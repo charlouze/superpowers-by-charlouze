@@ -304,6 +304,39 @@ de spec** (§3).
 
 ## 5. Batch lifecycle
 
+Vue d'ensemble. Les losanges hexagonaux sont les **gates humains**, et chacun est
+une revue de pull request — le plugin n'en ajoute aucun ailleurs.
+
+```mermaid
+flowchart TD
+    REQ["Demande architecturale"] --> ADOPTED{"Module adopté ?"}
+
+    ADOPTED -->|non| AD["adopting-a-module"]
+    AD --> ADPR[["PR : spec + gaps register"]]
+    ADPR --> ADG{{"Revue = gate d'adoption"}}
+    ADG --> WB
+
+    ADOPTED -->|oui| WB["writing-a-batch"]
+    WB --> BPR[["PR : document de batch<br/>scope, spec delta, réservations"]]
+    BPR --> BG{{"Revue = gate d'ouverture"}}
+
+    BG --> WS["writing-a-user-story"]
+    WS --> SPR[["PR : tranche de spec + code"]]
+    SPR --> SG{{"Revue = gate de livraison"}}
+
+    SG --> MORE{"D'autres stories ?"}
+    MORE -->|oui, une par une| WS
+    MORE -->|non| CB["closing-a-batch"]
+    CB --> CPR[["PR : changelog, consolidation,<br/>libérations, status: closed"]]
+
+    SG -.->|PR fermée sans fusion| ABANDON["Story abandonnée<br/>rien à révoquer"]
+    ABANDON -.->|résidus sur main| CB
+```
+
+L'arête pointillée est le seul chemin non nominal : une story abandonnée ne
+laisse rien dans la spec, mais laisse sur `main` sa réservation au gaps register
+et l'intention annoncée par le batch — que la clôture doit constater (§5.4).
+
 ### 5.1 Git model
 
 `main` est protégée : **tout passe par une pull request.** Le modèle en découle
@@ -315,6 +348,31 @@ sa propriété centrale : **sa spec décrit toujours exactement ce que son code
 fait.** Aucun état intermédiaire à signaler, donc aucun marqueur, aucune
 sémantique à faire comprendre à des agents qui ignorent ce plugin, et aucune
 exception à la règle de dérive.
+
+```mermaid
+gitGraph
+    commit id: "batch-07 ouvert"
+    branch "story/07-us-1-abonnement"
+    commit id: "us-1 tranche de spec"
+    commit id: "us-1 test rouge"
+    commit id: "us-1 implémentation"
+    commit id: "us-1 rulings"
+    checkout main
+    branch "story/07-us-2-relance"
+    commit id: "us-2 tranche de spec"
+    checkout main
+    merge "story/07-us-1-abonnement" tag: "PR #41"
+    checkout "story/07-us-2-relance"
+    commit id: "us-2 implémentation"
+    checkout main
+    merge "story/07-us-2-relance" tag: "PR #42"
+    commit id: "batch-07 clos"
+```
+
+Ce graphe porte l'invariant central : **la tranche de spec est le premier commit
+de chaque branche**, et elle rejoint `main` par la même fusion que son code. À
+aucun instant `main` ne connaît une spec en avance sur son code. Les deux stories
+sont en vol simultanément — c'est le régime nominal, pas un cas limite.
 
 **Les gates humains sont des revues de pull request.** Le plugin n'ajoute pas de
 cérémonie : il place ses points de validation là où votre flux en a déjà.
@@ -376,6 +434,34 @@ reste.
 Les user stories sont écrites **une par une** : la story N+1 est écrite en
 connaissant ce qu'a produit la story N. Plusieurs peuvent être en vol
 simultanément, c'est le régime normal d'un flux par pull request.
+
+Le détail des passages de relais, et les deux endroits exacts où les overrides
+mordent :
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant SC as writing-a-user-story
+    participant SP as superpowers
+    participant G as git + gh
+    participant H as Humain
+
+    SC->>G: préconditions — checkout principal, main rafraîchie
+    SC->>G: lire les champs Sections des PR ouvertes sur la même spec
+    Note over SC,G: arrêt si l'intersection n'est pas vide — §3
+    SC->>G: créer story/NN-us-N et son worktree
+    SC->>G: commit 1 — la tranche de spec, avant tout code
+    SC->>SP: writing-plans — Global Constraints portent le gel de la spec
+    SP->>SP: subagent-driven-development
+    Note over SP: mode d'exécution imposé — Override 3
+    SP->>SP: finishing-a-development-branch
+    Note over SP: choix contraint à la pull request — Override 4
+    SP->>G: push et ouverture de la pull request
+    SC->>G: commit — rulings et observed drift, périssables
+    G->>H: revue de la pull request
+    H-->>SC: demandes de correction — le gel est levé
+    H->>G: fusion
+```
 
 Pour chacune :
 
@@ -544,7 +630,31 @@ n'est pas en contexte quand ses règles d'exécution doivent s'appliquer.
 
 La classification spike / bounded / architectural de superpowers est
 **conservée telle quelle** — elle est orthogonale à ce modèle, et elle est
-bonne.
+bonne. Seul l'état terminal du chemin architectural est dévié :
+
+```mermaid
+flowchart LR
+    B["superpowers:brainstorming<br/>classification inchangée"]
+
+    B -->|spike| SPIKE["Réponse, aucun artefact"]
+    B -->|bounded| BOUND["PR unique — code + mise à jour de spec<br/>changelog out-of-batch<br/>même détection de concurrence"]
+    B -->|architectural| ARCH
+
+    ARCH["writing-a-batch"]
+    ARCH --> STORIES["writing-a-user-story<br/>puis superpowers:writing-plans"]
+
+    B -.->|"chemin natif remplacé"| NATIVE["design doc daté<br/>+ writing-plans"]
+
+    classDef over fill:#1f6feb,stroke:#1f6feb,color:#ffffff
+    classDef dead fill:#f6f8fa,stroke:#999999,color:#999999
+
+    class ARCH over
+    class NATIVE dead
+```
+
+Le nœud bleu est l'**Override 1** ; le nœud grisé est ce que superpowers ferait
+sans ce plugin, et que sa propre règle fermée impose — d'où la nécessité de
+déclarer l'override (§8.3).
 
 - **Spike** — inchangé. Aucun artefact.
 - **Bounded** — cérémonie inchangée, avec deux règles :
