@@ -74,8 +74,13 @@ spec concernée énonce son nom et son défaut — *« derrière le flag
 fusionnée derrière un flag rendrait la spec fausse au sens des utilisateurs, et
 rouvrirait par la fenêtre exactement l'écart que le §4.1 sert à fermer.
 
-Le flag est **par lot, pas par story** : le lot est la frontière au-delà de
-laquelle il n'y a plus rien d'incomplet.
+**Le flag est par couple (lot, module).** Pas par story — le lot est la frontière
+au-delà de laquelle il n'y a plus rien d'incomplet. Mais pas par lot non plus :
+un lot transverse (§2) qui garde du comportement dans deux modules déclare
+**deux** flags, un par module. Sans quoi sa story de levée devrait retirer la
+phrase de gating dans deux specs, alors qu'une story vise exactement un module —
+elle serait impossible à écrire. Avec un flag par module, chaque module a sa
+phrase, son branchement et sa story de levée, et l'invariant tient.
 
 **Sa durée de vie est courte, et c'est le lot qui la borne par défaut.** Un flag
 qui traîne est du code mort que plus personne n'ose retirer — le mode de panne
@@ -237,10 +242,23 @@ document n'en dépend. L'historique faisant autorité est celui du fichier lui-m
 chaque changement de spec voyage avec son code.
 
 **Comportement sous flag.** Une section décrivant un comportement encore gardé
-énonce son flag et son défaut (§2). La spec reste donc exactement vraie : elle ne
-décrit pas seulement ce que le code fait, mais **ce qu'il expose et sous quelle
-condition**. Cette phrase disparaît quand le flag est retiré (§5.3), et c'est un
-changement de spec comme un autre.
+énonce son flag, son défaut, et — si la portée dépasse le lot — **sa condition de
+levée** (§2) :
+
+```markdown
+🔒 `billing.recurring`, off by default — lifted when the `facturation` module is fully delivered
+```
+
+La spec reste donc exactement vraie : elle ne décrit pas seulement ce que le code
+fait, mais **ce qu'il expose et sous quelle condition**. Cette phrase disparaît
+quand le flag est retiré (§5.3), et c'est un changement de spec comme un autre.
+
+**La condition de levée est écrite ici et pas seulement dans le document de
+lot**, parce que c'est ici qu'on la lit. Le document de lot finit par se clore ;
+la spec, elle, est relue à chaque adoption, chaque audit et chaque ouverture de
+lot. Une condition qui ne vivrait que dans un document clos, sans pointeur depuis
+la spec, rendrait indiscernables un flag encore utile et un flag oublié —
+c'est-à-dire exactement la distinction dont dépend le §5.4.
 
 **La règle de dérive s'énonce alors sans exception :** *toute divergence entre
 la spec de `main` et le code de `main` est une dérive*, donc du travail
@@ -256,16 +274,24 @@ Deux sections distinctes, parce qu'elles ne se traitent pas pareil :
 - **Gaps** — le code fait des choses qu'aucune spec ne décrit. Alimente un
   batch ordinaire qui les spécifie enfin.
 
-**Qui écrit dedans — deux écrivains seulement.** `adopting-a-module` le crée
-(§6.4). Ensuite, **`closing-a-batch`** y consolide, en une seule pull request,
-les dérives que les stories du batch ont constatées hors périmètre. Les stories
-elles-mêmes **n'écrivent pas dans le registre** : elles consignent leurs
-constats dans leur propre document, sous **Observed drift**. Faire écrire chaque
-story dans le registre y recréerait exactement la contention que le changelog
-vient d'éviter.
+**Qui écrit dedans.** Il faut distinguer deux gestes, parce qu'ils n'ont pas le
+même profil de contention.
 
-Un bounded (§8.2), qui n'appartient à aucun batch, écrit directement dans le
-registre : il est seul et ne concurrence personne d'autre qu'un autre bounded.
+**Ajouter une entrée** — `adopting-a-module` à la création (§6.4), puis
+**`closing-a-batch`** seul, qui consolide en une pull request les dérives que les
+stories du batch ont constatées hors périmètre. Les stories **n'ajoutent pas** :
+elles consignent leurs constats dans leur propre document, sous **Observed
+drift**. Un ajout se fait en fin de section et concurrence tous les autres ajouts
+du même module — c'est exactement la contention que le changelog vient d'éviter,
+et elle se règle de la même façon : un seul écrivain par batch.
+
+**Barrer une entrée existante** — la pull request de la story qui la résorbe, ou
+d'un bounded. Le geste est local à une ligne déjà écrite, donc deux stories qui
+barrent des entrées différentes ne se marchent pas dessus. Le §5.3 en fait même
+le premier commit d'une story corrective, précisément pour fixer son périmètre.
+
+Un bounded (§8.2) n'appartient à aucun batch : il ajoute comme il barre,
+directement, et ne concurrence qu'un autre bounded.
 
 **Réservation, consommation, libération.** Chaque entrée désigne une section de
 la spec.
@@ -312,8 +338,19 @@ Un `README.md` avec un front matter `status: open | closed`, et :
   seule chose qui distingue un flag encore utile d'un flag oublié.
 
 **Le document de batch ne porte aucun état mutable**, et c'est délibéré : il est
-écrit une fois par sa pull request d'ouverture, puis ne bouge plus jusqu'à sa
-clôture. Deux conséquences.
+écrit une fois par sa pull request d'ouverture, et **rien dans le déroulement
+normal ne le modifie**.
+
+Il reste **amendable par une pull request d'amendement**, revue comme les autres.
+C'est le chemin de sortie de deux impasses réelles : un lot exempté de flag qui
+découvre en chemin qu'il en fallait un — un « refactor » qui changeait du
+comportement, un lot mono-story qui se scinde — et un lot dont on décide de
+réduire ou d'abandonner le périmètre. Sans ce chemin, ces deux situations n'ont
+aucune issue : le champ `Feature flag` a été décidé à l'ouverture et la clôture
+le contrôle. L'amendement n'est pas de l'état mutable au fil de l'eau — c'est une
+décision humaine explicite, qui passe par une revue.
+
+Deux conséquences de l'absence d'état mutable.
 
 - **La liste des stories n'y figure pas** : elle est le contenu du répertoire du
   batch, complété par les pull requests ouvertes. Une liste maintenue à la main
@@ -391,10 +428,13 @@ flowchart TD
     SG --> MORE{"D'autres stories ?"}
     MORE -->|oui, une par une| WS
     MORE -->|non| FLAG{"Ce lot lève-t-il un flag ?"}
-    FLAG -->|oui| LIFT["Story de levée<br/>retire le branchement et le gating"]
-    LIFT --> CB
+    FLAG -->|oui| LIFT["Story de levée — une par module gardé<br/>écrite via writing-a-user-story"]
+    LIFT --> LPR[["PR : retrait du branchement<br/>et de la phrase de gating"]]
+    LPR --> LG{{"Revue = gate de livraison"}}
+    LG --> CB
     FLAG -->|"non — portée étendue déclarée,<br/>ou lot sans flag"| CB["closing-a-batch"]
-    CB --> CPR[["PR : changelog, consolidation,<br/>libérations, constats, status: closed"]]
+    CB --> CPR[["PR : changelog, consolidation, libérations,<br/>constats, contrôle des flags, status: closed"]]
+    CPR --> CG{{"Revue = gate de clôture"}}
 
     SG -.->|PR fermée sans fusion| ABANDON["Story abandonnée<br/>rien à révoquer"]
     ABANDON -.->|résidus sur main| CB
@@ -432,7 +472,11 @@ exception à la règle de dérive.
 
 ```mermaid
 gitGraph
-    commit id: "batch-07 ouvert"
+    commit id: "état initial"
+    branch "batch/07-facturation-recurrente"
+    commit id: "document de batch"
+    checkout main
+    merge "batch/07-facturation-recurrente" tag: "PR #40"
     branch "story/07-us-1-abonnement"
     commit id: "us-1 tranche de spec"
     commit id: "us-1 test rouge"
@@ -447,13 +491,18 @@ gitGraph
     commit id: "us-2 implémentation"
     checkout main
     merge "story/07-us-2-relance" tag: "PR #42"
-    commit id: "batch-07 clos"
+    branch "batch/07-close"
+    commit id: "changelog, status closed"
+    checkout main
+    merge "batch/07-close" tag: "PR #43"
 ```
 
 Ce graphe porte l'invariant central : **la tranche de spec est le premier commit
 de chaque branche**, et elle rejoint `main` par la même fusion que son code. À
 aucun instant `main` ne connaît une spec en avance sur son code. Les deux stories
-sont en vol simultanément — c'est le régime nominal, pas un cas limite.
+sont en vol simultanément — c'est le régime nominal, pas un cas limite. Et
+`main` ne reçoit **que des fusions** : l'ouverture et la clôture du lot ont leurs
+propres branches, comme tout le reste.
 
 **Les gates humains sont des revues de pull request.** Le plugin n'ajoute pas de
 cérémonie : il place ses points de validation là où votre flux en a déjà.
@@ -463,6 +512,8 @@ cérémonie : il place ses points de validation là où votre flux en a déjà.
 | Adoption d'un module (§6.5) | la PR portant la spec et le gaps register |
 | Ouverture d'un batch (§5.2) | la PR portant le document de batch |
 | Livraison d'une story | la PR portant la tranche de spec et le code |
+| Clôture d'un batch (§5.4) | la PR portant changelog, consolidation et `status: closed` |
+| Amendement d'un batch (§4.3) | la PR portant la décision de changer son périmètre ou son flag |
 
 **L'abandon d'une story est presque gratuit.** Fermer sa pull request sans la
 fusionner jette la transcription avec le code : rien à révoquer, aucune spec à
@@ -476,9 +527,14 @@ conventionnel (§4) et l'espace de travail, en invoquant
 nommée, à un HEAD détaché, ou si l'isolation est refusée, le plugin s'assure
 qu'une branche nommée existe avant de continuer — aucun mécanisme ne dépend du
 nom, mais une branche doit exister pour qu'une pull request puisse être ouverte.
-SDD, à son démarrage, détecte `GIT_DIR != GIT_COMMON`, conclut « already in a
-linked worktree » et réutilise l'existant : c'est le comportement documenté de
-son Step 0, pas un détournement.
+
+SDD, à son démarrage, invoque `superpowers:using-git-worktrees`, dont le **Step 0**
+détecte `GIT_DIR != GIT_COMMON`, conclut « already in a linked worktree » et
+réutilise l'existant. C'est le comportement documenté de ce skill, pas un
+détournement — et c'est bien à lui qu'il appartient, non à SDD, qui ne fait que
+l'appeler. Ce Step 0 comporte aussi un garde sous-module : dans un sous-module,
+`GIT_DIR != GIT_COMMON` est vrai sans qu'il s'agisse d'un worktree. Un projet en
+sous-modules sort donc du chemin décrit ici, et ce plugin ne le couvre pas.
 
 **Préconditions, à vérifier avant de créer une branche, pour toute pull request
 de ce système :**
@@ -504,12 +560,20 @@ batch : scope, spec delta comme intention, et le champ `Feature flag` (§4.3).
 Pour un corrective batch, réserver dans le gaps register les entrées prises en
 charge (§4.2). **Aucune écriture dans les specs à ce stade.**
 
-**Faire remonter les flags vivants.** Si une phrase de gating couvre déjà une
-section que ce lot va toucher, la signaler dans le document de batch avec sa
-condition de levée. L'humain tranche au gate : ce lot la satisfait-il, et
-porte-t-il donc la story de levée (§5.3) ? Un flag à portée étendue traverse
-plusieurs lots ; c'est ici, et nulle part ailleurs, qu'on se demande à chaque
-fois si le sien est arrivé à terme.
+**Faire remonter les flags vivants — au niveau du module, pas de la section.**
+Lister toute phrase de gating présente dans les specs des modules que ce lot
+touche, quelles que soient les sections visées, et la reporter dans le document
+de batch avec sa condition de levée. L'humain tranche au gate : ce lot
+satisfait-il la condition, et porte-t-il donc la story de levée (§5.3) ?
+
+La granularité est ce qui rend le contrôle utile. Une remontée limitée aux
+sections que le lot modifie laisserait un flag à portée étendue survivre
+indéfiniment : le dernier lot d'un module ajoute typiquement des sections neuves
+sans toucher les anciennes, donc rien ne remonterait, le module serait
+« intégralement livré », et le flag resterait éteint pour toujours. Les modules
+étant grossiers par construction (§2), remonter au module coûte peu et ferme ce
+trou. C'est ici, et nulle part ailleurs, qu'on redemande à chaque lot si un flag
+est arrivé à terme.
 
 Ouvrir la pull request du batch. **Sa revue est le gate humain** : tant qu'elle
 n'est pas fusionnée, aucune story ne s'écrit. C'est la transposition du gate de
@@ -577,8 +641,8 @@ Pour chacune :
 6. **`superpowers:subagent-driven-development`** exécute, puis conclut comme il
    le fait toujours sur `superpowers:finishing-a-development-branch`. **Le choix
    y est contraint à « Push and create a Pull Request »** — c'est l'Override 4
-   (§8.3), et il est nécessaire : les deux autres options sont incompatibles
-   avec une branche protégée.
+   (§8.3) : le merge local détruit la branche sans jamais pouvoir atteindre le
+   remote, et garder la branche laisse la story sans état observable.
 7. **Avant fusion**, recopier les lignes `Ruling:` du message final de SDD dans
    le Rulings log du document de story, et consigner sous **Observed drift** les
    dérives constatées hors périmètre. Ces informations sont périssables — le
@@ -599,12 +663,17 @@ dans la spec — donc du code et une tranche de spec, dans une pull request :
 exactement la forme d'une story, sans mécanisme nouveau. C'est elle qui met la
 fonctionnalité en production.
 
+**Une story de levée par flag, donc par module** (§2). Un lot transverse gardant
+deux modules en écrit deux, chacune retirant la phrase de gating de sa spec et le
+branchement de son module — et chacune respecte l'invariant « une story, un
+module ».
+
 Elle est la **dernière story du lot** quand le flag est à portée de lot. Quand la
 portée est étendue (§2), elle appartient au lot qui satisfait la condition de
 levée déclarée — souvent le dernier lot d'un module en construction. Ce n'est pas
 au lot courant de le deviner : `writing-a-batch` fait remonter au gate
-d'ouverture (§5.2) tout flag vivant couvrant les sections que le lot va toucher,
-et l'humain tranche si ce lot est celui qui lève.
+d'ouverture (§5.2) tout flag vivant sur les modules que le lot touche, et
+l'humain tranche si ce lot est celui qui lève.
 
 Elle est **une story et non un devoir de clôture** parce qu'elle porte du code,
 et que du code mérite une revue et un cycle de tests. Si vous voulez une période
@@ -635,11 +704,20 @@ considère le batch terminé, une pull request de clôture :
    oubliée dans un document clos.
 5. **Vérifie qu'aucun flag du lot ne subsiste par accident.** Un flag encore
    présent — dans le code ou comme phrase de gating dans une spec — n'est
-   acceptable que si le document de lot lui a déclaré une **portée étendue avec
-   sa condition de levée** (§2, §4.3). Sinon la story de levée n'a pas été écrite
-   (§5.3) et le lot **ne peut pas être clos**. La distinction est tout l'objet du
+   acceptable que si sa **portée étendue et sa condition de levée** sont
+   déclarées (§2, §4.1, §4.3). Sinon la story de levée n'a pas été écrite (§5.3)
+   et le lot **ne peut pas être clos**. La distinction est tout l'objet du
    contrôle : un flag voulu et un flag oublié se ressemblent parfaitement dans le
    code, et seule la déclaration les sépare.
+
+   **Trois sorties, pas une impasse.** Un lot dont on renonce au périmètre alors
+   que des stories gardées sont déjà sur `main` ne doit pas rester ouvert à
+   jamais. L'humain choisit : écrire la story de levée et livrer ce qui existe ;
+   déclarer au flag une portée étendue par une pull request d'amendement (§4.3),
+   ce qui reporte la décision à un lot ultérieur ; ou écrire une **story de
+   démontage** qui retire le code gardé et la tranche de spec correspondante.
+   Sans ces trois sorties, le refus de clore fabriquerait précisément le code
+   mort sous flag qu'il existe pour empêcher.
 6. **Passe `status: closed`.**
 
 Cette pull request est revue comme les autres : la clôture acte une décision
@@ -694,9 +772,9 @@ l'humain valide devient la spec ; le reste part en gaps.
 |---|---|---|
 | `using-batches` | point d'entrée, cité par le bloc `CLAUDE.md` | le routage, le vocabulaire, les règles d'autorité, les overrides déclarés (§8.3) |
 | `adopting-a-module` | premier batch touchant un module sans spec | la PR d'adoption : spec (avec ses `Sources`) + gaps register |
-| `writing-a-batch` | ouverture d'un batch, ou requalification (§8.3) | la PR de batch : `NN`, scope, spec delta, réservations |
-| `writing-a-user-story` | une story à écrire | la PR de story : tranche de spec, plan, code, rulings, observed drift |
-| `closing-a-batch` | toutes les stories fusionnées ou abandonnées | la PR de clôture : changelog, consolidation, libérations, constats, `status: closed` |
+| `writing-a-batch` | ouverture d'un batch, amendement (§4.3), ou requalification (§8.3) | la PR de batch : `NN`, scope, spec delta, `Feature flag`, réservations, flags vivants remontés |
+| `writing-a-user-story` | une story à écrire, y compris levée ou démontage | la PR de story : tranche de spec, plan, code, rulings, observed drift |
+| `closing-a-batch` | toutes les stories fusionnées ou abandonnées | la PR de clôture : changelog, consolidation, libérations, constats, contrôle des flags, `status: closed` |
 
 Quatre skills productifs, un de routage. Le cycle d'une story tient dans un seul
 skill parce que la pull request porte son état : il n'y a ni enregistrement à
@@ -717,8 +795,11 @@ cette phrase comprise. La concession n'attend donc pas qu'un skill soit chargé.
 `writing-plans` porte en outre une concession directe : *« (User preferences for
 plan location override this default) »*. Le bloc `CLAUDE.md` s'appuie dessus pour
 déplacer les plans vers `docs/batches/`. `brainstorming` porte la même
-concession pour l'emplacement des specs, mais elle est **sans objet ici** : sous
-l'Override 1, `brainstorming` n'atteint jamais son étape « Write design doc ».
+concession pour l'emplacement des specs, mais elle est **sans objet ici** :
+l'Override 1 remplace l'étape 6 qui écrirait ce document, donc il n'y a aucun
+emplacement à relocaliser. Ce n'est vrai que parce que l'override porte sur les
+étapes 6 à 9 ; s'il ne portait que sur l'état terminal, le design doc daté serait
+écrit et cette concession redeviendrait le bon levier.
 
 Un hook `SessionStart` propre au plugin a été écarté : l'ordre entre les hooks
 de deux plugins n'est pas spécifié, ce qui laisserait deux blocs
@@ -729,14 +810,10 @@ Le bloc inséré par `/supercharlouze:init` est délibérément minuscule et sta
 ```markdown
 ## Specs and plans
 
-This project overrides how superpowers organizes specs and plans. Invoke
-`supercharlouze:using-batches` before any design work, and again before
-executing any plan. It relocates specs and plans, reroutes the architectural
-terminal state of superpowers:brainstorming, extends the stop conditions of
-superpowers:subagent-driven-development, requires subagent-driven-development as
-the execution mode, and constrains superpowers:finishing-a-development-branch to
-the pull request option. It declares each of these overrides explicitly; where it
-declares none, superpowers applies unchanged.
+This project overrides how superpowers organizes specs and plans.
+Invoke `supercharlouze:using-batches` before any design work, and again before executing any plan.
+It relocates specs and plans, replaces steps 6 to 9 of the architectural checklist of superpowers:brainstorming, extends the stop conditions of superpowers:subagent-driven-development, requires subagent-driven-development as the execution mode, and constrains superpowers:finishing-a-development-branch to the pull request option.
+It declares each of these overrides explicitly; where it declares none, superpowers applies unchanged.
 ```
 
 Le bloc **énumère les quatre overrides du §8.3, sans en omettre un**. Par
@@ -792,8 +869,12 @@ déclarer l'override (§8.3).
   porte simplement sa mise à jour de spec. **Pas de feature flag non plus** : un
   bounded est complet dans sa propre pull request, donc il satisfait le critère
   d'exemption du §2 par construction.
-- **Architectural** — l'état terminal est rerouté vers
-  `supercharlouze:writing-a-batch`. C'est un override déclaré (§8.3).
+- **Architectural** — les **étapes 6 à 9** de la checklist architecturale
+  (design doc daté, self-review, revue humaine, transition vers
+  `writing-plans`) sont remplacées par `supercharlouze:writing-a-batch`. C'est un
+  override déclaré (§8.3). Les étapes 1 à 5 — contexte, questions, approches,
+  design présenté par sections, approbation — sont **conservées intactes** :
+  c'est le travail de conception lui-même, et il n'a aucune raison de changer.
 
 ### 8.3 Declared overrides of closed rules
 
@@ -803,14 +884,27 @@ session sous pression : chacune doit donc être **nommée comme un override** da
 `using-batches` et dans le bloc `CLAUDE.md` (§8.1), avec sa justification. Il y
 en a quatre, et il ne doit jamais y en avoir une cinquième non déclarée.
 
-**Override 1 — l'état terminal du chemin architectural.** `brainstorming`
-écrit *« Architectural: the ONLY skill you invoke after brainstorming is
-writing-plans »*, et redouble en fin de skill : *« Do NOT invoke any other
-skill. writing-plans is the next step »*. Le reroutage du §8.2 contredit
-frontalement cette règle. Justification : `writing-a-batch` n'est pas un skill
-d'implémentation — la catégorie que cette règle protège — mais un substitut à
-l'étape documentaire qui précède `writing-plans`, lequel reste appelé, depuis
-`writing-a-user-story`.
+**Override 1 — la queue du chemin architectural, étapes 6 à 9.** La checklist
+architecturale de `brainstorming` se termine par quatre étapes : **6.** écrire le
+design doc daté, **7.** self-review, **8.** revue humaine de la spec écrite,
+**9.** transition vers `writing-plans`. Le skill verrouille la neuvième —
+*« Architectural: the ONLY skill you invoke after brainstorming is
+writing-plans »*, redoublé par *« Do NOT invoke any other skill. writing-plans is
+the next step »*.
+
+**Cet override remplace les quatre, pas seulement la dernière.** Ne rerouter que
+l'étape 9 laisserait les étapes 6 à 8 s'exécuter, et un design doc daté
+continuerait d'être écrit dans `docs/superpowers/specs/` — exactement ce que ce
+plugin existe pour supprimer. C'est un seul override, correctement délimité, et
+non deux : la substitution porte sur un bloc terminal cohérent.
+
+Justification : `writing-a-batch` n'est pas un skill d'implémentation — la
+catégorie que la règle de l'étape 9 protège — mais un substitut à l'étape
+documentaire qui précède `writing-plans`, lequel reste appelé, depuis
+`writing-a-user-story`. Et la substitution préserve chacune des étapes
+remplacées : l'étape 6 devient le document de batch, la 7 sa relecture avant
+ouverture, et **la 8 devient la revue de la pull request de batch** (§5.2) — la
+revue humaine n'est pas supprimée, elle change d'outil.
 
 **Override 2 — la cinquième condition d'arrêt de SDD.**
 `subagent-driven-development` énonce *« Four things stop you, and only these »*.
@@ -843,12 +937,23 @@ présente trois options — merge local, pull request, garder la branche — et
 attend un choix humain. Sur le chemin story, ce plugin contraint le choix à
 **« Push and create a Pull Request »**.
 
-Justification : les deux autres options sont incompatibles avec une branche
-protégée, et l'option « merge local » est activement destructrice. Elle fusionne
-sur la `main` locale, puis **supprime le worktree et la branche**, avant que le
-push n'échoue contre la protection — et à ce moment le rapatriement des rulings
-(§5.3, étape 7) n'a pas eu lieu et son support a disparu. Cet override ne retire
-pas un choix à l'humain : il retire un choix qui ne peut pas aboutir.
+Justification, énoncée exactement — les deux autres options ne sont pas
+équivalentes.
+
+**« Merge back locally » est activement destructrice.** Elle fusionne sur la
+`main` **locale**, lance les tests, puis **supprime le worktree et la branche**.
+Elle ne pousse jamais, donc rien n'échoue sur le moment : le travail se retrouve
+dans un commit local qui ne pourra jamais atteindre le remote, et la branche qui
+aurait porté une pull request n'existe plus. Le rapatriement des rulings (§5.3,
+étape 7) n'a jamais lieu, puisqu'il se fait sur la branche avant fusion.
+
+**« Keep the branch as-is » n'est pas destructrice et reste compatible avec une
+`main` protégée** — elle est simplement hors flux : sans pull request, la story
+n'a pas d'état observable et ne sera jamais livrée. Elle est écartée pour cette
+raison, pas parce qu'elle casserait quelque chose.
+
+Cet override retire donc un choix qui ne peut pas aboutir, et un choix qui
+n'aboutit nulle part.
 
 **Ce qui n'est délibérément pas un override :** l'état terminal de SDD. Ce
 plugin n'intercale rien entre SDD et `finishing-a-development-branch` — il
@@ -970,6 +1075,12 @@ flux par pull request sur une branche protégée, donc il éprouve le modèle du
 | Champ `Feature flag` facultatif dans le document de batch | « Aucun flag » doit être une décision énoncée et revue au gate d'ouverture, pas un oubli (§4.3). |
 | Flag obligatoirement borné au lot | Interdirait le cas légitime du module construit sur plusieurs lots et ouvert seulement une fois complet. La portée peut dépasser le lot, à condition d'être déclarée avec sa condition de levée (§2). |
 | Registre séparé des flags vivants | Le flag vit déjà dans la spec du module, lue à chaque adoption, audit et ouverture de lot. Un second registre serait un doublon à resynchroniser (§2). |
+| Un flag par lot, y compris pour un lot transverse | Sa story de levée devrait retirer la phrase de gating dans deux specs, alors qu'une story vise un module. Un flag par couple (lot, module) (§2). |
+| Condition de levée logée seulement dans le document de lot | Ce document se clôt, et aucun pointeur n'y mène depuis la spec ; la condition doit être lisible là où le flag se lit (§4.1). |
+| Remontée des flags vivants au niveau de la section | Un lot ajoutant des sections neuves sans toucher les gardées ne ferait rien remonter, et le flag survivrait indéfiniment (§5.2). |
+| Document de batch strictement immuable jusqu'à la clôture | Laisse sans issue le lot exempté qui découvre qu'il fallait un flag, et le lot dont on réduit le périmètre. Amendable par une PR revue (§4.3). |
+| Refus de clôture sans porte de sortie | Un lot renoncé avec des stories gardées déjà fusionnées resterait ouvert à jamais, avec le code mort sous flag que le contrôle existe pour empêcher (§5.4). |
+| Override 1 limité à l'état terminal de `brainstorming` | Les étapes 6 à 8 continueraient de s'exécuter et un design doc daté serait écrit — ce que ce plugin existe pour supprimer (§8.3). |
 | Numéros attribués sur le seul contenu de `main` | Un artefact n'atteint `main` qu'à la fusion : deux batches ou deux stories en vol prendraient le même numéro (§4). |
 | Dépendre du nom de branche produit par `using-git-worktrees` | Ce skill préfère les outils natifs du harness, qui nomment eux-mêmes, et peut aboutir à un HEAD détaché (§4). |
 | Laisser `finishing-a-development-branch` proposer ses trois options | Le merge local détruit worktree et branche avant d'échouer au push contre la protection, et emporte les rulings non rapatriés (Override 4). |
