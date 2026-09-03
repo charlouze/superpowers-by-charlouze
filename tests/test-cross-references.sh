@@ -11,21 +11,33 @@ fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 echo "test-cross-references"
 
 KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch"
+# Commands share the plugin namespace with the skills: /supercharlouze:init is a
+# command, not a skill, so it resolves against commands/<name>.md instead.
+KNOWN_COMMANDS="init"
 
-# 1. Every supercharlouze:<skill> reference names a skill that exists.
-#    begin/end are the CLAUDE.md block markers, not skill references.
+# 1. Every supercharlouze:<name> reference names a skill or a command that exists.
+#    README.md is scanned too — it names all five skills and the init command.
+#    begin/end are the CLAUDE.md block markers, not references.
 BAD=0
 while read -r ref; do
     [ -n "$ref" ] || continue
     found=0
     for s in $KNOWN_SKILLS; do
-        [ "$ref" = "$s" ] && found=1
+        if [ "$ref" = "$s" ] && [ -f "$REPO_ROOT/skills/$s/SKILL.md" ]; then
+            found=1
+        fi
+    done
+    for c in $KNOWN_COMMANDS; do
+        if [ "$ref" = "$c" ] && [ -f "$REPO_ROOT/commands/$c.md" ]; then
+            found=1
+        fi
     done
     if [ "$found" = "0" ]; then
-        echo "    unknown skill reference: supercharlouze:$ref"
+        echo "    unknown reference: supercharlouze:$ref"
         BAD=$((BAD + 1))
     fi
-done < <(grep -rhoE 'supercharlouze:[a-z-]+' "$REPO_ROOT/skills" "$REPO_ROOT/commands" 2>/dev/null \
+done < <(grep -rhoE 'supercharlouze:[a-z-]+' \
+             "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/README.md" 2>/dev/null \
          | sed 's/^supercharlouze://' | grep -vxE 'begin|end' | sort -u || true)
 
 if [ "$BAD" = "0" ]; then

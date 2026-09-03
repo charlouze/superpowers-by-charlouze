@@ -45,6 +45,36 @@ check_both "SDD stop conditions"           "superpowers:subagent-driven-developm
 check_both "imposed execution mode"        "execution mode"
 check_both "finishing-a-development-branch" "superpowers:finishing-a-development-branch"
 
+# Naming the skill is not naming the override: "superpowers:brainstorming applies
+# unchanged" would satisfy the four checks above. Each override is therefore also
+# checked on what it does, in the wording each file actually uses.
+check_verb() {
+    local label="$1" skill_needle="$2" block_needle="$3"
+    if has "$skill_needle" "$SKILL_FLAT"; then
+        pass "using-batches states what the override does: $label"
+    else
+        fail "using-batches states what the override does: $label"
+    fi
+    if has "$block_needle" "$BLOCK_FLAT"; then
+        pass "CLAUDE.md block states what the override does: $label"
+    else
+        fail "CLAUDE.md block states what the override does: $label"
+    fi
+}
+
+check_verb "steps 6 to 9 are replaced by writing-a-batch" \
+    "are replaced by \`supercharlouze:writing-a-batch\`" \
+    "replaces steps 6 to 9 of the architectural checklist"
+check_verb "the stop conditions are extended, not restated" \
+    "This plugin adds one, for corrective batches only" \
+    "extends the stop conditions of superpowers:subagent-driven-development"
+check_verb "SDD is imposed as the execution mode" \
+    "This plugin imposes SDD as the execution mode" \
+    "requires subagent-driven-development as the execution mode"
+check_verb "finishing is constrained to the pull request option" \
+    "this plugin constrains the choice to" \
+    "constrains superpowers:finishing-a-development-branch to the pull request option"
+
 if has "before any design work" "$BLOCK_FLAT" && has "before executing any plan" "$BLOCK_FLAT"; then
     pass "block requires invocation before design and before execution"
 else
@@ -63,7 +93,9 @@ else
     pass "block does not claim subagent-driven-development applies unchanged"
 fi
 
-if has "fifth" "$SKILL_FLAT"; then
+# "fifth" alone is satisfied by the heading of Override 2 ("fifth stop condition"),
+# so the needle is a fragment of the prohibition itself.
+if has "there must never be an undeclared" "$SKILL_FLAT"; then
     pass "using-batches forbids an undeclared fifth override"
 else
     fail "using-batches forbids an undeclared fifth override"
