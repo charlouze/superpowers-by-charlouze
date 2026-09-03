@@ -57,9 +57,9 @@ Two project constraints, not choices of this plugin, and everything else follows
 - **`main` is protected** — everything goes through a pull request.
 - **`main` is deployed continuously** — every merge ships to production.
 
-**One branch, one name.** `main` is that protected, continuously deployed branch, and this plugin calls it `main` everywhere — deliberately not an abstract "integration branch". The abstraction is what invites a `develop`-style branch, which the next paragraph rejects by name.
-
 The second is why feature flags exist, and it rules out the two natural alternatives. A batch branch, or a gitflow `develop` branch, would protect production by holding work back — at the price of a blind spot: a story merged into a batch branch is neither an open pull request nor on `main`, so it becomes invisible to concurrency detection for the whole life of the batch. A `develop` branch is worse: it creates **two baselines** for the drift rule — the reference spec on `develop`, the running code on `main` — and a corrective batch no longer knows what it is correcting against. A flag protects production without holding code back, so it creates neither blind spot nor second baseline.
+
+**One branch, one name.** `main` is that protected, continuously deployed branch, and this plugin calls it `main` everywhere — deliberately not an abstract "integration branch". The abstraction is what invites the `develop`-style branch the paragraph above rejects by name.
 
 **A story's pull request carries the spec slice and the code that implements it.** They ship together or not at all, in the same pull request. That is what gives `main` its central property: **its spec always describes exactly what its code does.** There is no intermediate state to signal, therefore no marker, no semantics to explain to agents that know nothing about this plugin, and no exception to the drift rule.
 
@@ -89,7 +89,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 
 **Every conflict is recorded for the human.** Reuse the existing mechanism rather than inventing one: `superpowers:subagent-driven-development` keeps a ledger whose decisions take the form `Ruling: <decision> — <why> — <what it costs if it is wrong>`, presented under "Rulings I made" before it deletes its workspace. Copy those lines into the story document, on the story's branch, before the merge — they are perishable, and the workspace is already gone.
 
-**Concurrency.** Two stories touching the same section of the same spec are a conflict. Detection is by declaration: each story document lists the sections it touches, and a starting story compares them against the open pull requests. The git merge conflict is only a **partial** safety net — git conflicts on lines, not on sections, so two stories editing the same section far apart merge cleanly. Relying on it would let through exactly the case worth catching.
+**Concurrency.** Two stories touching the same section of the same spec are a conflict. Detection is by declaration: each story document lists the sections it touches, and a starting story compares them against the open pull requests **and against every remote `story/*` branch that carries no pull request yet**. Both are needed: a story's pull request opens only at the very end of its implementation, so for that whole stretch its pushed branch is the only thing that shows it holds its sections. The git merge conflict is only a **partial** safety net — git conflicts on lines, not on sections, so two stories editing the same section far apart merge cleanly. Relying on it would let through exactly the case worth catching.
 
 ## What Is Kept, What Is Rerouted
 
@@ -174,7 +174,7 @@ That is the superpowers feeling kept: a document of this system reads like a sup
 | "The batch is newer than the spec, so the batch wins" | The spec is the binding authority, without exception and without deliberation. The batch carries scope and order, never behaviour that contradicts a spec. |
 | "I'll transcribe the whole spec delta now, it's more efficient" | One slice per story. A full delta makes the spec describe behaviour nobody delivered yet, and SDD's reviewers will report it as missing. |
 | "Only writing-plans may follow brainstorming, so I must write the design doc" | Override 1 is declared: steps 6 to 9 are replaced by `supercharlouze:writing-a-batch`. A dated design doc is precisely what this plugin removes. |
-| "Git will conflict if two stories touch the same section" | Git conflicts on lines, not sections; two edits far apart in one section merge cleanly. Compare the declared `Sections:` fields against open pull requests. |
+| "Git will conflict if two stories touch the same section" | Git conflicts on lines, not sections; two edits far apart in one section merge cleanly. Compare the declared `Sections:` fields against the open pull requests and against every remote `story/*` branch that carries no pull request yet. |
 | "This batch is refactor-only, the Feature flag field can stay empty" | The field is never empty. "none" plus its reason is a decision the opening gate reviews; a blank is an omission nobody can review. |
 | "The flag is still there but the batch is done, I'll clean it up later" | A flag surviving without a declared scope and lifting condition is the classic silent failure. Write the lifting story, declare extended scope by amendment, or write a teardown story. |
 | "A local merge is quicker than opening a pull request" | It deletes the worktree and the branch after merging into a `main` that can never be pushed. The work and the un-repatriated rulings go with them. |

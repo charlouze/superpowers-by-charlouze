@@ -62,7 +62,7 @@ require writing-a-batch "branch naming convention"                "batch/NN"
 
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "checks it is in the main checkout"  "main checkout"
-require writing-a-user-story "refreshes the integration branch"   "up to date with the remote"
+require writing-a-user-story "refreshes main from the remote"     "up to date with the remote"
 require writing-a-user-story "concurrency via declared Sections"  "Sections:"
 require writing-a-user-story "git conflict is only a partial net" "partial safety net"
 require writing-a-user-story "transcription is the first commit"  "first commit on the branch"

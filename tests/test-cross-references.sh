@@ -41,9 +41,9 @@ done < <(grep -rhoE 'supercharlouze:[a-z-]+' \
          | sed 's/^supercharlouze://' | grep -vxE 'begin|end' | sort -u || true)
 
 if [ "$BAD" = "0" ]; then
-    pass "every supercharlouze:<skill> reference resolves"
+    pass "every supercharlouze: skill or command reference resolves"
 else
-    fail "every supercharlouze:<skill> reference resolves ($BAD unknown)"
+    fail "every supercharlouze: skill or command reference resolves ($BAD unknown)"
 fi
 
 # 2. Every repo-relative path in backticks exists.

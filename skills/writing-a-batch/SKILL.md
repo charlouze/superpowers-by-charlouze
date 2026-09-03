@@ -245,7 +245,16 @@ does it therefore carry the lifting story?*
 **Record that ruling next to its entry before the pull request merges.** One
 line per surfaced flag — `carried by this batch — lifting story owed` or
 `not this batch — <reason>` — written into `Live flags` on the batch branch, in
-answer to the review.
+answer to the review. Recording it is review feedback applied to an open pull
+request, which is exactly how every other correction reaches this document; it
+is not mutable state, because after the merge nothing edits it again. Without
+that line the ruling exists only in a review thread:
+`supercharlouze:closing-a-batch` checks the flags this batch declared **and the
+ones it inherited by a ruling at the opening gate**, and it learns of the second
+kind from `Live flags` alone. So a flag declared by batch 05, surfaced by batch
+08 and assigned by the human to 08 would be checked by nobody if the lifting
+story were never written — the forgotten-flag failure this section exists to
+close, reintroduced at the very gate meant to close it.
 
 **Those two annotations are fixed strings, not paraphrases.** Write
 `carried by this batch — lifting story owed` verbatim, on one line, immediately
@@ -254,14 +263,7 @@ reason in the project's language after the dash. `supercharlouze:closing-a-batch
 reads the `Live flags` section of this document and matches the literal
 `carried by this batch — lifting story owed`; a flag it cannot match that way is
 an unruled flag, not a flag ruled away. Reword the annotation and the reader
-finds nothing, which is the failure this whole section exists to close. This is review feedback applied to an open pull request,
-which is exactly how every other correction reaches this document; it is not
-mutable state, because after the merge nothing edits it again. Without it the
-ruling exists only in a review thread: `supercharlouze:closing-a-batch` checks
-the flags **this** batch declared, so a flag declared by batch 05, surfaced by
-batch 08 and assigned by the human to 08 would be checked by nobody if the
-lifting story were never written — the forgotten-flag failure this section
-exists to close, reintroduced at the very gate meant to close it.
+finds nothing, which is the failure this whole section exists to close.
 
 **`Live flags` is a snapshot, taken for this gate.** It records what was live
 when this batch opened and what was ruled about it; it is not a registry to
@@ -337,12 +339,12 @@ itself is in question, and no agent may correct a spec.
    `superpowers:finishing-a-development-branch`. So the usual situation when
    this triggers is a branch and a worktree and **no pull request at all**.
    Therefore: **close the story's pull request without merging it if one is
-   already open; otherwise discard the branch and remove its worktree.** Either
-   way nothing has to be revoked, because nothing reached `main`: the spec slice,
-   or the struck gaps-register entry, travels with the code and dies with the
-   branch. Once the choice below is made, delete the story branch locally and on
-   the remote and remove its worktree in both cases, so no later session resumes
-   work under a qualification the batch no longer has. The gaps-register
+   already open.** Nothing has to be revoked either way, because nothing reached
+   `main`: the spec slice, or the struck gaps-register entry, travels with the
+   code and dies with the branch. The branch and its worktree go once the choice
+   below is ruled: delete the story branch locally and on the remote and remove
+   its worktree — whether a pull request existed or not — so no later session
+   resumes work under a qualification the batch no longer has. The gaps-register
    reservation is untouched by all of this — it lives on `main`, posted by the
    opening pull request, and `supercharlouze:closing-a-batch` releases it.
 2. **Put the choice to the human**, who alone may rule:

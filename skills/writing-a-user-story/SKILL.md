@@ -226,11 +226,6 @@ authority — pointing it at the living module spec is what makes this
 integration work without modifying superpowers. `Sections:` is what the *next*
 story's Step 1 reads.
 
-**Commit the story document and push it immediately** — `git push`. Until that
-push the branch is on the remote but declares no sections, and a sibling that
-finds it has to stop on an unknown. Pushing now closes that window and is what
-lets Step 1 answer for a story whose pull request will not exist for hours.
-
 Then create, at the end of the document, the two sections Step 6 fills — empty
 now, and left empty if nothing turns up:
 
@@ -284,6 +279,13 @@ implementer subagents, whose only channel to this skill's rules is this list: a
 stop condition stated to you and not written here never reaches the agent who
 has to obey it.
 
+**Commit the story document — header, the two empty sections and
+`Global Constraints` together — and push it immediately**, `git push`, before
+anything else in Step 5 starts. Until that push the branch is on the remote but
+declares no sections, and a sibling that finds it has to stop on an unknown.
+Pushing here closes that window and is what lets Step 1 answer for a story whose
+pull request will not exist for hours.
+
 ## Step 5 — Execute
 
 Three of this plugin's four declared overrides bite here. All three are named,
@@ -330,7 +332,8 @@ normally no pull request yet.** This condition fires *inside*
 pull request only opens at the very end of this step, through
 `superpowers:finishing-a-development-branch`. What exists when it triggers is a
 branch and a worktree. So: **close the story's pull request without merging it
-if one is already open; otherwise discard the branch and remove its worktree.**
+if one is already open; the branch and its worktree stay until the
+requalification is ruled.**
 Nothing on `main` changes either way — the spec slice, or the struck
 gaps-register entry, travels with the code and dies with the branch. The
 reservation posted on `main` by the batch's opening pull request is untouched,

@@ -201,9 +201,10 @@ with no skill of its own — each needing a thing it can point at:
 | Add or strike | a bounded change, from its own pull request | belonging to no batch, it writes an entry or strikes one directly, contending only with another bounded change |
 
 A register written as flowing paragraphs satisfies every other word of this step
-and breaks every one of them: there is no item to annotate, none to strike, and nothing a
-corrective batch can draw a scope from. Write entries so those gestures are
-mechanical.
+and breaks every one of them: there is no item to annotate, none to strike, no
+list for a bounded change to append one to — what it adds is more prose, which
+the next writer cannot point at either — and nothing a corrective batch can draw
+a scope from. Write entries so those gestures are mechanical.
 
 **The shape of the register:**
 
