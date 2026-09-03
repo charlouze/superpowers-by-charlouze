@@ -77,6 +77,22 @@ rouvrirait par la fenêtre exactement l'écart que le §4.1 sert à fermer.
 Le flag est **par lot, pas par story** : le lot est la frontière au-delà de
 laquelle il n'y a plus rien d'incomplet.
 
+**Sa durée de vie est courte, et c'est le lot qui la borne par défaut.** Un flag
+qui traîne est du code mort que plus personne n'ose retirer — le mode de panne
+classique, et il est silencieux.
+
+**Portée étendue, par exception.** Un flag peut légitimement survivre à son lot :
+un module entier construit sur plusieurs lots, qu'on n'ouvre qu'une fois complet,
+en est le cas type. Le flag déclare alors sa portée **et la condition qui le
+lève** — « levé quand le module `facturation` est intégralement livré ». Cette
+déclaration n'est pas une formalité : c'est elle qui distingue un flag encore
+utile d'un flag oublié, et sans elle les deux se ressemblent exactement.
+
+Un flag à portée étendue n'est pas orphelin pour autant, parce qu'il vit dans la
+**spec du module** : sa phrase de gating est lue par quiconque lit la spec, à
+chaque adoption, à chaque audit, à chaque ouverture de lot touchant la section.
+C'est sa visibilité qui le protège de l'oubli, pas un registre séparé.
+
 **Le critère d'exemption tient en une question :** *une story de ce lot,
 fusionnée seule, laisserait-elle un utilisateur devant quelque chose
 d'incomplet ?* Si non, pas de flag. Trois familles répondent non par
@@ -279,11 +295,21 @@ Un `README.md` avec un front matter `status: open | closed`, et :
   tranche par tranche, par la pull request de chaque story (§5.3). Pour un
   corrective batch, ce champ est vide et remplacé par les entrées du gaps
   register que le batch réserve.
-- **Feature flag** — le nom du flag et son défaut, ou `none` avec la raison de
-  l'exemption (§2). Ce champ est **obligatoire et jamais vide** : « aucun flag »
-  doit être une décision énoncée et revue, pas un oubli. C'est le gate
-  d'ouverture (§5.2) qui l'examine, et c'est le bon endroit — au moment où le
-  périmètre du lot est encore devant nous.
+- **Feature flag** — le nom du flag, son défaut, et sa **portée** ; ou `none`
+  avec la raison de l'exemption (§2). Ce champ est **obligatoire et jamais
+  vide** : « aucun flag » doit être une décision énoncée et revue, pas un oubli.
+  C'est le gate d'ouverture (§5.2) qui l'examine, et c'est le bon endroit — au
+  moment où le périmètre du lot est encore devant nous.
+
+  ```markdown
+  Feature flag: `billing.recurring`, off by default — scope: this batch
+  Feature flag: `billing.recurring`, off by default — scope: beyond this batch,
+                lifted when the `facturation` module is fully delivered
+  Feature flag: none — corrective batch, restores behaviour the spec already promises
+  ```
+
+  Une portée qui dépasse le lot **doit nommer sa condition de levée**. C'est la
+  seule chose qui distingue un flag encore utile d'un flag oublié.
 
 **Le document de batch ne porte aucun état mutable**, et c'est délibéré : il est
 écrit une fois par sa pull request d'ouverture, puis ne bouge plus jusqu'à sa
@@ -364,10 +390,10 @@ flowchart TD
 
     SG --> MORE{"D'autres stories ?"}
     MORE -->|oui, une par une| WS
-    MORE -->|non| FLAG{"Lot sous flag ?"}
+    MORE -->|non| FLAG{"Ce lot lève-t-il un flag ?"}
     FLAG -->|oui| LIFT["Story de levée<br/>retire le branchement et le gating"]
     LIFT --> CB
-    FLAG -->|non| CB["closing-a-batch"]
+    FLAG -->|"non — portée étendue déclarée,<br/>ou lot sans flag"| CB["closing-a-batch"]
     CB --> CPR[["PR : changelog, consolidation,<br/>libérations, constats, status: closed"]]
 
     SG -.->|PR fermée sans fusion| ABANDON["Story abandonnée<br/>rien à révoquer"]
@@ -474,9 +500,16 @@ request, conflit de fusion — mais elles ne préviennent plus.
 
 Vérifier que chaque module touché possède une spec adoptée ; sinon l'adoption
 est un préalable bloquant (§6). Attribuer `NN` (§4). Rédiger le document de
-batch : scope, spec delta comme intention. Pour un corrective batch, réserver
-dans le gaps register les entrées prises en charge (§4.2). **Aucune écriture
-dans les specs à ce stade.**
+batch : scope, spec delta comme intention, et le champ `Feature flag` (§4.3).
+Pour un corrective batch, réserver dans le gaps register les entrées prises en
+charge (§4.2). **Aucune écriture dans les specs à ce stade.**
+
+**Faire remonter les flags vivants.** Si une phrase de gating couvre déjà une
+section que ce lot va toucher, la signaler dans le document de batch avec sa
+condition de levée. L'humain tranche au gate : ce lot la satisfait-il, et
+porte-t-il donc la story de levée (§5.3) ? Un flag à portée étendue traverse
+plusieurs lots ; c'est ici, et nulle part ailleurs, qu'on se demande à chaque
+fois si le sien est arrivé à terme.
 
 Ouvrir la pull request du batch. **Sa revue est le gate humain** : tant qu'elle
 n'est pas fusionnée, aucune story ne s'écrit. C'est la transposition du gate de
@@ -561,20 +594,27 @@ Pour chacune :
 La story est livrée quand sa pull request est fusionnée. Il n'y a rien à cocher
 ni à réconcilier : son état *est* l'état de sa pull request.
 
-**La dernière story d'un lot à flag est la story de levée.** Elle supprime le
-branchement dans le code et la phrase de gating dans la spec — donc du code et
-une tranche de spec, dans une pull request : exactement la forme d'une story, sans
-mécanisme nouveau. C'est elle qui met la fonctionnalité en production.
+**La story de levée** supprime le branchement dans le code et la phrase de gating
+dans la spec — donc du code et une tranche de spec, dans une pull request :
+exactement la forme d'une story, sans mécanisme nouveau. C'est elle qui met la
+fonctionnalité en production.
+
+Elle est la **dernière story du lot** quand le flag est à portée de lot. Quand la
+portée est étendue (§2), elle appartient au lot qui satisfait la condition de
+levée déclarée — souvent le dernier lot d'un module en construction. Ce n'est pas
+au lot courant de le deviner : `writing-a-batch` fait remonter au gate
+d'ouverture (§5.2) tout flag vivant couvrant les sections que le lot va toucher,
+et l'humain tranche si ce lot est celui qui lève.
 
 Elle est **une story et non un devoir de clôture** parce qu'elle porte du code,
 et que du code mérite une revue et un cycle de tests. Si vous voulez une période
 d'observation entre l'activation et le nettoyage, coupez-la en deux stories —
 activer, puis retirer. Le modèle le supporte sans rien changer.
 
-**Sans story de levée, le flag survit à son lot.** C'est le mode de panne
-classique des feature flags, et il est silencieux : le code accumule des
-branchements morts que plus personne n'ose retirer. `closing-a-batch` refuse de
-clore tant qu'il en reste un (§5.4).
+**Sans story de levée, le flag survit à son lot par accident.** C'est le mode de
+panne classique des feature flags, et il est silencieux. `closing-a-batch`
+refuse donc de clore tant qu'un flag survit **sans portée étendue déclarée**
+(§5.4) — la survie voulue reste possible, la survie par oubli non.
 
 ### 5.4 Closing — `closing-a-batch`
 
@@ -593,11 +633,13 @@ considère le batch terminé, une pull request de clôture :
    Sans cette étape, l'abandon d'une story serait invisible : ni dérive (la spec
    et le code sont d'accord, tous deux silencieux), ni gap, juste une promesse
    oubliée dans un document clos.
-5. **Vérifie qu'aucun flag du lot ne subsiste** — ni dans le code, ni comme
-   phrase de gating dans une spec. S'il en reste un, la story de levée n'a pas
-   été écrite (§5.3) et le lot **ne peut pas être clos**. Un flag qui survit à
-   son lot est du code mort que plus personne n'ose retirer, et rien d'autre dans
-   le système ne le rattraperait.
+5. **Vérifie qu'aucun flag du lot ne subsiste par accident.** Un flag encore
+   présent — dans le code ou comme phrase de gating dans une spec — n'est
+   acceptable que si le document de lot lui a déclaré une **portée étendue avec
+   sa condition de levée** (§2, §4.3). Sinon la story de levée n'a pas été écrite
+   (§5.3) et le lot **ne peut pas être clos**. La distinction est tout l'objet du
+   contrôle : un flag voulu et un flag oublié se ressemblent parfaitement dans le
+   code, et seule la déclaration les sépare.
 6. **Passe `status: closed`.**
 
 Cette pull request est revue comme les autres : la clôture acte une décision
@@ -926,6 +968,8 @@ flux par pull request sur une branche protégée, donc il éprouve le modèle du
 | Feature flag non spécifié, traité comme un détail d'implémentation | Une story fusionnée derrière un flag rendrait la spec fausse au sens des utilisateurs, et rouvrirait l'écart que le §4.1 ferme. Le flag et son défaut sont énoncés dans la spec (§2). |
 | Levée du flag comme devoir de `closing-a-batch` | Elle porte du code, donc elle mérite une revue et un cycle de tests : c'est une story (§5.3). La clôture se contente de vérifier qu'elle a eu lieu. |
 | Champ `Feature flag` facultatif dans le document de batch | « Aucun flag » doit être une décision énoncée et revue au gate d'ouverture, pas un oubli (§4.3). |
+| Flag obligatoirement borné au lot | Interdirait le cas légitime du module construit sur plusieurs lots et ouvert seulement une fois complet. La portée peut dépasser le lot, à condition d'être déclarée avec sa condition de levée (§2). |
+| Registre séparé des flags vivants | Le flag vit déjà dans la spec du module, lue à chaque adoption, audit et ouverture de lot. Un second registre serait un doublon à resynchroniser (§2). |
 | Numéros attribués sur le seul contenu de `main` | Un artefact n'atteint `main` qu'à la fusion : deux batches ou deux stories en vol prendraient le même numéro (§4). |
 | Dépendre du nom de branche produit par `using-git-worktrees` | Ce skill préfère les outils natifs du harness, qui nomment eux-mêmes, et peut aboutir à un HEAD détaché (§4). |
 | Laisser `finishing-a-development-branch` proposer ses trois options | Le merge local détruit worktree et branche avant d'échouer au push contre la protection, et emporte les rulings non rapatriés (Override 4). |

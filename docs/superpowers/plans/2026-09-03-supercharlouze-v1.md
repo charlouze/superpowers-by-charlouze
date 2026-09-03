@@ -983,12 +983,14 @@ require writing-a-batch "branch naming convention"                "batch/NN"
 require writing-a-batch "batch document declares a feature flag"  "Feature flag"
 require writing-a-batch "flag field is never left empty"          "never.*empty\|mandatory\|none"
 require writing-a-batch "states the exemption criterion"          "incomplete"
+require writing-a-batch "flag declares its scope"                 "scope"
+require writing-a-batch "surfaces live flags on touched sections" "gating"
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: FAIL — les 11 nouvelles assertions échouent, les 8 de la Task 6 passent.
+Expected: FAIL — les 13 nouvelles assertions échouent, les 8 de la Task 6 passent.
 
 - [ ] **Step 3: Write minimal implementation**
 
@@ -1015,18 +1017,28 @@ pour un batch correctif, réservation des entrées du registre en
 `reserved by batch-NN` ; et la procédure de requalification du §8.3.
 
 Le champ `Feature flag` (§2, §4.3) est **obligatoire et jamais vide** : soit un
-nom et un défaut, soit `none` avec la raison. Le skill énonce le critère
-d'exemption sous forme de question — *une story de ce lot, fusionnée seule,
-laisserait-elle un utilisateur devant quelque chose d'incomplet ?* — et ses trois
-familles de réponse « non » : refactor et infrastructure (aucun changement de
-comportement, donc chaque PR est déployable), lot correctif (il rétablit un
-comportement déjà promis, le retarder serait l'inverse de son objet), lot à story
-unique.
+nom, un défaut et une **portée**, soit `none` avec la raison. Le skill énonce le
+critère d'exemption sous forme de question — *une story de ce lot, fusionnée
+seule, laisserait-elle un utilisateur devant quelque chose d'incomplet ?* — et
+ses trois familles de réponse « non » : refactor et infrastructure (aucun
+changement de comportement, donc chaque PR est déployable), lot correctif (il
+rétablit un comportement déjà promis, le retarder serait l'inverse de son objet),
+lot à story unique. Reprendre les trois exemples de champ du §4.3 tels quels.
+
+**Portée du flag** : le lot par défaut. Une portée qui le dépasse — un module
+construit sur plusieurs lots et ouvert seulement une fois complet — **doit nommer
+sa condition de levée**, faute de quoi un flag voulu et un flag oublié sont
+indiscernables.
+
+**Faire remonter les flags vivants** (§5.2) : si une phrase de gating couvre déjà
+une section que ce lot va toucher, la signaler dans le document de batch avec sa
+condition de levée, pour que l'humain tranche au gate si ce lot la satisfait et
+porte donc la story de levée.
 
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: PASS — 19 lignes `[PASS]`.
+Expected: PASS — 21 lignes `[PASS]`.
 
 - [ ] **Step 5: Commit**
 
@@ -1073,12 +1085,13 @@ require writing-a-user-story "answers review feedback on the branch" "review"
 require writing-a-user-story "story branch naming convention"      "story/NN"
 require writing-a-user-story "slice states the flag and its default" "feature flag\|flag"
 require writing-a-user-story "describes the flag-lifting story"    "lift"
+require writing-a-user-story "extended-scope flag is lifted later" "beyond this batch\|extended"
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: FAIL — les 17 nouvelles assertions échouent, les 19 précédentes passent.
+Expected: FAIL — les 18 nouvelles assertions échouent, les 21 précédentes passent.
 
 - [ ] **Step 3: Write minimal implementation**
 
@@ -1113,11 +1126,15 @@ Points obligatoires :
   la raison du §4.4 condition 2 : rendre la norme antérieure et opposable au code.
 - Si le batch déclare un feature flag, la tranche transcrite **énonce le flag et
   son défaut** (§4.1), et le code de la story est gardé par lui.
-- **La story de levée** (§5.3) : la dernière story d'un batch sous flag retire le
-  branchement dans le code et la phrase de gating dans la spec. C'est une story
-  et non un devoir de clôture parce qu'elle porte du code, donc mérite revue et
-  tests. Dire aussi qu'on peut la couper en deux — activer, puis retirer — si une
-  période d'observation est souhaitée.
+- **La story de levée** (§5.3) retire le branchement dans le code et la phrase de
+  gating dans la spec. C'est une story et non un devoir de clôture parce qu'elle
+  porte du code, donc mérite revue et tests. Dire aussi qu'on peut la couper en
+  deux — activer, puis retirer — si une période d'observation est souhaitée.
+- **À qui appartient la story de levée** : au batch courant si le flag est à
+  portée de batch ; au batch qui satisfait la condition de levée si la portée est
+  étendue (`beyond this batch`), souvent le dernier batch d'un module en
+  construction. Le skill ne le devine pas : c'est le gate d'ouverture qui l'a
+  tranché (§5.2).
 - Cas correctif : delta vide, le premier commit barre l'entrée du gaps register.
 - `Global Constraints` porte les contraintes du batch **et** le gel du fichier de
   spec, avec sa **borne** : levé à l'ouverture de la pull request.
@@ -1144,7 +1161,7 @@ Table `Red Flags` minimale :
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: PASS — 36 lignes `[PASS]`.
+Expected: PASS — 39 lignes `[PASS]`.
 
 - [ ] **Step 5: Commit**
 
@@ -1179,13 +1196,14 @@ require closing-a-batch "records undelivered intentions"          "undelivered\|
 require closing-a-batch "sets status closed"                      "status: closed"
 require closing-a-batch "closing PR is reviewed like any other"   "review"
 require closing-a-batch "branch naming convention"                "batch/NN"
-require closing-a-batch "refuses to close while a flag survives"  "flag"
+require closing-a-batch "refuses to close on an undeclared flag"  "flag"
+require closing-a-batch "accepts a declared extended-scope flag" "beyond this batch\|extended"
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: FAIL — les 8 nouvelles assertions échouent, les 36 précédentes passent.
+Expected: FAIL — les 9 nouvelles assertions échouent, les 39 précédentes passent.
 
 - [ ] **Step 3: Write minimal implementation**
 
@@ -1200,7 +1218,7 @@ avec ces sections :
 ### 2. Consolidate observed drift
 ### 3. Release unconsumed reservations
 ### 4. Record intentions announced but never delivered
-### 5. Refuse to close while a flag from this batch survives
+### 5. Refuse to close on a flag that survives without a declared scope
 ### 6. Set status: closed
 ## Red Flags
 ```
@@ -1226,7 +1244,7 @@ Table `Red Flags` minimale :
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: PASS — 44 lignes `[PASS]`.
+Expected: PASS — 48 lignes `[PASS]`.
 
 - [ ] **Step 5: Commit**
 
