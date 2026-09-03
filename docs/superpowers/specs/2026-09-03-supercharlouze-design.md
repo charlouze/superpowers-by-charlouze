@@ -5,7 +5,7 @@ plans de superpowers. Il remplace les documents de conception datés et jetables
 par une spécification vivante par module fonctionnel, et remplace les plans
 isolés par des *batches* de user stories qui font grandir ces specs.
 
-**Status:** conception validée le 2026-09-03, révisée après deux relectures
+**Status:** conception validée le 2026-09-03, révisée après trois relectures
 adversariales. Rien n'est encore implémenté.
 
 **Plugin name:** `supercharlouze` (namespace de tous les skills). Dépôt :
@@ -54,9 +54,9 @@ fonctionnalités à une ou plusieurs specs. Un batch peut être transverse à
 plusieurs modules.
 
 **User story** — un plan d'implémentation, dans
-`docs/batches/NN-<slug>/NN-us-N-<slug>.md`. Une user story appartient à
-exactement un batch et vise exactement **un** module, donc une seule spec. C'est
-aussi l'unité d'intégration : une branche, une story (§5.1).
+`docs/batches/NN-<slug>/NN-us-N-<slug>.md`. Elle appartient à exactement un
+batch et vise exactement **un** module, donc une seule spec. C'est aussi l'unité
+de livraison technique : **une story, une branche, une pull request** (§5.1).
 
 **Corrective batch** — un batch dont le spec delta est vide. Son but est de
 remettre le code existant en conformité avec une spec déjà vraie. Son périmètre
@@ -82,18 +82,23 @@ plutôt que d'en inventer un : `superpowers:subagent-driven-development` tient u
 ledger dont les décisions prennent la forme
 `Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>`, et les
 présente à l'humain sous le titre « Rulings I made » avant de supprimer son
-workspace. **La source à rapatrier est ce message final, pas le fichier
-ledger** : à l'instant où `closing-a-user-story` s'exécute, le workspace et son
-`progress.md` n'existent plus. Un implémenteur qui irait lire le ledger lirait
-un fichier supprimé.
+workspace.
+
+**Ces rulings sont périssables, et cela dicte le cycle de vie du §5.3.** Ils
+n'existent que dans le message final de SDD, dans la session qui a exécuté la
+story : le fichier ledger est déjà supprimé, et la pull request ne sera
+peut-être fusionnée que des jours plus tard, dans une autre session. Ils sont
+donc capturés **immédiatement**, par `recording-a-user-story`, et non au moment
+de la fermeture de la story.
 
 **Concurrence.** Deux batches ouverts peuvent toucher la même spec ; les
 marqueurs nomment leur user story, donc aucune confusion possible. Deux user
-stories marquant **la même section** est une condition d'arrêt et d'escalade ;
-ça ne se résout pas tout seul. La détection a lieu dans `writing-a-user-story`,
-et dans le chemin bounded (§8.2), avant toute écriture dans la spec — et elle
-n'est fiable que parce que tous les marqueurs vivent sur la branche
-d'intégration (§5.1).
+stories marquant **la même section** est une condition d'arrêt et d'escalade.
+La détection a lieu dans `writing-a-user-story`, et dans le chemin bounded
+(§8.2), avant toute écriture dans la spec — et elle n'est fiable que parce que
+tous les marqueurs vivent sur la branche d'intégration (§5.1). Avec un flux par
+pull request, plusieurs stories sont normalement en vol en même temps : cette
+règle n'est pas théorique, c'est le régime courant.
 
 ## 4. Artifact layout
 
@@ -124,20 +129,27 @@ deux `us-1-setup.md` dans deux batches différents partageraient workspace et
 laisser en place et en démarrer un autre — est inapplicable au même chemin.
 Comportement indéfini, et perte du mécanisme de reprise.
 
-**`NN` est attribué par `writing-a-batch`** comme le plus petit entier non
-utilisé dans `docs/batches/` **sur la branche d'intégration**, et le document de
-batch y est commité dès la validation du gate humain (§5.2). C'est ce commit qui
-réserve le numéro. Sans cette règle, deux batches ouverts en parallèle
-prendraient le même `NN` et la collision de basenames que le préfixe existe pour
-empêcher reviendrait par la porte que la concurrence ouvre.
+**`NN` est réservé par un commit, avant le gate humain.** `writing-a-batch`
+prend le plus petit entier non utilisé dans `docs/batches/` sur la branche
+d'intégration **rafraîchie**, crée le répertoire et le `README.md` en
+`status: draft`, et le commite immédiatement. Le gate du §5.2 fait ensuite
+passer le batch en `status: open`. Réserver seulement après le gate laisserait
+une fenêtre pendant laquelle un autre batch prendrait le même numéro, et la
+collision de basenames que le préfixe existe pour empêcher reviendrait par la
+porte que la concurrence ouvre.
+
+**Nommage des branches de story :** `story/NN-us-N-<slug>`. Il est dérivable du
+nom du fichier de plan, donc la réconciliation (§5.5) peut retrouver une branche
+sans registre séparé.
 
 ### 4.1 Spec document
 
 Décrit le comportement. Ni date, ni statut par section au repos.
 
 - Une section en cours de traitement porte un marqueur temporaire, posé par
-  `writing-a-user-story` et retiré par `closing-a-user-story`. **Sa durée de vie
-  va de l'écriture de la story à son intégration effective** (§5.1, §5.3).
+  `writing-a-user-story` et retiré par la réconciliation (§5.5). **Sa durée de
+  vie va de l'écriture de la story à la fusion effective de sa pull request** —
+  ce qui peut traverser plusieurs sessions.
 - **Le marqueur porte sa propre glose**, parce qu'il est lu par des agents qui
   ignorent tout de ce plugin — au premier rang desquels les reviewers de SDD,
   qui contrôlent la conformité sur la section même qui le porte :
@@ -154,14 +166,12 @@ Décrit le comportement. Ni date, ni statut par section au repos.
   sont enregistrées avec `out-of-batch` en guise de numéro.
 - Une section **Sources** liste les documents validés consommés lors de
   l'adoption (§6), par leur chemin **après archivage** (`docs/archive/...`).
-  Elle est ce qui rend calculable l'état des lieux de `init` (§9) ; sans elle,
-  aucun lien n'existe entre une spec et ce qui l'a nourrie.
+  Elle est ce qui rend calculable l'état des lieux de `init` (§9).
 
 La règle du marqueur est ce qui rend la détection de dérive mécanique : **tout
 écart entre la spec et le code qui n'est pas couvert par un marqueur est une
 dérive**, donc du travail correctif. Parce que le marqueur vit à l'échelle d'une
-user story et non d'un batch, cette règle est vraie en continu — et pas
-seulement entre deux batches.
+user story et non d'un batch, cette règle est vraie en continu.
 
 ### 4.2 Gaps register
 
@@ -173,7 +183,7 @@ Deux sections distinctes, parce qu'elles ne se traitent pas pareil :
   batch ordinaire qui les spécifie enfin.
 
 **Qui écrit dedans.** `adopting-a-module` le crée (§6.4). Ensuite,
-`closing-a-user-story` et `closing-a-batch` y **ajoutent** toute dérive
+`recording-a-user-story` et `closing-a-batch` y **ajoutent** toute dérive
 constatée en chemin et hors périmètre — typiquement une divergence spec/code sur
 une section non marquée, relevée par un reviewer SDD ou consignée dans un
 `Ruling:`. Sans ces écrivains, le registre ne serait alimenté qu'une fois, à
@@ -182,10 +192,10 @@ lieu.
 
 **Réservation et consommation.** Chaque entrée désigne une section de la spec.
 Elle est **réservée** à l'ouverture du batch qui la prend en charge (annotation
-`reserved by batch-08`) et **barrée** à la clôture de ce batch (§5.4), pas à son
-ouverture : tant que le batch n'est pas clos, l'écart n'est pas résorbé. La
+`reserved by batch-08`) et **barrée** à la clôture de ce batch (§5.4). La
 réservation est au registre ce que le marqueur est à la spec — sans elle, deux
-corrective batches concurrents piochent dans le même stock.
+corrective batches concurrents piochent dans le même stock. Une story abandonnée
+libère la réservation qu'elle portait (§5.5).
 
 Le registre déclare aussi **sa propre couverture** : quelles parties du module
 ont été auditées, lesquelles ne l'ont pas été, et pourquoi. Un registre vide qui
@@ -194,17 +204,24 @@ signifie « tout est conforme ».
 
 ### 4.3 Batch document
 
-Un `README.md` avec un front matter `status: open | closed`, et :
+Un `README.md` avec un front matter `status: draft | open | closed`, et :
 
 - **Scope** — ce que ce batch livre, et pourquoi maintenant.
 - **Spec delta** — le comportement ajouté à chaque spec, énoncé comme
   intention. Ce delta n'est **pas** transcrit dans la spec à l'ouverture : il
   l'est tranche par tranche, par chaque user story (§5.3). Pour un corrective
   batch, ce champ est vide et remplacé par les entrées du gaps register que le
-  batch réserve. Delta vide + entrées réservées, c'est exactement ce qui rend un
-  batch correctif.
-- **User stories** — une liste à cocher. Une case n'est cochée qu'après
-  intégration effective de la story (§5.3).
+  batch réserve.
+- **User stories** — une entrée par story, portant son état et **les
+  coordonnées dont la réconciliation a besoin** :
+
+  ```markdown
+  - [x] us-1 — `07-us-1-abonnement.md` — branch `story/07-us-1-abonnement` — PR #41 — merged
+  - [ ] us-2 — `07-us-2-relance.md` — branch `story/07-us-2-relance` — PR #42 — open
+  ```
+
+  Sans la branche et le numéro de PR consignés ici, la réconciliation (§5.5) n'a
+  rien à interroger.
 - **Rulings log** — les rulings rapatriés du message final de SDD (§3).
 
 ### 4.4 User story document
@@ -221,23 +238,27 @@ enregistré dans le répertoire du batch, avec un header étendu :
 contraignante — le faire pointer vers la spec vivante du module est ce qui fait
 fonctionner l'intégration sans modifier superpowers.
 
-**Ce montage n'est correct qu'à deux conditions**, toutes deux load-bearing :
+**Ce montage n'est correct qu'à trois conditions**, toutes load-bearing :
 
 1. **La transcription est incrémentale.** Si le delta complet d'un batch était
    écrit dans la spec à son ouverture, la spec décrirait, pendant l'exécution de
    l'US 1, le comportement des US 2 à N — et les reviewers de SDD signaleraient
    comme manquant ce qui n'est pas encore livré.
 2. **La transcription est commitée sur la branche d'intégration avant que SDD
-   démarre** (§5.1). Le worktree de SDD est un checkout du HEAD commité : une
+   démarre.** Le worktree de SDD est un checkout d'un HEAD commité : une
    transcription non commitée n'y figure pas, et les reviewers jugeraient la
-   conformité contre une spec dépourvue du delta — précisément l'inverse de ce
-   que ce montage cherche.
+   conformité contre une spec dépourvue du delta.
+3. **La session est sur la branche d'intégration, dans le checkout principal,
+   au moment où SDD démarre** (§5.1). `git worktree add -b` dérive du **HEAD
+   courant**, pas d'une branche nommée : si la session est restée dans le
+   worktree d'une story précédente, le nouveau code part d'un HEAD qui ne
+   contient pas le delta — et la condition 2 est violée alors même qu'elle a été
+   respectée.
 
-`Batch:` est un pointeur de lecture, pour l'humain et pour l'orchestrateur. Ce
-n'est **pas** le véhicule des contraintes. Ce que le batch impose à l'exécution
-est recopié mot pour mot dans la section `Global Constraints` du plan, que
-`superpowers:writing-plans` définit déjà comme faisant implicitement partie des
-exigences de chaque tâche.
+`Batch:` est un pointeur de lecture. Ce n'est **pas** le véhicule des
+contraintes. Ce que le batch impose à l'exécution est recopié mot pour mot dans
+la section `Global Constraints` du plan, que `superpowers:writing-plans` définit
+déjà comme faisant implicitement partie des exigences de chaque tâche.
 
 ## 5. Batch lifecycle
 
@@ -250,11 +271,11 @@ branche d'intégration, le code vit sur des branches de user story.**
   documentaires sur la branche d'intégration** (`main` ou son équivalent), en
   dehors de tout worktree, immédiatement. Ils ne transitent jamais par une
   branche de story.
-- Le code d'une story vit sur sa propre branche, créée par
-  `superpowers:using-git-worktrees` au démarrage de SDD. Le worktree dérive de
-  la branche d'intégration, donc il contient déjà le delta transcrit et le
-  marqueur.
-- **Une branche par user story, une intégration par user story.**
+- Le code d'une story vit sur `story/NN-us-N-<slug>`, créée par
+  `superpowers:using-git-worktrees` au démarrage de SDD.
+- **Une story, une branche, une pull request.** L'intégration est asynchrone :
+  la PR peut être fusionnée dans une autre session, un autre jour, par quelqu'un
+  d'autre. Tout le §5.3 en découle.
 
 C'est ce qui rend simultanément vraies les deux propriétés dont dépend le
 design : les reviewers de SDD voient le delta (§4.4, condition 2), et les
@@ -262,31 +283,58 @@ marqueurs de tous les batches sont visibles au même endroit, donc la détection
 de concurrence du §3 fonctionne. Une transcription qui vivrait sur la branche de
 la story satisferait la première et casserait la seconde.
 
+**Préconditions de toute écriture documentaire**, à vérifier avant d'écrire :
+
+- **Être dans le checkout principal.** `superpowers:using-git-worktrees` saute
+  la création d'un worktree quand `GIT_DIR != GIT_COMMON` — c'est-à-dire quand
+  la session est déjà dans un worktree lié. Or
+  `superpowers:finishing-a-development-branch` **préserve** le worktree sur les
+  options « PR » et « garder la branche ». Une session qui enchaîne deux stories
+  sans quitter le worktree de la première verrait donc le code de la seconde
+  atterrir sur la branche de la première. Sortir du worktree est une étape, pas
+  une hygiène.
+- **Être sur la branche d'intégration, rafraîchie.** Avec un flux par pull
+  request, les fusions arrivent depuis le remote : sans `fetch`/`pull` préalable,
+  la réservation de `NN`, la détection de concurrence et la réconciliation
+  raisonnent toutes sur un état périmé.
+
+**Hypothèses assumées, load-bearing :**
+
+- **Un seul clone de travail.** La sérialisation de `NN` et des marqueurs repose
+  sur des commits locaux immédiats ; deux machines travaillant en parallèle sur
+  le même projet pourraient réserver le même numéro ou se marcher dessus. Le
+  rafraîchissement systématique réduit la fenêtre sans la fermer.
+- **La branche d'intégration accepte les commits directs.** Les commits
+  documentaires ne passent pas par une pull request. Si le projet interdit le
+  push direct sur `main`, ce modèle ne s'applique pas en l'état : les documents
+  devraient alors transiter par des PR documentaires, au prix de la visibilité
+  immédiate dont dépendent §3 et §4.4.
+
 ### 5.2 Opening — `writing-a-batch`
 
 Vérifier que chaque module touché possède une spec adoptée ; sinon l'adoption
-est un préalable bloquant (§6). Rédiger le document de batch : scope, spec delta
-comme intention, liste initiale des user stories. Pour un corrective batch,
-réserver dans le gaps register les entrées prises en charge (§4.2). **Aucune
-écriture dans les specs à ce stade.**
+est un préalable bloquant (§6). Réserver `NN` et commiter le document de batch
+en `status: draft` (§4). Rédiger scope, spec delta comme intention, liste
+initiale des user stories. Pour un corrective batch, réserver dans le gaps
+register les entrées prises en charge (§4.2). **Aucune écriture dans les specs à
+ce stade.**
 
 Puis **gate humain obligatoire** : l'humain valide le batch avant qu'une seule
 user story soit écrite. Ce gate est la transposition de celui de superpowers,
-qui fait relire la spec écrite avant de passer à la planification ; le supprimer
-laisserait entrer du normatif dans l'autorité contraignante sans validation.
-
-À la validation, le document de batch est commité sur la branche d'intégration —
-c'est ce commit qui réserve `NN` (§4).
+qui fait relire la spec écrite avant de passer à la planification. À la
+validation, le batch passe en `status: open`.
 
 ### 5.3 Running
 
 Les user stories sont écrites **une par une**, pas toutes à l'avance : la story
 N+1 est écrite en connaissant ce qu'a produit la story N. Pour chacune :
 
-1. **`writing-a-user-story`** — vérifier qu'aucun marqueur d'une autre story
-   n'est posé sur les sections visées (§3) ; transcrire dans la spec **la
-   tranche du delta propre à cette story** ; poser le marqueur ; commiter le
-   tout sur la branche d'intégration ; puis appeler
+1. **`writing-a-user-story`** — vérifier les préconditions du §5.1 (checkout
+   principal, branche d'intégration rafraîchie) ; lancer une passe de
+   réconciliation (§5.5) pour que l'état des marqueurs soit à jour ; vérifier
+   qu'aucun marqueur d'une autre story ne couvre les sections visées (§3) ;
+   transcrire **la tranche du delta propre à cette story** ; poser le marqueur ;
+   commiter le tout sur la branche d'intégration ; puis appeler
    `superpowers:writing-plans`.
 
    **Cas correctif :** le delta étant vide, il n'y a rien à transcrire, mais
@@ -296,33 +344,73 @@ N+1 est écrite en connaissant ce qu'a produit la story N. Pour chacune :
    aveugles aux stories correctives en vol.
 
 2. **`superpowers:subagent-driven-development`** exécute le plan, puis conclut
-   comme il le fait toujours, sur `superpowers:finishing-a-development-branch`.
-   Rien n'est intercepté : ce plugin ne touche pas à l'état terminal de SDD.
+   comme il le fait toujours, sur `superpowers:finishing-a-development-branch`,
+   qui ouvre la pull request. Rien n'est intercepté : ce plugin ne touche pas à
+   l'état terminal de SDD.
 
-3. **`closing-a-user-story`** — **après intégration effective** de la branche.
-   Retirer le marqueur, cocher la case dans le batch, recopier les lignes
-   `Ruling:` du message final de SDD dans le Rulings log, verser au gaps
-   register les dérives constatées hors périmètre (§4.2), le tout en un commit
-   documentaire sur la branche d'intégration. Puis enchaîner sur la story
-   suivante ou, s'il n'en reste aucune, sur `closing-a-batch`.
+3. **`recording-a-user-story`** — dans la même session, une fois la PR ouverte.
+   Consigner dans le document de batch la branche et le numéro de PR (§4.3) ;
+   recopier les lignes `Ruling:` du message final de SDD dans le Rulings log ;
+   verser au gaps register les dérives constatées hors périmètre. Un commit
+   documentaire sur la branche d'intégration.
 
-**Si l'humain n'intègre pas** — `finishing-a-development-branch` propose aussi
-de garder la branche en l'état — alors `closing-a-user-story` ne s'exécute pas :
-la story n'est pas validée, sa case reste vide et son marqueur reste posé. C'est
-l'état correct : la spec annonce un comportement en cours de livraison, et il
-l'est effectivement. Cocher la case au retour de SDD, avant la décision
-d'intégration, ferait dire au système qu'une story est livrée alors qu'aucun
-code intégré ne la porte — une dérive fabriquée par le processus.
+   **Cette étape existe parce que ces informations sont périssables** (§3) : le
+   workspace de SDD est déjà supprimé, et la session qui fermera la story
+   n'existe pas encore. Tout ce qui n'est pas capturé ici est perdu.
+
+4. **La story reste ouverte** jusqu'à ce que sa PR soit fusionnée. Son marqueur
+   reste posé, sa case reste vide. C'est l'état correct : la spec annonce un
+   comportement en cours de livraison, et il l'est.
+
+La story suivante peut démarrer sans attendre — c'est le régime normal d'un flux
+par PR. Si elle vise une section encore marquée, la règle de concurrence du §3
+l'arrête, et c'est précisément son objet.
 
 ### 5.4 Closing — `closing-a-batch`
 
-Ajouter une ligne de changelog à chaque spec touchée. Barrer les entrées
-réservées dans les gaps registers avec le numéro de batch. Verser au registre
-les dérives constatées pendant le batch et non traitées. Passer
-`status: closed`. Vérifier qu'aucun marqueur de ce batch ne subsiste : il n'en
-reste normalement aucun, chacun ayant été retiré à l'intégration de sa story ;
-s'il en reste un, une story n'a pas été intégrée et c'est une anomalie à
-signaler, pas à nettoyer en silence.
+Déclenché quand la réconciliation a fermé la dernière story du batch. Ajouter
+une ligne de changelog à chaque spec touchée. Barrer les entrées réservées dans
+les gaps registers avec le numéro de batch. Verser au registre les dérives
+constatées pendant le batch et non traitées. Passer `status: closed`.
+
+Un batch dont une story a été abandonnée sans être remplacée ne peut pas être
+clos : soit une story de remplacement est écrite, soit le scope du batch est
+révisé — et cette révision repasse par le gate humain du §5.2.
+
+### 5.5 Reconciliation — `closing-a-user-story`
+
+Personne ne peut « observer » la fusion d'une pull request : elle survient hors
+session. La fermeture d'une story n'est donc pas un événement qu'on intercepte,
+c'est un **état qu'on constate**. `closing-a-user-story` est une passe
+idempotente, sans effet quand il n'y a rien à faire, exécutée au début de
+`writing-a-user-story`, avant `closing-a-batch`, et à la demande.
+
+Pour chaque story non fermée des batches ouverts, elle interroge l'état de la PR
+consignée au §4.3 (`gh pr view`), et à défaut de PR — cas du merge local —
+vérifie si la branche est un ancêtre de la branche d'intégration :
+
+| État constaté | Action |
+|---|---|
+| `MERGED` | Retirer le marqueur, cocher la case. Un commit documentaire. |
+| `CLOSED` sans fusion | Proposer l'abandon à l'humain (voir plus bas). Jamais automatique. |
+| `OPEN` | Ne rien faire. La story est en vol. |
+
+**L'interrogation passe par `gh` et non par l'ascendance git**, parce qu'une PR
+fusionnée en squash ou en rebase produit un commit dont la branche d'origine
+n'est plus un ancêtre. La vérification d'ascendance n'est que le repli pour les
+stories fusionnées localement.
+
+**Abandon d'une story.** Une story abandonnée — PR fermée sans fusion, discard
+via `finishing-a-development-branch`, ou requalification d'un batch correctif
+(§8.3) — laisse dans la spec une tranche de delta et un marqueur que personne ne
+livrera. La spec est alors normativement fausse, et le §3 interdit à un agent de
+la corriger de son propre chef. La réconciliation **propose** donc la
+révocation, l'humain la valide, et elle s'exécute en un commit documentaire :
+retrait de la tranche transcrite et du marqueur, libération des réservations au
+gaps register, entrée barrée dans la liste des stories du batch. Aucune ligne de
+changelog : rien n'a été livré. Sans ce chemin, chaque story abandonnée laisse
+une spec fausse et un marqueur orphelin, qui bloquera ensuite toute autre story
+visant la même section.
 
 ## 6. Module adoption
 
@@ -363,8 +451,7 @@ batches possibles.
 documents est impossible et la reconstruction depuis le code est écartée. Le
 skill bascule alors en dialogue : il énumère les comportements trouvés dans le
 code et demande à l'humain, section par section, « est-ce voulu ? ». Ce que
-l'humain valide devient la spec ; le reste part en gaps. C'est lent, et lancer
-cette adoption maintenant ou la différer reste la décision de l'humain.
+l'humain valide devient la spec ; le reste part en gaps.
 
 ## 7. Skills
 
@@ -372,15 +459,16 @@ cette adoption maintenant ou la différer reste la décision de l'humain.
 |---|---|---|
 | `using-batches` | point d'entrée, cité par le bloc `CLAUDE.md` | le routage, le vocabulaire, les règles d'autorité, les overrides déclarés (§8.3) |
 | `adopting-a-module` | premier batch touchant un module sans spec | la spec (avec ses `Sources`) + le gaps register |
-| `writing-a-batch` | ouverture d'un batch, ou requalification d'un batch correctif (§8.3) | le document de batch, les réservations au registre, le gate humain |
-| `writing-a-user-story` | une story à écrire | la tranche de delta transcrite et commitée, le marqueur, le plan superpowers |
-| `closing-a-user-story` | intégration effective de la branche de story | marqueur retiré, case cochée, rulings rapatriés, dérives versées au registre |
-| `closing-a-batch` | dernière story intégrée | changelog, registre drainé, `status: closed` |
+| `writing-a-batch` | ouverture d'un batch, ou requalification (§8.3) | `NN` réservé, le document de batch, les réservations au registre, le gate humain |
+| `writing-a-user-story` | une story à écrire | préconditions vérifiées, tranche transcrite et commitée, marqueur, plan superpowers |
+| `recording-a-user-story` | PR ouverte, même session | branche et PR consignées, rulings rapatriés, dérives versées au registre |
+| `closing-a-user-story` | passe de réconciliation (§5.5) | stories fusionnées fermées, abandons proposés |
+| `closing-a-batch` | dernière story fermée | changelog, registre drainé, `status: closed` |
 
-`writing-a-user-story` est séparé de `writing-a-batch` parce que les stories
-sont écrites au fil de l'eau (§5.3). `closing-a-user-story` est séparé de
-`closing-a-batch` parce qu'il s'exécute N fois par batch, à un moment que seule
-l'intégration déclenche.
+Trois skills couvrent le cycle d'une story parce que ses trois moments ont trois
+déclencheurs et trois durées de vie différents : l'écriture est synchrone,
+l'enregistrement est **périssable** et doit se faire dans la session de SDD, la
+fermeture est **asynchrone** et peut survenir des jours plus tard.
 
 ## 8. Routing and precedence
 
@@ -392,26 +480,22 @@ c'est le levier que superpowers concède explicitement.
 AGENTS.md, GEMINI.md, etc, direct requests) take precedence over skills »*. Ce
 pari est plus solide qu'il n'y paraît : le hook `SessionStart` de superpowers
 injecte l'**intégralité** de `using-superpowers` au démarrage de chaque session,
-cette phrase comprise. La concession n'attend donc pas qu'un skill soit chargé —
-superpowers la remet lui-même en contexte à chaque fois.
+cette phrase comprise. La concession n'attend donc pas qu'un skill soit chargé.
 
-Deux concessions plus étroites, mais plus directes encore, existent pour la
-seule relocalisation des artefacts : `brainstorming` porte *« (User preferences
-for spec location override this default) »* et `writing-plans` *« (User
-preferences for plan location override this default) »*. Sur ce point précis, la
-préséance n'est pas un pari — c'est une porte prévue par superpowers. Le bloc
-`CLAUDE.md` doit s'appuyer sur ces formulations quand il déplace les chemins, et
-ne recourir à la clause générale que pour ce qu'elles ne couvrent pas : le
-reroutage et les overrides.
+`writing-plans` porte en outre une concession directe pour la relocalisation des
+plans : *« (User preferences for plan location override this default) »*. Le
+bloc `CLAUDE.md` s'appuie dessus pour déplacer les plans vers `docs/batches/`.
+`brainstorming` porte la même concession pour l'emplacement des specs, mais elle
+est **sans objet ici** : sous l'Override 1, `brainstorming` n'atteint jamais son
+étape « Write design doc », donc il n'y a aucun emplacement de spec à
+relocaliser. La citer induirait un implémenteur à invoquer une porte qui ne
+dessert plus rien.
 
 Un hook `SessionStart` propre au plugin a été écarté : l'ordre entre les hooks
 de deux plugins n'est pas spécifié, ce qui laisserait deux blocs
-`EXTREMELY_IMPORTANT` concurrents et produirait des échecs intermittents et
-indiagnosticables.
+`EXTREMELY_IMPORTANT` concurrents et produirait des échecs intermittents.
 
-Le bloc inséré par `/supercharlouze:init` est délibérément minuscule et stable,
-pour n'avoir jamais à être resynchronisé quand le plugin évolue. Toute la
-substance vit dans les skills versionnés :
+Le bloc inséré par `/supercharlouze:init` est délibérément minuscule et stable :
 
 ```markdown
 ## Specs and plans
@@ -429,11 +513,9 @@ Le bloc **énumère les trois overrides du §8.3, sans en omettre un**. Par
 l'argument même de cette section — le bloc est le seul artefact garanti en
 contexte, et ce qu'il affirme l'emporte sur un skill chargé à la demande — un
 override absent du bloc serait exactement aussi fragile que celui qu'une
-formulation trop large aurait tué. Le bloc ne dit donc pas que les autres skills
-« s'appliquent inchangés » sans réserve, et il demande l'invocation **avant
-exécution d'un plan** autant qu'avant la conception : sans cela,
-`using-batches` n'est pas en contexte au moment où sa cinquième condition
-d'arrêt doit s'appliquer.
+formulation trop large aurait tué. Il demande aussi l'invocation **avant
+exécution d'un plan** autant qu'avant la conception, sans quoi `using-batches`
+n'est pas en contexte quand sa cinquième condition d'arrêt doit s'appliquer.
 
 ### 8.2 What is kept, what is rerouted
 
@@ -442,24 +524,21 @@ La classification spike / bounded / architectural de superpowers est
 bonne.
 
 - **Spike** — inchangé. Aucun artefact.
-- **Bounded** — cérémonie inchangée, avec deux ajouts. superpowers autorise une
-  modification bounded à être livrée sans aucun document, ce qui dans ce modèle
-  signifie du comportement qui change pendant que la spec reste immobile : une
-  dérive fabriquée par le processus lui-même. Donc :
-  - **(a) une modification bounded ne laisse jamais la spec muette.** Qu'elle
-    *altère* un comportement déjà décrit ou qu'elle en *ajoute* un que nulle
-    spec ne décrit, elle met la spec à jour au titre de sa définition de
-    terminé, avec une ligne de changelog `out-of-batch`. Traiter seulement le
-    cas « altère » rouvrirait le même trou un cran à côté.
-  - **(b) elle vérifie d'abord qu'aucun marqueur ne couvre la section visée** —
-    sinon elle percute une user story en vol, ce qui est la condition d'arrêt du
+- **Bounded** — cérémonie inchangée, avec trois règles :
+  - **(a) il ne laisse jamais la spec muette.** Qu'il *altère* un comportement
+    déjà décrit ou qu'il en *ajoute* un que nulle spec ne décrit, il met la spec
+    à jour au titre de sa définition de terminé, avec une ligne de changelog
+    `out-of-batch`. Traiter seulement le cas « altère » rouvrirait le même trou
+    un cran à côté.
+  - **(b) il vérifie d'abord qu'aucun marqueur ne couvre la section visée** —
+    sinon il percute une user story en vol, ce qui est la condition d'arrêt du
     §3 atteinte par une porte dérobée.
-
-  Pas de batch, pas de user story, pas de cérémonie ajoutée au-delà de ces deux
-  règles.
+  - **(c) son code et sa mise à jour de spec vont dans la même série de commits,
+    sur la branche d'intégration.** Un bounded n'a ni story ni branche : le
+    §5.1 ne lui donnerait sinon aucune place, et deux agents trancheraient
+    différemment.
 - **Architectural** — l'état terminal est rerouté vers
-  `supercharlouze:writing-a-batch` au lieu du design doc daté suivi de
-  `writing-plans`. C'est un override déclaré (§8.3).
+  `supercharlouze:writing-a-batch`. C'est un override déclaré (§8.3).
 
 ### 8.3 Declared overrides of closed rules
 
@@ -491,11 +570,12 @@ existe. Ici c'est l'autorité elle-même qui est en cause, et le §3 interdit à
 agent de corriger une spec.
 
 **Procédure de requalification**, portée par `writing-a-batch` : la story en
-cours est abandonnée, l'humain tranche. Soit il corrige la spec — lui seul le
-peut (§3) — et le batch reste correctif sur un périmètre réduit ; soit le batch
-est réécrit comme batch ordinaire, avec un spec delta, et repasse par le gate
-humain du §5.2. Dans les deux cas la réservation au gaps register est révisée.
-Sans cette procédure, l'arrêt serait défini et la suite ne le serait pas.
+cours est **abandonnée par le chemin du §5.5** — ce qui révoque sa transcription
+et son marqueur, sans quoi la spec resterait fausse. Puis l'humain tranche :
+soit il corrige la spec — lui seul le peut (§3) — et le batch reste correctif
+sur un périmètre réduit ; soit le batch est réécrit comme batch ordinaire, avec
+un spec delta, et repasse par le gate humain du §5.2. Dans les deux cas les
+réservations au gaps register sont révisées.
 
 **Override 3 — le mode d'exécution imposé.** `writing-plans` se termine en
 proposant à l'humain un choix entre `subagent-driven-development` et
@@ -503,12 +583,11 @@ proposant à l'humain un choix entre `subagent-driven-development` et
 rulings (§3, §5.3) dépend du ledger de SDD ; `executing-plans` n'en tient pas,
 et la trace des arbitrages serait perdue.
 
-**Ce qui n'est délibérément pas un override :** l'état terminal de SDD. Il
-serait tentant d'intercaler `closing-a-user-story` entre SDD et
-`finishing-a-development-branch`, mais ce serait un quatrième override — et il
-ferait cocher la case avant la décision d'intégration de l'humain (§5.3).
-`closing-a-user-story` s'exécute donc **après** la chaîne superpowers, pas
-dedans.
+**Ce qui n'est délibérément pas un override :** l'état terminal de SDD.
+`recording-a-user-story` et `closing-a-user-story` s'exécutent **après** la
+chaîne superpowers, jamais dedans. Intercaler quoi que ce soit entre SDD et
+`finishing-a-development-branch` serait un quatrième override, et ferait cocher
+une case avant la décision d'intégration de l'humain.
 
 ## 9. The `init` command
 
@@ -530,19 +609,16 @@ dedans.
    en modules — §6 le réserve à l'humain, et une suggestion serait lue comme une
    décision.
 
-L'adoption reste une décision délibérée, module par module (§6). Un projet peut
-rester à moitié adopté indéfiniment sans que rien ne casse.
-
 ## 10. Language
 
 La frontière ne passe pas entre les documents, elle passe **à l'intérieur** de
 chaque document : ossature en anglais, prose dans la langue du projet.
 
 - **L'ossature est anglaise, partout.** Titres de sections, noms de champs,
-  libellés de templates, valeurs de front matter (`status: open | closed`),
-  en-têtes de tableaux, patrons de chemins, marqueurs et leur glose, noms de
-  skills et de commandes. Cela vaut pour le plugin comme pour les documents
-  qu'il produit dans un projet : specs de module, gaps registers, batches.
+  libellés de templates, valeurs de front matter (`status: draft | open |
+  closed`), en-têtes de tableaux, patrons de chemins et de branches, marqueurs
+  et leur glose, noms de skills et de commandes. Cela vaut pour le plugin comme
+  pour les documents qu'il produit dans un projet.
 - **La prose est dans la langue du projet** — français par défaut ici. Le corps
   des exigences, les descriptions, les justifications, les slugs de fichiers et
   de répertoires, qui nomment des objets métier.
@@ -568,8 +644,7 @@ Le présent document suit cette règle.
 - Le bloc `CLAUDE.md` s'insère proprement dans un fichier existant, dans un
   projet sans `CLAUDE.md`, et ne se duplique pas à la deuxième exécution.
 - Chacun des trois overrides du §8.3 est présent et nommé **à la fois** dans
-  `using-batches` et dans le bloc `CLAUDE.md` — le seul contrôle structurel qui
-  protège une propriété comportementale, et il est bon marché.
+  `using-batches` et dans le bloc `CLAUDE.md`.
 
 **Ce qui n'est pas testé, et qui est donc un pari assumé :**
 
@@ -577,53 +652,56 @@ Le présent document suit cette règle.
   plus probable de la conception.
 - L'interprétation du marqueur par les reviewers de SDD (§4.1). La glose le rend
   lisible sans contexte, mais rien ne garantit qu'un reviewer la respecte.
+- Les deux hypothèses git du §5.1 : clone unique, et branche d'intégration
+  acceptant les commits directs.
 
-La phase 2 du plan d'amorçage est ce qui éprouve ces deux paris en pratique.
+La phase 2 du plan d'amorçage est ce qui éprouve ces paris en pratique.
 
 ## 12. Bootstrap plan
 
 **Phase 1 — construire la v1 avec superpowers nu.** Le plugin ne peut pas se
 construire lui-même : `writing-a-batch` n'existe pas encore. La v1 suit donc le
 chemin superpowers standard — ce document de conception, puis
-`superpowers:writing-plans`, puis `subagent-driven-development`. Les artefacts
-atterrissent dans `docs/superpowers/specs/` et `docs/superpowers/plans/`, selon
-les conventions de superpowers.
+`superpowers:writing-plans`, puis `subagent-driven-development`.
 
 **Phase 2 — dogfooding sur ce dépôt.** Une fois la v1 livrée, lancer
 `/supercharlouze:init` sur `superpowers-by-charlouze` lui-même. Il sera alors un
 vrai projet superpowers, avec des documents de conception datés à migrer, et
 dont on connaît chaque ligne — le bon premier sujet pour l'init, la migration et
-l'adoption, avant de les lâcher sur des projets réels. superpowers se construit
-lui-même de cette façon, et un plugin de skills s'y prête bien : son « code » est
-de la prose, donc l'écart entre spec et implémentation y est réel et vaut la
-peine d'être traqué.
+l'adoption, avant de les lâcher sur des projets réels. Le dépôt utilise déjà un
+flux par pull request, ce qui éprouve la réconciliation (§5.5) sur son chemin
+nominal dès le premier batch.
 
-**Nombre de modules pour ce dépôt : un — `superpowers-override`.** Pas quatre.
-C'est l'heuristique de granularité du §2 appliquée à son propre auteur.
+**Nombre de modules pour ce dépôt : un — `superpowers-override`.**
 
 ## 13. Rejected alternatives
 
 | Alternative | Motif du rejet |
 |---|---|
 | Forker superpowers | Le projet refuse explicitement les PR spécifiques à un fork ; la divergence serait maintenue seul, sans gain par rapport à un plugin compagnon. |
-| `CLAUDE.md` par projet, sans plugin | Suffisant pour les chemins et le vocabulaire, insuffisant face à la checklist en dur de `brainstorming` et à ses tables de red flags tunées. |
+| `CLAUDE.md` par projet, sans plugin | Suffisant pour les chemins et le vocabulaire, insuffisant face à la checklist en dur de `brainstorming`. |
 | Hook `SessionStart` pour la préséance | Ordre non spécifié entre hooks de plugins ; échecs intermittents. |
-| Le batch l'emporte sur la spec pendant le batch | La spec est ce que lisent les reviewers ; la laisser fausse pendant tout un batch ruine sa raison d'être. |
+| Le batch l'emporte sur la spec pendant le batch | La spec est ce que lisent les reviewers ; la laisser fausse ruine sa raison d'être. |
 | Un agent corrige la spec pour résoudre un conflit | Inverse silencieusement l'autorité : c'est alors l'intention du batch qui gagne (§3). |
 | Spec mise à jour à la clôture du batch | SDD contrôle la conformité après *chaque* tâche, contre une spec qui ne décrirait pas encore le travail en cours. |
-| Delta complet transcrit à l'ouverture du batch | Les reviewers de SDD signaleraient comme manquant le comportement des stories suivantes (§4.4). |
-| Transcription non commitée, ou commitée sur la branche de story | Non commitée : absente du worktree de SDD, les reviewers jugent contre une spec sans le delta. Sur la branche de story : invisible des autres batches, la détection de concurrence devient aveugle (§5.1). |
-| Une branche par batch, intégration unique à la clôture | Ramènerait la durée de vie du marqueur à celle du batch et annulerait la propriété de continuité du §4.1. |
+| Delta complet transcrit à l'ouverture du batch | Les reviewers signaleraient comme manquant le comportement des stories suivantes (§4.4). |
+| Transcription non commitée, ou commitée sur la branche de story | Non commitée : absente du worktree de SDD. Sur la branche de story : invisible des autres batches, la détection de concurrence devient aveugle (§5.1). |
+| Une branche par batch, intégration unique à la clôture | Ramènerait la durée de vie du marqueur à celle du batch et annulerait la continuité du §4.1. |
+| Fermeture de story déclenchée par un événement | Une PR fusionne hors session ; il n'y a pas d'événement à intercepter. D'où la réconciliation (§5.5). |
+| Rulings rapatriés à la fermeture de la story | Le message final de SDD n'existe plus quand la PR fusionne des jours plus tard (§3). D'où `recording-a-user-story`. |
+| Réconciliation par ascendance git seule | Une PR fusionnée en squash ou rebase n'est plus un ancêtre ; `gh` d'abord, ascendance en repli (§5.5). |
+| Révocation automatique d'une transcription abandonnée | §3 interdit à un agent de modifier une spec de son propre chef ; la réconciliation propose, l'humain valide (§5.5). |
 | Marqueur sans glose | Il est lu par des agents qui ignorent ce plugin, sur la section même dont ils contrôlent la conformité (§4.1). |
-| `closing-a-user-story` intercalé entre SDD et `finishing-a-development-branch` | Quatrième override non déclaré, et validation de la story avant la décision d'intégration de l'humain (§8.3). |
+| `closing-a-user-story` intercalé entre SDD et `finishing-a-development-branch` | Quatrième override non déclaré, et validation avant la décision d'intégration (§8.3). |
 | Fichiers de story nommés `us-N-<slug>.md` | Collision de workspace SDD par basename identique entre batches (§4). |
-| `NN` attribué sans réservation par commit | Deux batches parallèles prendraient le même numéro et rouvriraient la collision (§4). |
+| `NN` réservé après le gate humain | Fenêtre pendant laquelle un autre batch prend le même numéro (§4). |
 | Entrées du gaps register sans réservation à l'ouverture | Deux corrective batches concurrents piocheraient dans le même stock (§4.2). |
 | Gaps register alimenté seulement à l'adoption | La règle de dérive du §4.1 s'appuierait sur un audit qui n'a plus jamais lieu (§4.2). |
-| Pas de gate humain à l'ouverture d'un batch | Laisserait entrer du normatif dans l'autorité contraignante sans validation, là où superpowers en exige une pour un document jetable (§5.2). |
-| Statut permanent par section dans la spec | Traçabilité totale au prix d'un document qui se lit comme un registre et non comme une spécification. Le changelog en récupère l'essentiel. |
+| Pas de gate humain à l'ouverture d'un batch | Laisserait entrer du normatif dans l'autorité contraignante sans validation (§5.2). |
+| Citer la concession « spec location » de `brainstorming` | Sans objet sous l'Override 1 : `brainstorming` n'atteint jamais son étape « Write design doc » (§8.1). |
+| Statut permanent par section dans la spec | Un document qui se lit comme un registre et non comme une spécification. Le changelog en récupère l'essentiel. |
 | Spec reconstruite depuis le code à l'adoption | Canonise la dérive ; détruit la prémisse des corrective batches. |
-| Comportement non documenté absorbé dans la spec à l'adoption | La spec ne doit contenir que du validé ; le comportement non validé appartient au gaps register. |
+| Comportement non documenté absorbé dans la spec à l'adoption | La spec ne doit contenir que du validé ; le reste appartient au gaps register. |
 | « Exigence » comme unité de concurrence | Granularité indéfinissable ; la section, unité titrée, est vérifiable (§2). |
 | Support multi-harness | Seul Claude Code est utilisé ; chaque harness supplémentaire est du portage sans retour. |
 | Documents intégralement anglais | La spec est lue et amendée par l'humain ; l'anglais n'y sert que la machine. |
