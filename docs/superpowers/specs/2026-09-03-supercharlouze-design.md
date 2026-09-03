@@ -1,24 +1,24 @@
-# supercharlouze — Conception
+# supercharlouze — Design
 
-**But :** un plugin Claude Code qui surcharge l'organisation des specs et des
-plans de superpowers. Il remplace les documents de conception datés et
-jetables par une spécification vivante par module fonctionnel, et remplace les
-plans isolés par des *lots* de user stories qui font grandir ces specs.
+**Goal:** un plugin Claude Code qui surcharge l'organisation des specs et des
+plans de superpowers. Il remplace les documents de conception datés et jetables
+par une spécification vivante par module fonctionnel, et remplace les plans
+isolés par des *batches* de user stories qui font grandir ces specs.
 
-**État :** conception validée le 2026-09-03. Rien n'est encore implémenté.
+**Status:** conception validée le 2026-09-03. Rien n'est encore implémenté.
 
-**Nom du plugin :** `supercharlouze` (namespace de tous les skills). Dépôt :
+**Plugin name:** `supercharlouze` (namespace de tous les skills). Dépôt :
 `superpowers-by-charlouze`.
 
-**Harness cible :** Claude Code uniquement.
+**Target harness:** Claude Code uniquement.
 
 ---
 
-## 1. Le problème
+## 1. Problem
 
 superpowers écrit un document de conception daté par fonctionnalité
-(`docs/superpowers/specs/AAAA-MM-JJ-<sujet>-design.md`) et un plan par
-fonctionnalité (`docs/superpowers/plans/AAAA-MM-JJ-<feature>.md`). Les deux
+(`docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`) et un plan par
+fonctionnalité (`docs/superpowers/plans/YYYY-MM-DD-<feature>.md`). Les deux
 sont des instantanés d'une intention à un moment donné, et aucun n'est jamais
 repris.
 
@@ -28,7 +28,7 @@ décrit l'état courant. Aucun artefact ne répond à la question « que fait le
 module facturation aujourd'hui ? » — et par conséquent aucun artefact ne peut
 révéler que le code a dérivé de ce qui avait été validé.
 
-## 2. Le modèle
+## 2. Model
 
 **Module** — un domaine fonctionnel grossier, vu de l'extérieur. Les modules
 sont délimités par l'humain, jamais déduits par un agent. Préférer peu de gros
@@ -41,108 +41,112 @@ est **normative** (ce que le code doit faire), pas descriptive (ce que le code
 fait par accident). Elle ne porte pas de date. Elle est l'autorité contraignante
 de toutes les revues.
 
-**Lot** — l'unité de livraison, dans `docs/batches/NN-<slug>/`. Un lot regroupe
-plusieurs user stories. Sa raison d'être est d'ajouter des fonctionnalités à
-une ou plusieurs specs. Un lot peut être transverse à plusieurs modules.
+**Batch** (« lot ») — l'unité de livraison, dans `docs/batches/NN-<slug>/`. Un
+batch regroupe plusieurs user stories. Sa raison d'être est d'ajouter des
+fonctionnalités à une ou plusieurs specs. Un batch peut être transverse à
+plusieurs modules.
 
 **User story** — un plan d'implémentation, dans
 `docs/batches/NN-<slug>/us-N-<slug>.md`. Une user story appartient à exactement
-un lot et vise exactement **un** module, donc une seule spec.
+un batch et vise exactement **un** module, donc une seule spec.
 
-**Lot correctif** — un lot dont le delta de spec est vide. Son but est de
+**Corrective batch** — un batch dont le spec delta est vide. Son but est de
 remettre le code existant en conformité avec une spec déjà vraie. Son périmètre
-est puisé dans le registre d'écarts d'un module.
+est puisé dans le gaps register d'un module.
 
-## 3. Autorité et règles d'arbitrage
+## 3. Authority and conflict rules
 
-La spec est l'autorité contraignante. Le lot ne porte que ce qu'une spec ne
+La spec est l'autorité contraignante. Le batch ne porte que ce qu'une spec ne
 peut pas porter : le périmètre de livraison, l'ordre des user stories, les
 contraintes de migration et de compatibilité, et la raison pour laquelle ce
-travail a lieu maintenant. Par construction, le lot ne peut pas contredire la
+travail a lieu maintenant. Par construction, le batch ne peut pas contredire la
 spec.
 
-**Quand un lot et une spec se contredisent, la spec gagne.** Un conflit n'est
-pas un arbitrage à rendre, c'est un symptôme : le delta de spec a été mal
-écrit. On corrige la spec, puis on continue.
+**Quand un batch et une spec se contredisent, la spec gagne.** Un conflit n'est
+pas un arbitrage à rendre, c'est un symptôme : le spec delta a été mal écrit. On
+corrige la spec, puis on continue.
 
 **Tout conflit est consigné pour l'humain.** On réutilise le mécanisme existant
-plutôt que d'en inventer un : `superpowers:subagent-driven-development` tient
-un ledger dont les décisions prennent la forme
-`Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>`, et
-collecte toutes les lignes `Ruling:` pour les présenter à l'humain avant de
-supprimer son workspace. Comme ce workspace est éphémère, ce plugin recopie ces
-lignes dans le **journal d'arbitrages** du lot à la validation de chaque user
-story, pour que la trace survive.
+plutôt que d'en inventer un : `superpowers:subagent-driven-development` tient un
+ledger dont les décisions prennent la forme
+`Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>`, et collecte
+toutes les lignes `Ruling:` pour les présenter à l'humain avant de supprimer son
+workspace. Comme ce workspace est éphémère, ce plugin recopie ces lignes dans le
+**Rulings log** du batch à la validation de chaque user story, pour que la trace
+survive.
 
-**Deux lots ouverts peuvent marquer la même spec** — les marqueurs nomment leur
-lot, donc aucune confusion possible. Deux lots ouverts modifiant **la même
-exigence** est une condition d'arrêt et d'escalade ; ça ne se résout pas tout
-seul. La détection a lieu dans `writing-a-batch` : avant de poser un marqueur
-sur une section, il vérifie qu'un marqueur nommant un autre lot n'y est pas
-déjà.
+**Deux batches ouverts peuvent marquer la même spec** — les marqueurs nomment
+leur batch, donc aucune confusion possible. Deux batches ouverts modifiant **la
+même exigence** est une condition d'arrêt et d'escalade ; ça ne se résout pas
+tout seul. La détection a lieu dans `writing-a-batch` : avant de poser un
+marqueur sur une section, il vérifie qu'un marqueur nommant un autre batch n'y
+est pas déjà.
 
-## 4. Arborescence des artefacts
+## 4. Artifact layout
 
 ```
 docs/
   specs/
     facturation.md                spec vivante, une par module, non datée
-    facturation.gaps.md           registre d'écarts du module
+    facturation.gaps.md           gaps register du module
   batches/
     07-facturation-recurrente/
-      README.md                   le lot
+      README.md                   le batch
       us-1-abonnement.md          une user story = un plan superpowers
       us-2-relance.md
   archive/                        documents datés d'avant la migration
 ```
 
-### 4.1 Le document de spec
+Les *patrons* de chemins sont anglais et figés ; les *slugs* suivent la langue
+du projet, puisqu'ils nomment des objets métier (§10).
+
+### 4.1 Spec document
 
 Décrit le comportement. Ni date, ni statut par exigence au repos.
 
 - Les sections en cours de livraison portent un marqueur temporaire
-  `🚧 batch-07`, posé à l'ouverture du lot et retiré à sa clôture.
+  `🚧 batch-07`, posé à l'ouverture du batch et retiré à sa clôture.
 - Une table **Changelog** en pied de document porte l'historique :
-  `lot | date | changement`. Les modifications faites hors de tout lot (cf.
-  §8.2) y sont enregistrées avec `hors-lot` en guise de numéro.
+  `batch | date | change`. Les modifications faites hors de tout batch (cf.
+  §8.2) y sont enregistrées avec `out-of-batch` en guise de numéro.
 
 La règle du marqueur est ce qui rend la détection de dérive mécanique : **tout
 écart entre la spec et le code qui n'est pas couvert par un marqueur est une
 dérive**, donc du travail correctif.
 
-### 4.2 Le registre d'écarts
+### 4.2 Gaps register
 
 `docs/specs/<module>.gaps.md` est un document vivant, pas un rapport jetable.
-Créé par l'adoption du module, il est vidé au fil des lots. Deux sections
+Créé par l'adoption du module, il est vidé au fil des batches. Deux sections
 distinctes, parce qu'elles ne se traitent pas pareil :
 
-- **Violations** — le code contredit la spec. Alimente un lot *correctif*.
-- **Lacunes** — le code fait des choses qu'aucune spec ne décrit. Alimente un
-  lot *ordinaire* qui les spécifie enfin.
+- **Violations** — le code contredit la spec. Alimente un *corrective batch*.
+- **Gaps** — le code fait des choses qu'aucune spec ne décrit. Alimente un
+  batch ordinaire qui les spécifie enfin.
 
-Chaque entrée est barrée avec son numéro de lot quand elle est consommée.
+Chaque entrée est barrée avec son numéro de batch quand elle est consommée.
 
 Le registre déclare aussi **sa propre couverture** : quelles parties du module
 ont été auditées, lesquelles ne l'ont pas été, et pourquoi. Un registre vide qui
 signifie « rien n'a été examiné » ne doit pas ressembler à un registre vide qui
 signifie « tout est conforme ».
 
-### 4.3 Le document de lot
+### 4.3 Batch document
 
-Un `README.md` avec un front matter `statut: ouvert | clos`, et :
+Un `README.md` avec un front matter `status: open | closed`, et :
 
-- **Périmètre** — ce que ce lot livre, et pourquoi maintenant.
-- **Delta de spec** — le comportement ajouté à chaque spec ; ou, pour un lot
-  correctif, les entrées du registre d'écarts qu'il consomme. Delta vide +
-  entrées non vides, c'est exactement ce qui rend un lot correctif.
+- **Scope** — ce que ce batch livre, et pourquoi maintenant.
+- **Spec delta** — le comportement ajouté à chaque spec ; ou, pour un
+  corrective batch, les entrées du gaps register qu'il consomme. Delta vide +
+  entrées non vides, c'est exactement ce qui rend un batch correctif.
 - **User stories** — une liste à cocher. Les cases sont cochées à mesure que
   les stories sont validées.
-- **Journal d'arbitrages** — les rulings rapatriés du ledger de SDD.
+- **Rulings log** — les rulings rapatriés du ledger de SDD.
 
-### 4.4 Le document de user story
+### 4.4 User story document
 
 Un plan superpowers standard, produit par `superpowers:writing-plans`,
-enregistré dans le répertoire du lot, avec un header étendu :
+enregistré dans le répertoire du batch, avec un header étendu :
 
 ```markdown
 **Spec:** docs/specs/facturation.md
@@ -154,31 +158,30 @@ contraignante — le faire pointer vers la spec vivante du module est ce qui fai
 fonctionner toute l'intégration sans modifier superpowers.
 
 `Batch:` est un pointeur de lecture, pour l'humain et pour l'orchestrateur. Ce
-n'est **pas** le véhicule des contraintes. Ce que le lot impose à l'exécution
+n'est **pas** le véhicule des contraintes. Ce que le batch impose à l'exécution
 est recopié mot pour mot dans la section `Global Constraints` du plan, que
 `superpowers:writing-plans` définit déjà comme faisant implicitement partie des
 exigences de chaque tâche.
 
-## 5. Cycle de vie d'un lot
+## 5. Batch lifecycle
 
-**Ouverture.** Vérifier que chaque module touché possède une spec adoptée ;
-sinon l'adoption est un préalable bloquant (§6). Écrire le delta de spec dans
-chaque spec et poser les marqueurs `🚧 batch-NN` sur les sections concernées.
-Rédiger le document de lot avec son périmètre et la liste initiale des user
-stories.
+**Opening.** Vérifier que chaque module touché possède une spec adoptée ; sinon
+l'adoption est un préalable bloquant (§6). Écrire le spec delta dans chaque spec
+et poser les marqueurs `🚧 batch-NN` sur les sections concernées. Rédiger le
+document de batch avec son scope et la liste initiale des user stories.
 
-**Déroulement.** Les user stories sont écrites **une par une**, pas toutes à
+**Running.** Les user stories sont écrites **une par une**, pas toutes à
 l'avance : la story N+1 est écrite en connaissant ce qu'a produit la story N.
-Chaque story passe par `superpowers:writing-plans` pour la mécanique des
-tâches, puis par `superpowers:subagent-driven-development` pour l'exécution. À
-sa validation, on coche sa case dans le lot et on recopie ses rulings dans le
-journal d'arbitrages.
+Chaque story passe par `superpowers:writing-plans` pour la mécanique des tâches,
+puis par `superpowers:subagent-driven-development` pour l'exécution. À sa
+validation, on coche sa case dans le batch et on recopie ses rulings dans le
+Rulings log.
 
-**Clôture.** Retirer tous les marqueurs `🚧 batch-NN` des specs. Ajouter une
-ligne de changelog à chaque spec touchée. Barrer les entrées consommées dans
-les registres d'écarts avec le numéro de lot. Passer `statut: clos`.
+**Closing.** Retirer tous les marqueurs `🚧 batch-NN` des specs. Ajouter une
+ligne de changelog à chaque spec touchée. Barrer les entrées consommées dans les
+gaps registers avec le numéro de batch. Passer `status: closed`.
 
-## 6. Adoption d'un module
+## 6. Module adoption
 
 `supercharlouze:adopting-a-module` établit la vérité dont tout le reste dépend.
 C'est l'opération la plus délicate du système.
@@ -191,50 +194,49 @@ C'est l'opération la plus délicate du système.
 3. **L'humain** tranche les contradictions.
 
 Reconstruire une spec depuis le code est explicitement écarté : cela
-canoniserait la dérive et détruirait la propriété même qui rend les lots
-correctifs possibles.
+canoniserait la dérive et détruirait la propriété même qui rend les corrective
+batches possibles.
 
-**Étapes :**
+**Steps:**
 
-1. **Délimiter le module** — l'humain le nomme et en trace les contours. Le
-   skill ne les déduit jamais. Préférer un gros module à plusieurs petits.
-2. **Inventorier les documents validés** qui le couvrent — anciens design docs
-   superpowers, README, docs métier, ADR. Présenter la liste à l'humain
-   *avant* d'écrire quoi que ce soit, pour qu'il puisse ajouter une source
-   manquante ou en écarter une qui n'a jamais été validée. La qualité de la
-   spec est plafonnée par cet inventaire.
-3. **Écrire la spec depuis ces seuls documents.** Fusion, déduplication, mise
-   en cohérence. Quand deux documents validés se contredisent, le plus récent
+1. **Delimit the module** — l'humain le nomme et en trace les contours. Le skill
+   ne les déduit jamais. Préférer un gros module à plusieurs petits.
+2. **Inventory the validated documents** qui le couvrent — anciens design docs
+   superpowers, README, docs métier, ADR. Présenter la liste à l'humain *avant*
+   d'écrire quoi que ce soit, pour qu'il puisse ajouter une source manquante ou
+   en écarter une qui n'a jamais été validée. La qualité de la spec est plafonnée
+   par cet inventaire.
+3. **Write the spec from those documents only.** Fusion, déduplication, mise en
+   cohérence. Quand deux documents validés se contredisent, le plus récent
    l'emporte par défaut — consigné comme ruling, jamais résolu en silence.
-4. **Auditer le code contre la spec** et produire le registre d'écarts, avec
-   ses deux sections et sa couverture déclarée (§4.2).
-5. **Revue humaine obligatoire.** Tant que l'humain n'a pas validé la spec et
-   le registre, le module n'est pas adopté et aucun lot ne peut démarrer
-   dessus.
+4. **Audit the code against the spec** et produire le gaps register, avec ses
+   deux sections et sa couverture déclarée (§4.2).
+5. **Mandatory human review.** Tant que l'humain n'a pas validé la spec et le
+   registre, le module n'est pas adopté et aucun batch ne peut démarrer dessus.
 
 **Cas dégradé — un module sans aucun document validé.** L'adoption depuis les
 documents est impossible et la reconstruction depuis le code est écartée. Le
 skill bascule alors en dialogue : il énumère les comportements trouvés dans le
 code et demande à l'humain, section par section, « est-ce voulu ? ». Ce que
-l'humain valide devient la spec ; le reste part en lacunes. C'est lent, et
-lancer cette adoption maintenant ou la différer reste la décision de l'humain.
+l'humain valide devient la spec ; le reste part en gaps. C'est lent, et lancer
+cette adoption maintenant ou la différer reste la décision de l'humain.
 
-## 7. Les skills
+## 7. Skills
 
-| Skill | Déclencheur | Produit |
+| Skill | Trigger | Produces |
 |---|---|---|
 | `using-batches` | point d'entrée, cité par le bloc `CLAUDE.md` | le routage, le vocabulaire, les règles d'autorité et d'arbitrage |
-| `adopting-a-module` | premier lot touchant un module sans spec | la spec + le registre d'écarts |
-| `writing-a-batch` | ouverture d'un lot | le document de lot, le delta de spec, les marqueurs |
+| `adopting-a-module` | premier batch touchant un module sans spec | la spec + le gaps register |
+| `writing-a-batch` | ouverture d'un batch | le document de batch, le spec delta, les marqueurs |
 | `writing-a-user-story` | une story à écrire | un plan superpowers au bon endroit et au bon format |
 | `closing-a-batch` | dernière story validée | marqueurs retirés, changelog, registre consommé, rulings journalisés |
 
 `writing-a-user-story` est séparé de `writing-a-batch` parce que les stories
 sont écrites au fil de l'eau (§5).
 
-## 8. Routage et préséance
+## 8. Routing and precedence
 
-### 8.1 Le levier
+### 8.1 The lever
 
 La préséance sur superpowers s'obtient par le `CLAUDE.md` du projet, parce que
 c'est le seul levier que superpowers concède explicitement :
@@ -259,7 +261,7 @@ superpowers:writing-plans. Every other superpowers skill (TDD,
 subagent-driven-development, debugging, reviews) applies unchanged.
 ```
 
-### 8.2 Ce qui est conservé et ce qui est rerouté
+### 8.2 What is kept, what is rerouted
 
 La classification spike / bounded / architectural de superpowers est
 **conservée telle quelle** — elle est orthogonale à ce modèle, et elle est
@@ -272,19 +274,19 @@ bonne.
   dérive fabriquée par le processus lui-même. Donc : une modification bounded
   qui altère un comportement décrit dans une spec **doit mettre cette spec à
   jour au titre de sa définition de terminé**, avec une ligne de changelog
-  `hors-lot`. Pas de lot, pas de user story, pas de cérémonie ajoutée.
+  `out-of-batch`. Pas de batch, pas de user story, pas de cérémonie ajoutée.
 - **Architectural** — l'état terminal est rerouté. Au lieu d'écrire un design
   doc daté et d'appeler `writing-plans`, il appelle
   `supercharlouze:writing-a-batch`.
 
-### 8.3 Override déclaré d'une règle fermée
+### 8.3 Declared override of a closed rule
 
 `superpowers:subagent-driven-development` énonce *« Four things stop you, and
-only these »*. Ce plugin en ajoute une cinquième, pour les lots correctifs
+only these »*. Ce plugin en ajoute une cinquième, pour les corrective batches
 seulement :
 
 > Si, en mettant du code en conformité avec une spec, tu découvres que c'est la
-> **spec** qui a tort et le code qui a raison, arrête-toi. Le lot n'est plus
+> **spec** qui a tort et le code qui a raison, arrête-toi. Le batch n'est plus
 > correctif et doit être requalifié.
 
 Parce que SDD présente sa liste comme fermée, cet override doit être **nommé
@@ -292,7 +294,7 @@ comme un override** dans `using-batches`, avec sa justification. Une exception
 implicite à une règle marquée « et seulement celles-ci » ne survivra pas à une
 session sous pression.
 
-## 9. La commande `init`
+## 9. The `init` command
 
 `/supercharlouze:init` est idempotente et n'adopte jamais rien.
 
@@ -310,28 +312,32 @@ session sous pression.
 L'adoption reste une décision délibérée, module par module (§6). Un projet peut
 rester à moitié adopté indéfiniment sans que rien ne casse.
 
-## 10. Langues
+## 10. Language
 
-Deux registres, et la frontière passe entre le système et les documents :
+La frontière ne passe pas entre les documents, elle passe **à l'intérieur** de
+chaque document : ossature en anglais, prose dans la langue du projet.
 
-- **Le plugin est en anglais** — noms et contenus des skills, commandes,
-  README, bloc `CLAUDE.md`, messages. C'est la langue du système, conforme à
-  superpowers qui ne possède aucun mécanisme de localisation.
-- **Les documents de spécification sont dans la langue du projet** — français
-  par défaut ici. Cela vaut pour les specs de module, les registres d'écarts et
-  les documents de lot, y compris leurs titres de sections. Les skills, écrits
-  en anglais, prescrivent de rédiger ces documents dans la langue du projet.
-- **Le présent document est une spécification** : il est donc en français.
+- **L'ossature est anglaise, partout.** Titres de sections, noms de champs,
+  libellés de templates, valeurs de front matter (`status: open | closed`),
+  en-têtes de tableaux, patrons de chemins, marqueurs (`🚧 batch-07`), noms de
+  skills et de commandes. Cela vaut pour le plugin comme pour les documents
+  qu'il produit dans un projet : specs de module, gaps registers, batches.
+- **La prose est dans la langue du projet** — français par défaut ici. Le corps
+  des exigences, les descriptions, les justifications, les slugs de fichiers et
+  de répertoires, qui nomment des objets métier.
+- **Le plugin lui-même est intégralement anglais** — skills, commandes, README,
+  bloc `CLAUDE.md`, messages. Il n'a pas de prose métier ; il n'a que de
+  l'ossature.
 
-**Conséquence assumée sur les user stories.** Une user story est produite par
-`superpowers:writing-plans`, qui impose sa propre ossature anglaise
-(`Global Constraints`, `Files`, `Interfaces`, `Steps`). Une user story sera donc
-hybride : structure anglaise imposée par superpowers, prose française. On ne
-tente pas de traduire cette ossature — ce sont les champs que
-`subagent-driven-development` lit, et les renommer casserait l'intégration
-décrite en §4.4.
+C'est le « feeling superpowers » conservé : un document de ce système se lit
+comme un document superpowers, avec du contenu français. Et l'ossature anglaise
+imposée par `superpowers:writing-plans` aux user stories (`Global Constraints`,
+`Files`, `Interfaces`, `Steps`) n'est alors plus une exception subie — c'est la
+règle générale, déjà appliquée par superpowers.
 
-## 11. Vérification
+Le présent document suit cette règle.
+
+## 11. Verification
 
 **Contrôles structurels uniquement**, automatisés et bon marché :
 
@@ -341,13 +347,13 @@ décrite en §4.4.
 - Le bloc `CLAUDE.md` s'insère proprement dans un fichier existant, dans un
   projet sans `CLAUDE.md`, et ne se duplique pas à la deuxième exécution.
 
-L'évaluation comportementale du routage est **explicitement hors périmètre**.
-La conséquence acceptée : la solidité du levier `CLAUDE.md` — le point de
-rupture le plus probable de toute la conception — n'est pas prouvée par la
-suite de tests. La phase 2 du plan d'amorçage ci-dessous est ce qui l'éprouve
-en pratique.
+L'évaluation comportementale du routage est **explicitement hors périmètre**. La
+conséquence acceptée : la solidité du levier `CLAUDE.md` — le point de rupture
+le plus probable de toute la conception — n'est pas prouvée par la suite de
+tests. La phase 2 du plan d'amorçage ci-dessous est ce qui l'éprouve en
+pratique.
 
-## 12. Plan d'amorçage
+## 12. Bootstrap plan
 
 **Phase 1 — construire la v1 avec superpowers nu.** Le plugin ne peut pas se
 construire lui-même : `writing-a-batch` n'existe pas encore. La v1 suit donc le
@@ -357,28 +363,29 @@ atterrissent dans `docs/superpowers/specs/` et `docs/superpowers/plans/`, selon
 les conventions de superpowers.
 
 **Phase 2 — dogfooding sur ce dépôt.** Une fois la v1 livrée, lancer
-`/supercharlouze:init` sur `superpowers-by-charlouze` lui-même. Il sera alors
-un vrai projet superpowers, avec des documents de conception datés à migrer, et
-dont on connaît chaque ligne — le bon premier sujet pour l'init, la migration
-et l'adoption, avant de les lâcher sur des projets réels. superpowers se
-construit lui-même de cette façon, et un plugin de skills s'y prête bien : son
-« code » est de la prose, donc l'écart entre spec et implémentation y est réel
-et vaut la peine d'être traqué.
+`/supercharlouze:init` sur `superpowers-by-charlouze` lui-même. Il sera alors un
+vrai projet superpowers, avec des documents de conception datés à migrer, et
+dont on connaît chaque ligne — le bon premier sujet pour l'init, la migration et
+l'adoption, avant de les lâcher sur des projets réels. superpowers se construit
+lui-même de cette façon, et un plugin de skills s'y prête bien : son « code » est
+de la prose, donc l'écart entre spec et implémentation y est réel et vaut la
+peine d'être traqué.
 
 **Nombre de modules pour ce dépôt : un — `superpowers-override`.** Pas quatre.
 C'est l'heuristique de granularité du §2 appliquée à son propre auteur.
 
-## 13. Alternatives écartées
+## 13. Rejected alternatives
 
 | Alternative | Motif du rejet |
 |---|---|
 | Forker superpowers | Le projet refuse explicitement les PR spécifiques à un fork ; la divergence serait maintenue seul, sans gain par rapport à un plugin compagnon. |
 | `CLAUDE.md` par projet, sans plugin | Suffisant pour les chemins et le vocabulaire, insuffisant face à la checklist en dur de `brainstorming` et à ses tables de red flags tunées. |
 | Hook `SessionStart` pour la préséance | Ordre non spécifié entre hooks de plugins ; échecs intermittents. |
-| Le lot l'emporte sur la spec pendant le lot | La spec est ce que lisent les reviewers ; la laisser fausse pendant tout un lot ruine sa raison d'être. |
-| Spec mise à jour à la clôture du lot | Même motif : SDD contrôle la conformité après *chaque* tâche, contre une spec qui ne décrirait pas encore le travail en cours. |
+| Le batch l'emporte sur la spec pendant le batch | La spec est ce que lisent les reviewers ; la laisser fausse pendant tout un batch ruine sa raison d'être. |
+| Spec mise à jour à la clôture du batch | Même motif : SDD contrôle la conformité après *chaque* tâche, contre une spec qui ne décrirait pas encore le travail en cours. |
 | Statut permanent par exigence dans la spec | Traçabilité totale au prix d'un document qui se lit comme un registre et non comme une spécification. Le changelog en récupère l'essentiel. |
-| Spec reconstruite depuis le code à l'adoption | Canonise la dérive ; détruit la prémisse des lots correctifs. |
-| Comportement non documenté absorbé dans la spec à l'adoption | La spec ne doit contenir que du validé ; le comportement non validé appartient au registre d'écarts. |
+| Spec reconstruite depuis le code à l'adoption | Canonise la dérive ; détruit la prémisse des corrective batches. |
+| Comportement non documenté absorbé dans la spec à l'adoption | La spec ne doit contenir que du validé ; le comportement non validé appartient au gaps register. |
 | Support multi-harness | Seul Claude Code est utilisé ; chaque harness supplémentaire est du portage sans retour. |
-| Documents de spécification en anglais | Écarté au profit de la langue du projet (§10) : la spec est lue et amendée par l'humain, l'anglais n'y sert que la machine. |
+| Documents intégralement anglais | La spec est lue et amendée par l'humain ; l'anglais n'y sert que la machine. |
+| Documents intégralement français, ossature comprise | Perd le « feeling superpowers », et casse les champs que `subagent-driven-development` lit (§4.4). |
