@@ -49,18 +49,40 @@ pull request that has to be thrown away.
 
 ## Allocating NN
 
-`NN` is the **smallest integer not used in `docs/batches/` on `main` and not
-claimed by an open pull request**. Both conditions, always:
+`NN` is the **smallest integer not used in `docs/batches/` on `main`, not
+claimed by an open pull request, and not claimed by a pushed `batch/*` or
+`story/*` branch that carries no pull request yet**. All three, always:
 
 ```bash
 ls docs/batches/
-gh pr list --state open
+gh pr list --state open --json number,headRefName
+git ls-remote --heads origin 'batch/*' 'story/*'
 ```
 
 An artifact only reaches `main` when its pull request merges, so
 the directory listing knows nothing about work in flight. Trusting the directory
 alone hands the same number to two batches opened in parallel — and the second
 one discovers it at merge time, after review.
+
+**The third source closes the same window, by the same argument, as the
+concurrency scan of `supercharlouze:writing-a-user-story`** — read it as one
+idea applied twice, not as two coincidences. A branch is on the remote as soon
+as it has a commit, while its pull request may not open for a long while, so for
+that whole stretch it claims its number and `gh pr list` shows nothing at all.
+The branch name already carries the number — `batch/NN-<slug>` and
+`story/NN-us-N-<slug>` — so the remote listing answers on its own, with nothing
+to fetch and no file to read. That is also why the pull request query asks for
+`headRefName`: the number is in the head branch name, and nothing else in a
+pull request states it.
+
+Both patterns are scanned because both spell `NN`, but they do not carry the
+same weight. On the nominal path the `story/*` half finds nothing new:
+`supercharlouze:writing-a-user-story` requires the batch's opening pull request
+to be **merged** before any story is written, so wherever a `story/NN-us-N-`
+branch exists, `docs/batches/NN-<slug>/` is already on `main` and the directory
+listing above sees it. Scan it anyway — it is one line and it is the only thing
+that answers in the degraded case where that precondition was skipped and a
+story branch is the sole trace of its batch.
 
 The branch is `batch/NN-<slug>`. Path and branch patterns are English and fixed;
 the slug follows the project's language, because it names a business object.
@@ -351,11 +373,11 @@ itself is in question, and no agent may correct a spec.
    - **Correct the spec** — then the batch stays corrective, on a reduced scope,
      and the corrected spec ships through its own pull request; or
    - **Rewrite the batch as an ordinary batch**, with a real spec delta, through
-     a **new batch pull request** that goes back through the gate above.
+     an **amendment pull request** that goes back through the gate above.
 
    The rewrite keeps `NN` and its directory: the number identifies a delivery
    unit, and any story already merged lives under it — a new number would strand
-   them. So it is an amendment pull request on the existing document, replacing
+   them. Hence an amendment pull request on the existing document, replacing
    the reserved gaps entries with a `Spec delta`, reviewed at the gate like an
    opening. Allocate a fresh `NN` only when the human rules that the remaining
    work is a *different* batch, and then close this one with
@@ -385,14 +407,14 @@ skeleton.
 | Thought | Reality |
 |---------|---------|
 | "No flag needed, this batch is small" | Small is not the criterion. Would one story, merged alone, leave a user facing something incomplete? |
-| "I'll take the next free number from the directory" | A batch in an open pull request has not reached main yet. Ask gh too. |
+| "I'll take the next free number from the directory" | Work in an open pull request has not reached main yet, and a pushed branch may hold a number with no pull request at all. Ask gh and `git ls-remote --heads` too. |
 | "I'll add the story list to the batch document, it's clearer" | Every story would then conflict on that file, for information the directory already holds. |
 | "There's a flag on this module but my batch doesn't touch that section" | Surface it anyway. That is how an extended-scope flag gets lifted instead of forgotten. |
 | "I'll transcribe the spec delta now, while it's fresh" | The spec would then describe behaviour no code delivers. Each story transcribes its own slice. |
 | "The module has no spec yet, I'll write the batch and adopt later" | Adoption is blocking. Otherwise the batch invents the norm it is supposed to obey. |
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
 | "This batch is ordinary, reservations are a corrective-batch thing" | Any batch taking on gaps register entries reserves them at opening — a Gaps entry as much as a Violations one. Otherwise two batches specify the same behaviour. |
-| "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open; otherwise discard the branch and its worktree. |
+| "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open; otherwise discard the branch, locally and on the remote, and its worktree — a branch left on the remote reads as a live claim on its sections. |
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: it moves only through an amendment pull request of its own. |
 | "The human ruled on the live flags in the review, that's recorded" | A review thread is not the document. Write the ruling into `Live flags` before the merge, or closing has nothing to check. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |

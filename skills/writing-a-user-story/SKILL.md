@@ -63,22 +63,30 @@ Two stories touching the same section of the same spec are a conflict. Decide
 which sections this story will touch, then check that nobody else holds them.
 
 1. **List the open pull requests together with the files they touch**, and keep
-   those whose files include this story's spec file. Bare `gh pr list` prints
-   neither the files of a pull request nor its head branch, so it can never
-   answer this question — ask for both explicitly:
+   those whose files include this story's spec file. Bare `gh pr list` does not
+   print the files of a pull request, so it can never answer this question —
+   ask for them explicitly, together with the head ref point 2 reads:
 
    ```bash
    gh pr list --state open --limit 100 --json number,headRefName,files
    gh pr view <n> --json number,headRefName,files   # one pull request at a time
    ```
 
-2. **For each of those, read the `Sections:` field of its story document.** That
-   document lives on the *other* pull request's head branch, not on yours:
-   looking for it in your worktree finds nothing. Read it at the head ref:
+2. **For each of those, read its `Sections:` declaration — wherever that pull
+   request keeps it.** A story keeps it in its story document, which lives on
+   the *other* pull request's head branch and not in your worktree, so read it
+   at the head ref. A **bounded change** (`fix/<slug>`) has no story document at
+   all: it declares its sections in the body of its pull request, so read the
+   body. Look in the place that kind of pull request actually uses — demanding a
+   story document from a bounded change would find nothing, and "nothing found"
+   is the unknown of point 6, so every story would stop for as long as any
+   bounded pull request stayed open. That is a false stop, and a false stop jams
+   the nominal path instead of protecting it.
 
    ```bash
    gh api "repos/{owner}/{repo}/contents/<path>?ref=<headRefName>" --jq .content | base64 -d
    git fetch origin <headRefName> && git show FETCH_HEAD:<path>   # local alternative
+   gh pr view <n> --json body --jq .body                          # bounded change: fix/<slug>
    ```
 
 3. **Read the same field on every remote `story/*` branch that carries no pull
@@ -104,11 +112,16 @@ which sections this story will touch, then check that nobody else holds them.
 4. Intersect all of those with the sections this story will touch.
 5. **Stop if the intersection is not empty.** Report which pull request or
    branch holds the section, and let your human partner sequence the two.
-6. **Stop if you could not read a pull request's `Sections:` field** — fetch
-   failed, document absent, field missing. An unread field is an unknown, not a
-   pass. Name the pull request and say why, and let your human partner decide.
-   Silently treating it as empty turns the one real net into "found nothing".
-   The same applies to a story branch kept at point 3.
+6. **Stop if you could not read a pull request's `Sections:` declaration** —
+   fetch failed, story document absent on a story's branch, pull request body
+   silent on a bounded change, field missing. An unread declaration is an
+   unknown, not a pass. Name the pull request and say why, and let your human
+   partner decide. Silently treating it as empty turns the one real net into
+   "found nothing". The same applies to a story branch kept at point 3. What is
+   *not* an unknown: a bounded change having no story document. It never has
+   one, and its declaration is in its pull request body — read there, per
+   point 2. Only a declaration genuinely absent from the place its kind of pull
+   request keeps it stops you.
 
 **Name the blind spot rather than trusting the net.** What this check sees is
 what is on the remote: open pull requests, and pushed story branches. A story
@@ -130,12 +143,30 @@ case this check exists to catch.
 
 ## Step 2 — Allocate us-N and Create the Branch
 
-`us-N` is the smallest integer **not used in the batch directory on `main`**
-*and* **not claimed by an open pull request** (`gh pr
-list`). Both conditions are necessary: an artifact only reaches `main`
-when its pull request merges, so the directory listing knows nothing
-about what is in flight. Going by the directory alone gives the same number to
-two stories written while a third is in review.
+`us-N` is the smallest integer **not used in the batch directory on `main`**,
+**not claimed by an open pull request**, *and* **not claimed by a pushed
+`story/*` branch that carries no pull request yet**:
+
+```bash
+ls docs/batches/NN-<slug>/
+gh pr list --state open --limit 100 --json number,headRefName
+git ls-remote --heads origin 'story/*'
+```
+
+All three are necessary. The two remote ones are exactly the two scans Step 1
+runs — one idea applied twice, not two coincidences; the third is `main`
+itself, which Step 1 never reads, because concurrency is a question about work
+in flight and allocation is also a question about work already landed. An
+artifact only reaches `main` when its pull request merges, so the directory
+listing knows nothing about what is in flight;
+and a story's pull request opens only at the very end of Step 5, so from its
+first commit until then a branch holds its number without ever appearing in
+`gh pr list`. The branch name carries the number — `story/NN-us-N-<slug>` — so
+the remote listing answers on its own, with nothing to fetch and no file to
+read. Going by the directory alone gives the same number to two stories written
+while a third is in review; adding only the pull requests still gives it to two
+stories written while a third is being implemented, and that window is the
+longer of the two.
 
 Branch name, enforced by this plugin and not by superpowers:
 
@@ -337,8 +368,11 @@ requalification is ruled.**
 Nothing on `main` changes either way — the spec slice, or the struck
 gaps-register entry, travels with the code and dies with the branch. The
 reservation posted on `main` by the batch's opening pull request is untouched,
-and `supercharlouze:closing-a-batch` releases it. Delete the abandoned branch,
-locally and on the remote, once the requalification is ruled.
+and `supercharlouze:closing-a-batch` releases it. Once the requalification is
+ruled, delete the abandoned branch, locally and on the remote, and remove its
+worktree — the branch left on the remote would read as a live claim on its
+sections, and the worktree left behind is where a later session resumes work
+under a qualification the batch no longer has.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session
@@ -455,6 +489,8 @@ documents.
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No merge conflict, so no one else is on this section" | Git conflicts on lines, not sections. Check the open pull requests. |
 | "No open pull request touches this spec, so the section is free" | A story holds its sections from Step 1 until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too. |
+| "No open pull request uses us-3, so us-3 is free" | A branch claims its number from its first commit until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too — same argument as the concurrency scan. |
+| "This pull request has no story document, so I must stop" | Not if it is a `fix/<slug>`: a bounded change declares its sections in its pull request body. Read it there. Stopping would halt every story for as long as one bounded pull request stays open. |
 | "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-slice commit. |
 | "The story is abandoned, the branch can stay" | A pushed `story/*` branch with no pull request reads as a live claim on its sections. Delete it, locally and on the remote. |
 | "I'm already in a worktree, that's fine" | Then this story's code lands on the previous story's branch. Return to the main checkout. |
