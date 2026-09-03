@@ -448,6 +448,13 @@ else
     fail "using-batches states the drift rule"
 fi
 
+# Continuous deployment is the premise that makes feature flags necessary (2, 5.1).
+if grep -qi "continuous" "$SKILL" && grep -qi "feature flag" "$SKILL"; then
+    pass "using-batches ties continuous deployment to feature flags"
+else
+    fail "using-batches ties continuous deployment to feature flags"
+fi
+
 exit $((FAILURES > 0))
 ```
 
@@ -506,13 +513,16 @@ Exigences de contenu, vérifiées par le test :
 - `## The Git Model` porte le §5.1 : une story = une branche = une pull request
   portant **la tranche de spec et le code dans la même pull request** ; les
   gates humains sont des **revues** de pull request (table des trois gates) ; la
-  règle de dérive du §4.1 énoncée sans exception. C'est le seul skill qui porte
-  ce modèle — les autres l'appliquent sans le réexpliquer.
+  règle de dérive du §4.1 énoncée sans exception ; les deux contraintes du
+  projet — `main` protégée et **déployée en continu** — et le fait que la seconde
+  est la raison d'être des **feature flags** (§2), avec le rejet motivé de la
+  branche de lot et de `develop`. C'est le seul skill qui porte ce modèle — les
+  autres l'appliquent sans le réexpliquer.
 
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `bash tests/test-declared-overrides.sh`
-Expected: PASS — 14 lignes `[PASS]`.
+Expected: PASS — 15 lignes `[PASS]`.
 
 - [ ] **Step 5: Commit**
 
@@ -970,12 +980,15 @@ require writing-a-batch "PR review is the human gate"             "gate"
 require writing-a-batch "corrective batch reserves register entries" "reserved by batch"
 require writing-a-batch "carries the requalification procedure"   "requalif"
 require writing-a-batch "branch naming convention"                "batch/NN"
+require writing-a-batch "batch document declares a feature flag"  "Feature flag"
+require writing-a-batch "flag field is never left empty"          "never.*empty\|mandatory\|none"
+require writing-a-batch "states the exemption criterion"          "incomplete"
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: FAIL — les 8 nouvelles assertions échouent, les 8 de la Task 6 passent.
+Expected: FAIL — les 11 nouvelles assertions échouent, les 8 de la Task 6 passent.
 
 - [ ] **Step 3: Write minimal implementation**
 
@@ -994,17 +1007,26 @@ Remplacer le corps de `skills/writing-a-batch/SKILL.md` par le contenu des **§4
 
 Points obligatoires : `NN` = plus petit entier libre **sur `main` et parmi les
 pull requests ouvertes**, avec la raison (un artefact n'atteint `main` qu'à la
-fusion) ; branche `batch/NN-<slug>` ; le document de batch porte `Scope` et
-`Spec delta` **et aucun état mutable**, ni liste de stories ni cases à cocher,
-avec la raison (contention de fusion, et `gh pr list` dit mieux) ; aucune
-écriture dans les specs à l'ouverture ; la revue de la PR *est* le gate ; pour un
-batch correctif, réservation des entrées du registre en `reserved by batch-NN` ;
-et la procédure de requalification du §8.3.
+fusion) ; branche `batch/NN-<slug>` ; le document de batch porte `Scope`,
+`Spec delta`, `Feature flag` **et aucun état mutable**, ni liste de stories ni
+cases à cocher, avec la raison (contention de fusion, et `gh pr list` dit mieux) ;
+aucune écriture dans les specs à l'ouverture ; la revue de la PR *est* le gate ;
+pour un batch correctif, réservation des entrées du registre en
+`reserved by batch-NN` ; et la procédure de requalification du §8.3.
+
+Le champ `Feature flag` (§2, §4.3) est **obligatoire et jamais vide** : soit un
+nom et un défaut, soit `none` avec la raison. Le skill énonce le critère
+d'exemption sous forme de question — *une story de ce lot, fusionnée seule,
+laisserait-elle un utilisateur devant quelque chose d'incomplet ?* — et ses trois
+familles de réponse « non » : refactor et infrastructure (aucun changement de
+comportement, donc chaque PR est déployable), lot correctif (il rétablit un
+comportement déjà promis, le retarder serait l'inverse de son objet), lot à story
+unique.
 
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: PASS — 16 lignes `[PASS]`.
+Expected: PASS — 19 lignes `[PASS]`.
 
 - [ ] **Step 5: Commit**
 
@@ -1049,12 +1071,14 @@ require writing-a-user-story "records rulings before the merge"    "Rulings"
 require writing-a-user-story "records observed drift in the story" "Observed drift"
 require writing-a-user-story "answers review feedback on the branch" "review"
 require writing-a-user-story "story branch naming convention"      "story/NN"
+require writing-a-user-story "slice states the flag and its default" "feature flag\|flag"
+require writing-a-user-story "describes the flag-lifting story"    "lift"
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: FAIL — les 15 nouvelles assertions échouent, les 16 précédentes passent.
+Expected: FAIL — les 17 nouvelles assertions échouent, les 19 précédentes passent.
 
 - [ ] **Step 3: Write minimal implementation**
 
@@ -1087,6 +1111,13 @@ Points obligatoires :
 - Le header de story : `Spec:`, `Batch:`, `Sections:`.
 - La tranche de spec est le **premier commit** de la branche, avant le plan, avec
   la raison du §4.4 condition 2 : rendre la norme antérieure et opposable au code.
+- Si le batch déclare un feature flag, la tranche transcrite **énonce le flag et
+  son défaut** (§4.1), et le code de la story est gardé par lui.
+- **La story de levée** (§5.3) : la dernière story d'un batch sous flag retire le
+  branchement dans le code et la phrase de gating dans la spec. C'est une story
+  et non un devoir de clôture parce qu'elle porte du code, donc mérite revue et
+  tests. Dire aussi qu'on peut la couper en deux — activer, puis retirer — si une
+  période d'observation est souhaitée.
 - Cas correctif : delta vide, le premier commit barre l'entrée du gaps register.
 - `Global Constraints` porte les contraintes du batch **et** le gel du fichier de
   spec, avec sa **borne** : levé à l'ouverture de la pull request.
@@ -1113,7 +1144,7 @@ Table `Red Flags` minimale :
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: PASS — 31 lignes `[PASS]`.
+Expected: PASS — 36 lignes `[PASS]`.
 
 - [ ] **Step 5: Commit**
 
@@ -1132,7 +1163,7 @@ git commit -m "feat: writing-a-user-story skill"
 
 **Interfaces:**
 - Consumes: `require()` de la Task 6.
-- Produces: le skill de clôture, qui porte les cinq devoirs du §5.4 — dont trois
+- Produces: le skill de clôture, qui porte les six devoirs du §5.4 — dont quatre
   n'ont aucun autre porteur dans le système.
 
 - [ ] **Step 1: Write the failing test**
@@ -1148,12 +1179,13 @@ require closing-a-batch "records undelivered intentions"          "undelivered\|
 require closing-a-batch "sets status closed"                      "status: closed"
 require closing-a-batch "closing PR is reviewed like any other"   "review"
 require closing-a-batch "branch naming convention"                "batch/NN"
+require closing-a-batch "refuses to close while a flag survives"  "flag"
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: FAIL — les 7 nouvelles assertions échouent, les 31 précédentes passent.
+Expected: FAIL — les 8 nouvelles assertions échouent, les 36 précédentes passent.
 
 - [ ] **Step 3: Write minimal implementation**
 
@@ -1163,12 +1195,13 @@ avec ces sections :
 ```markdown
 ## Overview
 ## Preconditions
-## The Five Duties
+## The Six Duties
 ### 1. Write the changelog line
 ### 2. Consolidate observed drift
 ### 3. Release unconsumed reservations
 ### 4. Record intentions announced but never delivered
-### 5. Set status: closed
+### 5. Refuse to close while a flag from this batch survives
+### 6. Set status: closed
 ## Red Flags
 ```
 
@@ -1193,7 +1226,7 @@ Table `Red Flags` minimale :
 - [ ] **Step 4: Run test to verify it passes**
 
 Run: `bash tests/test-skill-content.sh`
-Expected: PASS — 38 lignes `[PASS]`.
+Expected: PASS — 44 lignes `[PASS]`.
 
 - [ ] **Step 5: Commit**
 

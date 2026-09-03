@@ -63,6 +63,33 @@ pull request porte *à la fois* la tranche de spec et le code qui la réalise
 remettre le code existant en conformité avec une spec déjà vraie. Son périmètre
 est puisé dans le gaps register d'un module.
 
+**Feature flag** — le mécanisme qui rend une story livrable seule sans exposer un
+lot à moitié fait. `main` est déployée en continu (§5.1), donc chaque story
+fusionnée part en production ; un lot dont les stories exposeraient du
+comportement incomplet en déclare un.
+
+**Le flag est un objet spécifié, pas un détail d'implémentation.** La section de
+spec concernée énonce son nom et son défaut — *« derrière le flag
+`billing.recurring`, désactivé par défaut »*. Sans cette déclaration, une story
+fusionnée derrière un flag rendrait la spec fausse au sens des utilisateurs, et
+rouvrirait par la fenêtre exactement l'écart que le §4.1 sert à fermer.
+
+Le flag est **par lot, pas par story** : le lot est la frontière au-delà de
+laquelle il n'y a plus rien d'incomplet.
+
+**Le critère d'exemption tient en une question :** *une story de ce lot,
+fusionnée seule, laisserait-elle un utilisateur devant quelque chose
+d'incomplet ?* Si non, pas de flag. Trois familles répondent non par
+construction :
+
+- **Refactor et infrastructure** — ils ne changent aucun comportement, donc
+  chaque pull request est déployable telle quelle. C'est la définition même d'un
+  refactor, pas une tolérance qu'on leur accorde.
+- **Lot correctif** — il rétablit un comportement déjà promis par la spec. Le
+  garder derrière un flag reviendrait à retarder une mise en conformité, ce qui
+  est l'inverse de son objet. En pratique il tient souvent en une seule story.
+- **Lot à story unique** — rien n'est jamais à moitié livré.
+
 ## 3. Authority and conflict rules
 
 La spec est l'autorité contraignante. Le batch ne porte que ce qu'une spec ne
@@ -193,6 +220,12 @@ document n'en dépend. L'historique faisant autorité est celui du fichier lui-m
 (`git log docs/specs/<module>.md`), et il est exact par construction puisque
 chaque changement de spec voyage avec son code.
 
+**Comportement sous flag.** Une section décrivant un comportement encore gardé
+énonce son flag et son défaut (§2). La spec reste donc exactement vraie : elle ne
+décrit pas seulement ce que le code fait, mais **ce qu'il expose et sous quelle
+condition**. Cette phrase disparaît quand le flag est retiré (§5.3), et c'est un
+changement de spec comme un autre.
+
 **La règle de dérive s'énonce alors sans exception :** *toute divergence entre
 la spec de `main` et le code de `main` est une dérive*, donc du travail
 correctif. Il n'y a pas de cas « pas encore livré » à excepter, parce que ce cas
@@ -246,6 +279,11 @@ Un `README.md` avec un front matter `status: open | closed`, et :
   tranche par tranche, par la pull request de chaque story (§5.3). Pour un
   corrective batch, ce champ est vide et remplacé par les entrées du gaps
   register que le batch réserve.
+- **Feature flag** — le nom du flag et son défaut, ou `none` avec la raison de
+  l'exemption (§2). Ce champ est **obligatoire et jamais vide** : « aucun flag »
+  doit être une décision énoncée et revue, pas un oubli. C'est le gate
+  d'ouverture (§5.2) qui l'examine, et c'est le bon endroit — au moment où le
+  périmètre du lot est encore devant nous.
 
 **Le document de batch ne porte aucun état mutable**, et c'est délibéré : il est
 écrit une fois par sa pull request d'ouverture, puis ne bouge plus jusqu'à sa
@@ -317,17 +355,20 @@ flowchart TD
     ADG --> WB
 
     ADOPTED -->|oui| WB["writing-a-batch"]
-    WB --> BPR[["PR : document de batch<br/>scope, spec delta, réservations"]]
+    WB --> BPR[["PR : document de batch<br/>scope, spec delta, réservations<br/>feature flag ou exemption motivée"]]
     BPR --> BG{{"Revue = gate d'ouverture"}}
 
     BG --> WS["writing-a-user-story"]
-    WS --> SPR[["PR : tranche de spec + code"]]
+    WS --> SPR[["PR : tranche de spec + code<br/>gardé par le flag s'il y en a un"]]
     SPR --> SG{{"Revue = gate de livraison"}}
 
     SG --> MORE{"D'autres stories ?"}
     MORE -->|oui, une par une| WS
-    MORE -->|non| CB["closing-a-batch"]
-    CB --> CPR[["PR : changelog, consolidation,<br/>libérations, status: closed"]]
+    MORE -->|non| FLAG{"Lot sous flag ?"}
+    FLAG -->|oui| LIFT["Story de levée<br/>retire le branchement et le gating"]
+    LIFT --> CB
+    FLAG -->|non| CB["closing-a-batch"]
+    CB --> CPR[["PR : changelog, consolidation,<br/>libérations, constats, status: closed"]]
 
     SG -.->|PR fermée sans fusion| ABANDON["Story abandonnée<br/>rien à révoquer"]
     ABANDON -.->|résidus sur main| CB
@@ -339,8 +380,22 @@ et l'intention annoncée par le batch — que la clôture doit constater (§5.4)
 
 ### 5.1 Git model
 
-`main` est protégée : **tout passe par une pull request.** Le modèle en découle
-entièrement, et cette contrainte est un atout plutôt qu'une gêne.
+Deux contraintes du projet, pas des choix de ce plugin, et tout le modèle en
+découle :
+
+- **`main` est protégée** : tout passe par une pull request.
+- **`main` est déployée en continu** : chaque fusion part en production.
+
+La seconde est la raison d'être des feature flags (§2), et elle **écarte les deux
+alternatives naturelles**. Une branche de lot, ou une branche `develop` façon
+gitflow, protégeraient la production en retenant le travail — mais au prix d'un
+angle mort : une story fusionnée dans une branche de lot n'est ni une pull
+request ouverte ni sur `main`, donc elle devient invisible à la détection de
+concurrence du §5.3, pour toute la durée du lot. Et une branche `develop` fait
+pire : elle crée **deux baselines** pour la règle de dérive — la spec de
+référence sur `develop`, le code en production sur `main` — et un lot correctif
+ne sait plus contre quoi il corrige. Le flag protège la production sans retenir
+le code, donc sans créer ni angle mort ni seconde baseline.
 
 **Une pull request de story porte la tranche de spec et le code qui la
 réalise.** Ils sont livrés ensemble ou pas du tout. C'est ce qui donne à `main`
@@ -476,6 +531,10 @@ Pour chacune :
 4. **Commiter la tranche du delta propre à cette story** — premier commit de la
    branche (§4.4, condition 2).
 
+   Si le lot déclare un feature flag (§4.3), la tranche transcrite **énonce le
+   flag et son défaut** (§4.1). Le code de la story, écrit ensuite, sera gardé
+   par ce flag.
+
    **Cas correctif :** le delta étant vide, ce premier commit ne touche pas la
    spec. Il barre l'entrée du gaps register que la story résorbe, ce qui joue le
    même rôle : fixer le périmètre dans l'histoire de la branche avant que le
@@ -502,6 +561,21 @@ Pour chacune :
 La story est livrée quand sa pull request est fusionnée. Il n'y a rien à cocher
 ni à réconcilier : son état *est* l'état de sa pull request.
 
+**La dernière story d'un lot à flag est la story de levée.** Elle supprime le
+branchement dans le code et la phrase de gating dans la spec — donc du code et
+une tranche de spec, dans une pull request : exactement la forme d'une story, sans
+mécanisme nouveau. C'est elle qui met la fonctionnalité en production.
+
+Elle est **une story et non un devoir de clôture** parce qu'elle porte du code,
+et que du code mérite une revue et un cycle de tests. Si vous voulez une période
+d'observation entre l'activation et le nettoyage, coupez-la en deux stories —
+activer, puis retirer. Le modèle le supporte sans rien changer.
+
+**Sans story de levée, le flag survit à son lot.** C'est le mode de panne
+classique des feature flags, et il est silencieux : le code accumule des
+branchements morts que plus personne n'ose retirer. `closing-a-batch` refuse de
+clore tant qu'il en reste un (§5.4).
+
 ### 5.4 Closing — `closing-a-batch`
 
 Quand toutes les stories du batch sont fusionnées ou abandonnées et que l'humain
@@ -519,7 +593,12 @@ considère le batch terminé, une pull request de clôture :
    Sans cette étape, l'abandon d'une story serait invisible : ni dérive (la spec
    et le code sont d'accord, tous deux silencieux), ni gap, juste une promesse
    oubliée dans un document clos.
-5. **Passe `status: closed`.**
+5. **Vérifie qu'aucun flag du lot ne subsiste** — ni dans le code, ni comme
+   phrase de gating dans une spec. S'il en reste un, la story de levée n'a pas
+   été écrite (§5.3) et le lot **ne peut pas être clos**. Un flag qui survit à
+   son lot est du code mort que plus personne n'ose retirer, et rien d'autre dans
+   le système ne le rattraperait.
+6. **Passe `status: closed`.**
 
 Cette pull request est revue comme les autres : la clôture acte une décision
 humaine — que le batch a livré ce qu'il devait — et cette décision mérite sa
@@ -668,7 +747,9 @@ déclarer l'override (§8.3).
     percuterait une story en vol par une porte dérobée.
 
   Pas de batch, pas de user story : un bounded est déjà une pull request, il
-  porte simplement sa mise à jour de spec.
+  porte simplement sa mise à jour de spec. **Pas de feature flag non plus** : un
+  bounded est complet dans sa propre pull request, donc il satisfait le critère
+  d'exemption du §2 par construction.
 - **Architectural** — l'état terminal est rerouté vers
   `supercharlouze:writing-a-batch`. C'est un override déclaré (§8.3).
 
@@ -840,7 +921,11 @@ flux par pull request sur une branche protégée, donc il éprouve le modèle du
 | Liste des stories maintenue dans le document de batch | Conflit de fusion à chaque story, pour une information que le répertoire et `gh pr list` donnent déjà (§4.3). |
 | Cases à cocher pour l'état des stories | Recopie une vérité que `gh pr list` donne mieux, et se désynchronise dès la première PR fusionnée hors session (§4.3). |
 | Sections d'une story déduites de son diff | Fragile ; l'auteur de la story les connaît, donc elles sont déclarées (§4.4). |
-| Une branche par batch | Rendrait les stories non livrables indépendamment et ramènerait l'écart spec/code que le modèle supprime. |
+| Une branche par batch, fusionnée dans `main` à la clôture | Protégerait la production en retenant le travail, mais une story fusionnée dans la branche de lot n'est ni une PR ouverte ni sur `main` : elle devient invisible à la détection de concurrence pendant toute la durée du lot. Et la branche vieillit, avec le fichier de spec pour surface de conflit (§5.1). |
+| Une branche `develop` façon gitflow | Même angle mort, mais permanent. Et surtout **deux baselines** pour la règle de dérive — spec de référence sur `develop`, code en production sur `main` — donc un lot correctif ne sait plus contre quoi il corrige (§5.1). |
+| Feature flag non spécifié, traité comme un détail d'implémentation | Une story fusionnée derrière un flag rendrait la spec fausse au sens des utilisateurs, et rouvrirait l'écart que le §4.1 ferme. Le flag et son défaut sont énoncés dans la spec (§2). |
+| Levée du flag comme devoir de `closing-a-batch` | Elle porte du code, donc elle mérite une revue et un cycle de tests : c'est une story (§5.3). La clôture se contente de vérifier qu'elle a eu lieu. |
+| Champ `Feature flag` facultatif dans le document de batch | « Aucun flag » doit être une décision énoncée et revue au gate d'ouverture, pas un oubli (§4.3). |
 | Numéros attribués sur le seul contenu de `main` | Un artefact n'atteint `main` qu'à la fusion : deux batches ou deux stories en vol prendraient le même numéro (§4). |
 | Dépendre du nom de branche produit par `using-git-worktrees` | Ce skill préfère les outils natifs du harness, qui nomment eux-mêmes, et peut aboutir à un HEAD détaché (§4). |
 | Laisser `finishing-a-development-branch` proposer ses trois options | Le merge local détruit worktree et branche avant d'échouer au push contre la protection, et emporte les rulings non rapatriés (Override 4). |
