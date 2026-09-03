@@ -1,0 +1,13 @@
+# Git for Windows defaults to core.autocrlf=true. Without these rules, a clone
+# made by `/plugin marketplace add` on Windows lands CRLF line endings.
+
+# Normalize line endings in the repository, let Git detect binary files.
+* text=auto
+
+# Shell scripts must keep LF in the working tree: bash dies on the trailing
+# $'\r' of a CRLF script before it runs a single command.
+*.sh text eol=lf
+
+# The canonical CLAUDE.md block is copied byte for byte into the target file and
+# compared byte for byte by the tests; CRLF here would break both.
+skills/using-batches/references/claude-md-block.md text eol=lf

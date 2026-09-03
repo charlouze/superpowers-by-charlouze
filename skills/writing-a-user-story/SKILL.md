@@ -62,11 +62,32 @@ outside the path this plugin covers.
 Two stories touching the same section of the same spec are a conflict. Decide
 which sections this story will touch, then check that nobody else holds them.
 
-1. List the open pull requests touching the same spec file (`gh pr list`).
-2. For each, read the `Sections:` field of its story document.
+1. **List the open pull requests together with the files they touch**, and keep
+   those whose files include this story's spec file. Bare `gh pr list` prints
+   neither the files of a pull request nor its head branch, so it can never
+   answer this question — ask for both explicitly:
+
+   ```bash
+   gh pr list --state open --limit 100 --json number,headRefName,files
+   gh pr view <n> --json number,headRefName,files   # one pull request at a time
+   ```
+
+2. **For each of those, read the `Sections:` field of its story document.** That
+   document lives on the *other* pull request's head branch, not on yours:
+   looking for it in your worktree finds nothing. Read it at the head ref:
+
+   ```bash
+   gh api "repos/{owner}/{repo}/contents/<path>?ref=<headRefName>" --jq .content | base64 -d
+   git fetch origin <headRefName> && git show FETCH_HEAD:<path>   # local alternative
+   ```
+
 3. Intersect those with the sections this story will touch.
 4. **Stop if the intersection is not empty.** Report which pull request holds
    the section, and let your human partner sequence the two.
+5. **Stop if you could not read a pull request's `Sections:` field** — fetch
+   failed, document absent, field missing. An unread field is an unknown, not a
+   pass. Name the pull request and say why, and let your human partner decide.
+   Silently treating it as empty turns the one real net into "found nothing".
 
 Sections are **declared, not derived**: reading a diff to guess which sections
 a story touches is fragile, whereas the story's author knows them. That is the
@@ -165,9 +186,23 @@ authority — pointing it at the living module spec is what makes this
 integration work without modifying superpowers. `Sections:` is what the *next*
 story's Step 1 reads.
 
+Then create, at the end of the document, the two sections Step 6 fills — empty
+now, and left empty if nothing turns up:
+
+```markdown
+## Rulings log
+
+## Observed drift
+```
+
+Write them at the same time as the header, not at Step 6. An empty section says
+*checked, nothing found*; a missing section says *never examined*, and a
+reviewer cannot tell the second from an omission.
+
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
 part of every task's requirements — carries two things: the constraints the
-batch imposes, copied verbatim, and **the freeze of the spec file**:
+batch imposes, that is its `Constraints` section copied verbatim, and **the
+freeze of the spec file**:
 
 > Between the transcription commit and the opening of the pull request, no task
 > modifies the spec file. A story that discovers the spec must change stops.
@@ -188,14 +223,30 @@ exception and without deliberation.** Implement what the spec says, record a
 `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an
 agent's.** Put that rule in `Global Constraints` too.
 
+**In a corrective batch, `Global Constraints` carries a third thing: the fifth
+stop condition of Step 5, written out in full.** Copy it verbatim:
+
+> If, while bringing code into conformity with the spec, you discover that the
+> **spec** is wrong and the code is right, stop. The batch is no longer
+> corrective and must be requalified. Do not correct the spec and do not work
+> around it.
+
+The freeze above already stops a task that finds the spec must change, but it
+stops it and says nothing more. The consequence — that the batch has lost the
+qualification it was opened under — is what makes this a requalification rather
+than a question to ask and move on from. And the discovery happens inside SDD's
+implementer subagents, whose only channel to this skill's rules is this list: a
+stop condition stated to you and not written here never reaches the agent who
+has to obey it.
+
 ## Step 5 — Execute
 
-Two of this plugin's four declared overrides bite here. Both are named, both
-carry their reason, and neither is a matter of judgment in the moment.
+Three of this plugin's four declared overrides bite here. All three are named,
+each carries its reason, and none is a matter of judgment in the moment.
 
 **Override 3 — the execution mode is imposed.** `superpowers:writing-plans`
-ends by offering a choice between subagent-driven development and inline
-execution. Do not present that choice: this plugin requires
+ends by offering a choice between subagent-driven development and
+`superpowers:executing-plans`. Do not present that choice: this plugin requires
 `superpowers:subagent-driven-development`. Reason: repatriating the rulings
 depends on SDD's ledger; `superpowers:executing-plans` keeps none, and the
 trace of every arbitration made on your human partner's behalf would be lost.
@@ -219,14 +270,19 @@ reason is exact:
 So this override removes one choice that cannot succeed, and one that leads
 nowhere.
 
-**In a corrective batch, a fifth stop condition applies.** SDD states that four
-things stop you and only these. Add: if, while bringing code into conformity
-with the spec, you discover that the **spec** is wrong and the code is right,
-stop. The batch is no longer corrective and must be requalified — close the
-pull request without merging and hand the decision to
-`supercharlouze:writing-a-batch`. The four native conditions assume a valid
-authority exists; here the authority itself is in question, and an agent may
-not correct a spec.
+**Override 2 — fifth stop condition (corrective batches).** SDD states that
+four things stop you and only these. In a corrective batch, this plugin adds
+one: if, while bringing code into conformity with the spec, you discover that
+the **spec** is wrong and the code is right, stop. The batch is no longer
+corrective and must be requalified — close the pull request without merging and
+hand the decision to `supercharlouze:writing-a-batch`. The four native
+conditions assume a valid authority exists; here the authority itself is in
+question, and an agent may not correct a spec.
+
+It is named as an override for the same reason as the other three: an unnamed
+exception to a rule superpowers states as closed does not survive a session
+under pressure. It reaches the implementers through `Global Constraints`
+(Step 4), which is the only channel they read.
 
 ## Step 6 — Record Before the Merge
 

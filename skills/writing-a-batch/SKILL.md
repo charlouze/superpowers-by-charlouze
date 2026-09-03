@@ -90,17 +90,33 @@ status: open
 
 <The behaviour added to each spec, stated as intention, per module.>
 
+## Constraints
+
+<Migration and compatibility constraints, and the required ordering of the user
+stories. `none` if there are none.>
+
 ## Feature flag
 
 <See the next section. Never omitted.>
 
 ## Live flags
 
-<See Surfacing Live Flags. `none` if there are none.>
+<See Surfacing Live Flags. `none` if there are none. Each entry carries the
+human's ruling once the review has given it.>
 ```
 
 `status: open | closed` is a front matter value, so it is English even in a
 French project.
+
+**`Constraints` is where the batch says what a spec cannot.** The spec is the
+binding authority on behaviour; what belongs to the batch and only to it is the
+delivery perimeter, the ordering of the user stories, and the migration and
+compatibility constraints — so that is what goes here, and nothing normative.
+`supercharlouze:writing-a-user-story` copies this section **verbatim** into
+every story's `Global Constraints`, where `superpowers:writing-plans` makes it
+implicitly part of every task's requirements. Write it as constraints an
+implementer can obey, not as background. Left out, each story would silently
+invent its own migration rule and its own order.
 
 This pull request does **no writing into the specs**. The delta is stated
 here as intention only; it is transcribed slice by slice, by the pull request of
@@ -108,6 +124,12 @@ each story (`supercharlouze:writing-a-user-story`). Transcribing the whole delta
 now would put behaviour into the spec that no code delivers — drift by
 definition, and the reviewers of a story would then report as missing what is
 merely not built yet.
+
+**The gaps register is not a spec.** `docs/specs/<module>.gaps.md` records what
+the code does that no spec describes, and where the code contradicts one — it
+carries no norm, so nothing you write there is normative and the rule above is
+untouched. That is why the corrective batch below reserves its entries in this
+same pull request while still writing nothing into a spec.
 
 **Corrective batch** — its spec delta is empty by definition: it restores
 behaviour a spec already promises. Replace that section with the gaps register
@@ -193,6 +215,25 @@ not look like "never checked".
 The human then rules at the gate: *does this batch satisfy the condition, and
 does it therefore carry the lifting story?*
 
+**Record that ruling next to its entry before the pull request merges.** One
+line per surfaced flag — `carried by this batch — lifting story owed` or
+`not this batch — <reason>` — written into `Live flags` on the batch branch, in
+answer to the review. This is review feedback applied to an open pull request,
+which is exactly how every other correction reaches this document; it is not
+mutable state, because after the merge nothing edits it again. Without it the
+ruling exists only in a review thread: `supercharlouze:closing-a-batch` checks
+the flags **this** batch declared, so a flag declared by batch 05, surfaced by
+batch 08 and assigned by the human to 08 would be checked by nobody if the
+lifting story were never written — the forgotten-flag failure this section
+exists to close, reintroduced at the very gate meant to close it.
+
+**`Live flags` is a snapshot, taken for this gate.** It records what was live
+when this batch opened and what was ruled about it; it is not a registry to
+keep in step with reality. The gating sentence in each module spec remains the
+authoritative statement of a flag, its default and its lifting condition —
+which is why a closed batch document is never consulted to find out whether a
+flag is still live.
+
 The granularity is what makes the control useful. Surfacing only the sections the
 batch modifies would let an extended-scope flag survive forever: the last batch
 of a module typically adds new sections without touching the old ones, so nothing
@@ -204,12 +245,14 @@ asked again whether a flag has come due.
 ## Opening the Pull Request
 
 Before opening, reread the batch document against the specs with fresh eyes:
-scope stated with its "why now", spec delta per module, `Feature flag` filled,
-reservations made for a corrective batch, live flags surfaced.
+scope stated with its "why now", spec delta per module, `Constraints` stated or
+`none`, `Feature flag` filled, reservations made for a corrective batch, live
+flags surfaced.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
 reviewer has to rule on: the flag decision, the scope, and each surfaced live
-flag.
+flag. As the review answers, write each live-flag ruling into the document, on
+this branch, before it merges.
 
 **The review of the batch pull request is the human gate.** Until it merges, no
 story is written and no spec is touched. It replaces the tail of the
@@ -233,14 +276,17 @@ real dead ends:
 Without this path neither situation has an issue: the `Feature flag` field was
 decided at opening, and closing checks it against reality.
 
-Do it on a branch named after the batch it amends, edit the batch document **in
-place** — no changelog inside it, no history of its own scope — and say in the
-pull request body what changed and why. An amendment is not mutable state
+Do it on a **distinct branch whose name carries no meaning** — do not reuse
+`batch/NN-<slug>`, which the opening pull request may still hold on the remote;
+nothing here depends on the name. Edit the batch document **in place** — no
+changelog inside it, no history of its own scope — and say in the pull request
+body what changed and why. An amendment is not mutable state
 flowing along: it is an explicit human decision that goes through a review.
 
 ## Requalifying a Corrective Batch
 
-**Trigger.** This plugin adds a fifth stop condition to
+**Trigger — Override 2, the fifth stop condition (corrective batches).** This
+plugin adds a fifth stop condition to
 `superpowers:subagent-driven-development`: while bringing code into conformance
 with a spec, if a story discovers that the **spec** is wrong and the code is
 right, it stops. The batch is no longer corrective and must be requalified. The
@@ -256,8 +302,15 @@ itself is in question, and no agent may correct a spec.
    - **Correct the spec** — then the batch stays corrective, on a reduced scope,
      and the corrected spec ships through its own pull request; or
    - **Rewrite the batch as an ordinary batch**, with a real spec delta, through
-     a **new batch pull request** that goes back through the gate above. Allocate
-     nothing new if the batch keeps its number; amend it if only its scope moves.
+     a **new batch pull request** that goes back through the gate above.
+
+   The rewrite keeps `NN` and its directory: the number identifies a delivery
+   unit, and any story already merged lives under it — a new number would strand
+   them. So it is an amendment pull request on the existing document, replacing
+   the reserved gaps entries with a `Spec delta`, reviewed at the gate like an
+   opening. Allocate a fresh `NN` only when the human rules that the remaining
+   work is a *different* batch, and then close this one with
+   `supercharlouze:closing-a-batch` rather than leaving it open.
 3. **Revise the gaps register reservations** in either case: entries annotated
    `reserved by batch-NN` that are no longer in scope must be released, and
    `supercharlouze:closing-a-batch` releases whatever is left unconsumed.
@@ -289,5 +342,6 @@ skeleton.
 | "I'll transcribe the spec delta now, while it's fresh" | The spec would then describe behaviour no code delivers. Each story transcribes its own slice. |
 | "The module has no spec yet, I'll write the batch and adopt later" | Adoption is blocking. Otherwise the batch invents the norm it is supposed to obey. |
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
-| "The scope changed, I'll just edit the batch document on main" | The batch document has no mutable state. Scope changes go through an amendment pull request. |
+| "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: it moves only through an amendment pull request of its own. |
+| "The human ruled on the live flags in the review, that's recorded" | A review thread is not the document. Write the ruling into `Live flags` before the merge, or closing has nothing to check. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |

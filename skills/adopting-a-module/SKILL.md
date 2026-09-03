@@ -22,12 +22,15 @@ Run this when a batch is about to touch a module that has no spec yet.
 you arrive here from there, or directly when your human partner asks for a module
 to be adopted.
 
+**Announce at start:** "I'm using the adopting-a-module skill to adopt the
+<module> module."
+
 ## Source Authority
 
 Three ranks, and they never trade places:
 
-1. **The validated documents.** They make the truth here:
-   validated documents are normative, and only they create normative text.
+1. **The validated documents.** Here, validated documents are normative,
+   and only they create normative text.
 2. **The code.** It never corrects a document. It fills the *silences* — behaviour
    no document ever described. And what it reveals in a silence does not enter the
    spec on its own authority: it is recorded as a gap. Only your human partner can
@@ -46,6 +49,28 @@ The pressure to break this rule is highest exactly where the documents are thinn
 — that is the moment to slow down, not to improvise.
 
 ## Steps
+
+**Check the preconditions first, before creating any branch and long before
+writing a line of either document.** They are the ones every pull request of this
+system checks:
+
+- **You are in the main checkout.** `git rev-parse --git-dir` and
+  `git rev-parse --git-common-dir` resolve to the same directory. The reason
+  matters, because from inside a worktree this rule is exactly the one an agent
+  talks itself out of: `superpowers:finishing-a-development-branch` *preserves*
+  the worktree on the pull request path, so `superpowers:using-git-worktrees`
+  Step 0 sees `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree",
+  reuses it, and the adoption lands on the previous piece of work's branch. Go
+  back to the main checkout first.
+- **You are on `main`, refreshed from the remote.** Merges arrive from the
+  remote, and an adoption written against a stale `main` audits code that is no
+  longer there.
+- **`gh` is available and authenticated.** The adoption ends in a pull request.
+
+The order below is not a suggestion. **The branch exists before either document
+is written** — step 3 — because `superpowers:using-git-worktrees` creates a
+*separate directory*: writing the spec first would leave it uncommitted in the
+main checkout on `main`, and the new workspace would open empty.
 
 ### 1. Delimit the module
 
@@ -85,7 +110,22 @@ path. That section is the only persistent link between a spec and the documents
 that fed it, and the init command depends on it: its status report computes which
 archived documents appear in no spec's `Sources` at all.
 
-### 3. Write the spec from those documents only
+### 3. Create the branch
+
+Now, and not later. Create the branch `adopt/<module>` and its workspace by
+invoking `superpowers:using-git-worktrees`, then move into that workspace: every
+file the next two steps write belongs there.
+
+That skill prefers the harness's native tooling, which picks its own branch name
+and may leave you on a detached HEAD. If it leaves you on a differently named
+branch or on a detached HEAD, make sure a named branch exists before you
+continue — nothing in this system depends on the branch name, but a pull request
+needs a branch.
+
+The two steps before this one are dialogue: they produce a boundary and an
+inventory, not files. Everything after it writes.
+
+### 4. Write the spec from those documents only
 
 Merge, deduplicate, reconcile. The spec is normative — what the code must do — not
 descriptive.
@@ -97,15 +137,47 @@ descriptive.
   default** — and the arbitration is written down as
   `Ruling: <decision> — <why> — <what it costs if it is wrong>`. Never resolve a
   contradiction in silence; the ruling is what lets a reviewer disagree with you.
+  Adoption has no story document and therefore no Rulings log, so these lines go
+  in the **body of the adoption pull request** (step 6), where the reviewer who
+  might disagree will read them.
 - **No date, no status, no in-progress marker.** A spec carries none, ever. On
   `main`, spec and code always travel in the same pull request, so no state exists
   that would need one.
 - **Titled sections are the unit of the whole system** — concurrency detection and
   gaps entries both designate a section. Title them so they can be pointed at.
 - Add the empty `Changelog` table (`batch | date | change`) in the footer.
-  `supercharlouze:closing-a-batch` writes into it, one line per batch.
+  `supercharlouze:closing-a-batch` writes into it, one line per batch. It is not
+  the only writer: a bounded change belongs to no batch and writes its own
+  `out-of-batch` line, from its own pull request.
 
-### 4. Audit the code against the spec
+**The shape of the spec.** Minimal, and every part of it load-bearing:
+
+```markdown
+# <module>
+
+## Boundary
+
+<What this module covers, and — explicitly — what it does not.>
+
+## <A titled section>
+
+<Normative prose: what the code must do. Titled so a gaps entry, a story's
+`Sections:` field and a concurrency check can all point at it.>
+
+## Sources
+
+- `docs/archive/specs/<archived document>.md` — <why it covers this module.>
+
+## Changelog
+
+| batch | date | change |
+|---|---|---|
+```
+
+No front matter, no date, no status. The section titles are English skeleton;
+the prose under them follows the project's language.
+
+### 5. Audit the code against the spec
 
 Read the code against each section you just wrote, and produce the gaps register.
 Two sections, kept apart because they are not treated the same way:
@@ -116,6 +188,43 @@ Two sections, kept apart because they are not treated the same way:
 
 Each entry designates a section of the spec.
 
+**Each entry is a single addressable item — one list item, never a paragraph of
+running prose.** You are the only skill that ever *creates* this file, and three
+later skills act on entries in place, each needing a thing it can point at:
+
+| Gesture | Who | What it does to the entry |
+|---|---|---|
+| Reserve | `supercharlouze:writing-a-batch`, in the batch's opening pull request | appends `reserved by batch-NN` to it |
+| Strike | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | strikes it through, atomically with the code |
+| Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed |
+
+A register written as flowing paragraphs satisfies every other word of this step
+and breaks all three: there is no item to annotate, none to strike, and nothing a
+corrective batch can draw a scope from. Write entries so those gestures are
+mechanical.
+
+**The shape of the register:**
+
+```markdown
+# <module> — Gaps register
+
+## Coverage
+
+<Which parts of the module were audited, which were not, and why. Written even
+— especially — when nothing was found.>
+
+## Violations
+
+- **<spec section>** — <how the code contradicts it.>
+- **<spec section>** — <another one.> `reserved by batch-08`
+- ~~**<spec section>** — <one a story has already resolved.>~~
+
+## Gaps
+
+- **<spec section, or the section that should exist>** — <behaviour no spec
+  describes.>
+```
+
 **The register also declares its own coverage:** which parts of the module were
 audited, which were not, and why. An empty register that means "nothing was
 examined" must never look like an empty register that means "everything conforms" —
@@ -125,19 +234,17 @@ down. Declare the coverage especially when you found nothing.
 Fix nothing while you are here. Adoption produces the register; resorbing an entry
 is a batch of its own, with its own review.
 
-### 5. Open the adoption pull request
+### 6. Open the adoption pull request
 
-Check the preconditions first: you are in the main checkout, on `main`, refreshed
-from the remote. Then create the branch `adopt/<module>` and its workspace by
-invoking `superpowers:using-git-worktrees`. If that skill leaves you on a
-differently named branch or on a detached HEAD, make sure a named branch exists
-before you continue — nothing in this system depends on the branch name, but a pull
-request needs a branch.
+The branch already exists — you created it at step 3. Commit both documents on
+it, push, and open the pull request.
 
 The pull request carries the spec and the gaps register, and no code. Its body
 carries what a reviewer needs to disagree with you: the boundary as your partner
-drew it, the retained inventory, the rulings from step 3, and the declared
-coverage.
+drew it, the retained inventory, the rulings from step 4, and the declared
+coverage. **The pull request body is where an adoption's rulings live.** Adoption
+produces no story document, so there is no Rulings log to write them into, and a
+ruling nobody can read is a contradiction resolved in silence.
 
 **The review of the adoption pull request is the mandatory human review.** It is the
 adoption gate, and there is no other one — this plugin adds no ceremony, it puts
@@ -169,7 +276,8 @@ init command reads it. The declared coverage says which behaviours were never pu
 to your partner.
 
 The same treatment applies to a partial inventory: the covered part of the module
-follows steps 2 to 4, the uncovered part follows this dialogue.
+follows steps 2 to 5, the uncovered part follows this dialogue. Either way the
+branch of step 3 is created before anything is written.
 
 ## Language
 
@@ -191,5 +299,8 @@ plugin itself is entirely English, because it carries no business prose.
 | "These two documents disagree, I'll keep the clearer one" | Most recent wins by default, and the choice is a ruling, written down. |
 | "This behaviour is obviously intended, so into the spec it goes" | Obvious to you is not validated by them. Undocumented behaviour is a gap until a human says otherwise. |
 | "No documents exist, so I'll draft from the code and have them confirm" | A draft to confirm is a blanket yes waiting to happen. Section by section, one question at a time. |
+| "I'll write the two documents first and create the branch to carry them" | using-git-worktrees opens a separate, empty directory. The branch comes first, at step 3, or both files stay stranded on `main`. |
+| "I'm already in a worktree, that will do" | Its Step 0 sees `GIT_DIR != GIT_COMMON`, reuses it, and the adoption lands on the previous branch. Main checkout first. |
+| "Prose reads better than a list in the gaps register" | Then nothing can reserve, strike or release an entry, and the three downstream gestures break. |
 | "The adoption PR is open, the batch can start" | Merged is adopted. The review is the gate, not the push. |
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |

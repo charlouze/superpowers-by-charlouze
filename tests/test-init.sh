@@ -108,4 +108,129 @@ else
     fail "inserted block is byte-identical to the canonical source"
 fi
 
+# --- Case 8: prose that merely names both markers is not a block ---
+# Only the anchored comment lines are markers. A sentence mentioning both names
+# must not be mistaken for a balanced pair, and must not be treated as a block
+# opening either — everything after it has to survive.
+P6="$TEST_ROOT/prose"
+mkdir -p "$P6"
+printf '# P\n\nNever hand-edit between supercharlouze:begin and supercharlouze:end.\n\nUSER CONTENT THAT MUST SURVIVE\n' > "$P6/CLAUDE.md"
+if bash "$INIT" "$P6" >/dev/null 2>&1; then
+    pass "prose markers: init succeeds"
+else
+    fail "prose markers: init succeeds"
+fi
+if grep -q "USER CONTENT THAT MUST SURVIVE" "$P6/CLAUDE.md" \
+   && grep -q "Never hand-edit between" "$P6/CLAUDE.md"; then
+    pass "prose markers: user content survives"
+else
+    fail "prose markers: user content survives"
+fi
+if [ "$(count "<!-- supercharlouze:begin -->" "$P6/CLAUDE.md")" = "1" ]; then
+    pass "prose markers: the real block is appended exactly once"
+else
+    fail "prose markers: the real block is appended exactly once"
+fi
+
+# --- Case 9: a closing marker before an opening one must abort ---
+P7="$TEST_ROOT/inverted"
+mkdir -p "$P7"
+printf '# P\n\n<!-- supercharlouze:end -->\nMIDDLE\n<!-- supercharlouze:begin -->\n\nUSER CONTENT THAT MUST SURVIVE\n' > "$P7/CLAUDE.md"
+BEFORE7="$(cat "$P7/CLAUDE.md")"
+if bash "$INIT" "$P7" >/dev/null 2>&1; then
+    fail "inverted markers: init exits non-zero"
+else
+    pass "inverted markers: init exits non-zero"
+fi
+if [ "$(cat "$P7/CLAUDE.md")" = "$BEFORE7" ]; then
+    pass "inverted markers: CLAUDE.md left untouched"
+else
+    fail "inverted markers: CLAUDE.md left untouched"
+fi
+
+# --- Case 10: duplicated markers must abort ---
+P8="$TEST_ROOT/duplicated"
+mkdir -p "$P8"
+printf '# P\n\n<!-- supercharlouze:begin -->\nA\n<!-- supercharlouze:end -->\n\n<!-- supercharlouze:begin -->\nB\n<!-- supercharlouze:end -->\n' > "$P8/CLAUDE.md"
+BEFORE8="$(cat "$P8/CLAUDE.md")"
+if bash "$INIT" "$P8" >/dev/null 2>&1; then
+    fail "duplicated markers: init exits non-zero"
+else
+    pass "duplicated markers: init exits non-zero"
+fi
+if [ "$(cat "$P8/CLAUDE.md")" = "$BEFORE8" ]; then
+    pass "duplicated markers: CLAUDE.md left untouched"
+else
+    fail "duplicated markers: CLAUDE.md left untouched"
+fi
+
+# --- Case 11: nested archive content migrates, relative paths preserved ---
+P9="$TEST_ROOT/nested"
+mkdir -p "$P9/docs/superpowers/specs/nested" "$P9/docs/superpowers/plans/2025"
+touch "$P9/docs/superpowers/specs/flat.md"
+touch "$P9/docs/superpowers/specs/nested/deep.md"
+touch "$P9/docs/superpowers/plans/2025/old.md"
+bash "$INIT" "$P9" >/dev/null
+if [ -f "$P9/docs/archive/specs/flat.md" ] \
+   && [ -f "$P9/docs/archive/specs/nested/deep.md" ] \
+   && [ -f "$P9/docs/archive/plans/2025/old.md" ]; then
+    pass "nested: the whole subtree migrates under docs/archive"
+else
+    fail "nested: the whole subtree migrates under docs/archive"
+fi
+if [ ! -d "$P9/docs/superpowers" ]; then
+    pass "nested: docs/superpowers is gone once emptied"
+else
+    fail "nested: docs/superpowers is gone once emptied"
+fi
+
+# --- Case 12: a destination collision must not silently overwrite ---
+P10="$TEST_ROOT/collision"
+mkdir -p "$P10/docs/superpowers/specs" "$P10/docs/archive/specs"
+printf 'INCOMING\n' > "$P10/docs/superpowers/specs/foo.md"
+printf 'EXISTING\n' > "$P10/docs/archive/specs/foo.md"
+if bash "$INIT" "$P10" >/dev/null 2>&1; then
+    fail "collision: init exits non-zero"
+else
+    pass "collision: init exits non-zero"
+fi
+if grep -q "EXISTING" "$P10/docs/archive/specs/foo.md"; then
+    pass "collision: the archived file is not overwritten"
+else
+    fail "collision: the archived file is not overwritten"
+fi
+if [ -f "$P10/docs/superpowers/specs/foo.md" ]; then
+    pass "collision: the incoming file is left in place"
+else
+    fail "collision: the incoming file is left in place"
+fi
+
+# --- Case 13: a pre-existing CLAUDE.md.tmp is not clobbered ---
+P11="$TEST_ROOT/tmpfile"
+mkdir -p "$P11"
+printf '# P\n\n<!-- supercharlouze:begin -->\nOLD\n<!-- supercharlouze:end -->\n' > "$P11/CLAUDE.md"
+printf 'PRECIOUS\n' > "$P11/CLAUDE.md.tmp"
+bash "$INIT" "$P11" >/dev/null
+if [ -f "$P11/CLAUDE.md.tmp" ] && grep -q "PRECIOUS" "$P11/CLAUDE.md.tmp"; then
+    pass "tempfile: a pre-existing CLAUDE.md.tmp survives"
+else
+    fail "tempfile: a pre-existing CLAUDE.md.tmp survives"
+fi
+
+# --- Case 14: empty report lists say so instead of showing a bare heading ---
+REPORT="$TEST_ROOT/report.txt"
+bash "$INIT" "$P1" > "$REPORT"
+ADOPTED_NEXT="$(awk '/^adopted modules:/ { getline; print; exit }' "$REPORT")"
+ARCHIVED_NEXT="$(awk '/^archived documents not listed/ { getline; print; exit }' "$REPORT")"
+if printf '%s' "$ADOPTED_NEXT" | grep -qi "none"; then
+    pass "report: an empty adopted-modules list says none"
+else
+    fail "report: an empty adopted-modules list says none"
+fi
+if printf '%s' "$ARCHIVED_NEXT" | grep -qi "none"; then
+    pass "report: an empty archived-documents list says none"
+else
+    fail "report: an empty archived-documents list says none"
+fi
+
 exit $((FAILURES > 0))

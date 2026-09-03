@@ -11,20 +11,27 @@ A batch closes when every one of its user stories is merged or abandoned and the
 
 Abandoning a story is almost free: closing its pull request without merging throws away the spec slice and the code together — nothing to revoke, no spec left out of step. But two things it never touched are still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the intention the batch announced in its spec delta. **No other skill picks them up.** If closing skips a duty, that duty is simply never done.
 
-Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 5 is allowed to refuse.
+Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 5 is allowed to refuse, and because it is allowed to refuse it runs its check before the four that write.
 
 **Announce at start:** "I'm using the closing-a-batch skill to close batch NN."
 
 ## Preconditions
 
 - **Every story is merged or its pull request is closed.** `gh pr list` is the authority. A story's state *is* its pull request's state — there is no checklist anywhere to reconcile against.
-- **You are in the main checkout, on `main`, refreshed from the remote.** Merges arrive from the remote; a stale `main` hides the very stories you are about to account for, and you would consolidate from an incomplete set.
+- **Your human partner judges the batch finished.** Every story being merged or closed is necessary and not sufficient. Closing records a human decision — that the batch delivered what it owed — and a batch is never closed because an agent judged the work to look finished.
+- **You are in the main checkout, on `main`, refreshed from the remote.** In the main checkout because `superpowers:finishing-a-development-branch` *preserves* the worktree on the pull request path: from inside one, `superpowers:using-git-worktrees` Step 0 sees `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses it, and this closure lands on the previous branch instead of its own. Refreshed because merges arrive from the remote; a stale `main` hides the very stories you are about to account for, and you would consolidate from an incomplete set.
 - **Create the branch and its workspace by invoking `superpowers:using-git-worktrees`.** The conventional name is `batch/NN-<slug>-close`, enforced by this plugin, not by that skill. If it lands on a differently named branch or a detached HEAD, make sure a named branch exists before continuing — nothing depends on the name, but a pull request needs a branch.
-- **Read the batch document `docs/batches/NN-<slug>/README.md` and every story document in that directory.** The story documents carry the drift you are about to consolidate; the batch document carries the intention you are about to check against what actually shipped.
+- **Read the batch document `docs/batches/NN-<slug>/README.md` and every story document in that directory.** The story documents carry the drift you are about to consolidate; the batch document carries the intention you are about to check against what actually shipped. "Every document in that directory" is every document that reached `main`: an abandoned story's document died with its branch, never merged, so it is not there — and neither is whatever it recorded under `Observed drift`. Nothing recovers it; that is part of what abandoning costs. Read what is on `main` and do not go hunting closed pull requests for documents that never landed.
 
 ## The Six Duties
 
 Do all six on the same branch. Then open one pull request.
+
+**Duty 5 is a check, not a write, and its check runs first — before duties 1 to 4 write anything.** The numbering below is the model's and does not change; only the moment of that one check is fixed. Read the code and the specs for surviving flags, decide whether this batch may be closed at all, and only then do duties 1, 2, 3, 4 in order, with duty 6 last as always.
+
+The reason is what a refusal costs. Duties 1 to 4 all write: changelog lines into every touched spec, consolidated drift and recorded shortfalls into the gaps registers, released reservations. Duty 5 writes nothing — it reports and hands the decision to your human partner. Check first and a refusal costs nothing: the close branch is still empty, there is no commit to abandon, and the batch closes later in one clean run once the lifting story has merged. Check last and a refusal strands four duties' worth of writing on a branch nobody may merge, and none of it is safe to re-run: a second attempt would append the changelog line a second time, re-append every consolidated drift entry, and find reservations duty 3 had already released for a batch that was never closed.
+
+So: if duty 5 refuses, **stop before writing anything.** Report the surviving flag, present the three exits below, and leave the batch open. The only thing to clean up is an empty branch and its workspace.
 
 ### 1. Write the changelog line
 
@@ -57,7 +64,11 @@ Compare the spec delta the batch announced at opening against what actually reac
 
 Both, not either. Without this step the abandonment is perfectly invisible: it is not drift, because the spec and the code agree — both are silent about the feature; and it is not a gap, because nothing recorded it. It is a promise forgotten inside a document that just went `closed`. This duty is the only reader of that edge in the whole system.
 
+**A corrective batch has nothing to compare here**, and that is not a gap in the duty. Its spec delta is empty by definition — it restores behaviour a spec already promises — so it announced no intention a spec could fall short of. What it announced instead were the gaps register entries it reserved, and an entry it never resolved is an unconsumed reservation: duty 3 is the whole of this duty for a corrective batch. Do not invent a comparison, and do not re-file the released entries as fresh gaps — they are still in the register where they always were.
+
 ### 5. Refuse to close on a flag that survives without a declared scope
+
+**This check runs first, before duties 1 to 4 — see The Six Duties above.** It writes nothing, so performing it on an empty branch makes a refusal free.
 
 Check every feature flag this batch declared, in two places: the code, and the gating sentences of the specs it touched. A surviving flag is acceptable **only** if its extended scope and its lifting condition are declared — in the batch document's `Feature flag` field and in the spec's gating sentence. A flag that survives with **no declared scope** means the lifting story was never written, and the batch **cannot be closed**.
 
@@ -68,7 +79,7 @@ Refusing is not a dead end. Report the surviving flag and present the **three ex
 | Exit | What it does | Form |
 |---|---|---|
 | Lift | Ships what exists: removes the branching in the code and the gating sentence in the spec | A lifting story, written with `supercharlouze:writing-a-user-story` — one per guarded module |
-| Extend the scope | Defers the decision to a later batch by declaring the flag's extended scope and its lifting condition | An amendment pull request on the batch document, reviewed like any other |
+| Extend the scope | Defers the decision to a later batch by declaring the flag's extended scope and its lifting condition | An amendment pull request on the batch document, written with `supercharlouze:writing-a-batch` — its *Amending a Batch* section owns this path — and reviewed like any other |
 | Tear down | Removes the guarded code and the corresponding spec slice | A teardown story, written with `supercharlouze:writing-a-user-story` |
 
 Then stop and wait. Do not close the batch under an undeclared surviving flag "to be tidied up later" — that is the outcome this duty exists to prevent. And do not leave the batch open indefinitely either: without these three exits, the refusal would manufacture exactly the dead flagged code it is meant to prevent.
@@ -91,6 +102,8 @@ Then push and open the pull request. The **review of the closing pull request** 
 | "The changelog is already up to date, each story added its line" | Stories do not write the changelog. One line per batch, here. |
 | "Observed drift is out of scope for this batch" | That is exactly why it goes to the register instead of being forgotten. |
 | "A flag is still live, so I cannot close — dead end" | Three exits: lift it, declare an extended scope by amendment, or tear the guarded code down. |
+| "I'll work through the duties in order and check the flags at the end" | Duty 5 writes nothing, so it checks first. Checked last, a refusal strands four duties of writing on a branch nobody can merge, and re-running duplicates all of it. |
+| "I'm already in a worktree from this batch's last story, I'll close from here" | using-git-worktrees would reuse it and the closure would land on that story's branch. Back to the main checkout first. |
 | "The flag is gone from the code, that is enough" | The gating sentence in the spec is part of the flag. Left behind, it makes the spec false. |
 | "I'll flip the status now and file the gaps in a follow-up" | The status is the record that the duties were done. Flipping it first turns the record into a lie. |
 | "The batch document says it delivered X, so it delivered X" | Check the specs on main, not the promise made at opening. The whole point of duty 4 is the difference. |

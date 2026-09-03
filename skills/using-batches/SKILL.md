@@ -15,6 +15,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 |---|---|
 | A module this work touches has no spec in `docs/specs/` | `supercharlouze:adopting-a-module` — blocking; nothing starts until its pull request merges |
 | Architectural work on adopted modules | `supercharlouze:writing-a-batch` |
+| Drift found, or a module's gaps register holds unreserved entries | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
 | A batch must change scope or flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
@@ -59,7 +60,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 
 **A story's pull request carries the spec slice and the code that implements it.** They ship together or not at all, in the same pull request. That is what gives `main` its central property: **its spec always describes exactly what its code does.** There is no intermediate state to signal, therefore no marker, no semantics to explain to agents that know nothing about this plugin, and no exception to the drift rule.
 
-**The spec slice is the first commit of every branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts.
+**The spec slice is the first commit of every story branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts. A corrective story is the one exception in form and not in purpose: its spec delta is empty, so its first commit strikes the gaps register entry it resolves instead, which fixes its scope in the branch's history exactly the same way. Batch-opening and batch-closing branches carry no spec slice at all — they carry no code either.
 
 **The drift rule therefore has no exception:** any divergence between the spec on `main` and the code on `main` is drift, hence corrective work. There is no "not delivered yet" case to exempt, because that case does not exist. Behaviour still gated states its flag, its default and — when the scope outlives the batch — its lifting condition in the spec itself, so the spec stays exactly true: it describes not only what the code does but what it exposes and under what condition.
 
@@ -106,6 +107,8 @@ No batch, no user story: a bounded change is already a pull request, it simply c
 ## Declared Overrides
 
 superpowers states several of its rules as closed. An implicit exception to a rule marked "and only these" will not survive a session under pressure, so each one is **named as an override**, here and in the CLAUDE.md block, with its justification. There are four of them, and there must never be an undeclared **fifth**. If you find yourself wanting one, stop and take it to the human: an undeclared override is indistinguishable from an agent quietly ignoring superpowers.
+
+The CLAUDE.md block opens on a fifth clause — *"it relocates specs and plans"* — and that one is **not** an override, which is why the count still reads four. `superpowers:writing-plans` grants the plan location as an explicit concession, *"(User preferences for plan location override this default)"*, so relocating them overrides no closed rule; and the spec location needs no concession at all, because Override 1 replaces the step that would have written a dated design doc, leaving nothing to relocate.
 
 The CLAUDE.md block is not reproduced in this skill. It lives in exactly one place, `skills/using-batches/references/claude-md-block.md`, and the init command inserts it into a project; a second copy would drift from the first.
 
