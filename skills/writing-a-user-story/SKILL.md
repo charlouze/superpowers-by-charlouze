@@ -9,8 +9,8 @@ description: Use when writing the next user story of an open batch - transcribes
 
 A story is the unit of technical delivery: **one story, one branch, one pull
 request** — and that pull request carries *both* the spec slice and the code
-that implements it. They ship together or not at all. That is what gives the
-integration branch its central property: **its spec always describes exactly
+that implements it. They ship together or not at all. That is what gives
+`main` its central property: **its spec always describes exactly
 what its code does.** No intermediate state to signal, no marker, no exception
 to the drift rule.
 
@@ -42,7 +42,7 @@ of this system, not only to stories.
   `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses
   the existing one — and this story's code would land on the previous story's
   branch. Go back to the main checkout first.
-- **The integration branch is checked out and up to date with the remote.**
+- **`main` is checked out and up to date with the remote.**
   Fetch, then fast-forward. Merges arrive from the remote; without that
   refresh, number allocation and concurrency detection both reason on a stale
   state.
@@ -81,13 +81,43 @@ which sections this story will touch, then check that nobody else holds them.
    git fetch origin <headRefName> && git show FETCH_HEAD:<path>   # local alternative
    ```
 
-3. Intersect those with the sections this story will touch.
-4. **Stop if the intersection is not empty.** Report which pull request holds
-   the section, and let your human partner sequence the two.
-5. **Stop if you could not read a pull request's `Sections:` field** — fetch
+3. **Read the same field on every remote `story/*` branch that carries no pull
+   request yet.** A story's pull request opens only at the end of Step 5, so a
+   sibling holds its sections for the whole length of an implementation without
+   appearing in point 1 above. Its branch, however, is on the remote from its
+   very first commit (Step 3), so the remote sees it:
+
+   ```bash
+   git ls-remote --heads origin 'story/*'
+   git fetch origin
+   git diff --name-only origin/main...origin/<branch>   # does it touch this spec file?
+   git show origin/<branch>:docs/batches/NN-<slug>/NN-us-N-<slug>.md
+   ```
+
+   Keep the branches whose diff against `main` touches this story's spec file —
+   the same filter point 1 applies to pull requests. Skip the branches already
+   covered by a pull request there, and skip your own. A kept branch whose
+   story document does not exist yet is a story between its spec commit and its
+   plan commit: it holds the spec file and has not yet declared its sections,
+   which is an unknown and stops you exactly as point 6 does. That window is one
+   plan-writing step long.
+4. Intersect all of those with the sections this story will touch.
+5. **Stop if the intersection is not empty.** Report which pull request or
+   branch holds the section, and let your human partner sequence the two.
+6. **Stop if you could not read a pull request's `Sections:` field** — fetch
    failed, document absent, field missing. An unread field is an unknown, not a
    pass. Name the pull request and say why, and let your human partner decide.
    Silently treating it as empty turns the one real net into "found nothing".
+   The same applies to a story branch kept at point 3.
+
+**Name the blind spot rather than trusting the net.** What this check sees is
+what is on the remote: open pull requests, and pushed story branches. A story
+that has created its branch but not yet pushed it is invisible to every sibling,
+and no amount of care at this step finds it. That window runs from Step 2 to the
+push at the end of Step 3, which is precisely why the push happens there and not
+at the end of the run — it turns a window as long as an implementation into one
+as long as writing a single commit. Read this step as complete for work already
+on the remote, and as blind to everything else.
 
 Sections are **declared, not derived**: reading a diff to guess which sections
 a story touches is fragile, whereas the story's author knows them. That is the
@@ -100,10 +130,10 @@ case this check exists to catch.
 
 ## Step 2 — Allocate us-N and Create the Branch
 
-`us-N` is the smallest integer **not used in the batch directory on the
-integration branch** *and* **not claimed by an open pull request** (`gh pr
-list`). Both conditions are necessary: an artifact only reaches the integration
-branch when its pull request merges, so the directory listing knows nothing
+`us-N` is the smallest integer **not used in the batch directory on `main`**
+*and* **not claimed by an open pull request** (`gh pr
+list`). Both conditions are necessary: an artifact only reaches `main`
+when its pull request merges, so the directory listing knows nothing
 about what is in flight. Going by the directory alone gives the same number to
 two stories written while a third is in review.
 
@@ -135,7 +165,10 @@ ledger.
 
 Transcribe into `docs/specs/<module>.md` the part of the batch's spec delta
 that **this** story delivers, and commit it as the **first commit on the
-branch** — before the plan is written, before any task runs.
+branch** — before the plan is written, before any task runs. **A lifting story
+transcribes a removal:** its slice deletes the gating sentence from the spec
+instead of adding behaviour, and that deletion is this same first commit (see
+Lifting and Teardown Stories below).
 
 Both properties are load-bearing.
 
@@ -170,6 +203,13 @@ the spec. It strikes the gaps register entry the story resolves, in
 the branch's history before any code exists. Striking an entry is local to a
 line already written, so two stories striking different entries do not collide.
 
+**Push the branch as soon as this commit exists** — `git push -u origin
+story/NN-us-N-<slug>`. Nothing depends on it for this story; it is what makes
+this story *visible*, since a sibling running Step 1 reads pushed `story/*`
+branches and the pull request does not exist for a long while yet. Pushing here
+rather than at the end shrinks the blind spot named in Step 1 from the length of
+an implementation to the length of a single commit.
+
 ## Step 4 — Write the Plan
 
 Call `superpowers:writing-plans`. The plan **is** the story document: save it
@@ -185,6 +225,11 @@ into the batch directory, and extend the standard header with three fields.
 authority — pointing it at the living module spec is what makes this
 integration work without modifying superpowers. `Sections:` is what the *next*
 story's Step 1 reads.
+
+**Commit the story document and push it immediately** — `git push`. Until that
+push the branch is on the remote but declares no sections, and a sibling that
+finds it has to stop on an unknown. Pushing now closes that window and is what
+lets Step 1 answer for a story whose pull request will not exist for hours.
 
 Then create, at the end of the document, the two sections Step 6 fills — empty
 now, and left empty if nothing turns up:
@@ -258,13 +303,13 @@ waits for a human choice. On the story path the choice is constrained to
 reason is exact:
 
 - **"Merge back locally" is actively destructive.** It merges into the *local*
-  integration branch, runs the tests, then **deletes the worktree and the
-  branch**. It never pushes, so nothing fails at the time: the work ends up in
-  a local commit that can never reach the remote, and the branch that would
-  have carried a pull request no longer exists. Step 6 never happens either,
-  since it happens on the branch before the merge.
+  `main` — a `main` that can never be pushed — runs the tests, then **deletes
+  the worktree and the branch**. It never pushes, so nothing fails at the time:
+  the work ends up in a local commit that can never reach the remote, and the
+  branch that would have carried a pull request no longer exists. Step 6 never
+  happens either, since it happens on the branch before the merge.
 - **"Keep the branch as-is" is not destructive** and remains compatible with a
-  protected integration branch. It is simply out of the flow: with no pull
+  protected `main`. It is simply out of the flow: with no pull
   request the story has no observable state and will never be delivered.
 
 So this override removes one choice that cannot succeed, and one that leads
@@ -274,10 +319,23 @@ nowhere.
 four things stop you and only these. In a corrective batch, this plugin adds
 one: if, while bringing code into conformity with the spec, you discover that
 the **spec** is wrong and the code is right, stop. The batch is no longer
-corrective and must be requalified — close the pull request without merging and
-hand the decision to `supercharlouze:writing-a-batch`. The four native
+corrective and must be requalified — **abandon the story**, then hand the
+decision to `supercharlouze:writing-a-batch`. The four native
 conditions assume a valid authority exists; here the authority itself is in
 question, and an agent may not correct a spec.
+
+**Abandoning here does not start by closing a pull request, because there is
+normally no pull request yet.** This condition fires *inside*
+`superpowers:subagent-driven-development`, mid-implementation, and the story's
+pull request only opens at the very end of this step, through
+`superpowers:finishing-a-development-branch`. What exists when it triggers is a
+branch and a worktree. So: **close the story's pull request without merging it
+if one is already open; otherwise discard the branch and remove its worktree.**
+Nothing on `main` changes either way — the spec slice, or the struck
+gaps-register entry, travels with the code and dies with the branch. The
+reservation posted on `main` by the batch's opening pull request is untouched,
+and `supercharlouze:closing-a-batch` releases it. Delete the abandoned branch,
+locally and on the remote, once the requalification is ruled.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session
@@ -322,10 +380,20 @@ tick and nothing to reconcile: its state *is* the state of its pull request.
 
 **Abandoning is almost free.** Closing the pull request without merging throws
 the transcription away with the code — nothing to revoke, no spec to put back
-straight. Two residues remain on the integration branch: the gaps register
+straight. If the abandonment happens before the pull request exists — a
+requalification under Override 2, a story dropped mid-run — there is nothing to
+close, only a branch and a worktree to discard. Two residues remain on `main`:
+the gaps register
 reservation posted by the batch's opening pull request, and the intention the
 batch announced and never delivered. Both belong to
 `supercharlouze:closing-a-batch`.
+
+**Clean up after an abandoned or requalified story: remove its worktree and
+delete its branch, locally and on the remote.** This is not tidiness. A pushed
+`story/*` branch with no pull request is exactly what every sibling's Step 1
+reads as a live claim on its sections, so an abandoned branch left on the remote
+holds those sections against every story that follows, and nothing ever releases
+them.
 
 ## Lifting and Teardown Stories
 
@@ -383,8 +451,11 @@ documents.
 | "I'll write the whole batch delta now, it's more efficient" | Reviewers would flag the next stories' behaviour as missing. One slice per story. |
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No merge conflict, so no one else is on this section" | Git conflicts on lines, not sections. Check the open pull requests. |
+| "No open pull request touches this spec, so the section is free" | A story holds its sections from Step 1 until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too. |
+| "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-slice commit. |
+| "The story is abandoned, the branch can stay" | A pushed `story/*` branch with no pull request reads as a live claim on its sections. Delete it, locally and on the remote. |
 | "I'm already in a worktree, that's fine" | Then this story's code lands on the previous story's branch. Return to the main checkout. |
-| "Merging locally is quicker" | It never pushes. It merges into local main, deletes the worktree and the branch, and takes the unrecorded rulings with it. |
+| "Merging locally is quicker" | It never pushes. It merges into the local `main`, deletes the worktree and the branch, and takes the unrecorded rulings with it. |
 | "I'll transcribe the spec at the end, with the code" | Then the norm is not prior to the code and the freeze has no starting point. The slice ships as commit one. |
 | "Keeping the branch is harmless" | Without a pull request the story has no observable state and is never delivered. |
 | "Inline execution is simpler for a small story" | It keeps no ledger, so the rulings never reach your human partner. SDD is required. |

@@ -40,7 +40,7 @@ pull request that has to be thrown away.
    story. `superpowers:finishing-a-development-branch` preserves the worktree on
    the pull request path, so a session that chains two pieces of work without
    leaving it would silently stack this batch on the previous branch.
-3. **You are on the integration branch, up to date with the remote.** Merges
+3. **You are on `main`, up to date with the remote.** Merges
    arrive from the remote; without a fetch, number allocation reasons on a stale
    directory.
 4. **`gh` is available and authenticated.** Number allocation queries it. Without
@@ -49,15 +49,15 @@ pull request that has to be thrown away.
 
 ## Allocating NN
 
-`NN` is the **smallest integer not used in `docs/batches/` on the integration
-branch and not claimed by an open pull request**. Both conditions, always:
+`NN` is the **smallest integer not used in `docs/batches/` on `main` and not
+claimed by an open pull request**. Both conditions, always:
 
 ```bash
 ls docs/batches/
 gh pr list --state open
 ```
 
-An artifact only reaches the integration branch when its pull request merges, so
+An artifact only reaches `main` when its pull request merges, so
 the directory listing knows nothing about work in flight. Trusting the directory
 alone hands the same number to two batches opened in parallel — and the second
 one discovers it at merge time, after review.
@@ -128,20 +128,38 @@ merely not built yet.
 **The gaps register is not a spec.** `docs/specs/<module>.gaps.md` records what
 the code does that no spec describes, and where the code contradicts one — it
 carries no norm, so nothing you write there is normative and the rule above is
-untouched. That is why the corrective batch below reserves its entries in this
-same pull request while still writing nothing into a spec.
+untouched. That is why a batch reserves its entries in this same pull request
+while still writing nothing into a spec.
+
+**Reserving gaps-register entries — any batch, not only a corrective one.**
+Reservation is a property of the opening pull request of **whatever batch takes
+an entry on**, and it exists so that two batches cannot draw the same entry. So:
+if any part of this batch's scope comes from `docs/specs/<module>.gaps.md`,
+reserve every entry it takes on **in this same pull request**, annotating the
+entry `reserved by batch-NN`. The reservation lives on `main`; that is what
+stops another batch from taking the same gap, and closing a story's pull request
+does not carry it away. `supercharlouze:closing-a-batch` releases whatever is
+left unconsumed — which it can only do for entries that were reserved in the
+first place.
+
+**The two sections of the register do not feed the same kind of batch.**
+*Violations* — the code contradicts a spec — feed a **corrective** batch.
+*Gaps* — the code does things no spec describes — feed an **ordinary** batch
+that finally specifies them, and such a batch has a real spec delta *and*
+reservations. Reservation is not a corrective-batch ceremony: an ordinary batch
+drawing from *Gaps* reserves exactly like a corrective one. Skip it, and two
+batches set out to specify the same undocumented behaviour in parallel, which is
+the collision the annotation exists to prevent.
 
 **Corrective batch** — its spec delta is empty by definition: it restores
-behaviour a spec already promises. Replace that section with the gaps register
-entries the batch takes on, and reserve each of them in
-`docs/specs/<module>.gaps.md` **in this same pull request**, annotating the entry
-`reserved by batch-NN`. The reservation lives on the integration branch; that is
-what stops another batch from taking the same gap, and closing a story's pull
-request does not carry it away.
+behaviour a spec already promises. Replace that section with the *Violations*
+entries the batch takes on, reserved in `docs/specs/<module>.gaps.md` as above.
 
 **The batch document carries no mutable state.** It is written once, by this
-opening pull request, and nothing in the normal course of the batch modifies it.
-Two consequences follow, and both are deliberate:
+opening pull request, and nothing in the normal course of the batch modifies it
+**until closing** — where `supercharlouze:closing-a-batch` amends it and flips
+its front matter to `status: closed`, in a reviewed pull request of its own, and
+the batch is over. Two consequences follow, and both are deliberate:
 
 - **The list of stories does not appear in it.** The list of stories is the
   content of the batch directory, completed by the open pull requests. A
@@ -157,7 +175,7 @@ The `Feature flag` field is **mandatory and never left empty**. "No flag" must b
 a stated and reviewed decision, not an omission. It is examined at this gate
 because this is the moment when the batch's scope is still ahead of everyone.
 
-The batch is delivered onto a continuously deployed integration branch: every
+The batch is delivered onto a continuously deployed `main`: every
 merged story ships. The flag is what makes a story deliverable alone without
 exposing a half-built batch.
 
@@ -198,6 +216,15 @@ Feature flag: `billing.recurring`, off by default — scope: beyond this batch,
 Feature flag: none — corrective batch, restores behaviour the spec already promises
 ```
 
+A cross-module batch is not a fourth shape: it writes **one line per guarded
+module**, each of one of those three shapes, and each naming its module so the
+lifting story knows which spec it belongs to:
+
+```markdown
+Feature flag: `facturation.recurrent`, off by default — scope: this batch — module `facturation`
+Feature flag: `relance.recurrent`, off by default — scope: this batch — module `relance`
+```
+
 The flag is a specified object, not an implementation detail. Its name, its
 default and — when the scope extends — its lifting condition are written into the
 **spec section** concerned, by the story that transcribes that section. State
@@ -218,7 +245,16 @@ does it therefore carry the lifting story?*
 **Record that ruling next to its entry before the pull request merges.** One
 line per surfaced flag — `carried by this batch — lifting story owed` or
 `not this batch — <reason>` — written into `Live flags` on the batch branch, in
-answer to the review. This is review feedback applied to an open pull request,
+answer to the review.
+
+**Those two annotations are fixed strings, not paraphrases.** Write
+`carried by this batch — lifting story owed` verbatim, on one line, immediately
+under the surfaced flag it rules on; or `not this batch — <reason>` with the
+reason in the project's language after the dash. `supercharlouze:closing-a-batch`
+reads the `Live flags` section of this document and matches the literal
+`carried by this batch — lifting story owed`; a flag it cannot match that way is
+an unruled flag, not a flag ruled away. Reword the annotation and the reader
+finds nothing, which is the failure this whole section exists to close. This is review feedback applied to an open pull request,
 which is exactly how every other correction reaches this document; it is not
 mutable state, because after the merge nothing edits it again. Without it the
 ruling exists only in a review thread: `supercharlouze:closing-a-batch` checks
@@ -246,8 +282,8 @@ asked again whether a flag has come due.
 
 Before opening, reread the batch document against the specs with fresh eyes:
 scope stated with its "why now", spec delta per module, `Constraints` stated or
-`none`, `Feature flag` filled, reservations made for a corrective batch, live
-flags surfaced.
+`none`, `Feature flag` filled, reservations made for every gaps register entry
+this batch takes on — corrective or ordinary — and live flags surfaced.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
 reviewer has to rule on: the flag decision, the scope, and each surfaced live
@@ -295,9 +331,20 @@ itself is in question, and no agent may correct a spec.
 
 **Procedure.**
 
-1. **Close the story's pull request without merging it.** Nothing has to be
-   revoked: the spec slice travels with the code, so dropping the pull request
-   drops both.
+1. **Abandon the story — and do not assume it has a pull request.** Override 2
+   fires *inside* `superpowers:subagent-driven-development`, mid-implementation,
+   and a story's pull request is opened only at the very end of its Step 5, by
+   `superpowers:finishing-a-development-branch`. So the usual situation when
+   this triggers is a branch and a worktree and **no pull request at all**.
+   Therefore: **close the story's pull request without merging it if one is
+   already open; otherwise discard the branch and remove its worktree.** Either
+   way nothing has to be revoked, because nothing reached `main`: the spec slice,
+   or the struck gaps-register entry, travels with the code and dies with the
+   branch. Once the choice below is made, delete the story branch locally and on
+   the remote and remove its worktree in both cases, so no later session resumes
+   work under a qualification the batch no longer has. The gaps-register
+   reservation is untouched by all of this — it lives on `main`, posted by the
+   opening pull request, and `supercharlouze:closing-a-batch` releases it.
 2. **Put the choice to the human**, who alone may rule:
    - **Correct the spec** — then the batch stays corrective, on a reduced scope,
      and the corrected spec ships through its own pull request; or
@@ -342,6 +389,8 @@ skeleton.
 | "I'll transcribe the spec delta now, while it's fresh" | The spec would then describe behaviour no code delivers. Each story transcribes its own slice. |
 | "The module has no spec yet, I'll write the batch and adopt later" | Adoption is blocking. Otherwise the batch invents the norm it is supposed to obey. |
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
+| "This batch is ordinary, reservations are a corrective-batch thing" | Any batch taking on gaps register entries reserves them at opening — a Gaps entry as much as a Violations one. Otherwise two batches specify the same behaviour. |
+| "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open; otherwise discard the branch and its worktree. |
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: it moves only through an amendment pull request of its own. |
 | "The human ruled on the live flags in the review, that's recorded" | A review thread is not the document. Write the ruling into `Live flags` before the merge, or closing has nothing to check. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |

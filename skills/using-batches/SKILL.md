@@ -15,7 +15,8 @@ This project replaces dated design docs and one-off plans with a **living spec p
 |---|---|
 | A module this work touches has no spec in `docs/specs/` | `supercharlouze:adopting-a-module` — blocking; nothing starts until its pull request merges |
 | Architectural work on adopted modules | `supercharlouze:writing-a-batch` |
-| Drift found, or a module's gaps register holds unreserved entries | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
+| Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
+| A module's gaps register holds unreserved **Gaps** — the code does things no spec describes | `supercharlouze:writing-a-batch`, as an ordinary batch that finally specifies them |
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
 | A batch must change scope or flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
@@ -56,6 +57,8 @@ Two project constraints, not choices of this plugin, and everything else follows
 - **`main` is protected** — everything goes through a pull request.
 - **`main` is deployed continuously** — every merge ships to production.
 
+**One branch, one name.** `main` is that protected, continuously deployed branch, and this plugin calls it `main` everywhere — deliberately not an abstract "integration branch". The abstraction is what invites a `develop`-style branch, which the next paragraph rejects by name.
+
 The second is why feature flags exist, and it rules out the two natural alternatives. A batch branch, or a gitflow `develop` branch, would protect production by holding work back — at the price of a blind spot: a story merged into a batch branch is neither an open pull request nor on `main`, so it becomes invisible to concurrency detection for the whole life of the batch. A `develop` branch is worse: it creates **two baselines** for the drift rule — the reference spec on `develop`, the running code on `main` — and a corrective batch no longer knows what it is correcting against. A flag protects production without holding code back, so it creates neither blind spot nor second baseline.
 
 **A story's pull request carries the spec slice and the code that implements it.** They ship together or not at all, in the same pull request. That is what gives `main` its central property: **its spec always describes exactly what its code does.** There is no intermediate state to signal, therefore no marker, no semantics to explain to agents that know nothing about this plugin, and no exception to the drift rule.
@@ -94,15 +97,16 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
 
 **Spike** — unchanged. An answer, no artifact.
 
-**Bounded** — ceremony unchanged, with three rules:
+**Bounded** — ceremony unchanged, with four rules:
 
 - **(a) Its pull request never leaves the spec silent.** Whether it *alters* a behaviour some spec already describes or *adds* one no spec describes, it updates the spec in the same pull request as the code, with an `out-of-batch` changelog line. Handling only the "alters" case would reopen the same hole one notch over.
-- **(b) It undergoes the same concurrency detection as a story**, and therefore declares its sections in the body of its pull request — otherwise it would hit a story in flight through a back door.
+- **(b) It undergoes the same concurrency detection as a story**, and therefore declares its sections in the body of its pull request — otherwise it would hit a story in flight through a back door. Run **Step 1 of `supercharlouze:writing-a-user-story`** before creating `fix/<slug>` — the same open pull requests to list, the same `gh` calls, the same `Sections:` read at another branch's head ref — and stop on the same conditions, including the one where a head ref cannot be read.
 - **(c) It carries no feature flag.** A bounded change is complete in its own pull request, so it satisfies the exemption criterion by construction.
+- **(d) It writes to a gaps register directly.** Belonging to no batch, it may both add an entry and strike one in `docs/specs/<module>.gaps.md`, from its own pull request, contending only with another bounded change. The batch path is stricter — stories only record what they observe, and only `supercharlouze:closing-a-batch` consolidates it — because that contention is per batch, not per pull request.
 
 No batch, no user story: a bounded change is already a pull request, it simply carries its spec update. Its branch is `fix/<slug>`.
 
-**Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**: that is the design work itself, and it has no reason to change.
+**Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`, which may first require `supercharlouze:adopting-a-module` as a blocking precondition. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**: that is the design work itself, and it has no reason to change.
 
 ## Declared Overrides
 
@@ -117,6 +121,8 @@ The CLAUDE.md block is not reproduced in this skill. It lives in exactly one pla
 The architectural checklist of `superpowers:brainstorming` ends with four steps: **6.** write the dated design doc, **7.** self-review, **8.** human review of the written spec, **9.** transition to writing-plans. The skill locks the ninth — *"Architectural: the ONLY skill you invoke after brainstorming is writing-plans"*, doubled by *"Do NOT invoke any other skill. writing-plans is the next step"*.
 
 **This override replaces all four, not only the last.** Rerouting step 9 alone would let steps 6 to 8 run, and a dated design doc would still be written into `docs/superpowers/specs/` — exactly what this plugin exists to remove. It is one override, correctly bounded, not two: the substitution covers a coherent terminal block.
+
+**The substitute may itself be blocked.** When a module the work touches has no spec, `supercharlouze:writing-a-batch` treats `supercharlouze:adopting-a-module` as a blocking precondition, so that skill runs first — named here rather than left implicit, because a second post-brainstorming skill under a rule stated as closed is exactly what an unnamed exception looks like. It widens nothing: the override still covers steps 6 to 9 and nothing else.
 
 Justification: `supercharlouze:writing-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its re-read before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
 

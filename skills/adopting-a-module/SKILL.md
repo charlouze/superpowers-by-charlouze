@@ -190,16 +190,18 @@ Each entry designates a section of the spec.
 
 **Each entry is a single addressable item — one list item, never a paragraph of
 running prose.** You are the only skill that ever *creates* this file, and three
-later skills act on entries in place, each needing a thing it can point at:
+later skills act on entries in place — plus the bounded path, a fourth writer
+with no skill of its own — each needing a thing it can point at:
 
 | Gesture | Who | What it does to the entry |
 |---|---|---|
 | Reserve | `supercharlouze:writing-a-batch`, in the batch's opening pull request | appends `reserved by batch-NN` to it |
 | Strike | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | strikes it through, atomically with the code |
 | Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed |
+| Add or strike | a bounded change, from its own pull request | belonging to no batch, it writes an entry or strikes one directly, contending only with another bounded change |
 
 A register written as flowing paragraphs satisfies every other word of this step
-and breaks all three: there is no item to annotate, none to strike, and nothing a
+and breaks every one of them: there is no item to annotate, none to strike, and nothing a
 corrective batch can draw a scope from. Write entries so those gestures are
 mechanical.
 

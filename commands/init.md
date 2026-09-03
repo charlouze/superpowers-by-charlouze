@@ -9,8 +9,8 @@ current directory.
 Everything in this system ships through a pull request, and this command is no
 exception (spec section 9).
 
-1. From the main checkout, on an up-to-date integration branch, create the
-   branch `chore/supercharlouze-init`.
+1. From the main checkout, on an up-to-date `main`, create the branch
+   `chore/supercharlouze-init`.
 2. Run `bash ${CLAUDE_PLUGIN_ROOT}/scripts/init.sh <target>`. It is idempotent:
    it creates `docs/specs/`, `docs/batches/` and `docs/archive/`, moves any
    `docs/superpowers/specs` and `docs/superpowers/plans` under `docs/archive/`,
