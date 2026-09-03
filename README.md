@@ -22,10 +22,37 @@ debugging, code review — is reused unchanged.
 
 ## Status
 
-Design stage. Nothing is implemented yet.
+v0.1.0 — the five skills, the `/supercharlouze:init` command and the structural
+test suite are in place.
 
-The design lives on the `design/supercharlouze` branch, at
-`docs/superpowers/specs/2026-09-03-supercharlouze-design.md`.
+## Install
+
+```bash
+/plugin marketplace add charlouze/superpowers-by-charlouze
+/plugin install supercharlouze@supercharlouze
+```
+
+Then, in each project you want to move over, run `/supercharlouze:init`. It opens
+a pull request; nothing is adopted until you decide, module by module.
+
+## Skills
+
+| Skill | Use it when |
+|---|---|
+| `supercharlouze:using-batches` | Entry point — routing, authority rules, declared overrides |
+| `supercharlouze:adopting-a-module` | A module has no living spec yet |
+| `supercharlouze:writing-a-batch` | Opening, amending or requalifying a batch |
+| `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
+| `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
+
+## Tests
+
+```bash
+bash tests/run-all.sh
+```
+
+Structural checks only — see section 11 of the design document for what is
+deliberately not tested.
 
 ## Requirements
 
