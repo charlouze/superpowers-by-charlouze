@@ -181,6 +181,28 @@ git commit -m "fix: name the spec section instead of counting it"
 
 ## Rulings log
 
+Trois décisions prises pendant l'exécution, aucune soumise à l'humain sur le
+moment. Les trois portent sur des trouvailles de la revue de branche.
+
+- `Ruling:` prendre l'assertion d'existence des sections (trouvaille 3) alors que
+  le plan la déclarait hors périmètre — le sujet même de cette story est le
+  pointeur qui pourrit, et livrer deux nouveaux renvois que rien ne vérifie
+  reproduirait le défaut un cran plus loin — *coût si c'est faux :* quelques
+  lignes de périmètre au-delà de ce que le gate d'ouverture a revu, dans un
+  fichier que la story touche déjà.
+
+- `Ruling:` parquer la trouvaille du succès vide (trouvaille 5) — le « no such
+  file » avalé par `grep` est le motif préexistant des assertions 1 et 2, et les
+  réécrire tombe sous le « Ne rien corriger d'autre » du lot — *coût si c'est
+  faux :* une racine de balayage renommée ferait passer la garde en silence au
+  lieu de la faire échouer.
+
+- `Ruling:` garder `reserved by batch-01` **hors** du barré sur l'entrée du
+  registre (trouvaille 8) — le devoir 3 de `closing-a-batch` se fonde sur « never
+  struck through », donc les deux formes fonctionnent, et la garder enregistre
+  quel lot a consommé l'entrée — *coût si c'est faux :* une divergence cosmétique
+  avec la forme qu'illustre `adopting-a-module`, à retrancher au lot 02.
+
 ## Observed drift
 
 - **Quatre renvois numérotés survivent dans `tests/`**, du même type que ceux que
