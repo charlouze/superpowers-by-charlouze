@@ -37,7 +37,7 @@ inobservables ici.
   `docs/archive/specs/` et privé d'autorité par la présente adoption. La spec
   vivante est l'autorité contraignante et n'a pas de numérotation : les deux
   pointeurs sont d'ores et déjà faux, et ils pourriront davantage à chaque
-  amendement de la spec.
+  amendement de la spec. `reserved by batch-01`
 
 ## Gaps
 
