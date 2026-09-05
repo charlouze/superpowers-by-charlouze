@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 01 — Renvois au document de conception archivé

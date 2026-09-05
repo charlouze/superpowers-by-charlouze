@@ -39,6 +39,19 @@ inobservables ici.
   pointeurs sont d'ores et déjà faux, et ils pourriront davantage à chaque
   amendement de la spec.~~ `reserved by batch-01`
 
+- **Verification** — quatre renvois numérotés au document de conception archivé
+  survivent dans `tests/`, du même type que ceux que le lot 01 a corrigés et
+  laissés hors de son périmètre parce que l'entrée qu'il avait réservée ne
+  nommait que les artefacts livrés : `tests/test-cross-references.sh:66`
+  (`(spec 8.1)`, à remplacer par la section `Routing and precedence`), `:74`
+  (`(spec 8.2)` → `What is kept, what is rerouted`),
+  `tests/test-declared-overrides.sh:104` (`(spec 5.1)` → `Git model`),
+  `tests/test-skill-content.sh:35` (`(spec 6)` → `Module adoption`). La garde
+  ajoutée par le lot 01 ne les attrape pas : sa portée s'arrête aux artefacts
+  livrés, et son libellé le dit. Rien d'autre ne les rattrapera non plus — la
+  section `Coverage` ci-dessus déclare que `tests/` n'a été audité que par le
+  **nom** de ses assertions.
+
 ## Gaps
 
 - **The batch document** — `writing-a-batch` impose une section `## Constraints`
@@ -136,3 +149,24 @@ inobservables ici.
   assertions de contenu sur les quatre skills productifs, assertions sur le
   fichier de commande. Ces contrôles sont structurels et légitimes, mais la liste
   normative de la spec n'en couvre que cinq.
+
+- **Concurrency detection / The user story document** — la spec fait du champ
+  `Sections:` « le mécanisme de détection de concurrence », et la détection ne
+  retient que les pull requests et les branches **dont le diff touche le fichier
+  de spec**. Or le premier commit d'une story corrective ne touche pas la spec,
+  par construction : il barre une entrée du gaps register. Une story corrective
+  est donc structurellement invisible de ce mécanisme, et le `Sections:` que la
+  spec lui impose de déclarer n'est jamais lu par personne. Constaté par le
+  lot 01, dont c'était le cas. **Rien à corriger dans le code : les deux règles
+  sont implémentées fidèlement, c'est leur conjonction qui est muette.** Résorber
+  cette entrée veut dire décider ce que la spec doit dire — soit exempter une
+  story corrective de la déclaration, soit étendre le filtre au gaps register —
+  et cette décision est humaine. D'où le classement en *gap* plutôt qu'en
+  violation : un lot correctif la prendrait et buterait aussitôt sur la cinquième
+  condition d'arrêt.
+
+- **Verification** — le lot 01 a ajouté une garde qui vérifie que les sections
+  nommées par un renvoi **existent**, jamais que la section citée dit ce que le
+  renvoi prétend. Un déplacement de contenu d'une section à l'autre laisse le
+  renvoi vert et faux. Aucun document validé ne dit quel niveau de vérification
+  un renvoi doit à sa cible, ni si un tel contrôle est seulement souhaitable.

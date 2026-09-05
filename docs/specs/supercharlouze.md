@@ -936,3 +936,4 @@ exception subie — c'est la règle générale, déjà appliquée.
 
 | batch | date | change |
 |---|---|---|
+| 01 | 2026-09-05 | Lot correctif : les renvois des artefacts livrés nomment leur section de cette spec au lieu de citer un numéro du document de conception archivé, et deux gardes structurelles empêchent la réapparition du défaut — l'une contre les renvois numérotés, l'autre contre un renvoi dont la section n'existe plus. |
