@@ -60,6 +60,7 @@ inobservables ici.
   `Global Constraints` de chaque plan. Aucun document validé ne nomme cette
   section ni ne décrit la convention `none` ou la recopie verbatim, alors que la
   spec fait de ces contraintes ce que le batch porte et que la spec ne porte pas.
+  `reserved by batch-02`
 
 - **The batch document** — `writing-a-batch` impose une section `## Live flags` où
   chaque flag vivant remonté reçoit la décision de l'humain, écrite sous forme de
@@ -69,6 +70,7 @@ inobservables ici.
   décrit cette section, ni le fait que la décision soit consignée dans le
   document, ni ce couplage par chaîne littérale entre deux skills — qui est
   pourtant le seul canal par lequel un flag hérité atteint le contrôle de clôture.
+  `reserved by batch-02`
 
 - **Closing a batch** — le contrôle des flags porte, dans `closing-a-batch`, sur
   les flags **que le lot a déclarés** *et* sur ceux **qu'il a hérités par une
@@ -76,20 +78,20 @@ inobservables ici.
   décision humaine rend « dépensée » la portée étendue déclarée par le lot
   d'origine, donc l'entrée n'est réglée que si le flag a disparu du code et de la
   spec. Aucun document validé ne décrit la notion de flag hérité ni ce test
-  particulier ; la spec ne connaît que les flags du lot.
+  particulier ; la spec ne connaît que les flags du lot. `reserved by batch-02`
 
 - **Closing a batch** — `closing-a-batch` exécute le **contrôle du devoir 5 avant
   les devoirs 1 à 4**, au motif qu'un refus doit être gratuit : les quatre
   premiers écrivent, aucun n'est rejouable sans dupliquer ses effets, et un refus
   tardif échouerait quatre devoirs d'écriture sur une branche que personne ne
   peut fusionner. La spec énonce six devoirs dans l'ordre 1 à 6 et ne décrit
-  aucune inversion.
+  aucune inversion. `reserved by batch-02`
 
 - **Closing a batch** — `closing-a-batch` énonce que le devoir 4 **n'a rien à
   comparer pour un lot correctif**, dont le spec delta est vide par définition, et
   que le devoir 3 en tient alors lieu — avec l'interdiction explicite de reclasser
   les entrées libérées en gaps neufs. Aucun document validé ne porte cette
-  exception.
+  exception. `reserved by batch-02`
 
 - **The user story document** — `writing-a-user-story` fait porter aux
   `Global Constraints` **plus que les deux choses que la spec y met** : outre les
@@ -99,19 +101,20 @@ inobservables ici.
   les `Global Constraints` sont le seul canal que lisent les sous-agents
   implémenteurs de SDD, donc une condition d'arrêt qui n'y figure pas n'atteint
   jamais l'agent qui doit l'appliquer. La spec en reste à deux éléments.
+  `reserved by batch-02`
 
 - **Module adoption** — `adopting-a-module` fixe la **place de la création de la
   branche dans l'ordre des étapes** : avant que le moindre fichier soit écrit,
   parce que `superpowers:using-git-worktrees` ouvre un répertoire séparé et
   qu'une spec écrite plus tôt resterait sur `main` dans le checkout principal. La
   spec ordonne les étapes de l'adoption sans placer celle-là, et aucun document
-  validé n'énonce cette contrainte d'ordre.
+  validé n'énonce cette contrainte d'ordre. `reserved by batch-02`
 
 - **Branch naming** — `writing-a-batch` impose qu'une pull request d'amendement
   parte d'une **branche distincte au nom sans signification**, et interdit de
   réutiliser `batch/NN-<slug>` que la pull request d'ouverture peut encore tenir
   sur le remote. La table de nommage de la spec n'a pas de ligne pour
-  l'amendement.
+  l'amendement. `reserved by batch-02`
 
 - **Branch naming** — la spec demande que le plugin crée la branche au nom
   conventionnel, et qu'il **s'assure qu'une branche nommée existe** si l'outil
@@ -122,6 +125,7 @@ inobservables ici.
   satisfont la spec, qui ne dit pas laquelle des deux lectures elle veut — la
   présente pull request en est l'illustration, portée par une branche que le
   harnais a nommée `worktree-adopt+supercharlouze` et non `adopt/supercharlouze`.
+  `reserved by batch-02`
 
 - **The init command** — `scripts/init.sh` porte plusieurs comportements de sûreté
   qu'aucun document validé ne décrit, et que la spec réduit à « insérer ou mettre
@@ -132,7 +136,7 @@ inobservables ici.
   paire de marqueurs HTML (`<!-- supercharlouze:begin -->` / `:end`) appariés
   **sur la ligne entière**, de sorte qu'une prose citant les marqueurs ne soit pas
   prise pour un bloc ; il préserve le mode du fichier ; et il supprime
-  l'arborescence `docs/superpowers` une fois vidée.
+  l'arborescence `docs/superpowers` une fois vidée. `reserved by batch-02`
 
 - **Document layout** — l'arborescence que `init` crée comporte deux répertoires
   qui restent vides jusqu'au premier usage, `docs/specs/` et `docs/batches/`. Git
@@ -140,7 +144,7 @@ inobservables ici.
   frais ne les a pas. Le script les recrée à chaque exécution, donc le code est
   conforme à ce que la spec lui demande — mais aucun document validé ne dit si
   l'arborescence doit survivre à un clone, ni ce qu'un dépôt est censé porter
-  entre l'init et la première spec.
+  entre l'init et la première spec. `reserved by batch-02`
 
 - **Verification** — la suite de tests vérifie **au-delà des cinq contrôles que la
   spec énumère** : cas limites de l'init (collision d'archivage, marqueurs
@@ -148,7 +152,7 @@ inobservables ici.
   migration d'un sous-arbre imbriqué, portée de la lecture de `Sources`),
   assertions de contenu sur les quatre skills productifs, assertions sur le
   fichier de commande. Ces contrôles sont structurels et légitimes, mais la liste
-  normative de la spec n'en couvre que cinq.
+  normative de la spec n'en couvre que cinq. `reserved by batch-02`
 
 - **Concurrency detection / The user story document** — la spec fait du champ
   `Sections:` « le mécanisme de détection de concurrence », et la détection ne
