@@ -1,0 +1,9 @@
+{
+  "name": "supercharlouze",
+  "description": "Overrides how superpowers organizes specs and plans: one living spec per module, batches of user stories, corrective batches",
+  "version": "0.1.0",
+  "author": { "name": "Charlouze" },
+  "homepage": "https://github.com/charlouze/superpowers-by-charlouze",
+  "repository": "https://github.com/charlouze/superpowers-by-charlouze",
+  "keywords": ["superpowers", "specs", "plans", "batches", "user-stories"]
+}

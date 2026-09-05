@@ -6,7 +6,26 @@ par une spécification vivante par module fonctionnel, et remplace les plans
 isolés par des *batches* de user stories qui font grandir ces specs.
 
 **Status:** conception validée le 2026-09-03, révisée après quatre relectures
-adversariales. Rien n'est encore implémenté.
+adversariales. v1 livrée le 2026-09-04 ; le présent document a été amendé à
+cette occasion, et un lecteur qui audite l'amendement a ici la liste complète
+des endroits touchés — la liste est ici parce qu'aucune de ces corrections ne
+tient dans le seul passage qui l'énonce.
+
+Deux points que l'implémentation a révélés faux. **La portée de la détection de
+concurrence** s'énonce au §3 et au §5.3, et se propage à l'abandon d'une story
+(§5.1), à la vue d'ensemble (§5) et au bounded (§8.2). **Le point de départ de
+la procédure de requalification** s'énonce au §8.3 et se propage lui aussi à
+l'abandon (§5.1). Il en découle une troisième règle, que l'auditeur cherchera
+pour elle-même : **l'attribution des numéros du §4** refuse désormais aussi les
+numéros qu'une branche poussée revendique sans porter encore de pull request.
+§13 suit les trois.
+
+Et quelques endroits où les skills étaient simplement en avance sur le document,
+qui les rattrape sans qu'aucun amendement l'exige : le Rulings log et l'Observed
+drift sont créés vides au moment du plan (§4.4) ; une story a pour précondition
+que son batch existe et soit ouvert (§5.1) ; deux citations de section fausses
+sont corrigées, `§6.4` en « §6, étape 4 » au §4.2 et `§6.2` en « §6, étape 2 »
+au §9.
 
 **Plugin name:** `supercharlouze` (namespace de tous les skills). Dépôt :
 `superpowers-by-charlouze`.
@@ -154,7 +173,22 @@ encore.
 **Concurrence.** Deux stories qui touchent la même section d'une même spec sont
 un conflit. **La détection est celle du §5.3 : chaque document de story déclare
 les sections qu'elle touche, et une story qui démarre les compare à celles des
-pull requests ouvertes.** Le conflit de fusion git n'est qu'un filet **partiel**
+pull requests ouvertes *et des branches `story/*` poussées qui n'ont pas encore
+de pull request*.**
+
+Ce second terme n'est pas un raffinement, c'est ce qui rend le mécanisme vrai.
+La pull request d'une story n'ouvre qu'à l'étape 6 du §5.3, alors que son champ
+`Sections:` existe dès que son plan est écrit, à l'étape 5 : s'en tenir aux pull
+requests ouvertes rendrait chaque story invisible à ses sœurs **pendant toute la
+durée de son implémentation** — soit exactement l'angle mort que le §5.1 reproche
+à la branche de lot, réintroduit sur le chemin nominal. La contrepartie — la
+branche est poussée dès son premier commit (§5.3, étape 4) — est assumée : ce
+filet voit ce qui est sur le remote, ni plus ni moins, et une branche créée mais
+non poussée reste invisible. Le dire est la moitié du mécanisme — un filet dont
+on croit qu'il attrape tout est plus dangereux qu'un filet dont on connaît la
+maille.
+
+Le conflit de fusion git n'est qu'un filet **partiel**
 — git conflicte sur des lignes, pas sur des sections, donc deux stories
 modifiant la même section à des endroits éloignés fusionnent proprement. Compter
 sur lui reviendrait à laisser passer exactement le cas qu'on veut attraper.
@@ -180,13 +214,36 @@ Les *patrons* de chemins sont anglais et figés ; les *slugs* suivent la langue
 du projet, puisqu'ils nomment des objets métier (§10).
 
 **Attribution des numéros.** `NN` (batch) et `us-N` (story) suivent la même
-règle : le plus petit entier non utilisé **dans `docs/batches/` sur `main`** et
-**non revendiqué par une pull request ouverte** (`gh pr list`). Les deux
-conditions sont nécessaires, et pour la même raison dans les deux cas : un
-artefact n'atteint `main` qu'à la fusion de sa pull request, donc le contenu du
-répertoire ignore tout ce qui est en vol. Se fier au seul contenu de `main`
-ferait prendre le même numéro à deux batches ouverts en parallèle, ou à deux
-stories écrites pendant qu'une troisième est en revue.
+règle : le plus petit entier non utilisé **dans `docs/batches/` sur `main`**,
+**non revendiqué par une pull request ouverte** (`gh pr list`), et **non
+revendiqué par une branche poussée qui ne porte pas encore de pull request**.
+Le patron de branche à balayer n'est pas le même pour les deux numéros, parce
+que le nom d'une branche dit ce qu'elle revendique : `NN` se cherche contre
+`batch/*` **et** `story/*`, puisque `story/NN-us-N-<slug>` porte le numéro de
+son lot autant que celui de sa story ; `us-N` se cherche contre `story/*` seul,
+une branche `batch/*` ne pouvant revendiquer aucun numéro de story. Les trois
+conditions sont nécessaires, et pour la même raison : un artefact n'atteint
+`main` qu'à la fusion de sa pull request, donc le contenu du répertoire ignore
+tout ce qui est en vol. Se fier au seul contenu de `main` ferait prendre le même
+numéro à deux batches ouverts en parallèle, ou à deux stories écrites pendant
+qu'une troisième est en revue.
+
+La troisième condition est **le même argument que celui du §3**, appliqué au
+même trou. La branche d'une story est poussée à l'étape 4 du §5.3 et sa pull
+request n'ouvre qu'à l'étape 6 : entre les deux, elle revendique son `NN` et son
+`us-N` pendant toute son implémentation sans figurer dans `gh pr list`. Le terme
+`batch/*` n'est pas le symétrique de celui-là mais un **filet résiduel** : rien
+au §5.2 ne pousse `batch/NN-<slug>` avant sa pull request, donc la branche
+atteint le remote au même instant que la pull request et `git ls-remote` n'y
+voit rien que `gh pr list` manque. Elle n'ouvre une fenêtre que si elle a été
+poussée tôt — le flux ne l'impose pas, une session peut le faire — et le terme
+n'existe que pour couvrir ce cas-là. Refuser cet angle mort à la détection de
+concurrence et le tolérer à l'attribution des numéros serait tenir deux fois le
+même raisonnement pour en tirer deux conclusions contraires : c'est une seule
+idée, pas deux coïncidences. Les deux règles lisent le même couple de sources
+**distantes** — pull requests ouvertes et branches poussées — et l'attribution
+y ajoute le répertoire sur `main`, parce qu'elle seule doit aussi éviter les
+numéros déjà livrés.
 
 **Le préfixe `NN-` des fichiers de story** garantit l'unicité des basenames.
 Sur le chemin nominal il est confortable plutôt que nécessaire : chaque story
@@ -277,7 +334,7 @@ Deux sections distinctes, parce qu'elles ne se traitent pas pareil :
 **Qui écrit dedans.** Il faut distinguer deux gestes, parce qu'ils n'ont pas le
 même profil de contention.
 
-**Ajouter une entrée** — `adopting-a-module` à la création (§6.4), puis
+**Ajouter une entrée** — `adopting-a-module` à la création (§6, étape 4), puis
 **`closing-a-batch`** seul, qui consolide en une pull request les dérives que les
 stories du batch ont constatées hors périmètre. Les stories **n'ajoutent pas** :
 elles consignent leurs constats dans leur propre document, sous **Observed
@@ -381,7 +438,11 @@ déclaré et non déduit : lire un diff pour deviner quelles sections une story
 touche est fragile, alors que l'auteur de la story le sait.
 
 Le document porte en outre un **Rulings log** et une section **Observed drift**,
-remplis avant la fusion (§3, §4.2).
+remplis avant la fusion (§3, §4.2). Les deux sont **créées vides au moment du
+plan**, en même temps que le header, et non à l'instant où on les remplit — et
+laissées vides si rien n'est venu. Une section vide dit « examiné, rien
+trouvé » ; une section absente dit « jamais examiné », et un reviewer ne la
+distingue pas d'un oubli.
 
 **Ce montage n'est correct qu'à trois conditions**, toutes load-bearing :
 
@@ -436,13 +497,18 @@ flowchart TD
     CB --> CPR[["PR : changelog, consolidation, libérations,<br/>constats, contrôle des flags, status: closed"]]
     CPR --> CG{{"Revue = gate de clôture"}}
 
-    SG -.->|PR fermée sans fusion| ABANDON["Story abandonnée<br/>rien à révoquer"]
-    ABANDON -.->|résidus sur main| CB
+    SG -.->|"PR fermée sans fusion"| ABANDON["Story abandonnée<br/>rien à révoquer<br/>branche supprimée localement et sur le remote"]
+    WS -.->|"abandon ou requalification en cours de story —<br/>pas encore de PR"| ABANDON
+    ABANDON -.->|"résidus sur main"| CB
 ```
 
-L'arête pointillée est le seul chemin non nominal : une story abandonnée ne
-laisse rien dans la spec, mais laisse sur `main` sa réservation au gaps register
-et l'intention annoncée par le batch — que la clôture doit constater (§5.4).
+Les arêtes pointillées sont le seul chemin non nominal, et il a **deux
+formes**. La pull request de la story est fermée sans fusion s'il y en a une ;
+sinon — le cas normal, puisqu'elle n'ouvre qu'à l'étape 6 du §5.3 — il n'y a
+qu'une branche à supprimer, localement **et sur le remote** (§5.1, §8.3). Dans
+les deux cas la story abandonnée ne laisse rien dans la spec, mais laisse sur
+`main` sa réservation au gaps register et l'intention annoncée par le batch —
+que la clôture doit constater (§5.4).
 
 ### 5.1 Git model
 
@@ -455,12 +521,15 @@ découle :
 La seconde est la raison d'être des feature flags (§2), et elle **écarte les deux
 alternatives naturelles**. Une branche de lot, ou une branche `develop` façon
 gitflow, protégeraient la production en retenant le travail — mais au prix d'un
-angle mort : une story fusionnée dans une branche de lot n'est ni une pull
-request ouverte ni sur `main`, donc elle devient invisible à la détection de
-concurrence du §5.3, pour toute la durée du lot. Et une branche `develop` fait
-pire : elle crée **deux baselines** pour la règle de dérive — la spec de
-référence sur `develop`, le code en production sur `main` — et un lot correctif
-ne sait plus contre quoi il corrige. Le flag protège la production sans retenir
+angle mort : une story fusionnée dans une branche de lot disparaît des **deux**
+sources de la détection du §5.3 — sa pull request n'est plus ouverte, et sa
+branche `story/*` n'est plus une revendication vivante sur le remote dès lors
+que la fusion la supprime, ce que fait par défaut un flux par pull request —
+alors que ce qu'elle a écrit n'a pas atteint `main`. Elle devient donc invisible
+pour toute la durée du lot. Et une branche `develop` fait pire : elle crée
+**deux baselines** pour la règle de dérive — la spec de référence sur `develop`,
+le code en production sur `main` — et un lot correctif ne sait plus contre quoi
+il corrige. Le flag protège la production sans retenir
 le code, donc sans créer ni angle mort ni seconde baseline.
 
 **Une pull request de story porte la tranche de spec et le code qui la
@@ -509,17 +578,27 @@ cérémonie : il place ses points de validation là où votre flux en a déjà.
 
 | Gate | Artefact revu |
 |---|---|
-| Adoption d'un module (§6.5) | la PR portant la spec et le gaps register |
+| Adoption d'un module (§6, étape 5) | la PR portant la spec et le gaps register |
 | Ouverture d'un batch (§5.2) | la PR portant le document de batch |
 | Livraison d'une story | la PR portant la tranche de spec et le code |
 | Clôture d'un batch (§5.4) | la PR portant changelog, consolidation et `status: closed` |
 | Amendement d'un batch (§4.3) | la PR portant la décision de changer son périmètre ou son flag |
 
-**L'abandon d'une story est presque gratuit.** Fermer sa pull request sans la
-fusionner jette la transcription avec le code : rien à révoquer, aucune spec à
-remettre d'aplomb. Deux résidus subsistent néanmoins sur `main`, et ils ont un
-porteur (§5.4) : la réservation au gaps register posée par la PR d'ouverture du
-batch, et l'intention annoncée dans le spec delta du batch et jamais livrée.
+**L'abandon d'une story est presque gratuit.** Sa pull request est fermée sans
+fusion **s'il y en a une** — le plus souvent il n'y en a pas encore, puisqu'elle
+n'ouvre qu'à l'étape 6 du §5.3 — et **dans tous les cas** sa branche est
+supprimée, localement **et sur le remote**, worktree compris. L'abandon jette
+ainsi la transcription avec le code : rien à révoquer, aucune spec à remettre
+d'aplomb. La suppression distante n'est ni un ménage optionnel ni une
+alternative à la fermeture, et les deux gestes ne se remplacent pas : le
+balayage du §5.3 n'écarte que les branches couvertes par une pull request
+**ouverte**, donc une branche dont la pull request a été fermée est relue comme
+une revendication vivante, exactement comme une branche qui n'en a jamais eu.
+Laissée en place, elle réserve ses sections contre toutes les stories qui
+suivent, et plus rien ne les libère. Deux résidus subsistent par ailleurs sur
+`main`, et ils ont un porteur (§5.4) : la réservation au gaps register posée par
+la PR d'ouverture du batch, et l'intention annoncée dans le spec delta du batch
+et jamais livrée.
 
 **Création de la branche.** Le plugin crée lui-même la branche au nom
 conventionnel (§4) et l'espace de travail, en invoquant
@@ -546,6 +625,11 @@ de ce système :**
 - **Être sur `main`, rafraîchie.** Les fusions arrivent depuis le remote : sans
   `fetch`/`pull`, l'attribution des numéros et la détection de concurrence
   raisonnent sur un état périmé.
+- **Pour une story : le batch existe et est ouvert.** Sa pull request
+  d'ouverture est fusionnée et son document porte `status: open`. C'est le gate
+  d'ouverture (§5.2) qui autorise l'écriture des stories ; avant lui, une story
+  s'appuierait sur un périmètre, un spec delta et un champ `Feature flag` que
+  personne n'a encore revus — et le gate perdrait ce qu'il est censé tenir.
 
 **Hypothèse assumée :** `gh` est disponible et authentifié. L'attribution des
 numéros et la détection de concurrence l'interrogent. Sans lui, les deux
@@ -587,25 +671,27 @@ Les user stories sont écrites **une par une** : la story N+1 est écrite en
 connaissant ce qu'a produit la story N. Plusieurs peuvent être en vol
 simultanément, c'est le régime normal d'un flux par pull request.
 
-Le détail des passages de relais, et les deux endroits exacts où les overrides
+Le détail des passages de relais, et les trois endroits exacts où les overrides
 mordent :
 
 ```mermaid
 sequenceDiagram
-    autonumber
     participant SC as writing-a-user-story
     participant SP as superpowers
     participant G as git + gh
     participant H as Humain
 
     SC->>G: préconditions — checkout principal, main rafraîchie
-    SC->>G: lire les champs Sections des PR ouvertes sur la même spec
-    Note over SC,G: arrêt si l'intersection n'est pas vide — §3
+    SC->>G: lire les champs Sections des PR ouvertes et des branches story/* poussées
+    Note over SC,G: arrêt si l'intersection n'est pas vide, ou si un champ est illisible — §3
     SC->>G: créer story/NN-us-N et son worktree
     SC->>G: commit 1 — la tranche de spec, avant tout code
+    SC->>G: push immédiat — la story devient visible de ses sœurs
     SC->>SP: writing-plans — Global Constraints portent le gel de la spec
+    SC->>G: commit et push du document de story — les sections sont déclarées
     SP->>SP: subagent-driven-development
     Note over SP: mode d'exécution imposé — Override 3
+    Note over SP: cinquième condition d'arrêt, lot correctif — Override 2
     SP->>SP: finishing-a-development-branch
     Note over SP: choix contraint à la pull request — Override 4
     SP->>G: push et ouverture de la pull request
@@ -619,14 +705,49 @@ Pour chacune :
 
 1. **Vérifier les préconditions** du §5.1 — checkout principal, `main`
    rafraîchie.
-2. **Détecter la concurrence** : lister les pull requests ouvertes touchant le
-   même fichier de spec, lire leur champ `Sections:` (§4.4), et **s'arrêter** si
-   l'intersection avec les sections visées n'est pas vide. C'est le mécanisme,
-   pas une précaution : le conflit de fusion git ne rattraperait pas deux
-   modifications éloignées d'une même section.
+2. **Détecter la concurrence** sur les deux sources, pas sur une seule :
+
+   - les **pull requests ouvertes** touchant le même fichier de spec, dont on
+     lit le champ `Sections:` (§4.4) ;
+   - les **branches `story/*` poussées qui ne portent pas encore de pull
+     request** **et qui touchent le même fichier de spec** — le diff de la
+     branche contre `main` le dit —, dont on lit le même champ sur leur head
+     ref. Une story n'ouvre sa pull request qu'à l'étape 6 ; sans ce second
+     balayage elle serait invisible pendant tout ce qui précède (§3).
+
+   Le filtre par fichier de spec est le même sur les deux sources, et pour la
+   même raison. Sans lui sur la seconde, l'étape ordonnerait de lire *toutes*
+   les branches de story du dépôt et de s'arrêter à la première illisible, y
+   compris sur des modules que cette story ne touche pas — un arrêt que rien ne
+   justifie, sur un conflit qui ne peut pas exister.
+
+   **La déclaration `Sections:` se lit là où la pull request la tient** : dans
+   le document de story pour une story (§4.4), dans le corps de la pull request
+   pour un bounded (§8.2), qui n'a pas de document de story. Le préciser n'est
+   pas un détail de lecture : chercher le champ au seul endroit prévu pour les
+   stories ferait de chaque bounded ouvert une déclaration « illisible », et
+   arrêterait donc toutes les stories tant qu'un bounded reste ouvert — un faux
+   arrêt qui bloque le chemin nominal au nom d'un conflit fantôme. Seule une
+   déclaration réellement absente ou illisible est un inconnu.
+
+   **S'arrêter** si l'intersection avec les sections visées n'est pas vide.
+   **S'arrêter aussi si un champ `Sections:` n'a pas pu être lu** — fetch en
+   échec, document absent, champ manquant. Un champ non lu est un inconnu, pas
+   un feu vert ; le traiter comme vide transforme le seul vrai filet en « rien
+   trouvé ». C'est le mécanisme, pas une précaution : le conflit de fusion git
+   ne rattraperait pas deux modifications éloignées d'une même section.
+
+   Le cas d'une branche poussée dont le document de story n'existe pas encore —
+   une story entre son commit de tranche et son commit de plan — est un inconnu
+   au même titre, et arrête pareillement. Cette fenêtre dure le temps d'écrire
+   un plan.
 3. **Attribuer `us-N`** (§4) et **créer la branche** (§5.1).
 4. **Commiter la tranche du delta propre à cette story** — premier commit de la
-   branche (§4.4, condition 2).
+   branche (§4.4, condition 2) — **puis pousser la branche immédiatement**.
+   Rien dans cette story n'en dépend ; le push la rend *visible*, puisqu'une
+   sœur qui démarre lit les branches `story/*` poussées (étape 2). Pousser ici
+   plutôt qu'à la fin réduit l'angle mort du §3 de la durée d'une implémentation
+   à celle d'un seul commit.
 
    Si le lot déclare un feature flag (§4.3), la tranche transcrite **énonce le
    flag et son défaut** (§4.1). Le code de la story, écrit ensuite, sera gardé
@@ -637,7 +758,16 @@ Pour chacune :
    même rôle : fixer le périmètre dans l'histoire de la branche avant que le
    code commence.
 5. **Appeler `superpowers:writing-plans`**, en portant dans `Global Constraints`
-   les contraintes du batch et le gel du fichier de spec (§3).
+   les contraintes du batch et le gel du fichier de spec (§3). Puis **commiter
+   le document de story — header, les deux sections vides et
+   `Global Constraints` — et le pousser immédiatement**, avant que l'étape 6
+   démarre.
+
+   Ce push est ce qui rend vraie la dernière phrase de l'étape 2. Jusqu'à lui,
+   la branche est sur le remote et ne déclare aucune section : une sœur qui la
+   trouve doit s'arrêter sur un inconnu. Pousser ici borne cette fenêtre à
+   l'écriture d'un plan ; pousser plus tard la ferait durer une implémentation
+   entière — exactement l'angle mort que l'étape 4 vient de fermer.
 6. **`superpowers:subagent-driven-development`** exécute, puis conclut comme il
    le fait toujours sur `superpowers:finishing-a-development-branch`. **Le choix
    y est contraint à « Push and create a Pull Request »** — c'est l'Override 4
@@ -862,8 +992,15 @@ déclarer l'override (§8.3).
     changelog `out-of-batch`. Traiter seulement le cas « altère » rouvrirait le
     même trou un cran à côté.
   - **(b) il subit la même détection de concurrence** que les stories (§5.3) et
-    déclare donc ses sections dans le corps de sa pull request, sans quoi il
-    percuterait une story en vol par une porte dérobée.
+    déclare donc ses sections dans le corps de sa pull request — n'ayant pas de
+    document de story, c'est là que l'étape 2 du §5.3 va les lire —, sans quoi
+    il percuterait une story en vol par une porte dérobée. **Son propre angle
+    mort est nommé et accepté**, comme le §3 nomme le sien : un bounded est
+    invisible tant que sa pull request n'est pas ouverte, puisque rien d'autre
+    ne porte sa déclaration. On le tolère parce qu'un bounded *est* une pull
+    request, sans longue phase d'implémentation derrière elle — là où la fenêtre
+    d'une story durait une implémentation entière, ce que le §3 a précisément
+    refusé d'accepter.
 
   Pas de batch, pas de user story : un bounded est déjà une pull request, il
   porte simplement sa mise à jour de spec. **Pas de feature flag non plus** : un
@@ -918,13 +1055,32 @@ Justification : les quatre conditions de SDD supposent qu'une autorité valide
 existe. Ici c'est l'autorité elle-même qui est en cause, et le §3 interdit à un
 agent de corriger une spec.
 
-**Procédure de requalification**, portée par `writing-a-batch` : la pull request
-de la story est fermée sans fusion. Puis l'humain tranche : soit il corrige la
-spec — lui seul le peut (§3) — et le batch reste correctif sur un périmètre
-réduit ; soit le batch est réécrit comme batch ordinaire, avec un spec delta, par
-une nouvelle pull request de batch qui repasse par la revue du §5.2. Dans les
-deux cas les réservations au gaps register sont révisées, et `closing-a-batch`
-libérera celles qui restent (§5.4).
+**Procédure de requalification**, portée par `writing-a-batch`.
+
+**Elle ne commence pas par fermer une pull request, parce qu'il n'y en a
+normalement pas encore.** Cette condition d'arrêt se déclenche *à l'intérieur* de
+`subagent-driven-development`, en pleine implémentation, et la pull request de la
+story n'ouvre qu'à l'étape 6 du §5.3, par `finishing-a-development-branch`. Ce
+qui existe au moment du déclenchement, c'est une branche — poussée (§5.3,
+étape 4) — et un worktree. La story est donc abandonnée au sens du §5.1 : sa
+pull request est fermée sans fusion s'il y en a déjà une, et dans tous les cas
+la branche est supprimée localement et sur le remote, worktree compris, une fois
+la requalification tranchée. Rien n'a atteint `main` : la tranche de spec, ou
+l'entrée barrée du gaps register, voyage avec le code et meurt avec la branche.
+La réservation, elle, vit sur `main` et n'est pas concernée.
+
+Puis l'humain tranche : soit il corrige la spec — lui seul le peut (§3) — et le
+batch reste correctif sur un périmètre réduit ; soit le batch est réécrit comme
+batch ordinaire, avec un spec delta. **Cette réécriture garde `NN` et son
+répertoire** : le numéro identifie une unité de livraison, et les stories du lot
+déjà fusionnées vivent dessous — un numéro neuf les laisserait orphelines d'un
+lot qui les a pourtant livrées. Elle passe donc par une **pull request
+d'amendement** (§4.3) sur le document existant, qui remplace les entrées
+réservées par un spec delta, et repasse par la revue du §5.2 comme le ferait une
+ouverture. Un `NN` neuf n'est attribué que si l'humain juge que le travail
+restant est un *autre* batch — et celui-ci est alors clos par `closing-a-batch`,
+jamais laissé ouvert derrière lui. Dans les deux cas les réservations au gaps
+register sont révisées, et `closing-a-batch` libérera celles qui restent (§5.4).
 
 **Override 3 — le mode d'exécution imposé.** `writing-plans` se termine en
 proposant à l'humain un choix entre `subagent-driven-development` et
@@ -977,10 +1133,10 @@ reste, elle produit une pull request (branche `chore/supercharlouze-init`).
    déjà un `CLAUDE.md` que sur un projet qui n'en a pas.
 4. Rendre l'état des lieux : quels modules sont adoptés (une spec existe dans
    `docs/specs/`), et quels documents archivés ne figurent dans la section
-   `Sources` d'aucune spec (§4.1, §6.2) — c'est ce qui rend ce calcul décidable
-   plutôt qu'affaire d'heuristique. La commande ne **propose pas** de découpage
-   en modules — §6 le réserve à l'humain, et une suggestion serait lue comme une
-   décision.
+   `Sources` d'aucune spec (§4.1, §6, étape 2) — c'est ce qui rend ce calcul
+   décidable plutôt qu'affaire d'heuristique. La commande ne **propose pas** de
+   découpage en modules — §6 le réserve à l'humain, et une suggestion serait lue
+   comme une décision.
 
 ## 10. Language
 
@@ -1063,12 +1219,16 @@ flux par pull request sur une branche protégée, donc il éprouve le modèle du
 | Réconciliation par interrogation des PR fusionnées | Servait à fermer une story dont l'état vivait ailleurs que dans sa PR. L'état d'une story *est* l'état de sa PR (§4.3). |
 | Skill de rapatriement post-exécution | Les rulings sont poussés sur la branche de la story avant fusion (§5.3). |
 | Conflit de fusion git comme mécanisme de détection de concurrence | Git conflicte sur des lignes, pas sur des sections : deux modifications éloignées d'une même section fusionnent proprement. Filet partiel seulement (§3). |
+| Détection de concurrence limitée aux pull requests ouvertes | La pull request d'une story n'ouvre qu'à l'étape 6 du §5.3 : la story serait invisible de ses sœurs pendant toute son implémentation, soit l'angle mort reproché à la branche de lot, réintroduit sur le chemin nominal. On lit aussi les branches `story/*` poussées (§3, §5.3). |
+| Champ `Sections:` illisible traité comme vide | Un fetch en échec ou un document absent deviendrait un feu vert, et le seul vrai filet retournerait « rien trouvé » précisément quand il ne voit rien (§5.3). |
+| Push de la branche de story repoussé à l'ouverture de la pull request | Le push est ce qui rend la story visible ; le retarder rouvre l'angle mort que le balayage des branches sert à fermer (§5.3). |
+| Requalification commençant par fermer la pull request de la story | L'Override 2 se déclenche dans SDD, avant que `finishing-a-development-branch` n'ouvre quoi que ce soit : la procédure démarrerait sur une instruction inexécutable (§8.3). |
 | Changelog écrit par chaque story | Ferait conflicter au même point toutes les stories d'un module en vol simultanément — le régime nominal. Une ligne par batch, écrite à la clôture (§4.1). |
 | Gaps register écrit par chaque story | Même contention. Les stories consignent sous `Observed drift`, `closing-a-batch` consolide (§4.2). |
 | Liste des stories maintenue dans le document de batch | Conflit de fusion à chaque story, pour une information que le répertoire et `gh pr list` donnent déjà (§4.3). |
 | Cases à cocher pour l'état des stories | Recopie une vérité que `gh pr list` donne mieux, et se désynchronise dès la première PR fusionnée hors session (§4.3). |
 | Sections d'une story déduites de son diff | Fragile ; l'auteur de la story les connaît, donc elles sont déclarées (§4.4). |
-| Une branche par batch, fusionnée dans `main` à la clôture | Protégerait la production en retenant le travail, mais une story fusionnée dans la branche de lot n'est ni une PR ouverte ni sur `main` : elle devient invisible à la détection de concurrence pendant toute la durée du lot. Et la branche vieillit, avec le fichier de spec pour surface de conflit (§5.1). |
+| Une branche par batch, fusionnée dans `main` à la clôture | Protégerait la production en retenant le travail, mais une story fusionnée dans la branche de lot disparaît des deux sources de la détection — sa PR n'est plus ouverte, et sa branche `story/*` n'est plus une revendication vivante dès lors que la fusion la supprime, ce que fait par défaut un flux par pull request — sans pour autant avoir atteint `main` : elle devient invisible pendant toute la durée du lot. Et la branche vieillit, avec le fichier de spec pour surface de conflit (§5.1). |
 | Une branche `develop` façon gitflow | Même angle mort, mais permanent. Et surtout **deux baselines** pour la règle de dérive — spec de référence sur `develop`, code en production sur `main` — donc un lot correctif ne sait plus contre quoi il corrige (§5.1). |
 | Feature flag non spécifié, traité comme un détail d'implémentation | Une story fusionnée derrière un flag rendrait la spec fausse au sens des utilisateurs, et rouvrirait l'écart que le §4.1 ferme. Le flag et son défaut sont énoncés dans la spec (§2). |
 | Levée du flag comme devoir de `closing-a-batch` | Elle porte du code, donc elle mérite une revue et un cycle de tests : c'est une story (§5.3). La clôture se contente de vérifier qu'elle a eu lieu. |
@@ -1081,9 +1241,9 @@ flux par pull request sur une branche protégée, donc il éprouve le modèle du
 | Document de batch strictement immuable jusqu'à la clôture | Laisse sans issue le lot exempté qui découvre qu'il fallait un flag, et le lot dont on réduit le périmètre. Amendable par une PR revue (§4.3). |
 | Refus de clôture sans porte de sortie | Un lot renoncé avec des stories gardées déjà fusionnées resterait ouvert à jamais, avec le code mort sous flag que le contrôle existe pour empêcher (§5.4). |
 | Override 1 limité à l'état terminal de `brainstorming` | Les étapes 6 à 8 continueraient de s'exécuter et un design doc daté serait écrit — ce que ce plugin existe pour supprimer (§8.3). |
-| Numéros attribués sur le seul contenu de `main` | Un artefact n'atteint `main` qu'à la fusion : deux batches ou deux stories en vol prendraient le même numéro (§4). |
+| Numéros attribués sur le seul contenu de `main`, ou sur `main` et les seules PR ouvertes | Un artefact n'atteint `main` qu'à la fusion : deux batches ou deux stories en vol prendraient le même numéro. Et s'arrêter aux PR ouvertes laisse le même trou que le §3 refuse — une branche poussée revendique son numéro pendant toute son implémentation, sans figurer dans `gh pr list`. On lit le contenu de `main`, les pull requests ouvertes, et les branches poussées sans pull request — `batch/*` ou `story/*` pour `NN`, `story/*` pour `us-N` (§4, §3). |
 | Dépendre du nom de branche produit par `using-git-worktrees` | Ce skill préfère les outils natifs du harness, qui nomment eux-mêmes, et peut aboutir à un HEAD détaché (§4). |
-| Laisser `finishing-a-development-branch` proposer ses trois options | Le merge local détruit worktree et branche avant d'échouer au push contre la protection, et emporte les rulings non rapatriés (Override 4). |
+| Laisser `finishing-a-development-branch` proposer ses trois options | Le merge local ne pousse jamais, donc rien n'échoue sur le moment : il détruit worktree et branche et laisse le travail dans un commit local qui n'atteindra jamais le remote, avec les rulings non rapatriés (Override 4). |
 | Entrées du gaps register sans réservation à l'ouverture | Deux corrective batches concurrents piocheraient dans le même stock (§4.2). |
 | Réservations jamais libérées | Une story abandonnée laisserait sur `main` une réservation perpétuelle bloquant tout autre batch (§4.2). |
 | Clôture sans constat des intentions non livrées | Une story abandonnée serait invisible : ni dérive, ni gap, juste une promesse oubliée (§5.4). |
