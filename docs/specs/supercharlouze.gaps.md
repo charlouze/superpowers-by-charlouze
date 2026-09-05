@@ -30,14 +30,14 @@ inobservables ici.
 
 ## Violations
 
-- **Verification** — `README.md` renvoie le lecteur à « section 11 of the design
+- ~~**Verification** — `README.md` renvoie le lecteur à « section 11 of the design
   document » pour la liste des paris non testés, et `commands/init.md` renvoie à
   « spec section 9 » pour la règle de la pull request. Ces deux renvois désignent
   des sections numérotées du document de conception, désormais archivé sous
   `docs/archive/specs/` et privé d'autorité par la présente adoption. La spec
   vivante est l'autorité contraignante et n'a pas de numérotation : les deux
   pointeurs sont d'ores et déjà faux, et ils pourriront davantage à chaque
-  amendement de la spec. `reserved by batch-01`
+  amendement de la spec.~~ `reserved by batch-01`
 
 ## Gaps
 
