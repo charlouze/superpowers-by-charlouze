@@ -51,8 +51,8 @@ a pull request; nothing is adopted until you decide, module by module.
 bash tests/run-all.sh
 ```
 
-Structural checks only — see section 11 of the design document for what is
-deliberately not tested.
+Structural checks only — see the `Verification` section of
+`docs/specs/supercharlouze.md` for what is deliberately not tested.
 
 ## Requirements
 

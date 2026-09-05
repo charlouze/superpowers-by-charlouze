@@ -82,4 +82,25 @@ for needle in "out-of-batch" "never leaves the spec silent" "fix/" "no feature f
     fi
 done
 
+# 5. No shipped artifact cites a numbered section of the archived design
+#    document. The living spec is the binding authority and its sections are
+#    titled, not numbered: a numbered pointer names a document that adoption
+#    stripped of authority, and it rots further at every reshuffle of the spec.
+#    tests/ is deliberately out of range — it is not shipped to users, and the
+#    gaps register entry this guard answers to names only the shipped artifacts.
+BAD=0
+while read -r hit; do
+    [ -n "$hit" ] || continue
+    echo "    numbered reference to the archived design document: $hit"
+    BAD=$((BAD + 1))
+done < <(grep -rnoEi 'spec section [0-9]+|section [0-9]+ of the design|\(spec [0-9]+(\.[0-9]+)?\)' \
+             "$REPO_ROOT/README.md" "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/scripts" \
+             2>/dev/null | sort -u || true)
+
+if [ "$BAD" = "0" ]; then
+    pass "no shipped artifact cites a numbered section of the archived design document"
+else
+    fail "no shipped artifact cites a numbered section of the archived design document ($BAD found)"
+fi
+
 exit $((FAILURES > 0))
