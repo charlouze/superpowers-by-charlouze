@@ -93,14 +93,26 @@ while read -r hit; do
     [ -n "$hit" ] || continue
     echo "    numbered reference to the archived design document: $hit"
     BAD=$((BAD + 1))
-done < <(grep -rnoEi 'spec section [0-9]+|section [0-9]+ of the design|\(spec [0-9]+(\.[0-9]+)?\)' \
+done < <(grep -rnoEi 'section [0-9]+|§ ?[0-9]+|\(spec [0-9]+(\.[0-9]+)?\)' \
              "$REPO_ROOT/README.md" "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/scripts" \
              2>/dev/null | sort -u || true)
 
 if [ "$BAD" = "0" ]; then
-    pass "no shipped artifact cites a numbered section of the archived design document"
+    pass "README, skills, commands and scripts cite no numbered section of the archived design document"
 else
-    fail "no shipped artifact cites a numbered section of the archived design document ($BAD found)"
+    fail "README, skills, commands and scripts cite no numbered section of the archived design document ($BAD found)"
 fi
+
+# 6. Every section a shipped cross-reference names exists in the living spec.
+#    Assertion 5 proves the old numbered phrasing is gone; without this one,
+#    nothing proves the replacement points anywhere. A renamed section would
+#    break the reference silently — the same defect, one indirection later.
+for h in "Verification" "The init command"; do
+    if grep -qxF "## $h" "$REPO_ROOT/docs/specs/supercharlouze.md"; then
+        pass "the living spec has a section named: $h"
+    else
+        fail "the living spec has a section named: $h"
+    fi
+done
 
 exit $((FAILURES > 0))

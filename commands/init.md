@@ -7,7 +7,8 @@ Set up this project for supercharlouze. Target: $ARGUMENTS — if empty, the
 current directory.
 
 Everything in this system ships through a pull request, and this command is no
-exception — see `The init command` in `docs/specs/supercharlouze.md`.
+exception — see `The init command` in
+`${CLAUDE_PLUGIN_ROOT}/docs/specs/supercharlouze.md`.
 
 1. From the main checkout, on an up-to-date `main`, create the branch
    `chore/supercharlouze-init`.

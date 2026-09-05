@@ -158,10 +158,10 @@ explicative.
 **Limite connue, à ne pas essayer de fermer ici.** L'assertion 2 de ce même
 fichier vérifie que les chemins entre backticks existent, mais son motif ne couvre
 que `skills|scripts|commands|tests|.claude-plugin`. L'étendre à `docs` ferait
-échouer la suite, parce que les skills citent des **patrons** —
-`docs/specs/<module>.md`, `docs/batches/NN-<slug>/README.md` — que ce contrôle ne
-sait pas distinguer de vrais chemins. Les deux nouveaux renvois ne sont donc pas
-vérifiés mécaniquement. C'est hors périmètre de ce lot.
+échouer la suite, parce que les skills citent des chemins du **projet cible** —
+`docs/superpowers/specs`, `docs/superpowers/plans` — qui nomment sa disposition
+avant migration et n'existent pas dans ce dépôt. Les deux nouveaux renvois ne sont
+donc pas vérifiés mécaniquement. C'est hors périmètre de ce lot.
 
 - [ ] **Step 4: Run test to verify it passes**
 
@@ -182,3 +182,25 @@ git commit -m "fix: name the spec section instead of counting it"
 ## Rulings log
 
 ## Observed drift
+
+- **Quatre renvois numérotés survivent dans `tests/`**, du même type que ceux que
+  cette story corrige, et délibérément hors périmètre : l'entrée du registre ne
+  nommait que les artefacts livrés. `tests/test-cross-references.sh:66`
+  (`(spec 8.1)` → section `Routing and precedence`), `:74` (`(spec 8.2)` →
+  `What is kept, what is rerouted`), `tests/test-declared-overrides.sh:104`
+  (`(spec 5.1)` → `Git model`), `tests/test-skill-content.sh:35` (`(spec 6)` →
+  `Module adoption`). Rien d'autre ne les rattrapera : la section `Coverage` du
+  registre déclare que `tests/` n'a été audité que par le **nom** de ses
+  assertions, pas ligne à ligne.
+
+- **Le champ `Sections:` d'une story corrective n'est jamais lu.** La détection de
+  concurrence ne retient que les pull requests et les branches dont le diff
+  touche le même **fichier de spec** ; le diff d'une story corrective ne touche
+  que le gaps register. Une story corrective est donc structurellement invisible
+  de ce mécanisme, et sa déclaration reste inerte. C'est une propriété de la
+  spec, pas de cette story.
+
+- **Les nouveaux renvois de ce lot ne sont vérifiés que par leur titre.**
+  L'assertion 6 ajoutée ici contrôle que les sections nommées existent, pas que
+  la section citée dit bien ce que le renvoi prétend. Un déplacement de contenu
+  d'une section à l'autre passerait au travers.
