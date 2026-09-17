@@ -106,4 +106,12 @@ require closing-a-batch "sets status closed"                     "status: closed
 require closing-a-batch "closing PR is reviewed"                 "review of the closing pull request"
 require closing-a-batch "branch naming convention"               "batch/NN"
 
+# --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
+require closing-a-batch "duty 5 checks before the writing duties" "before duties 1 to 4"
+require closing-a-batch "a refusal must cost nothing"            "makes a refusal free"
+require closing-a-batch "covers flags inherited by a ruling"     "inherited by a ruling at the opening gate"
+require closing-a-batch "the ruling replaces the declaration"    "the ruling replaces the declaration as the test"
+require closing-a-batch "duty 4 is empty for a corrective batch" "A corrective batch has nothing to compare here"
+require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
+
 exit $((FAILURES > 0))
