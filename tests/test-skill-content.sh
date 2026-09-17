@@ -64,7 +64,7 @@ require writing-a-batch "branch naming convention"                "batch/NN"
 require writing-a-batch "template declares the Constraints section" "## Constraints"
 require writing-a-batch "template declares the Live flags section"  "## Live flags"
 require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
-require writing-a-batch "Constraints carry nothing normative"       "nothing normative"
+require writing-a-batch "Constraints carry nothing normative"       "and nothing normative"
 require writing-a-batch "live-flag ruling is a fixed string"        "fixed strings, not paraphrases"
 require writing-a-batch "Live flags is a snapshot for this gate"    "snapshot, taken for this gate"
 
@@ -92,7 +92,8 @@ require writing-a-user-story "teardown story exists"              "teardown stor
 require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
 require writing-a-user-story "GC carries the spec freeze"         "freeze of the spec file"
 require writing-a-user-story "GC carries the authority rule"      "Put that rule in \`Global Constraints\` too"
-require writing-a-user-story "GC carries the fifth stop condition" "carries a third thing: the fifth stop condition"
+require writing-a-user-story "the authority rule is stated in full" "the spec wins — without exception and without deliberation"
+require writing-a-user-story "GC carries the fifth stop condition" "the fifth stop condition of Step 5, written out in full"
 require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
