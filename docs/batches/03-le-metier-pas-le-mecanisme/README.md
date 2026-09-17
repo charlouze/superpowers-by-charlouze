@@ -136,6 +136,14 @@ ses formulations n'a rattrapé la v1 ni la v2, et ce qui a rattrapé la v3 lui e
 extérieur. C'est un argument pour la question laissée ouverte plus bas, et c'est
 aussi la mesure de ce que ce lot doit accomplir tout seul.
 
+**Le lot s'applique enfin à lui-même.** `docs/specs/supercharlouze.md` a été écrite
+avant ces règles, et rien ne garantit qu'elle les respecte — elle décrit un système
+dont le domaine *est* de la mécanique, ce qui est précisément la situation où la
+frontière est la plus difficile à tenir. Une dernière tranche la met en conformité,
+après les deux autres. Un lot qui pose une norme sans s'y soumettre laisse à la
+première story venue le soin de découvrir que l'autorité ne s'applique pas à
+elle-même, et cette découverte-là ne se répare pas.
+
 **Ce lot ne puise pas dans le gaps register** et ne réserve donc aucune entrée :
 aucune des entrées de `docs/specs/supercharlouze.gaps.md` ne porte sur le contenu
 d'une spec. Il ajoute de la norme neuve, tirée d'une décision humaine prise en
@@ -314,17 +322,37 @@ cause plutôt que de relire le document entier.
 
 ## Constraints
 
-- **Ordre requis.** La tranche `The spec document` est transcrite **en premier** et
-  fusionnée avant que la seconde commence : la tranche `Module adoption` cite la
-  règle que la première pose, et l'écrire contre un texte non fusionné produirait
-  deux formulations concurrentes de la même règle. Les deux tranches n'ont aucun
-  autre ordre entre elles, et il n'y en a que deux.
+- **Ordre requis, et il est total.** La tranche `The spec document` est transcrite
+  **en premier** et fusionnée avant que la suivante commence : la tranche
+  `Module adoption` cite la règle que la première pose, et l'écrire contre un texte
+  non fusionné produirait deux formulations concurrentes de la même règle. La **mise
+  en conformité de `docs/specs/supercharlouze.md`** vient **en dernier**, après que
+  les deux tranches normatives sont sur `main` : elle applique la règle, elle ne
+  peut donc pas précéder son énoncé, et elle toucherait sinon des sections que les
+  deux autres sont en train d'écrire.
 - **La spec de ce plugin doit survivre à la règle qu'elle énonce.**
   `docs/specs/supercharlouze.md` est pleine de noms de branches, d'appels `gh` et de
   mécanique git — légitimement, parce qu'ils sont observables à la frontière de ce
-  module. Toute formulation qui rendrait cette spec illégale est une mauvaise
-  formulation, et il faut la reprendre plutôt que l'excepter. C'est le meilleur test
-  disponible de la règle, et il est gratuit.
+  module et qu'un autre implémenteur les lirait comme vrais du sien. Toute
+  formulation qui rendrait cette spec illégale est une mauvaise formulation, et il
+  faut la reprendre plutôt que l'excepter. C'est le meilleur test disponible de la
+  règle, et il est gratuit.
+- **La mise en conformité est à sens constant.** Elle réexprime, elle ne décide
+  jamais. Une phrase qui sort de la spec parce qu'elle décrit un mécanisme ne
+  change pas ce que le plugin doit faire ; si la reprise d'une section changeait la
+  norme, c'est que ce n'est plus une mise en conformité mais une décision, et une
+  décision sur une spec est **un acte humain**. La tranche s'arrête et la pose.
+- **Elle n'invente aucune intention.** Là où la spec porte un mécanisme dont aucun
+  document validé ni aucune section voisine ne donne la règle qu'il servait, la
+  tranche **ne la déduit pas** : ce serait le blanchiment que ce lot interdit,
+  commis par le lot lui-même. Elle laisse la phrase en place et **consigne le
+  constat sous `Observed drift`** dans son document de story, d'où
+  `supercharlouze:closing-a-batch` le consolidera. Aucune écriture directe dans le
+  gaps register : ce lot n'y touche pas.
+- **Cette tranche est commanditée par l'humain au gate d'ouverture**, et c'est ce
+  qui la distingue d'un agent qui corrigerait une spec de sa propre initiative. La
+  commande porte sur la **forme** du document, jamais sur ce qu'il exige ; la revue
+  de sa pull request est le gate qui le vérifie.
 - **Chaque norme ajoutée repart avec une garde structurelle** dans `tests/`, dans la
   même pull request qu'elle.
 - **`tests/run-all.sh` est vert avant l'ouverture de toute pull request.**
