@@ -128,6 +128,15 @@ docs/
 Les patrons de chemins sont anglais et figés ; les slugs suivent la langue du
 projet, puisqu'ils nomment des objets métier.
 
+**Cette arborescence décrit une destination, pas un état que le dépôt doit
+maintenir.** `docs/specs/` et `docs/batches/` restent vides jusqu'à leur premier
+usage, et git ne suit pas les répertoires vides : ils ne sont donc pas sur `main`,
+et **un clone frais ne les a pas**. C'est sans conséquence, et c'est le régime
+voulu — `init` est idempotente et les recrée à chaque exécution, et rien dans ce
+système ne lit ces répertoires avant qu'un document y soit écrit. Entre l'init et
+la première spec, un dépôt ne porte donc que son bloc `CLAUDE.md` et ce que
+l'archivage y a déplacé.
+
 **Le préfixe `NN-` des fichiers de story** garantit l'unicité des basenames. Il est
 confortable sur le chemin nominal, où chaque story a son propre worktree, et
 nécessaire sur les chemins dégradés — worktree refusé, isolation indisponible — où
@@ -988,6 +997,29 @@ le reste, elle produit une pull request, sur la branche
    `docs/specs/` — et quels documents archivés ne figurent dans la section
    `Sources` d'aucune spec. C'est ce qui rend ce calcul décidable plutôt qu'affaire
    d'heuristique.
+
+**Ses refus font partie de sa définition.** Une commande idempotente qui abîme un
+document en passant n'est pas idempotente : ce qu'elle refuse de faire est donc
+normatif au même titre que ce qu'elle fait.
+
+- **Collision d'archivage — refus de toute l'exécution, avant le moindre
+  déplacement.** Si un document occupe déjà l'un des chemins de destination, la
+  commande les énumère tous et s'arrête sans rien déplacer. Une migration à moitié
+  faite qui annonce un succès est pire qu'une migration qui n'a pas commencé, et
+  l'écrasement détruirait précisément l'historique que l'archivage existe pour
+  préserver.
+- **Marqueurs `CLAUDE.md` cassés — refus, et fichier laissé intact.** Un marqueur
+  d'ouverture sans fermeture, une fermeture sans ouverture, l'un ou l'autre en
+  double, ou une fermeture placée avant son ouverture : la commande nomme le défaut
+  et sort sans réécrire. Elle ne devine pas où le bloc s'arrête.
+- **Les marqueurs sont des lignes entières, jamais des sous-chaînes.** Une prose
+  qui cite un marqueur n'est pas un bloc et ne doit jamais être traitée comme tel —
+  sans quoi le plugin ne pourrait pas documenter ses propres marqueurs.
+- **Le mode du fichier est préservé.** La réécriture passe par un fichier
+  temporaire, et un fichier temporaire ne naît pas avec les droits de sa cible.
+- **L'arborescence `docs/superpowers` est supprimée une fois vidée, et seulement
+  une fois vidée.** Ce qui y subsiste n'appartient pas au plugin : il n'est ni
+  déplacé, ni supprimé, et sa présence laisse le répertoire en place.
 
 **Elle ne propose aucun découpage en modules** : c'est réservé à l'humain, et une
 suggestion serait lue comme une décision.
