@@ -298,7 +298,7 @@ else
     pass "sources scope: a document named under Sources is not reported as unclaimed"
 fi
 
-# --- Case 15: what the plugin does not own is neither moved nor removed ---
+# --- Case 17: what the plugin does not own is neither moved nor removed ---
 # The spec says docs/superpowers is dropped once emptied, and *only* once
 # emptied. Case 11 covers the first half; nothing covered the second.
 P14="$TEST_ROOT/foreign"
@@ -323,18 +323,43 @@ else
     fail "foreign: docs/superpowers survives while it still holds something"
 fi
 
-# --- Case 16: the CLAUDE.md file mode survives the rewrite ---
-# Structural, not behavioural, and the reason belongs here rather than in a
-# commit message: the rewrite goes through a temp file, which is born 0600, so
-# the target's mode has to be restored explicitly. A filesystem that reports
-# 644 for every file whatever chmod is asked of it cannot tell a restored mode
-# from a lost one — a behavioural assertion would compare 644 to 644 and pass
-# whether or not the call is there, which is the test that verifies nothing.
-# Asserting the call is what such a filesystem can still check.
-if grep -q 'chmod --reference' "$INIT"; then
-    pass "init restores the CLAUDE.md mode after the temp-file swap"
+# --- Case 18: the CLAUDE.md file mode survives the temp-file swap ---
+# The rewrite goes through a file mktemp creates as 0600, so the target's mode
+# has to be restored explicitly. This filesystem does not carry every mode bit
+# — it tracks the write bit and little else, so 600, 644 and 755 all read back
+# as 644 — but a read-only fixture discriminates cleanly, which is enough to
+# tell a restored mode from a lost one. The mode is captured rather than
+# hard-coded, so the assertion holds wherever the suite runs.
+file_mode() { stat -c '%a' "$1" 2>/dev/null || stat -f '%Lp' "$1"; }
+P17="$TEST_ROOT/mode"
+mkdir -p "$P17"
+printf '# P\n\n<!-- supercharlouze:begin -->\nOLD\n<!-- supercharlouze:end -->\n' > "$P17/CLAUDE.md"
+chmod 555 "$P17/CLAUDE.md"
+MODE17_BEFORE="$(file_mode "$P17/CLAUDE.md")"
+bash "$INIT" "$P17" >/dev/null
+if [ "$(file_mode "$P17/CLAUDE.md")" = "$MODE17_BEFORE" ]; then
+    pass "init preserves the CLAUDE.md mode across the temp-file swap"
 else
-    fail "init restores the CLAUDE.md mode after the temp-file swap"
+    fail "init preserves the CLAUDE.md mode across the temp-file swap"
+fi
+
+# --- Case 19: a closing marker with no opening one must abort ---
+# The fourth broken-marker form the spec names, and the only one no fixture
+# reached. Its branch in the script looks like a near-duplicate of the one
+# above it, which is exactly the kind of line a later simplification deletes.
+P18="$TEST_ROOT/endonly"
+mkdir -p "$P18"
+printf '# P\n\n<!-- supercharlouze:end -->\n\nUSER CONTENT THAT MUST SURVIVE\n' > "$P18/CLAUDE.md"
+BEFORE18="$(cat "$P18/CLAUDE.md")"
+if bash "$INIT" "$P18" >/dev/null 2>&1; then
+    fail "end-only marker: init exits non-zero"
+else
+    pass "end-only marker: init exits non-zero"
+fi
+if [ "$(cat "$P18/CLAUDE.md")" = "$BEFORE18" ]; then
+    pass "end-only marker: CLAUDE.md left untouched"
+else
+    fail "end-only marker: CLAUDE.md left untouched"
 fi
 
 exit $((FAILURES > 0))
