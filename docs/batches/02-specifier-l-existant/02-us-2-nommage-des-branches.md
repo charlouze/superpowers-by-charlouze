@@ -93,9 +93,11 @@ shared "every branch-creating skill restores the conventional name" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
 shared "and each says a named branch is not enough" \
-    "a named branch is not enough" \
+    "named branch is not enough" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 ```
+
+L'aiguille omet l'article de tête volontairement : les quatre textes de remplacement écrivent cette phrase en **début** de phrase, donc `A named branch is not enough`, avec une majuscule. Le helper compare octet pour octet, sans normaliser la casse. Ne « répare » pas l'aiguille en y remettant un `a` minuscule.
 
 - [ ] **Step 2: Lancer le test — il doit ÉCHOUER, et c'est le but**
 
