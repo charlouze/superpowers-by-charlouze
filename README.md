@@ -10,7 +10,8 @@ scattered across ten snapshots, none of which describes the current state.
 This plugin replaces that with:
 
 - **One living spec per functional module** — undated, normative, and the
-  binding authority for every review.
+  binding authority for every review. It carries business rules and
+  intentions; the mechanism stays in the code.
 - **Batches** — units of delivery that group user stories and whose purpose is
   to make those specs grow.
 - **User stories** — one implementation plan each, targeting exactly one spec.
