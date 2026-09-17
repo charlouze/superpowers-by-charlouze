@@ -60,6 +60,14 @@ require writing-a-batch "amendment pull request exists"           "amendment pul
 require writing-a-batch "carries the requalification procedure"   "requalification"
 require writing-a-batch "branch naming convention"                "batch/NN"
 
+# --- writing-a-batch: the batch document contract (spec section "The batch document") ---
+require writing-a-batch "template declares the Constraints section" "## Constraints"
+require writing-a-batch "template declares the Live flags section"  "## Live flags"
+require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
+require writing-a-batch "Constraints carry nothing normative"       "nothing normative"
+require writing-a-batch "live-flag ruling is a fixed string"        "fixed strings, not paraphrases"
+require writing-a-batch "Live flags is a snapshot for this gate"    "snapshot, taken for this gate"
+
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "checks it is in the main checkout"  "main checkout"
 require writing-a-user-story "refreshes main from the remote"     "up to date with the remote"
