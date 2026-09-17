@@ -41,6 +41,8 @@ Stories do not write the changelog, and the reason is contention, not taste. The
 
 The changelog is a reading convenience, not a mechanism: no rule of this system depends on it. The authoritative history is `git log docs/specs/<module>.md`, exact by construction because every spec change travels in the same pull request as its code. Write the line well — a human skims it — but never let a difficulty here become a reason to stop.
 
+The `change` cell is part of the spec file, so the content rule of `supercharlouze:using-batches` holds there too: it says what this batch changed for the business, never by what mechanism. The test is the same one — *would another developer, having implemented the same intention differently, read this sentence as true of their code?* A changelog line that names a branch, a hook or a file the business never asked for is the one place where a whole batch's worth of mechanism gets back into a spec, one line at a time.
+
 ### 2. Consolidate observed drift
 
 Collect the **Observed drift** section of every story document in the batch and write its findings into the gaps register of the module concerned, `docs/specs/<module>.gaps.md`: code that contradicts the spec goes under **Violations**, behaviour no spec describes goes under **Gaps**.
