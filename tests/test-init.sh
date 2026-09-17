@@ -298,4 +298,43 @@ else
     pass "sources scope: a document named under Sources is not reported as unclaimed"
 fi
 
+# --- Case 15: what the plugin does not own is neither moved nor removed ---
+# The spec says docs/superpowers is dropped once emptied, and *only* once
+# emptied. Case 11 covers the first half; nothing covered the second.
+P14="$TEST_ROOT/foreign"
+mkdir -p "$P14/docs/superpowers/specs" "$P14/docs/superpowers/notes"
+touch "$P14/docs/superpowers/specs/moved.md"
+printf 'KEEP\n' > "$P14/docs/superpowers/notes/keep.md"
+bash "$INIT" "$P14" >/dev/null
+if [ -f "$P14/docs/archive/specs/moved.md" ]; then
+    pass "foreign: the plugin's own documents still migrate"
+else
+    fail "foreign: the plugin's own documents still migrate"
+fi
+if [ -f "$P14/docs/superpowers/notes/keep.md" ] \
+   && grep -q "KEEP" "$P14/docs/superpowers/notes/keep.md"; then
+    pass "foreign: a document the plugin does not own is left untouched"
+else
+    fail "foreign: a document the plugin does not own is left untouched"
+fi
+if [ -d "$P14/docs/superpowers" ]; then
+    pass "foreign: docs/superpowers survives while it still holds something"
+else
+    fail "foreign: docs/superpowers survives while it still holds something"
+fi
+
+# --- Case 16: the CLAUDE.md file mode survives the rewrite ---
+# Structural, not behavioural, and the reason belongs here rather than in a
+# commit message: the rewrite goes through a temp file, which is born 0600, so
+# the target's mode has to be restored explicitly. A filesystem that reports
+# 644 for every file whatever chmod is asked of it cannot tell a restored mode
+# from a lost one — a behavioural assertion would compare 644 to 644 and pass
+# whether or not the call is there, which is the test that verifies nothing.
+# Asserting the call is what such a filesystem can still check.
+if grep -q 'chmod --reference' "$INIT"; then
+    pass "init restores the CLAUDE.md mode after the temp-file swap"
+else
+    fail "init restores the CLAUDE.md mode after the temp-file swap"
+fi
+
 exit $((FAILURES > 0))
