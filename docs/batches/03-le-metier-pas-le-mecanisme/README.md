@@ -62,14 +62,30 @@ C'est la démonstration, sur pièces, que reformuler un mécanisme en métier es
 contournée d'un cran, sans qu'aucune de ses formulations actuelles ne s'y oppose.
 
 Un dernier constat, de la même pull request, montre que la fuite n'a pas besoin
-d'être grossière pour coûter. La v3 — celle que la revue a acceptée — écrit encore
-« le système vérifie toutes les cinq minutes », un intervalle de balayage, juste à
-côté d'un tableau de garanties par ailleurs irréprochable. Son gaps register porte
-en conséquence une violation : *« la vérification est différée à trente minutes au
-lieu des cinq que la spec garantit »*. Le code fait du backoff au repos, ce qui est
-sain ; la garantie métier réelle — au bout de combien de temps une ressource
-orpheline disparaît — n'est nulle part. **La fuite a fabriqué un lot correctif
-contre du code sain, et laissé la vraie règle non spécifiée.**
+d'être grossière pour coûter, **et qu'elle coûte autrement qu'on ne le croit
+d'abord**. La v3 — celle que la revue a acceptée sur le fond — écrit encore « le
+système vérifie toutes les cinq minutes », un intervalle de balayage, juste à côté
+d'un tableau de garanties par ailleurs irréprochable. Et une garantie voisine
+promet qu'une ressource orpheline « est détruite dans les cinq minutes ».
+
+Le gaps register porte en conséquence une violation : *« la vérification est
+différée à trente minutes au repos, au lieu des cinq que la spec garantit »*. Cette
+violation est **réelle** — la garantie est contredite, le lot correctif est
+légitime. Le défaut est ailleurs, et il est plus instructif : **le cinq de la
+garantie est le cinq du balayage.** Personne n'a jamais décidé qu'une ressource
+orpheline devait mourir en cinq minutes ; le nombre a été lu dans le code, puis
+promu en promesse. La spec a donc hérité d'une exigence que le métier n'a pas
+choisie, et une optimisation raisonnable — ne pas interroger l'hébergeur quand rien
+ne tourne — devient une infraction.
+
+La question à poser était une question d'argent et non de balayage : *au bout de
+combien de temps une ressource orpheline coûte-t-elle trop cher ?* Si la réponse est
+« une heure », il n'y a pas de lot correctif du tout. Si c'est « cinq minutes », la
+garantie est juste et le code a tort — mais quelqu'un l'aura décidé. **Un chiffre
+métier se choisit ; hérité d'un mécanisme, il transforme une décision d'ingénierie
+en dette de conformité.** C'est la troisième clause du delta, et c'est le cas qui la
+rend nécessaire : la première ne suffit pas ici, puisque la phrase fautive a la
+forme d'une garantie et passe le test de l'autre implémentation.
 
 **Une v4 a suivi** (`3d59552`, 256 lignes), après vingt-cinq commentaires en ligne
 qui reprennent la spec phrase par phrase. Deux enseignements, et ils tirent en sens
@@ -183,10 +199,20 @@ c'est exactement ce à quoi sert une spec vivante. **Le flou n'est pas de la
 prudence** — c'est une règle qu'aucun code ne peut contredire, donc une règle qui ne
 sert à rien.
 
-Ce qui distingue ce chiffre-là du chiffre qu'il faut proscrire est le test de la
-première clause, et rien d'autre : un autre implémenteur lirait « une session dure
-quatre heures » comme vraie de son code, et ne reconnaîtrait pas « le balayage passe
-toutes les cinq minutes ».
+Le test de la première clause suffit pour le cas franc : un autre implémenteur
+lirait « une session dure quatre heures » comme vraie de son code, et ne
+reconnaîtrait pas « le balayage passe toutes les cinq minutes ». **Il ne suffit pas
+pour le cas qui compte.** Un chiffre hérité d'un mécanisme puis écrit sous forme de
+garantie — « une ressource orpheline est détruite dans les cinq minutes », quand
+cinq est la période du balayage — a la forme d'une promesse et passe le test :
+n'importe quelle implémentation peut la tenir. Elle est pourtant fausse en tant que
+règle, parce que **personne ne l'a décidée**.
+
+D'où la question qui accompagne tout chiffre écrit dans une spec : *d'où vient
+celui-là — d'une décision, ou d'une lecture du code ?* Un chiffre dont on ne sait
+pas répondre est un gap, pas une garantie. Écrit comme une garantie, il transforme
+une décision d'ingénierie légitime en dette de conformité, et le lot correctif qui
+en découle est régulier — ce qui le rend indétectable.
 
 **Quatrième clause — la structure de la spec suit le métier.** Une règle vit **là où
 vit le comportement qu'elle contraint**, et non regroupée dans une section qui
