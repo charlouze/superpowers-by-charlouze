@@ -60,6 +60,14 @@ require writing-a-batch "amendment pull request exists"           "amendment pul
 require writing-a-batch "carries the requalification procedure"   "requalification"
 require writing-a-batch "branch naming convention"                "batch/NN"
 
+# --- writing-a-batch: the batch document contract (spec section "The batch document") ---
+require writing-a-batch "template declares the Constraints section" "## Constraints"
+require writing-a-batch "template declares the Live flags section"  "## Live flags"
+require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
+require writing-a-batch "Constraints carry nothing normative"       "and nothing normative"
+require writing-a-batch "live-flag ruling is a fixed string"        "fixed strings, not paraphrases"
+require writing-a-batch "Live flags is a snapshot for this gate"    "snapshot, taken for this gate"
+
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "checks it is in the main checkout"  "main checkout"
 require writing-a-user-story "refreshes main from the remote"     "up to date with the remote"
@@ -80,6 +88,14 @@ require writing-a-user-story "slice states the flag and default"  "states the fl
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
 require writing-a-user-story "teardown story exists"              "teardown story"
 
+# --- writing-a-user-story: what Global Constraints carries (spec section "The user story document") ---
+require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
+require writing-a-user-story "GC carries the spec freeze"         "freeze of the spec file"
+require writing-a-user-story "GC carries the authority rule"      "Put that rule in \`Global Constraints\` too"
+require writing-a-user-story "the authority rule is stated in full" "the spec wins — without exception and without deliberation"
+require writing-a-user-story "GC carries the fifth stop condition" "the fifth stop condition of Step 5, written out in full"
+require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
+
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
@@ -90,5 +106,13 @@ require closing-a-batch "offers three exits"                     "three exits"
 require closing-a-batch "sets status closed"                     "status: closed"
 require closing-a-batch "closing PR is reviewed"                 "review of the closing pull request"
 require closing-a-batch "branch naming convention"               "batch/NN"
+
+# --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
+require closing-a-batch "duty 5 checks before the writing duties" "before duties 1 to 4"
+require closing-a-batch "a refusal must cost nothing"            "makes a refusal free"
+require closing-a-batch "covers flags inherited by a ruling"     "inherited by a ruling at the opening gate"
+require closing-a-batch "the ruling replaces the declaration"    "the ruling replaces the declaration as the test"
+require closing-a-batch "duty 4 is empty for a corrective batch" "A corrective batch has nothing to compare here"
+require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
 
 exit $((FAILURES > 0))
