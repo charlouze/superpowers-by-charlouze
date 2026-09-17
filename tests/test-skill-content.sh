@@ -88,6 +88,13 @@ require writing-a-user-story "slice states the flag and default"  "states the fl
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
 require writing-a-user-story "teardown story exists"              "teardown story"
 
+# --- writing-a-user-story: what Global Constraints carries (spec section "The user story document") ---
+require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
+require writing-a-user-story "GC carries the spec freeze"         "freeze of the spec file"
+require writing-a-user-story "GC carries the authority rule"      "Put that rule in \`Global Constraints\` too"
+require writing-a-user-story "GC carries the fifth stop condition" "carries a third thing: the fifth stop condition"
+require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
+
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
