@@ -118,9 +118,12 @@ file the next two steps write belongs there.
 
 That skill prefers the harness's native tooling, which picks its own branch name
 and may leave you on a detached HEAD. If it leaves you on a differently named
-branch or on a detached HEAD, make sure a named branch exists before you
-continue — nothing in this system depends on the branch name, but a pull request
-needs a branch.
+branch or on a detached HEAD, restore the conventional name before going on:
+`adopt/<module>`. **A named branch is not enough.** Number allocation and the
+concurrency scan both recognise a branch by its name, on exactly the window where
+no pull request exists yet, so a branch left under a harness-chosen name is
+invisible to both — and a convention that holds only where a scan happens to read
+it is one nobody can rely on.
 
 The two steps before this one are dialogue: they produce a boundary and an
 inventory, not files. Everything after it writes.

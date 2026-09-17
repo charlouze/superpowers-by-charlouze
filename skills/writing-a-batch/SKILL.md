@@ -90,8 +90,11 @@ the slug follows the project's language, because it names a business object.
 Create the branch and workspace by invoking `superpowers:using-git-worktrees`.
 That skill prefers the harness's native tooling, which picks its own branch name
 and may leave you on a detached HEAD. This plugin enforces its own naming: if you
-end up elsewhere, make sure a branch named `batch/NN-<slug>` exists before going
-on. No mechanism depends on the name — but a pull request needs a branch.
+end up elsewhere, restore the conventional name before going on:
+`batch/NN-<slug>`. **A named branch is not enough.** Allocating `NN` above reads
+`batch/*` and `story/*` on the remote to refuse a number already claimed, so a
+branch left under a harness-chosen name claims nothing, and hands its number to
+the next batch opened in parallel.
 
 ## The Batch Document
 

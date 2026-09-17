@@ -58,4 +58,18 @@ shared "the Live flags section is named on both ends" \
     "Live flags" \
     writing-a-batch closing-a-batch
 
+
+# `Number allocation` and the concurrency scan both recognise a branch by its
+# name, and both on exactly the window where no pull request exists yet. So a
+# skill that creates a branch owes more than "some named branch exists": it
+# restores the conventional name. The loose reading leaves a branch that is
+# invisible to both scans, holding neither its number nor its sections.
+shared "every branch-creating skill restores the conventional name" \
+    "restore the conventional name before going on" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+shared "and each says a named branch is not enough" \
+    "named branch is not enough" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
 exit $((FAILURES > 0))
