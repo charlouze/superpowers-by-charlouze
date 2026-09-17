@@ -111,6 +111,24 @@ devient elle-même source incontestable. »* La v4 a supprimé la section. C'est
 contestation d'une règle que ce plugin prescrit — la section `Sources` et l'état des
 lieux de `init` qui la lit — et elle se tranche dans un lot à elle, pas ici.
 
+**Et le dépôt a fini par écrire lui-même les règles manquantes.** La même pull
+request ajoute à son `CLAUDE.md` un bloc de cinq règles sur ce qu'une spec contient
+et sous quelle forme — *« elle dit les intentions métier et leurs règles, jamais les
+mécanismes »*, *« les valeurs se disent, jamais "quelques minutes" »*, *« tout y est
+normatif, au même niveau »*, *« une règle qui vaut pour tous les modules ne vit dans
+aucun »*, *« chaque module redéfinit ce qu'il emprunte »*. Un projet qui réinvente
+localement les règles de son outillage dit deux choses à la fois : que ces règles
+sont justes, et que l'outillage aurait dû les porter. Quatre des cinq sont reprises
+ici — les deux premières comme clauses 1 à 3, les deux suivantes comme clauses 6
+et 7. La cinquième, la place d'une règle transverse, est un trou de structure de ce
+plugin et relève d'un lot à elle.
+
+Une ironie de ce bloc mérite d'être notée, parce qu'elle mesure ce qu'il manquait :
+la règle sur les valeurs cite **« cinq minutes »** comme exemple de chiffre à dire.
+C'est précisément le chiffre hérité du balayage analysé ci-dessus. La règle est
+juste, son exemple est le cas qu'elle aurait dû proscrire — parce qu'il lui manque
+la question *d'où vient ce chiffre*.
+
 **Ce qui a sorti cette adoption de l'ornière mérite d'être consigné** : la v3 est
 celle qui a été écrite en invoquant la skill `domain-driven-design`, et c'est de là
 que vient sa section `Ubiquitous language`. Le plugin n'y est pour rien — aucune de
@@ -132,7 +150,7 @@ Module `supercharlouze`, une seule spec. Le delta est énoncé par section de sp
 La section énonce aujourd'hui ce qu'une spec **ne porte pas** en fait de
 métadonnées — ni date, ni statut, ni marqueur — et ce qu'elle porte en fait de
 structure. Elle ne dit rien de ce dont une spec **parle**. Le delta l'ajoute, en
-cinq clauses indissociables.
+sept clauses indissociables.
 
 **Première clause — le test de l'autre implémentation.** Une spec porte des règles
 et des intentions métier ; le mécanisme est dans le code. Le critère n'est pas un
@@ -232,6 +250,24 @@ l'inverse de ce qu'on veut. Ce qu'un glossaire n'a pas à porter, ce sont les no
 qui ne sont ceux de personne : un type de persistance, une classe d'adapter, un
 document de magasin.
 
+**Sixième clause — tout ce qu'une spec contient est normatif, au même niveau.** Une
+spec ne hiérarchise pas ses règles : marquer les unes comme importantes laisse
+entendre que les autres lient moins, et une règle qui lie moins ne lie pas. Il n'y a
+donc ni règles principales, ni recommandations, ni bonnes pratiques dans une spec —
+ce qui n'est pas opposable n'y entre pas. Un projet qui veut un **aparté non
+normatif** — un exemple, une précision qui tempère une règle voisine — déclare la
+convention qui le rend reconnaissable et s'y tient ; le plugin n'impose aucun
+balisage, il exige seulement qu'un aparté se distingue d'une règle et qu'il n'en
+porte jamais une.
+
+**Septième clause — un module redéfinit ce qu'il emprunte.** Une spec se lit seule.
+Un terme dont un module voisin fait autorité est **redéfini ici, réduit à ce dont ce
+module se sert**, en nommant la spec qui en est propriétaire. Renvoyer à la
+définition d'à côté paraît plus propre et ne l'est pas : le sens du terme change
+alors sans que ce module le sache, et il l'apprend par une panne. L'emprunt réduit
+n'est pas une duplication mais un **contrat** — et le jour où il diverge de la
+définition d'origine, c'est exactement ce qu'on voulait voir.
+
 **Périmètre de la règle.** Elle porte sur le fichier de spec, **toutes ses lignes**,
 y compris la cellule `change` du changelog — c'est une propriété du document, donc
 elle vaut pour quiconque y écrit, sans qu'aucun skill n'ait à se la voir rappeler
@@ -296,13 +332,21 @@ cause plutôt que de relire le document entier.
   pas.
 - **Ne rien aligner en silence.** Là où l'écriture révèle que le code contredit la
   spec, la constatation part sous `Observed drift` dans le document de story.
-- **Cinq décisions sont tranchées au gate d'ouverture** et ne se rediscutent pas en
+- **Sept décisions sont tranchées au gate d'ouverture** et ne se rediscutent pas en
   cours d'implémentation : le critère est le **test de l'autre implémentation** et
   non une liste de mots interdits ; un mécanisme lu dans un document validé **part
   au registre** plutôt que d'être lu à travers pour en déduire une intention ; **un
   choix métier porte son chiffre**, la règle n'autorisant jamais le flou ; **nommer
-  n'est pas mécaniser**, donc un glossaire métier reste ; et le gaps register est
-  **hors du périmètre** de la règle.
+  n'est pas mécaniser**, donc un glossaire métier reste ; **tout ce qu'une spec
+  contient est normatif au même niveau**, le plugin ne prescrivant aucun balisage
+  d'aparté ; **un module redéfinit ce qu'il emprunte** plutôt que de renvoyer à la
+  spec voisine ; et le gaps register est **hors du périmètre** de la règle.
+- **La place d'une règle transverse est hors périmètre.** Une règle qui vaut pour
+  tous les modules ne vit dans aucun, et ce plugin ne dit nulle part où elle vit —
+  un module, une spec, et rien d'autre. Trancher demande de décider si le système
+  gagne une spec transverse ou s'il reconnaît `CLAUDE.md` comme son domicile, ce qui
+  touche `Document layout` et l'adoption. C'est un lot à part entière, pas une
+  clause à glisser ici.
 - **La contestation de la section `Sources` est hors périmètre.** Elle est réelle,
   elle vise ce plugin, et elle demande de décider si une spec vivante a encore
   besoin de déclarer ce qui l'a nourrie — avec l'état des lieux de `init` qui en
