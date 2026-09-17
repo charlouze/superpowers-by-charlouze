@@ -100,20 +100,20 @@ inobservables ici.
   implémenteurs de SDD, donc une condition d'arrêt qui n'y figure pas n'atteint
   jamais l'agent qui doit l'appliquer. La spec en reste à deux éléments.~~ `reserved by batch-02`
 
-- **Module adoption** — `adopting-a-module` fixe la **place de la création de la
+- ~~**Module adoption** — `adopting-a-module` fixe la **place de la création de la
   branche dans l'ordre des étapes** : avant que le moindre fichier soit écrit,
   parce que `superpowers:using-git-worktrees` ouvre un répertoire séparé et
   qu'une spec écrite plus tôt resterait sur `main` dans le checkout principal. La
   spec ordonne les étapes de l'adoption sans placer celle-là, et aucun document
-  validé n'énonce cette contrainte d'ordre. `reserved by batch-02`
+  validé n'énonce cette contrainte d'ordre.~~ `reserved by batch-02`
 
-- **Branch naming** — `writing-a-batch` impose qu'une pull request d'amendement
+- ~~**Branch naming** — `writing-a-batch` impose qu'une pull request d'amendement
   parte d'une **branche distincte au nom sans signification**, et interdit de
   réutiliser `batch/NN-<slug>` que la pull request d'ouverture peut encore tenir
   sur le remote. La table de nommage de la spec n'a pas de ligne pour
-  l'amendement. `reserved by batch-02`
+  l'amendement.~~ `reserved by batch-02`
 
-- **Branch naming** — la spec demande que le plugin crée la branche au nom
+- ~~**Branch naming** — la spec demande que le plugin crée la branche au nom
   conventionnel, et qu'il **s'assure qu'une branche nommée existe** si l'outil
   natif du harnais en a choisi un autre. Les skills implémentent cette phrase de
   deux façons : `writing-a-batch` exige de rétablir le nom conventionnel
@@ -121,8 +121,7 @@ inobservables ici.
   qu'`adopting-a-module` se contente de n'importe quelle branche nommée. Les deux
   satisfont la spec, qui ne dit pas laquelle des deux lectures elle veut — la
   présente pull request en est l'illustration, portée par une branche que le
-  harnais a nommée `worktree-adopt+supercharlouze` et non `adopt/supercharlouze`.
-  `reserved by batch-02`
+  harnais a nommée `worktree-adopt+supercharlouze` et non `adopt/supercharlouze`.~~ `reserved by batch-02`
 
 - **The init command** — `scripts/init.sh` porte plusieurs comportements de sûreté
   qu'aucun document validé ne décrit, et que la spec réduit à « insérer ou mettre
