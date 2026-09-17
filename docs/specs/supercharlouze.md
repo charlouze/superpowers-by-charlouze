@@ -208,6 +208,129 @@ cours.** C'est une propriété du modèle git et non une préférence de style :
 `main`, la spec et le code avancent dans la même pull request, donc il n'existe
 jamais d'état où la spec décrirait quelque chose que le code ne fait pas encore.
 
+**Ce dont une spec parle.** Une spec porte des règles et des intentions métier ; le
+mécanisme reste dans le code. C'est une seconde propriété de contenu, orthogonale à
+la première : une spec peut être parfaitement normative et n'énoncer pourtant que de
+la mécanique — imposer un magasin de données, un déclencheur, une couche d'adapters.
+Les clauses qui suivent sont indissociables. La première dit ce qui n'entre pas, la
+deuxième ce qu'on n'a pas le droit d'écrire à la place, la troisième ce qui empêche
+les deux premières de fabriquer du flou.
+
+**Le test de l'autre implémentation.** Le critère n'est pas un vocabulaire interdit,
+mais une question posée à chaque phrase qu'on s'apprête à écrire :
+
+> Un autre développeur, ayant implémenté la même intention autrement, lirait-il
+> cette phrase comme vraie de son code ?
+
+Oui : c'est une règle, elle entre. Non : c'est cette implémentation-ci, elle reste
+dans le code. Le test se formule de façon équivalente par la remplaçabilité — *ce
+mécanisme peut-il être remplacé sans rendre la spec fausse pour quiconque est hors
+du module ?* — et c'est la première forme qu'on applique : imaginer un collègue est
+à la portée de qui écrit, imaginer un observateur externe ne l'est pas.
+
+Le test porte sur la **frontière du module**, jamais sur les mots, et c'est ce qui
+le rend applicable partout. Un module dont le domaine *est* l'infrastructure — un
+pipeline de déploiement, ou ce plugin-ci — énonce des noms de branches et des appels
+`gh` comme règles, parce qu'à sa frontière ils sont observables et qu'un autre
+implémenteur les lirait comme vrais du sien. Un vocabulaire interdit rendrait la
+présente spec illégale ; le test la laisse s'écrire.
+
+Deux corollaires :
+
+- **une règle ne bouge pas quand un mécanisme bouge.** Si un changement d'avis
+  purement technique obligeait à réécrire la phrase, c'est que la phrase décrivait
+  la technique ;
+- **la spec ne légifère pas sur la qualité du code.** Une implémentation maladroite
+  qui produit le comportement promis est conforme. La spec dit ce qui doit être
+  vrai, jamais par quel chemin ni avec quelle élégance.
+
+**On ne reformule pas un mécanisme en règle.** Le test dit ce qui sort, pas ce qui
+le remplace, et c'est là qu'un agent invente. L'intention derrière un mécanisme ne
+se **déduit** pas : elle vient d'un document validé ou de l'humain. Une intention
+paraphrasée depuis le code est de la reconstruction depuis le code, et la règle qui
+en sort a trois défauts qu'aucune revue n'attrape facilement — elle est invérifiable
+de l'extérieur, elle a la forme du code plutôt que celle du métier, et elle
+**canonise la dérive**, puisque c'est le comportement observé qu'elle décrit.
+
+Quatre signes la reconnaissent sans rien connaître du domaine :
+
+- la section a **la forme du code** — une phrase par branche, un paragraphe par
+  module technique ;
+- elle est **vague là où le code est précis** — « quelques minutes » est un nombre
+  effacé, pas une promesse prudente ;
+- elle **nomme un acteur interne** — ce qui surveille, ce qui calcule, ce que ce
+  module ne compte pas ;
+- **personne hors du module ne pourrait dire si elle est tenue.**
+
+La question qui les tranche tous : *qu'est-ce qu'un utilisateur ou un module voisin
+perd si cette phrase est fausse ?* Si la réponse est « rien d'observable », ce n'est
+pas une règle — c'est un gap, et il part au registre.
+
+**Un choix métier porte son chiffre.** Une durée, un pas, une fenêtre, un plafond,
+un délai de garantie sont des décisions métier, et une décision métier s'écrit avec
+sa valeur : « une session dure quatre heures », « la prolongation repousse la
+fermeture d'une heure et n'est offerte que dans les trente dernières minutes ». Si
+la valeur change un jour, c'est la spec qui change, et c'est exactement ce à quoi
+sert une spec vivante. **Le flou n'est pas de la prudence** — c'est une règle
+qu'aucun code ne peut contredire, donc une règle qui ne sert à rien.
+
+Le test de l'autre implémentation suffit pour le cas franc : un autre implémenteur
+lirait « une session dure quatre heures » comme vraie de son code, et ne
+reconnaîtrait pas « le balayage passe toutes les cinq minutes ». Il ne suffit pas
+pour le cas qui compte — un chiffre hérité d'un mécanisme puis écrit sous forme de
+garantie a la forme d'une promesse et passe le test, puisque n'importe quelle
+implémentation peut la tenir. Il est pourtant faux en tant que règle, parce que
+personne ne l'a décidé. D'où la question qui accompagne tout chiffre écrit dans une
+spec :
+
+> Celui-là, d'où vient-il — d'une décision, ou d'une lecture du code ?
+
+Un chiffre dont on ne sait pas répondre est un gap, pas une garantie. Écrit comme
+une garantie, il transforme une décision d'ingénierie légitime en dette de
+conformité, et le lot correctif qui en découle est régulier — ce qui le rend
+indétectable.
+
+**La structure de la spec suit le métier.** Une règle vit là où vit le comportement
+qu'elle contraint, et non regroupée dans une section qui rassemble les règles par
+nature. Une section « les invariants », « les ports », « ce qui écrit où » a la
+forme des couches du code, et cette forme suffit à trahir l'origine du texte même
+quand chaque phrase, prise seule, passerait le test. C'est le signe de la forme du
+code, énoncé du côté constructif.
+
+**Nommer n'est pas mécaniser.** Un glossaire qui lie un terme métier au nom porté
+par le code et par l'interface est une règle, pas une fuite : il énonce que ce
+concept s'appelle pareil partout, ce qui est exactement ce qui permet à un expert du
+domaine de lire le code et d'y reconnaître ses intentions. Il passe le test —
+renommer l'identifiant sans toucher au glossaire rend la spec fausse, puisqu'elle
+promettait le contraire. Ce qu'un glossaire n'a pas à porter, ce sont les noms qui
+ne sont ceux de personne : un type de persistance, une classe d'adapter, un document
+de magasin.
+
+**Tout ce qu'une spec contient est normatif, au même niveau.** Une spec ne
+hiérarchise pas ses règles : marquer les unes comme importantes laisse entendre que
+les autres lient moins, et une règle qui lie moins ne lie pas. Il n'y a donc ni
+règles principales, ni recommandations, ni bonnes pratiques dans une spec — ce qui
+n'est pas opposable n'y entre pas. Un projet qui veut un **aparté non normatif** —
+un exemple, une précision qui tempère une règle voisine — déclare la convention qui
+le rend reconnaissable et s'y tient ; aucun balisage n'est imposé, il est seulement
+exigé qu'un aparté se distingue d'une règle et qu'il n'en porte jamais une.
+
+**Un module redéfinit ce qu'il emprunte.** Une spec se lit seule. Un terme dont un
+module voisin fait autorité est redéfini ici, **réduit à ce dont ce module se
+sert**, en nommant la spec qui en est propriétaire. Renvoyer à la définition d'à
+côté paraît plus propre et ne l'est pas : le sens du terme change alors sans que ce
+module le sache, et il l'apprend par une panne. L'emprunt réduit n'est pas une
+duplication mais un **contrat** — et le jour où il diverge de la définition
+d'origine, c'est exactement ce qu'on voulait voir.
+
+**Périmètre de ces clauses.** Elles portent sur le fichier de spec, **toutes ses
+lignes**, y compris la cellule `change` du changelog : c'est une propriété du
+document, elle vaut donc pour quiconque y écrit. Elles ne portent pas sur
+`docs/specs/<module>.gaps.md`, qui n'est pas une spec — une entrée de registre nomme
+un mécanisme, c'est son métier, et c'est là que part tout ce que le test éjecte.
+
+Deux éléments de structure sont fixes :
+
 - Une table **Changelog** en pied de document porte l'historique
   `batch | date | change`. **Une ligne par batch, écrite par `closing-a-batch`** —
   pas une ligne par story : le changelog est de granularité batch par nature, et le

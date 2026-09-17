@@ -110,6 +110,14 @@ shared "and each says a named branch is not enough" \
     "named branch is not enough" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
+# The content rule lives in one place, `using-batches`. A skill that writes into a
+# spec file names it and reuses its question verbatim rather than restating it —
+# a second formulation of the same rule is exactly what drifts. One assertion over
+# the three files: two separate ones would both stay green while one end reworded.
+shared "whoever writes into a spec spells the other-implementation test identically" \
+    "read this sentence as true of their code" \
+    using-batches writing-a-user-story closing-a-batch
+
 # `Branch naming` used to deny, in bold, that any mechanism of this system
 # depends on a branch's name. Two sections of the same spec contradicted it, and
 # the denial is gone. No skill may carry it either — but the guard has to catch

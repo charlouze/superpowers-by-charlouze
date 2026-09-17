@@ -115,4 +115,23 @@ require closing-a-batch "the ruling replaces the declaration"    "the ruling rep
 require closing-a-batch "duty 4 is empty for a corrective batch" "A corrective batch has nothing to compare here"
 require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
 
+# --- using-batches: what a spec says (spec section "The spec document") ---
+require using-batches "the test bears on the module boundary"   "bears on the module's boundary"
+require using-batches "no rewording a mechanism into a rule"    "You do not reword a mechanism into a rule"
+require using-batches "lists the laundering signs"              "Four signs recognise it"
+require using-batches "a business choice carries its number"    "A business choice carries its number"
+require using-batches "vagueness is not prudence"               "Vagueness is not prudence"
+require using-batches "a number says where it comes from"       "a decision, or a reading of the code"
+require using-batches "structure follows the business"          "structure follows the business"
+require using-batches "a glossary is a rule, not a leak"        "Naming is not mechanising"
+require using-batches "one normative level, no ranking"         "normative, at the same level"
+require using-batches "a module redefines what it borrows"      "redefines what it borrows"
+require using-batches "the rule covers the changelog cell"      "including the changelog's \`change\` cell"
+require using-batches "the gaps register is out of scope"       "\`docs/specs/<module>.gaps.md\`, which is not a spec"
+require using-batches "states the content rule itself"          "business rules and intentions; the mechanism stays in the code"
+require using-batches "corollary: a rule outlives a mechanism"  "A rule does not move when a mechanism moves"
+require using-batches "corollary: no legislating on quality"    "does not legislate on code quality"
+require using-batches "carries the section it points at"        "## What a Spec Says"
+require using-batches "the glossary points at that section"     "see \`What a Spec Says\` below"
+
 exit $((FAILURES > 0))

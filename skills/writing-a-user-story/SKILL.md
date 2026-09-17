@@ -230,6 +230,25 @@ reopen through the window exactly the gap the living spec exists to close. The
 sentence disappears in the lifting story, and that is a spec change like any
 other.
 
+**What the slice may contain.** The transcription applies the content rule of
+`supercharlouze:using-batches` — a spec carries business rules and intentions,
+the mechanism stays in the code — to every sentence it writes. Ask it of each:
+*would another developer, having implemented the same intention differently,
+read this sentence as true of their code?* The delta was written by a human at
+the opening gate, but transcribing it is still writing, and a delta that names a
+mechanism is transcribed as the rule that mechanism served **only if a validated
+document or your human partner states that rule**. You do not deduce it: an
+intention paraphrased from the code is reconstruction from the code, and it
+canonises the very drift it describes. A delta clause you cannot transcribe is
+a conflict between the batch and the spec, and the authority rule above settles
+it: the spec wins, you record a `Ruling:` naming the clause you left out and
+why, and you carry on. That ruling reaches your human partner through the story
+document (Step 6) and is read at the delivery gate. Only where the ejected
+clause describes behaviour the code already has does it *also* belong under
+**Observed drift**, from where `supercharlouze:closing-a-batch` files it into
+the gaps register — a mechanism prescribed but not yet built is neither a
+violation nor a gap, and the register has nowhere to put it.
+
 **Corrective story.** The delta being empty, this first commit does not touch
 the spec. It strikes the gaps register entry the story resolves, in
 `docs/specs/<module>.gaps.md`. That plays the same role: fixing the scope in
