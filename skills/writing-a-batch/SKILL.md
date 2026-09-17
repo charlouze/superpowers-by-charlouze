@@ -340,8 +340,11 @@ Without this path neither situation has an issue: the `Feature flag` field was
 decided at opening, and closing checks it against reality.
 
 Do it on a **distinct branch whose name carries no meaning** — do not reuse
-`batch/NN-<slug>`, which the opening pull request may still hold on the remote;
-nothing here depends on the name. Edit the batch document **in place** — no
+`batch/NN-<slug>`, which the opening pull request may still hold on the remote.
+An amendment claims neither a fresh number nor any sections, so no scan looks for
+its branch and its name has nothing to carry: that is what makes it the one
+exception to restoring a conventional name, and the exception holds for that
+reason alone. Edit the batch document **in place** — no
 changelog inside it, no history of its own scope — and say in the pull request
 body what changed and why. An amendment is not mutable state
 flowing along: it is an explicit human decision that goes through a review.

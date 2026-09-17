@@ -40,6 +40,30 @@ shared() {
     fi
 }
 
+# The mirror of `shared`: a claim that must survive nowhere. Used for a sentence
+# a spec slice removed, which is otherwise guarded by nothing — the positive
+# assertions would stay green on a file that carried both the new phrasing and
+# the old, contradicting one.
+absent() {
+    local label="$1" needle="$2"
+    shift 2
+    local found=""
+    local s f b
+    for s in "$@"; do
+        f="$REPO_ROOT/skills/$s/SKILL.md"
+        b=""
+        [ -f "$f" ] && b="$(body_flat "$f")"
+        case "$b" in
+            *"$needle"*) found="$found $s" ;;
+        esac
+    done
+    if [ -z "$found" ]; then
+        pass "$label"
+    else
+        fail "$label (present in:$found)"
+    fi
+}
+
 # The human's ruling on a live flag reaches the closing check through these two
 # fixed strings and nothing else: writing-a-batch writes them into the batch
 # document, closing-a-batch matches the first word for word. A paraphrase on
@@ -71,5 +95,16 @@ shared "every branch-creating skill restores the conventional name" \
 shared "and each says a named branch is not enough" \
     "named branch is not enough" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+# `Branch naming` used to claim, in bold, that no mechanism of this system
+# depends on the branch name. Two sections of the same spec contradicted it, and
+# the claim is gone. No skill may carry it either — in any of its wordings.
+absent "no skill claims the branch name is irrelevant" \
+    "depends on the name" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches
+
+absent "no skill claims it in the long form" \
+    "depends on the branch name" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches
 
 exit $((FAILURES > 0))
