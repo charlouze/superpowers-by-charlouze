@@ -71,6 +71,30 @@ sain ; la garantie métier réelle — au bout de combien de temps une ressource
 orpheline disparaît — n'est nulle part. **La fuite a fabriqué un lot correctif
 contre du code sain, et laissé la vraie règle non spécifiée.**
 
+**Une v4 a suivi** (`3d59552`, 256 lignes), après vingt-cinq commentaires en ligne
+qui reprennent la spec phrase par phrase. Deux enseignements, et ils tirent en sens
+inverse l'un de l'autre :
+
+- **la fuite la plus tenace est celle qui ressemble le plus à une garantie.**
+  « Le système vérifie toutes les cinq minutes » a traversé les **quatre** versions
+  sans qu'aucune revue ne l'arrête, alors que la table de garanties juste en dessous
+  est irréprochable. Une revue humaine attentive, quatre fois de suite, ne suffit
+  pas : c'est un critère écrit qu'il faut ;
+- **et la peur du mécanisme fabrique du flou.** Plusieurs commentaires réclament
+  l'inverse de ce que la règle pourrait laisser croire — *« n'ayons pas peur d'être
+  précis… une session dure 4h et si un jour on fait évoluer ça, on fera évoluer la
+  spec »*, *« repousse d'une heure la fermeture et c'est disponible 30 minutes avant
+  la fin »*, ou simplement *« combien de temps ? »* en face d'une phrase vague. Une
+  règle qui interdit le mécanisme sans exiger la précision produit mécaniquement la
+  v2. Le contrepoids est donc dans le delta, pas en commentaire.
+
+**Un commentaire vise le plugin et non l'adoption**, et il est signalé plutôt que
+fondu dans le périmètre : *« je ne comprends pas l'intérêt d'une section `Sources`.
+[…] c'est toujours la spec qui fait foi pour tout malgré d'autres sources. Elle
+devient elle-même source incontestable. »* La v4 a supprimé la section. C'est une
+contestation d'une règle que ce plugin prescrit — la section `Sources` et l'état des
+lieux de `init` qui la lit — et elle se tranche dans un lot à elle, pas ici.
+
 **Ce qui a sorti cette adoption de l'ornière mérite d'être consigné** : la v3 est
 celle qui a été écrite en invoquant la skill `domain-driven-design`, et c'est de là
 que vient sa section `Ubiquitous language`. Le plugin n'y est pour rien — aucune de
@@ -92,23 +116,38 @@ Module `supercharlouze`, une seule spec. Le delta est énoncé par section de sp
 La section énonce aujourd'hui ce qu'une spec **ne porte pas** en fait de
 métadonnées — ni date, ni statut, ni marqueur — et ce qu'elle porte en fait de
 structure. Elle ne dit rien de ce dont une spec **parle**. Le delta l'ajoute, en
-trois clauses indissociables.
+cinq clauses indissociables.
 
-**Première clause — le test de remplaçabilité.** Une spec porte des règles et des
-intentions métier ; le mécanisme est dans le code. Le critère n'est pas un
+**Première clause — le test de l'autre implémentation.** Une spec porte des règles
+et des intentions métier ; le mécanisme est dans le code. Le critère n'est pas un
 vocabulaire interdit mais une question, posée à chaque phrase qu'on s'apprête à
 écrire :
 
-> Ce mécanisme peut-il être remplacé par un autre sans rendre la spec fausse pour
-> quiconque est hors du module ?
+> Un autre développeur, ayant implémenté la même intention autrement, lirait-il
+> cette phrase comme vraie de son code ?
 
-Oui, c'est de l'implémentation : ça n'entre nulle part dans la spec. Non, c'est une
-règle : ça entre. Le test porte sur la **frontière du module**, jamais sur les mots,
-et c'est ce qui le rend applicable. Un module dont le domaine *est* l'infrastructure
-— un pipeline de déploiement, ou ce plugin-ci — énonce des noms de branches et des
-appels `gh` comme règles, parce qu'à sa frontière ils sont observables. Un
-vocabulaire interdit rendrait la présente spec illégale ; le test la laisse
-s'écrire.
+Oui : c'est une règle, elle entre. Non : c'est votre implémentation, elle reste dans
+le code. La forme est délibérément celle-là plutôt qu'un « personne hors du module
+ne s'en apercevrait » — imaginer un collègue est à la portée d'un agent, imaginer un
+observateur externe ne l'est pas. Le test se formule de façon équivalente par la
+remplaçabilité — *ce mécanisme peut-il être remplacé sans rendre la spec fausse pour
+quiconque est hors du module ?* — et les deux se recoupent ; c'est la première qu'on
+applique.
+
+**Corollaire, le test de stabilité.** Une règle ne bouge pas quand un mécanisme
+bouge. Si un changement d'avis purement technique obligeait à réécrire la phrase,
+c'est que la phrase décrivait la technique.
+
+**Second corollaire : la spec ne légifère pas sur la qualité du code.** Une
+implémentation maladroite qui produit le comportement promis est conforme. La spec
+dit ce qui doit être vrai, jamais par quel chemin ni avec quelle élégance.
+
+Le test porte sur la **frontière du module**, jamais sur les mots, et c'est ce qui
+le rend applicable partout. Un module dont le domaine *est* l'infrastructure — un
+pipeline de déploiement, ou ce plugin-ci — énonce des noms de branches et des appels
+`gh` comme règles, parce qu'à sa frontière ils sont observables et qu'un autre
+implémenteur les lirait comme vrais du sien. Un vocabulaire interdit rendrait la
+présente spec illégale ; le test la laisse s'écrire.
 
 **Deuxième clause — on ne reformule pas un mécanisme en règle.** Le test dit ce qui
 sort, pas ce qui le remplace, et c'est là qu'un agent invente. L'intention derrière
@@ -133,7 +172,30 @@ La question qui tranche les quatre : *qu'est-ce qu'un utilisateur ou un module
 voisin perd si cette phrase est fausse ?* Si la réponse est « rien d'observable »,
 ce n'est pas une règle — c'est un gap, et il part au registre.
 
-**Troisième clause — nommer n'est pas mécaniser.** Un glossaire qui lie un terme
+**Troisième clause — un choix métier porte son chiffre.** C'est le contrepoids des
+deux premières, et sans lui elles fabriquent du flou : un agent à qui l'on interdit
+le mécanisme écrit « quelques minutes » et croit avoir obéi. Une durée, un pas, une
+fenêtre, un plafond, un délai de garantie sont des **décisions métier**, et une
+décision métier s'écrit avec sa valeur. « Une session dure quatre heures », « la
+prolongation repousse la fermeture d'une heure et n'est offerte que dans les trente
+dernières minutes » : si la valeur change un jour, c'est la spec qui change, et
+c'est exactement ce à quoi sert une spec vivante. **Le flou n'est pas de la
+prudence** — c'est une règle qu'aucun code ne peut contredire, donc une règle qui ne
+sert à rien.
+
+Ce qui distingue ce chiffre-là du chiffre qu'il faut proscrire est le test de la
+première clause, et rien d'autre : un autre implémenteur lirait « une session dure
+quatre heures » comme vraie de son code, et ne reconnaîtrait pas « le balayage passe
+toutes les cinq minutes ».
+
+**Quatrième clause — la structure de la spec suit le métier.** Une règle vit **là où
+vit le comportement qu'elle contraint**, et non regroupée dans une section qui
+rassemble les règles par nature. Une section « les invariants », « les ports », « ce
+qui écrit où » a la forme des couches du code, et cette forme suffit à trahir
+l'origine du texte même quand chaque phrase, prise seule, passerait le test. C'est
+le premier signe de blanchiment, énoncé du côté constructif.
+
+**Cinquième clause — nommer n'est pas mécaniser.** Un glossaire qui lie un terme
 métier au nom porté par le code et par l'interface est **une règle et non une
 fuite** : il énonce que ce concept s'appelle pareil partout, ce qui est exactement
 ce qui permet à un expert du domaine de lire le code et d'y reconnaître ses
@@ -208,12 +270,17 @@ cause plutôt que de relire le document entier.
   pas.
 - **Ne rien aligner en silence.** Là où l'écriture révèle que le code contredit la
   spec, la constatation part sous `Observed drift` dans le document de story.
-- **Quatre décisions sont tranchées au gate d'ouverture** et ne se rediscutent pas
-  en cours d'implémentation : le critère est le **test de remplaçabilité** et non
-  une liste de mots interdits ; un mécanisme lu dans un document validé **part au
-  registre** plutôt que d'être lu à travers pour en déduire une intention ;
-  **nommer n'est pas mécaniser**, donc un glossaire métier reste ; et le gaps
-  register est **hors du périmètre** de la règle.
+- **Cinq décisions sont tranchées au gate d'ouverture** et ne se rediscutent pas en
+  cours d'implémentation : le critère est le **test de l'autre implémentation** et
+  non une liste de mots interdits ; un mécanisme lu dans un document validé **part
+  au registre** plutôt que d'être lu à travers pour en déduire une intention ; **un
+  choix métier porte son chiffre**, la règle n'autorisant jamais le flou ; **nommer
+  n'est pas mécaniser**, donc un glossaire métier reste ; et le gaps register est
+  **hors du périmètre** de la règle.
+- **La contestation de la section `Sources` est hors périmètre.** Elle est réelle,
+  elle vise ce plugin, et elle demande de décider si une spec vivante a encore
+  besoin de déclarer ce qui l'a nourrie — avec l'état des lieux de `init` qui en
+  dépend. Aucune story de ce lot n'y touche, ni pour la défendre ni pour la retirer.
 - **Aucune dépendance à `domain-driven-design`.** La règle s'énonce de façon
   autonome, et elle doit tenir pour un agent qui n'a jamais chargé cette skill.
   Faire de `domain-driven-design` un prérequis du plugin, au même rang que
