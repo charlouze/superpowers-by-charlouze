@@ -142,13 +142,13 @@ inobservables ici.
   l'arborescence doit survivre à un clone, ni ce qu'un dépôt est censé porter
   entre l'init et la première spec.~~ `reserved by batch-02`
 
-- **Verification** — la suite de tests vérifie **au-delà des cinq contrôles que la
+- ~~**Verification** — la suite de tests vérifie **au-delà des cinq contrôles que la
   spec énumère** : cas limites de l'init (collision d'archivage, marqueurs
   inversés, dupliqués, cités en prose, survie d'un `CLAUDE.md.tmp` préexistant,
   migration d'un sous-arbre imbriqué, portée de la lecture de `Sources`),
   assertions de contenu sur les quatre skills productifs, assertions sur le
   fichier de commande. Ces contrôles sont structurels et légitimes, mais la liste
-  normative de la spec n'en couvre que cinq. `reserved by batch-02`
+  normative de la spec n'en couvre que cinq.~~ `reserved by batch-02`
 
 - **Concurrency detection / The user story document** — la spec fait du champ
   `Sections:` « le mécanisme de détection de concurrence », et la détection ne

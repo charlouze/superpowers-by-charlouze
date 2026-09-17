@@ -1046,15 +1046,51 @@ exception subie — c'est la règle générale, déjà appliquée.
 
 ## Verification
 
-**Contrôles structurels uniquement**, automatisés et bon marché :
+**Contrôles structurels uniquement**, automatisés et bon marché.
 
-- `plugin.json` est valide.
-- Chaque `SKILL.md` a un front matter avec `name` et `description`.
-- Les chemins cités d'un skill à l'autre existent.
-- Le bloc `CLAUDE.md` s'insère proprement dans un fichier existant, dans un projet
-  sans `CLAUDE.md`, et ne se duplique pas à la deuxième exécution.
-- Chacun des quatre overrides est présent et nommé **à la fois** dans
-  `using-batches` et dans le bloc `CLAUDE.md`.
+**Ce que « structurel » veut dire ici, parce que le mot invite une autre lecture :**
+il oppose *automatisé et bon marché* à *jugement humain sur la prose*, et rien
+d'autre. Il n'oppose pas une assertion portant sur le texte source à une assertion
+portant sur le comportement — le contrôle du bloc `CLAUDE.md` ci-dessous exécute la
+commande et regarde le résultat, et c'est l'un des contrôles fondateurs de cette
+liste. Ce que « structurel » exclut, c'est le contrôle qui demanderait à une
+machine de juger si une prose est juste, claire ou suffisante.
+
+**Cette liste est un plancher, pas une clôture** : ce que la suite doit au minimum
+couvrir. Une garde qui dépasse la liste n'est pas une dérive. Une liste close en
+ferait une, et chaque garde ajoutée fabriquerait mécaniquement un écart à consigner
+— ce qui est exactement ce qui est arrivé lorsque cette liste en énumérait cinq.
+
+- **Métadonnées du plugin** — `plugin.json` et `marketplace.json` existent, sont du
+  JSON valide, s'accordent sur le nom et sur la version, et l'entrée de marketplace
+  désigne bien le plugin.
+- **Front matter des skills** — chaque `SKILL.md` existe, ouvre sur son front
+  matter, porte un `name` qui correspond à son répertoire et une `description` ; et
+  le répertoire des skills contient exactement les skills déclarés.
+- **Renvois** — chaque renvoi `supercharlouze:` désigne un skill ou une commande
+  qui existe, chaque chemin relatif cité d'un skill à l'autre existe, chaque section
+  nommée par un renvoi existe dans cette spec, et aucun artefact livré ne cite un
+  numéro de section du document de conception archivé.
+- **Le bloc `CLAUDE.md`** — il s'insère proprement dans un fichier existant comme
+  dans un projet qui n'en a pas, ne se duplique pas à la deuxième exécution, et vit
+  dans un seul fichier du dépôt.
+- **Les quatre overrides déclarés** — chacun est présent et nommé **à la fois** dans
+  `using-batches` et dans le bloc `CLAUDE.md`, et chacun y énonce ce qu'il remplace.
+- **La commande d'init** — son fichier existe et porte son front matter ; son corps
+  nomme le script, le skill de routage et sa branche, et interdit d'adopter comme de
+  proposer un découpage.
+- **Le script d'init, par son comportement** — arborescence créée, migration et ses
+  cas limites, chacun des refus que `The init command` énumère, idempotence,
+  préservation du mode, et portée de la lecture de `Sources`.
+- **Le contenu des skills productifs** — chacun énonce les règles que cette spec lui
+  attribue.
+- **Les contrats entre skills** — ce qu'aucune assertion portant sur un seul skill
+  ne peut exprimer : une même chaîne littérale écrite à l'identique des deux côtés
+  d'un couplage, et une affirmation qui ne doit survivre dans aucun skill.
+- **L'intégrité de la suite elle-même** — aucun fichier de test n'échappe au
+  lanceur, et aucun ne passe sans rien affirmer. Une garde que personne n'exécute et
+  une garde qui n'affirme rien sont indiscernables d'une garde absente, et les deux
+  se lisent comme une couverture.
 
 **Ce qui n'est pas testé, et qui est donc un pari assumé :**
 
