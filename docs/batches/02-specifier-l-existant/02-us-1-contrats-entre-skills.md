@@ -362,4 +362,22 @@ git commit -m "test: garder le couplage par chaîne littérale entre writing-a-b
 
 ## Rulings log
 
+Trois décisions prises pendant l'exécution, recopiées du ledger SDD. Aucune ne porte sur le contenu livré : toutes trois portent sur la conduite de l'exécution.
+
+- **Ruling:** les tâches 1 à 3 partent en **un seul dispatch** au lieu de trois — **pourquoi :** même fichier, même forme (un bloc de lignes `require` suivi d'une preuve par mutation), et la règle de groupement de `subagent-driven-development` couvre exactement ce cas ; trois sièges de revue quasi identiques sur un seul fichier n'achètent rien, et le reviewer voit le même diff dans les deux cas — **coût si c'est faux :** un seul gate de revue au lieu de trois, donc un défaut confiné à l'un des trois blocs reçoit une attention moins isolée.
+
+- **Ruling:** l'ambiguïté d'ancrage trouvée au scan pre-flight est levée **dans le dispatch** plutôt que corrigée dans le plan — **pourquoi :** `tests/test-skill-content.sh` contient deux lignes `require <skill> "branch naming convention" … "batch/NN"` qui ne diffèrent que par le nom du skill, mais le plan cite déjà chaque ancre en entier, nom du skill compris ; le texte est donc correct et le risque est un `grep` trop large, que nommer le bloc et sa ligne dans le dispatch supprime sans toucher un plan que le reviewer va lire — **coût si c'est faux :** une insertion atterrit dans le mauvais bloc, la preuve par mutation passe quand même, et la garde se retrouve sous le mauvais intertitre où elle trompera un lecteur ultérieur.
+
+- **Ruling:** implémenteurs et reviewers de tâche tournent sur un modèle de milieu de gamme, pas le moins cher — **pourquoi :** le plan porte le code complet, ce qui plaiderait pour le tier le moins cher, mais chaque preuve dépend d'un `sed` qui doit matcher un tiret cadratin et d'un `git checkout --` qui doit revenir proprement sous git-bash Windows ; un tour raté là coûte plus que le tier n'économise. La revue finale de branche tourne sur le modèle le plus capable, conformément à la sélection de modèle — **coût si c'est faux :** quelques centimes de dépense évitable.
+
 ## Observed drift
+
+Un écart constaté **hors du périmètre de cette story**, trouvé en éditant la section voisine et laissé tel quel conformément à la contrainte du lot « ne rien aligner en silence ». Il n'est couvert par aucune entrée existante de `docs/specs/supercharlouze.gaps.md` ; `closing-a-batch` le consolidera au registre.
+
+- **`The batch document` — la spec affirme sans réserve que le document de lot ne porte aucun état mutable, et sa propre section `Closing a batch` la contredit.** La phrase est : « Le document de batch ne porte aucun état mutable, et rien dans le déroulement normal ne le modifie. » Or `closing-a-batch` modifie bel et bien ce document, deux fois, et la spec le dit ailleurs elle-même : le devoir 4 amende le texte du lot « pour ne plus promettre ce qu'il n'a pas livré », et le devoir 6 bascule son front matter en `status: closed`. Le skill énonce d'ailleurs la règle **avec** l'exception que la spec nie — « nothing in the normal course of the batch modifies it **until closing** ».
+
+  C'est donc le code qui a raison et la spec qui est incomplète. La résorption est une phrase dans `The batch document` reconnaissant la clôture comme la borne de l'immutabilité — mais c'est une décision humaine, et cette story ne l'a pas prise.
+
+  **Circonstance aggravante, marginale :** la tranche livrée par cette story ajoute à cette même phrase une réserve pour `Live flags`, qui est correcte en elle-même. Elle a pour effet de faire lire la clause de tête comme si `Live flags` était la seule exception digne d'être nommée, alors qu'il en existe une seconde, plus ancienne et non énoncée.
+
+  **Ce que ça coûte si personne ne le ramasse :** un lot ultérieur réécrit `writing-a-batch` depuis la seule spec — ce que la spec est faite pour permettre, puisqu'elle est l'autorité contraignante de toute revue — supprime la clause « until closing » comme non étayée, et les devoirs 4 et 6 de `closing-a-batch` deviennent un comportement que la spec interdit. C'est exactement le mode de panne que la section `Scope` de ce lot invoque comme sa raison d'être.
