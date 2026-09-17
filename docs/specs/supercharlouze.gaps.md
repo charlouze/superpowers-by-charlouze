@@ -123,7 +123,7 @@ inobservables ici.
   présente pull request en est l'illustration, portée par une branche que le
   harnais a nommée `worktree-adopt+supercharlouze` et non `adopt/supercharlouze`.~~ `reserved by batch-02`
 
-- **The init command** — `scripts/init.sh` porte plusieurs comportements de sûreté
+- ~~**The init command** — `scripts/init.sh` porte plusieurs comportements de sûreté
   qu'aucun document validé ne décrit, et que la spec réduit à « insérer ou mettre
   à jour, sans jamais dupliquer » : il **refuse toute l'exécution** si un document
   archivé occupe déjà un chemin de destination, avant de déplacer quoi que ce
@@ -132,15 +132,15 @@ inobservables ici.
   paire de marqueurs HTML (`<!-- supercharlouze:begin -->` / `:end`) appariés
   **sur la ligne entière**, de sorte qu'une prose citant les marqueurs ne soit pas
   prise pour un bloc ; il préserve le mode du fichier ; et il supprime
-  l'arborescence `docs/superpowers` une fois vidée. `reserved by batch-02`
+  l'arborescence `docs/superpowers` une fois vidée.~~ `reserved by batch-02`
 
-- **Document layout** — l'arborescence que `init` crée comporte deux répertoires
+- ~~**Document layout** — l'arborescence que `init` crée comporte deux répertoires
   qui restent vides jusqu'au premier usage, `docs/specs/` et `docs/batches/`. Git
   ne suit pas les répertoires vides : sur `main`, ils n'existent pas, et un clone
   frais ne les a pas. Le script les recrée à chaque exécution, donc le code est
   conforme à ce que la spec lui demande — mais aucun document validé ne dit si
   l'arborescence doit survivre à un clone, ni ce qu'un dépôt est censé porter
-  entre l'init et la première spec. `reserved by batch-02`
+  entre l'init et la première spec.~~ `reserved by batch-02`
 
 - **Verification** — la suite de tests vérifie **au-delà des cinq contrôles que la
   spec énumère** : cas limites de l'init (collision d'archivage, marqueurs
