@@ -90,8 +90,11 @@ the slug follows the project's language, because it names a business object.
 Create the branch and workspace by invoking `superpowers:using-git-worktrees`.
 That skill prefers the harness's native tooling, which picks its own branch name
 and may leave you on a detached HEAD. This plugin enforces its own naming: if you
-end up elsewhere, make sure a branch named `batch/NN-<slug>` exists before going
-on. No mechanism depends on the name — but a pull request needs a branch.
+end up elsewhere, restore the conventional name before going on:
+`batch/NN-<slug>`. **A named branch is not enough.** Allocating `NN` above reads
+`batch/*` and `story/*` on the remote to refuse a number already claimed, so a
+branch left under a harness-chosen name claims nothing, and hands its number to
+the next batch opened in parallel.
 
 ## The Batch Document
 
@@ -337,8 +340,11 @@ Without this path neither situation has an issue: the `Feature flag` field was
 decided at opening, and closing checks it against reality.
 
 Do it on a **distinct branch whose name carries no meaning** — do not reuse
-`batch/NN-<slug>`, which the opening pull request may still hold on the remote;
-nothing here depends on the name. Edit the batch document **in place** — no
+`batch/NN-<slug>`, which the opening pull request may still hold on the remote.
+An amendment claims neither a fresh number nor any sections, so no scan looks for
+its branch and its name has nothing to carry: that is what makes it the one
+exception to restoring a conventional name, and the exception holds for that
+reason alone. Edit the batch document **in place** — no
 changelog inside it, no history of its own scope — and say in the pull request
 body what changed and why. An amendment is not mutable state
 flowing along: it is an explicit human decision that goes through a review.

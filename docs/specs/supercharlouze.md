@@ -162,13 +162,35 @@ ne pouvant revendiquer aucun numéro de story.
 | Adoption d'un module | `adopt/<module>` |
 | `init` | `chore/supercharlouze-init` |
 | Bounded | `fix/<slug>` |
+| Amendement d'un batch | une branche distincte au nom sans signification |
 
 Ce nommage est une convention que le plugin fait respecter lui-même, et non une
 propriété de `superpowers:using-git-worktrees` : ce skill préfère les outils natifs
 du harnais, qui choisissent le nom de branche, et peut aboutir à un HEAD détaché.
-**Aucun mécanisme de ce système ne dépend du nom de branche** — l'identification
-passe par la pull request et par le document de story — mais une branche nommée
-doit exister pour qu'une pull request puisse être ouverte.
+**Le nom conventionnel doit alors être rétabli avant de continuer.** Il ne suffit
+pas qu'une branche nommée existe.
+
+**Deux mécanismes de ce système reconnaissent une branche à son nom**, et tous deux
+exactement sur la fenêtre où la pull request n'existe pas encore :
+
+- `Number allocation` refuse un numéro revendiqué par une branche poussée qui ne
+  porte pas encore de pull request, et cherche `NN` contre `batch/*` et `story/*`,
+  `us-N` contre `story/*` ;
+- `Concurrency detection` lit comme seconde source les branches `story/*` poussées
+  qui ne portent pas encore de pull request.
+
+Une branche laissée sous le nom qu'un outil natif lui a donné est invisible des
+deux. Elle ne réserve pas son numéro et ne tient pas ses sections : une story sœur
+peut prendre le même `us-N`, ou écrire dans la même section, sans que rien ne
+l'arrête — et ce silence dure toute une implémentation, ce que la spec décrit
+ailleurs comme l'angle mort que ces deux sources existent pour fermer. C'est
+pourquoi le nom est vérifié et rétabli, et non simplement souhaité.
+
+**L'amendement est la seule exception, et il l'est par construction.** Une pull
+request d'amendement ne revendique ni numéro neuf ni sections, donc aucun balayage
+ne la cherche et son nom n'a rien à porter. Il doit en revanche être *différent* de
+`batch/NN-<slug>`, que la pull request d'ouverture du même lot peut encore tenir
+sur le remote.
 
 ## The spec document
 
@@ -433,7 +455,8 @@ la PR d'ouverture, et l'intention annoncée dans le spec delta et jamais livrée
 **Création de la branche.** Le plugin crée lui-même la branche au nom conventionnel
 et son espace de travail, en invoquant `superpowers:using-git-worktrees`. Si ce
 skill aboutit à une branche autrement nommée, à un HEAD détaché, ou si l'isolation
-est refusée, le plugin s'assure qu'une branche nommée existe avant de continuer.
+est refusée, le plugin **rétablit le nom conventionnel** avant de continuer — voir
+`Branch naming`, qui dit pourquoi une branche nommée ne suffit pas.
 
 Un projet organisé en sous-modules git sort du chemin décrit ici et n'est pas
 couvert : le Step 0 de `superpowers:using-git-worktrees` y voit

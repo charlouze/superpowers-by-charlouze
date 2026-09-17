@@ -118,9 +118,16 @@ file the next two steps write belongs there.
 
 That skill prefers the harness's native tooling, which picks its own branch name
 and may leave you on a detached HEAD. If it leaves you on a differently named
-branch or on a detached HEAD, make sure a named branch exists before you
-continue — nothing in this system depends on the branch name, but a pull request
-needs a branch.
+branch or on a detached HEAD, restore the conventional name before going on:
+`adopt/<module>`. **A named branch is not enough** — and here that is a matter of
+convention rather than mechanism, which is worth saying plainly: nothing scans
+`adopt/*`. Number allocation reads `batch/*` and `story/*`, the concurrency scan
+reads `story/*`, and an adoption branch claims no number and holds no sections,
+so it is equally unseen under either name. The convention is uniform anyway: a
+rule honoured only where a scan would catch you is not a rule. And it is on
+`batch/*` and `story/*` that it bites — there, a branch under the wrong name
+silently hands away its number and its sections for the length of an
+implementation.
 
 The two steps before this one are dialogue: they produce a boundary and an
 inventory, not files. Everything after it writes.

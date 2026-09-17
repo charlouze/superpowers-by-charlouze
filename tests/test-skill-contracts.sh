@@ -40,6 +40,44 @@ shared() {
     fi
 }
 
+# The mirror of `shared`: a claim that must survive nowhere. Used for a sentence
+# a spec slice removed, which is otherwise guarded by nothing — the positive
+# assertions would stay green on a file that carried both the new phrasing and
+# the old, contradicting one.
+#
+# Matches an extended regular expression against the flattened body, not a
+# literal substring: the claim this test hunts is a denial ("nothing depends
+# on the branch name"), and the doctrine this branch establishes is written in
+# the same words, affirmatively ("Number allocation depends on the branch
+# name"). A literal match cannot tell the two apart and would turn red on the
+# true sentence, inviting the writer to delete it.
+#
+# Fails explicitly, naming the file, when a listed skill does not exist: an
+# empty body from a missing file never matches, and a silent pass there would
+# mean the assertion inspected nothing.
+absent() {
+    local label="$1" needle="$2"
+    shift 2
+    local found=""
+    local s f b
+    for s in "$@"; do
+        f="$REPO_ROOT/skills/$s/SKILL.md"
+        if [ ! -f "$f" ]; then
+            fail "$label (no such skill: $s)"
+            return
+        fi
+        b="$(body_flat "$f")"
+        if echo "$b" | grep -Eq "$needle"; then
+            found="$found $s"
+        fi
+    done
+    if [ -z "$found" ]; then
+        pass "$label"
+    else
+        fail "$label (present in:$found)"
+    fi
+}
+
 # The human's ruling on a live flag reaches the closing check through these two
 # fixed strings and nothing else: writing-a-batch writes them into the batch
 # document, closing-a-batch matches the first word for word. A paraphrase on
@@ -57,5 +95,29 @@ shared "live-flag ruling: not this batch" \
 shared "the Live flags section is named on both ends" \
     "Live flags" \
     writing-a-batch closing-a-batch
+
+
+# `Number allocation` and the concurrency scan both recognise a branch by its
+# name, and both on exactly the window where no pull request exists yet. So a
+# skill that creates a branch owes more than "some named branch exists": it
+# restores the conventional name. The loose reading leaves a branch that is
+# invisible to both scans, holding neither its number nor its sections.
+shared "every branch-creating skill restores the conventional name" \
+    "restore the conventional name before going on" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+shared "and each says a named branch is not enough" \
+    "named branch is not enough" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+# `Branch naming` used to deny, in bold, that any mechanism of this system
+# depends on a branch's name. Two sections of the same spec contradicted it, and
+# the denial is gone. No skill may carry it either — but the guard has to catch
+# the *denial*, not the words: "Number allocation depends on the branch name" is
+# the true statement this branch exists to establish, and a literal match would
+# turn red on it and invite the writer to delete it.
+absent "no skill denies that the branch name matters" \
+    "(nothing|Nothing|no mechanism|No mechanism)[^.]{0,40}depends on the (branch )?name" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches
 
 exit $((FAILURES > 0))

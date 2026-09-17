@@ -180,10 +180,12 @@ project's language — it names a business object.
 Create the branch and the workspace by invoking
 `superpowers:using-git-worktrees`. That skill prefers the harness's native
 tooling, which picks its own branch name, and may leave a detached HEAD. If it
-produces another name, a detached HEAD, or if isolation is declined, make sure
-a **named branch exists** before going further. No mechanism here depends on
-the name — identification goes through the pull request and the story document
-— but a pull request cannot be opened without a branch.
+produces another name, a detached HEAD, or if isolation is declined, restore the
+conventional name before going on: `story/NN-us-N-<slug>`. **A named branch is
+not enough.** Step 1's third source and this step's allocation both read
+`story/*` on the remote, so a branch under any other name is invisible to every
+sibling for the whole length of an implementation — it holds neither its `us-N`
+nor its sections, and the push at the end of Step 3 buys nothing.
 
 The story document lives at `docs/batches/NN-<slug>/NN-us-N-<slug>.md`. The
 `NN-` prefix keeps basenames unique across batches. On the nominal path it is
