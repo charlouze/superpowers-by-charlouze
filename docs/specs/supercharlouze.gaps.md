@@ -54,54 +54,51 @@ inobservables ici.
 
 ## Gaps
 
-- **The batch document** — `writing-a-batch` impose une section `## Constraints`
+- ~~**The batch document** — `writing-a-batch` impose une section `## Constraints`
   (contraintes de migration et de compatibilité, ordre requis des stories, `none`
   s'il n'y en a pas), que `writing-a-user-story` recopie **verbatim** dans les
   `Global Constraints` de chaque plan. Aucun document validé ne nomme cette
   section ni ne décrit la convention `none` ou la recopie verbatim, alors que la
-  spec fait de ces contraintes ce que le batch porte et que la spec ne porte pas.
-  `reserved by batch-02`
+  spec fait de ces contraintes ce que le batch porte et que la spec ne porte pas.~~ `reserved by batch-02`
 
-- **The batch document** — `writing-a-batch` impose une section `## Live flags` où
+- ~~**The batch document** — `writing-a-batch` impose une section `## Live flags` où
   chaque flag vivant remonté reçoit la décision de l'humain, écrite sous forme de
   **deux chaînes littérales** : `carried by this batch — lifting story owed` et
   `not this batch — <reason>`. `closing-a-batch` recherche la première **au mot
   près** pour savoir quels flags le lot devait lever. Aucun document validé ne
   décrit cette section, ni le fait que la décision soit consignée dans le
   document, ni ce couplage par chaîne littérale entre deux skills — qui est
-  pourtant le seul canal par lequel un flag hérité atteint le contrôle de clôture.
-  `reserved by batch-02`
+  pourtant le seul canal par lequel un flag hérité atteint le contrôle de clôture.~~ `reserved by batch-02`
 
-- **Closing a batch** — le contrôle des flags porte, dans `closing-a-batch`, sur
+- ~~**Closing a batch** — le contrôle des flags porte, dans `closing-a-batch`, sur
   les flags **que le lot a déclarés** *et* sur ceux **qu'il a hérités par une
   décision au gate d'ouverture**, avec un test distinct pour les seconds : la
   décision humaine rend « dépensée » la portée étendue déclarée par le lot
   d'origine, donc l'entrée n'est réglée que si le flag a disparu du code et de la
   spec. Aucun document validé ne décrit la notion de flag hérité ni ce test
-  particulier ; la spec ne connaît que les flags du lot. `reserved by batch-02`
+  particulier ; la spec ne connaît que les flags du lot.~~ `reserved by batch-02`
 
-- **Closing a batch** — `closing-a-batch` exécute le **contrôle du devoir 5 avant
+- ~~**Closing a batch** — `closing-a-batch` exécute le **contrôle du devoir 5 avant
   les devoirs 1 à 4**, au motif qu'un refus doit être gratuit : les quatre
   premiers écrivent, aucun n'est rejouable sans dupliquer ses effets, et un refus
   tardif échouerait quatre devoirs d'écriture sur une branche que personne ne
   peut fusionner. La spec énonce six devoirs dans l'ordre 1 à 6 et ne décrit
-  aucune inversion. `reserved by batch-02`
+  aucune inversion.~~ `reserved by batch-02`
 
-- **Closing a batch** — `closing-a-batch` énonce que le devoir 4 **n'a rien à
+- ~~**Closing a batch** — `closing-a-batch` énonce que le devoir 4 **n'a rien à
   comparer pour un lot correctif**, dont le spec delta est vide par définition, et
   que le devoir 3 en tient alors lieu — avec l'interdiction explicite de reclasser
   les entrées libérées en gaps neufs. Aucun document validé ne porte cette
-  exception. `reserved by batch-02`
+  exception.~~ `reserved by batch-02`
 
-- **The user story document** — `writing-a-user-story` fait porter aux
+- ~~**The user story document** — `writing-a-user-story` fait porter aux
   `Global Constraints` **plus que les deux choses que la spec y met** : outre les
   contraintes du batch et le gel du fichier de spec, la règle « la spec gagne, et
   corriger une spec est un acte humain », et — dans un lot correctif — la
   cinquième condition d'arrêt recopiée intégralement. Le motif est load-bearing :
   les `Global Constraints` sont le seul canal que lisent les sous-agents
   implémenteurs de SDD, donc une condition d'arrêt qui n'y figure pas n'atteint
-  jamais l'agent qui doit l'appliquer. La spec en reste à deux éléments.
-  `reserved by batch-02`
+  jamais l'agent qui doit l'appliquer. La spec en reste à deux éléments.~~ `reserved by batch-02`
 
 - **Module adoption** — `adopting-a-module` fixe la **place de la création de la
   branche dans l'ordre des étapes** : avant que le moindre fichier soit écrit,

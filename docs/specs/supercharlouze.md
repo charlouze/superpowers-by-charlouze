@@ -266,6 +266,15 @@ Un `README.md` avec un front matter `status: open | closed`, et :
   Ce delta n'est transcrit dans aucune spec à l'ouverture : il l'est tranche par
   tranche, par la pull request de chaque story. Pour un lot correctif, ce champ est
   vide et remplacé par les entrées du gaps register que le batch réserve.
+- **Constraints** — les contraintes de migration et de compatibilité, et l'ordre
+  requis des stories ; `none` s'il n'y en a pas. C'est ce que le batch porte et que
+  la spec ne porte pas, donc **rien de normatif n'y figure** : la spec reste seule
+  autorité sur le comportement. `supercharlouze:writing-a-user-story` la recopie
+  **verbatim** dans les `Global Constraints` de chaque story, où
+  `superpowers:writing-plans` en fait implicitement une exigence de chaque tâche.
+  Elle s'écrit donc comme des contraintes qu'un implémenteur peut respecter, et non
+  comme du contexte. Omise, chaque story inventerait en silence son propre ordre et
+  sa propre règle de migration.
 - **Feature flag** — le nom du flag, son défaut et sa portée ; ou `none` avec la
   raison de l'exemption. Ce champ est **obligatoire et jamais vide** : « aucun
   flag » doit être une décision énoncée et revue, pas un oubli. Une portée qui
@@ -278,8 +287,33 @@ Un `README.md` avec un front matter `status: open | closed`, et :
   Feature flag: none — corrective batch, restores behaviour the spec already promises
   ```
 
+- **Live flags** — chaque phrase de gating vivante remontée au gate d'ouverture,
+  avec la décision de l'humain ; `none` s'il n'y en a pas, pour que « vérifié, rien
+  trouvé » ne ressemble pas à « jamais vérifié ». La décision s'écrit sous l'une de
+  **deux chaînes littérales**, sur une ligne, immédiatement sous le flag qu'elle
+  tranche :
+
+  ```markdown
+  carried by this batch — lifting story owed
+  not this batch — <reason>
+  ```
+
+  **Ce caractère littéral est normatif et non stylistique.**
+  `supercharlouze:closing-a-batch` reconnaît la première **au mot près** pour savoir
+  quels flags le lot devait lever, et cette section est le **seul canal** par lequel
+  une décision prise au gate d'ouverture atteint le contrôle de clôture. Reformulée,
+  l'annotation n'est plus trouvée : le flag devient un flag non tranché plutôt qu'un
+  flag écarté, et il échappe au seul contrôle qui pouvait le rattraper.
+
+  La section est un **instantané pris pour ce gate**, non un registre à tenir à
+  jour : l'énoncé faisant autorité sur un flag — son nom, son défaut, sa condition
+  de levée — reste la phrase de gating de la spec du module.
+
 **Le document de batch ne porte aucun état mutable**, et rien dans le déroulement
-normal ne le modifie. Deux conséquences :
+normal ne le modifie. Inscrire dans `Live flags` la décision rendue en revue n'y
+déroge pas : c'est une réponse à la revue sur une pull request encore ouverte,
+comme toute autre correction apportée avant la fusion, et plus rien ne touche la
+section ensuite. Deux conséquences :
 
 - **La liste des stories n'y figure pas** : elle est le contenu du répertoire du
   batch, complété par les pull requests ouvertes. Une liste maintenue à la main
@@ -320,8 +354,24 @@ temps que le header, et laissées vides si rien n'est venu : une section vide di
 « examiné, rien trouvé », une section absente dit « jamais examiné », et un
 reviewer ne la distingue pas d'un oubli.
 
-`Global Constraints` porte deux choses : les contraintes que le batch impose,
-recopiées mot pour mot, et le gel du fichier de spec.
+`Global Constraints` porte quatre choses :
+
+1. les contraintes que le batch impose, sa section `Constraints` recopiée mot pour
+   mot ;
+2. le gel du fichier de spec ;
+3. la règle d'autorité — la spec gagne sans délibération, et corriger une spec est
+   un acte humain, jamais un acte d'agent ;
+4. **dans un lot correctif seulement**, la cinquième condition d'arrêt de
+   l'Override 2, recopiée intégralement.
+
+**La liste est ce qu'elle est pour une raison, et cette raison est load-bearing :**
+`Global Constraints` est le **seul canal** que lisent les sous-agents implémenteurs
+de `superpowers:subagent-driven-development`. Une règle énoncée ailleurs — dans un
+skill, dans le document de lot, dans une consigne de session — n'atteint jamais
+l'agent qui doit l'appliquer. Le gel arrête bien une tâche qui découvre que la spec
+doit changer, mais il l'arrête sans rien dire de plus ; c'est la cinquième condition
+qui nomme la conséquence, à savoir que le lot a perdu la qualification sous laquelle
+il a été ouvert.
 
 **Ce montage n'est correct qu'à trois conditions, toutes load-bearing :**
 
@@ -591,6 +641,44 @@ request de clôture qui :
    acceptable que si sa portée étendue et sa condition de levée sont déclarées.
    Sinon la story de levée n'a pas été écrite et le lot **ne peut pas être clos**.
 6. **Passe `status: closed`.**
+
+**Le contrôle du devoir 5 s'exécute avant les devoirs 1 à 4.** La numérotation
+ci-dessus est celle du modèle et ne change pas ; seul le moment de ce contrôle est
+fixé. Le motif est ce que coûte un refus : le devoir 5 n'écrit rien et il lui est
+permis de refuser, tandis que les devoirs 1 à 4 écrivent tous — lignes de changelog,
+dérives consolidées, constats, réservations libérées — et qu'aucun n'est rejouable
+sans dupliquer ses effets. Contrôlé d'abord, un refus est gratuit : la branche de
+clôture est encore vide. Contrôlé en dernier, il échouerait quatre devoirs
+d'écriture sur une branche que personne ne peut fusionner, et une seconde tentative
+ajouterait une deuxième ligne de changelog, réinscrirait chaque dérive et chercherait
+des réservations déjà libérées pour un lot jamais clos.
+
+**Le devoir 5 porte sur deux familles de flags**, et le document de batch les nomme
+toutes les deux : ceux que le lot a **déclarés**, dans son champ `Feature flag`, et
+ceux qu'il a **hérités** par une décision rendue au gate d'ouverture, dans sa section
+`Live flags`. Un flag hérité se reconnaît à l'annotation
+`carried by this batch — lifting story owed`. La section `Live flags` se lit même
+quand le champ `Feature flag` dit `none` : un lot exempté ne déclare aucun flag
+propre et peut tout de même avoir été désigné comme le lot qui lève celui d'un autre.
+
+**Pour un flag hérité, la décision remplace la déclaration comme test.** Ce flag a
+été déclaré par un lot antérieur, donc il *a* une portée et une condition de levée
+consignées ; le lire contre la règle générale l'acquitterait à tous les coups, et le
+lot désigné pour le lever se clorait sur une story de levée que personne n'a écrite.
+Ce que la décision humaine a changé, c'est qu'elle a constaté la condition de levée
+satisfaite par **ce** lot, ce qui rend dépensée la portée étendue d'origine.
+L'entrée n'est donc réglée que si le flag a disparu **du code et de la phrase de
+gating de la spec** ; sinon le lot ne peut pas être clos, et sa portée ne peut être
+étendue à nouveau que par un amendement décidé sur ce lot-ci.
+
+**Le devoir 4 n'a rien à comparer pour un lot correctif**, et ce n'est pas un trou
+dans le devoir : le spec delta d'un lot correctif est vide par définition, puisqu'il
+rétablit un comportement qu'une spec promet déjà, donc il n'a annoncé aucune
+intention dont une spec pourrait être en défaut. Ce qu'il a annoncé, ce sont les
+entrées du gaps register qu'il a réservées, et une entrée jamais résorbée est une
+réservation non consommée : le devoir 3 est alors la totalité du devoir 4. Ne pas
+fabriquer de comparaison, et **ne pas reclasser en gaps neufs** les entrées
+libérées — elles sont toujours au registre, là où elles ont toujours été.
 
 **Trois sorties, pas une impasse.** Un lot dont on renonce au périmètre alors que
 des stories gardées sont déjà sur `main` ne doit pas rester ouvert à jamais.
