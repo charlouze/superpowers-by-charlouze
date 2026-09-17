@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 02 — Spécifier l'existant

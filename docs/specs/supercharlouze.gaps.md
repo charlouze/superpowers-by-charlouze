@@ -52,6 +52,31 @@ inobservables ici.
   section `Coverage` ci-dessus déclare que `tests/` n'a été audité que par le
   **nom** de ses assertions.
 
+- **Verification** — *complète l'entrée ci-dessus, qu'aucun lot ne tient encore.*
+  Elle annonce **quatre** renvois numérotés survivant dans `tests/` et en nomme
+  quatre. Il y en a **neuf** : `tests/test-command.sh`, `tests/test-cross-references.sh`
+  (deux), `tests/test-declared-overrides.sh`, et `tests/test-skill-content.sh`
+  (cinq), plusieurs citant chacun plusieurs numéros. Le lot correctif qui prendra
+  l'entrée précédente trouverait donc son énumération incomplète et pourrait
+  s'arrêter au périmètre annoncé — ce qui est exactement ce que le lot 01 a fait,
+  et qui est la raison pour laquelle cette violation existe. Les deux entrées se
+  prennent ensemble ; la fusion des deux libellés est une décision humaine.
+
+- **The init command** — la spec énonce sans réserve que « le mode du fichier est
+  préservé », et `scripts/init.sh` ne l'offre qu'au mieux : `chmod --reference` est
+  une extension GNU que le `chmod` BSD ne connaît pas, l'échec est avalé par
+  `2>/dev/null || true`, et `CLAUDE.md` repart alors sous le mode du fichier
+  temporaire, `0600`, sans un mot. **Résoluble en ne touchant que le code** — un
+  repli portable derrière l'appel GNU — d'où le classement en violation plutôt
+  qu'en gap. La garde comportementale livrée par le lot 02 attrape ce cas là où
+  elle tourne, mais ne le prévient pas.
+
+- **The init command** — la spec énonce que les refus laissent le fichier
+  **intact**, et `scripts/init.sh` exécute `touch "$CLAUDE_MD"` avant les comptages
+  de marqueurs : sur un chemin de refus le contenu est bien intact, mais la `mtime`
+  a changé. Écart mineur et sans conséquence connue, **résoluble en déplaçant le
+  `touch` après les contrôles**, donc en ne touchant que le code.
+
 ## Gaps
 
 - ~~**The batch document** — `writing-a-batch` impose une section `## Constraints`
@@ -170,3 +195,111 @@ inobservables ici.
   renvoi prétend. Un déplacement de contenu d'une section à l'autre laisse le
   renvoi vert et faux. Aucun document validé ne dit quel niveau de vérification
   un renvoi doit à sa cible, ni si un tel contrôle est seulement souhaitable.
+
+**Les entrées qui suivent ont été consolidées par la clôture du lot 02**, depuis
+les sections `Observed drift` de ses quatre stories. Elles partagent une forme :
+**la spec y a tort et le code y a raison.** Elles sont classées en *Gaps* et non en
+*Violations* par le précédent que porte déjà l'entrée *Concurrency detection*
+ci-dessus — un lot correctif qui les prendrait buterait aussitôt sur la cinquième
+condition d'arrêt, puisque les résorber veut dire corriger une spec, ce qu'un agent
+ne peut pas faire. Les deux constats qu'un changement de code seul peut résoudre
+sont sous *Violations*.
+
+- **The batch document / Closing a batch** — la spec affirme sans réserve que « le
+  document de batch ne porte aucun état mutable, et rien dans le déroulement normal
+  ne le modifie », et sa propre section `Closing a batch` la contredit : le devoir 4
+  amende le texte du lot pour ne plus promettre ce qu'il n'a pas livré, et le
+  devoir 6 bascule son front matter en `status: closed`. `closing-a-batch` énonce
+  d'ailleurs la règle **avec** l'exception que la spec nie — « nothing in the normal
+  course of the batch modifies it **until closing** ». Le code a raison. Résorber
+  veut dire borner la phrase sur la clôture, et c'est une décision humaine.
+
+- **Branch naming** — « Une branche laissée sous le nom qu'un outil natif lui a
+  donné est invisible des deux » se lit comme général et ne vaut que de `batch/*` et
+  `story/*`. Ni `adopt/<module>`, ni `chore/supercharlouze-init`, ni `fix/<slug>` ne
+  sont lus par l'un des deux mécanismes : pour eux la phrase est fausse. **Le coût
+  est démontré, pas hypothétique** — cette phrase a produit, dans le plan de la
+  story 02-us-2, un paragraphe affirmant une causalité inexistante, rattrapé en
+  *Critical* à la revue de tâche et corrigé au commit `b4564ba`. Reformulation
+  suggérée : « invisible des deux là où ces balayages portent — `batch/*` et
+  `story/*` ».
+
+- **Branch naming** — le critère donné à l'exception d'amendement en licencierait
+  quatre. Le paragraphe pose que l'amendement est la seule exception « par
+  construction », au motif qu'il ne revendique ni numéro ni sections et qu'aucun
+  balayage ne le cherche. Ce critère est **exactement aussi vrai** de
+  `adopt/<module>`, `chore/supercharlouze-init` et `fix/<slug>`. La spec déclare
+  donc une exception unique en donnant une raison qui en autorise quatre, et elle
+  entre en tension directe avec `adopting-a-module`, à qui le lot 02 a dû faire
+  écrire que n'être pas balayé n'exempte **pas**. La vraie raison est ailleurs : la
+  table n'assigne à l'amendement aucun nom conventionnel à rétablir.
+
+- **Branch naming / Number allocation** — la dépendance au nom de branche est plus
+  large que la spec ne le dit. Elle affirme que les deux mécanismes lisent le nom
+  « tous deux exactement sur la fenêtre où la pull request n'existe pas encore ».
+  C'est faux pour `Number allocation`, dont la **deuxième** condition — un numéro
+  revendiqué par une pull request ouverte — se résout elle aussi par le nom, via
+  `headRefName` : `writing-a-batch` l'écrit noir sur blanc, « the number is in the
+  head branch name, and nothing else in a pull request states it ». Un lot ouvert
+  depuis une branche mal nommée, pull request **ouverte**, ne revendique son numéro
+  pour personne. La lecture stricte en sort renforcée ; c'est le raisonnement écrit
+  qui est plus étroit que le système décrit.
+
+- **The gaps register** — le registre n'a pas de vocabulaire pour « retirée parce
+  que fausse ». La story 02-us-2 a barré l'entrée *Module adoption* non parce qu'un
+  code la résorbait, mais parce qu'elle était factuellement fausse. Or la spec
+  définit le barré comme le geste de « la pull request de la story qui la résorbe,
+  **atomiquement avec le code qui la résorbe** ». Relue plus tard, cette entrée dira
+  donc « résorbée par cette pull request », ce qui est faux : aucun code ne l'a
+  résorbée, elle a été retirée. Il manque une annotation distinguant les deux
+  gestes — et le présent commentaire de consolidation est, lui aussi, une forme que
+  la spec ne décrit pas.
+
+- **Document layout** — la clause écrite par la story 02-us-3 est fausse dans ce
+  dépôt même. Elle affirme que `docs/specs/` et `docs/batches/` « ne sont donc pas
+  sur `main` » ; `git ls-tree -r main` les y trouve tous les deux, et le fichier qui
+  porte la phrase est l'un d'eux. La prémisse est vraie — ils restent vides jusqu'à
+  leur premier usage — mais la conclusion est au présent absolu. Reformulation
+  tenable : « **tant qu'ils sont vides**, ils ne sont pas sur `main` ».
+
+- **Document layout** — second membre de la même phrase, également falsifiable :
+  « rien dans ce système ne lit ces répertoires avant qu'un document y soit écrit ».
+  `writing-a-batch` prescrit `ls docs/batches/` pour attribuer `NN`, exécuté
+  exactement quand le répertoire peut être absent, et `writing-a-user-story` fait de
+  même sur le répertoire du lot. L'impact est faible — un `ls` qui échoue laisse
+  déduire `NN=1` — mais la phrase est présentée comme une garantie. Formulation
+  tenable : « aucune **décision** de ce système ne dépend de leur existence ».
+
+- **The init command** — « ce qui subsiste n'appartient pas au plugin : il n'est ni
+  déplacé, ni supprimé » n'est vrai qu'**en dehors de `specs/` et `plans/`**. Le
+  balayage `find "$from" -depth -type d -exec rmdir {} +` supprime un répertoire
+  étranger vide placé sous `docs/superpowers/specs/`, et un fichier étranger déposé
+  là est déplacé vers `docs/archive/specs/`. Borner la phrase suffirait ; changer le
+  code serait l'autre sortie, et c'est ce choix qui rend la décision humaine.
+
+- **Verification** — le bullet sur le contenu des skills promet plus que la suite ne
+  tient. « Chacun énonce les règles que cette spec lui attribue » est un
+  quantificateur universel sur un ensemble non énuméré, là où tous ses voisins
+  énumèrent des propriétés concrètes, et `tests/test-skill-content.sh` affirme une
+  soixantaine de chaînes littérales choisies à la main. La liste étant désormais un
+  **plancher**, c'est une obligation permanente que rien ne soutient. Deux règles le
+  démontrent : la **troisième condition** de `Number allocation` — un numéro
+  revendiqué par une branche poussée sans pull request, avec ses patrons
+  différenciés — et la **place de la story de levée**, dernière du lot quand le flag
+  est à portée de lot ; les deux sont énoncées par les skills et touchées par aucune
+  assertion. Reformulation d'une ligne : « chacun énonce, **dans sa formulation
+  littérale, un ensemble nommé** de règles que cette spec lui attribue ».
+
+- **Verification** — la clause sur les sections nommées est universelle, sa garde
+  est énumérée. « Chaque section nommée par un renvoi existe dans cette spec » est
+  **vraie aujourd'hui** — le balayage des artefacts livrés ne trouve que deux renvois
+  de ce type — mais la garde itère une paire codée en dur. Un renvoi nommé ajouté
+  demain ne serait vérifié par rien.
+
+- **Verification** — la clause sur les chemins est plus étroite que ses mots.
+  « Chaque chemin relatif cité d'un skill à l'autre existe » : la garde ne reconnaît
+  que les chemins entre accents graves sous `skills`, `scripts`, `commands`, `tests`
+  et `.claude-plugin`, et ne balaie que `skills/` et `commands/`. Un chemin `docs/…`,
+  ou cité depuis `README.md` ou `scripts/`, n'est pas vérifié. Cette formulation est
+  **antérieure au lot 02**, recopiée mot pour mot de l'ancienne liste de cinq — elle
+  n'est donc pas une promesse neuve, seulement une promesse restée trop large.
