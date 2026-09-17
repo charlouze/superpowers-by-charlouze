@@ -44,6 +44,17 @@ shared() {
 # a spec slice removed, which is otherwise guarded by nothing — the positive
 # assertions would stay green on a file that carried both the new phrasing and
 # the old, contradicting one.
+#
+# Matches an extended regular expression against the flattened body, not a
+# literal substring: the claim this test hunts is a denial ("nothing depends
+# on the branch name"), and the doctrine this branch establishes is written in
+# the same words, affirmatively ("Number allocation depends on the branch
+# name"). A literal match cannot tell the two apart and would turn red on the
+# true sentence, inviting the writer to delete it.
+#
+# Fails explicitly, naming the file, when a listed skill does not exist: an
+# empty body from a missing file never matches, and a silent pass there would
+# mean the assertion inspected nothing.
 absent() {
     local label="$1" needle="$2"
     shift 2
@@ -51,11 +62,14 @@ absent() {
     local s f b
     for s in "$@"; do
         f="$REPO_ROOT/skills/$s/SKILL.md"
-        b=""
-        [ -f "$f" ] && b="$(body_flat "$f")"
-        case "$b" in
-            *"$needle"*) found="$found $s" ;;
-        esac
+        if [ ! -f "$f" ]; then
+            fail "$label (no such skill: $s)"
+            return
+        fi
+        b="$(body_flat "$f")"
+        if echo "$b" | grep -Eq "$needle"; then
+            found="$found $s"
+        fi
     done
     if [ -z "$found" ]; then
         pass "$label"
@@ -96,15 +110,14 @@ shared "and each says a named branch is not enough" \
     "named branch is not enough" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
-# `Branch naming` used to claim, in bold, that no mechanism of this system
-# depends on the branch name. Two sections of the same spec contradicted it, and
-# the claim is gone. No skill may carry it either — in any of its wordings.
-absent "no skill claims the branch name is irrelevant" \
-    "depends on the name" \
-    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches
-
-absent "no skill claims it in the long form" \
-    "depends on the branch name" \
+# `Branch naming` used to deny, in bold, that any mechanism of this system
+# depends on a branch's name. Two sections of the same spec contradicted it, and
+# the denial is gone. No skill may carry it either — but the guard has to catch
+# the *denial*, not the words: "Number allocation depends on the branch name" is
+# the true statement this branch exists to establish, and a literal match would
+# turn red on it and invite the writer to delete it.
+absent "no skill denies that the branch name matters" \
+    "(nothing|Nothing|no mechanism|No mechanism)[^.]{0,40}depends on the (branch )?name" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches
 
 exit $((FAILURES > 0))

@@ -123,10 +123,10 @@ branch or on a detached HEAD, restore the conventional name before going on:
 convention rather than mechanism, which is worth saying plainly: nothing scans
 `adopt/*`. Number allocation reads `batch/*` and `story/*`, the concurrency scan
 reads `story/*`, and an adoption branch claims no number and holds no sections,
-so it is equally unseen under either name. The convention is uniform anyway,
-because one honoured only where a scan would catch you is one nobody relies on
-where it does bite — on `batch/*` and `story/*`, where a branch under the wrong
-name silently hands away its number and its sections for the length of an
+so it is equally unseen under either name. The convention is uniform anyway: a
+rule honoured only where a scan would catch you is not a rule. And it is on
+`batch/*` and `story/*` that it bites — there, a branch under the wrong name
+silently hands away its number and its sections for the length of an
 implementation.
 
 The two steps before this one are dialogue: they produce a boundary and an
