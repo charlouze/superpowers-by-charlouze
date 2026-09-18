@@ -45,7 +45,7 @@ The `change` cell is part of the spec file, so the content rule of `supercharlou
 
 ### 2. Consolidate observed drift
 
-Collect the **Observed drift** section of every story document in the batch and write its findings into the gaps register of the module concerned, `docs/specs/<module>.gaps.md`: code that contradicts the spec goes under **Violations**, behaviour no spec describes goes under **Gaps**.
+Collect the **Observed drift** section of every story document in the batch and write its findings into the gaps register of the module concerned, `docs/specs/<module>.gaps.md`: whatever a story reported as code contradicting the spec goes under **Violations**, whatever it reported as behaviour no spec describes goes under **Gaps**. A story finds its gaps in the code it went through; that is this duty's only source, and it is not the only source the register has.
 
 Stories deliberately do not write into the register. Adding an entry appends at the end of a section and competes with every other addition to the same module — the same contention duty 1 avoids, solved the same way: a single writer per batch. Their observations wait in their own document until now, which is why they are recorded there and why you are the one who moves them.
 

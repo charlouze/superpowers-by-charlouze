@@ -208,14 +208,18 @@ the prose under them follows the project's language.
 
 ### 5. Audit the code against the spec
 
-Read the code against each section you just wrote, and produce the gaps register.
+Read the code against each section you just wrote, and add to the gaps register
+what the audit reveals.
+
 Two sections, kept apart because they are not treated the same way:
 
 - **Violations** — the code contradicts the spec. Feeds a *corrective batch*.
-- **Gaps** — the code does things no spec describes. Feeds an ordinary batch that
-  finally specifies them.
+- **Gaps** — a real behaviour or requirement no spec describes. Feeds an ordinary
+  batch that finally specifies them.
 
-Each entry designates a section of the spec.
+Each entry designates a section of the spec. **An entry that came from a document
+names that document**, so your human partner can promote it knowing what they are
+promoting instead of re-reading the whole thing.
 
 **Each entry is a single addressable item — one list item, never a paragraph of
 running prose.** You are the only skill that ever *creates* this file, and three
@@ -255,6 +259,9 @@ a scope from. Write entries so those gestures are mechanical.
 
 - **<spec section, or the section that should exist>** — <behaviour no spec
   describes.>
+- **<spec section, or the section that should exist>** — <a mechanism
+  `<the validated document, by the path or title the Sources section uses>`
+  prescribes and no spec carries.>
 ```
 
 **The register also declares its own coverage:** which parts of the module were
@@ -335,7 +342,6 @@ plugin itself is entirely English, because it carries no business prose.
 |---------|---------|
 | "The code is the real truth, I'll spec what it does" | That canonizes drift and destroys the premise of corrective batches. |
 | "The document prescribes this mechanism, so it is normative" | A validated document is authority over the intentions it states, not the mechanisms it describes. The mechanism goes to the register, naming its source. |
-| "I ejected those mechanisms while writing, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit. Step 4 files it in the register itself. |
 | "The intention behind this mechanism is obvious, I'll write it down" | Deducing an intention from a mechanism is reconstruction from the code by another road. It comes from a document or from your partner, or it goes to the register. |
 | "I can infer the module boundaries from the directory layout" | Boundaries belong to your human partner. A wrong one contaminates everything downstream. |
 | "This old design doc is close enough to validated" | Ask. The spec's quality is capped by the inventory. |
@@ -350,3 +356,4 @@ plugin itself is entirely English, because it carries no business prose.
 | "Prose reads better than a list in the gaps register" | Then nothing can reserve, strike or release an entry, and the three downstream gestures break. |
 | "The adoption PR is open, the batch can start" | Merged is adopted. The review is the gate, not the push. |
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |
+| "I ejected those mechanisms at step 4, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit, and step 4's set-aside list is its only route into the register. |

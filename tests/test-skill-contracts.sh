@@ -12,7 +12,6 @@ echo "test-skill-contracts"
 
 # Body only: everything after the closing --- of the frontmatter, flattened so a
 # phrase matches regardless of wrapping.
-#
 # `tr -s ' '` squeezes runs of spaces to one, so a needle stays matchable when the
 # prose it targets is re-wrapped: without it, a wrapped line whose continuation is
 # indented flattens to several spaces where the needle has one, and the guard turns
@@ -125,6 +124,19 @@ shared "and each says a named branch is not enough" \
 shared "whoever writes into a spec spells the other-implementation test identically" \
     "read this sentence as true of their code" \
     using-batches writing-a-user-story closing-a-batch adopting-a-module
+
+# A gap's *category* does not depend on where you stand; only its sources do. So
+# the skills that gloss it to route say what a gap is and never where it comes
+# from: naming a source there would teach `using-batches` a word — a validated
+# document — that means nothing outside an adoption, and would have to be kept in
+# step with every context that finds gaps some other way.
+#
+# Scoped to the gloss, not the file: `using-batches` names a validated document
+# legitimately elsewhere, in the content rule, as one of the two places an
+# intention may come from.
+absent "no routing gloss names a source of gaps" \
+    "Gaps\*?\*?[^.|]{0,160}validated document" \
+    using-batches writing-a-batch
 
 # `Branch naming` used to deny, in bold, that any mechanism of this system
 # depends on a branch's name. Two sections of the same spec contradicted it, and
