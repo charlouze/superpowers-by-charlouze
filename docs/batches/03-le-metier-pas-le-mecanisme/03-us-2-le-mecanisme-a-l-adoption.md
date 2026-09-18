@@ -474,4 +474,20 @@ git commit -m "feat: ouvre le gaps register au mécanisme prescrit par un docume
 
 ## Rulings log
 
+**Ruling: trois constats mineurs de la revue finale sont corrigés sans être soumis.** `body_flat` gagne `tr -s ' '` dans les deux fichiers de test, l'aiguille faible `names that document` est renforcée, et le renvoi de la spec vers sa section `The spec document` rejoint la garde de renvois. Les trois protègent des gardes que cette story ajoute, et une garde qui rougit sur de la prose correcte apprend au rédacteur suivant à réécrire de la prose correcte pour plaire à un test. — Coût si c'est faux : trois changements cantonnés à `tests/`, visibles au diff et annulables en un commit.
+
+**Ruling: la ligne de `Red Flags` qui glose la règle d'autorité reste telle quelle.** Reformuler en forme ramassée une règle déjà énoncée est le **genre** de cette table, dans les cinq skills du plugin ; la condamner condamnerait la convention entière. — Coût si c'est faux : le rang 1 est révisé un jour et cette ligne continue silencieusement de dire l'ancienne chose.
+
+**Le gate de livraison a tranché en deux temps** — une discussion, puis une revue en ligne de neuf commentaires dont les fils portent les réponses. Ce que la branche livre :
+
+- **Un gap est « un comportement ou une exigence réels qu'aucune spec ne décrit ».** La catégorie ne dépend pas du contexte, ses sources oui : une adoption les trouve dans l'audit du code et dans ce que l'écriture éjecte des documents validés, une story dans le code qu'elle traverse. Les sources avaient d'abord été écrites **dans** la définition, puis cette définition gardée identique dans quatre fichiers — d'où « document validé » qui fuyait jusqu'à `using-batches`, à qui ce mot ne dit rien. Les gloses de routage sont muettes sur les sources, sous une garde qui le vérifie.
+- **Le registre est écrit dès le step 4.** La première formulation — mettre de côté au step 4, verser au step 5 — a été livrée puis rejetée en revue : c'est un mécanisme, et une spec n'en porte pas. La spec ne dit plus **quand** le registre est écrit ; la skill, elle, a le droit de le dire.
+- **`closing-a-batch` ne définit plus un gap.** Sa définition étroite, puis le paragraphe qui expliquait pourquoi elle différait, ont disparu ensemble : avec une catégorie sans sources, elle ne diffère plus.
+- **Cinq paragraphes de la tranche portaient une justification et non la règle.** Ils disent la règle. Dans une spec, tout est normatif au même niveau — un paragraphe non opposable n'y a donc pas sa place, même raccourci.
+- **L'exclusivité que portait « Ils font la vérité » revient dans la spec**, bornée à sa nouvelle portée, et **la puce du step 4 renvoie à `Source Authority`** au lieu de la redire.
+
+**Deux constats de la revue ont été discutés plutôt qu'appliqués tels quels**, et la correction retenue est plus étroite que celle demandée : le paragraphe *On ne lit pas « à travers » un mécanisme* ne décrivait pas une implémentation — ce qui a le droit d'entrer dans une spec est normatif à la frontière de ce module — donc seule sa justification est partie, pas la règle ; et le dialogue du cas dégradé reste pour la même raison, seule sa justification nommant des magasins de données et des couches d'adapters est partie.
+
 ## Observed drift
+
+Aucune divergence entre la spec et le code constatée hors du périmètre de cette story. Ce que les revues ont remonté portait sur la norme elle-même et sur la façon de l'écrire, jamais sur du code qui contredirait une spec. Tout est tranché et livré.
