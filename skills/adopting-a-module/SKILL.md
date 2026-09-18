@@ -293,9 +293,19 @@ excluded — it would canonize drift here exactly as it would anywhere else.
 
 Switch to dialogue:
 
-1. Enumerate the behaviours you find in the code, grouped as candidate sections.
-2. Ask your human partner, section by section: *is this intended?*
+1. Enumerate the behaviours **observable at the module's boundary**, grouped as
+   candidate sections.
+2. Ask your human partner, section by section: *is this intended?* — a question
+   about the intention, never about the mechanism.
 3. What they validate becomes the spec. Everything else goes to **Gaps**.
+
+The boundary is what bounds the enumeration, and it is load-bearing: an agent
+reading code sees infrastructure first, so an unbounded enumeration puts data
+stores, triggers and adapter layers to your partner one at a time. **A mechanism
+is not submitted to human validation** — validating it would not make it a rule,
+only an approved drift, and approved drift is worse than drift because nothing
+downstream can tell it apart from a decision. Enumerate what a user or a
+neighbouring module could observe, and nothing else.
 
 Each answer is a human validation, and human validation is the only thing that can
 create normative text where no document exists. So ask section by section: a wall
@@ -334,6 +344,7 @@ plugin itself is entirely English, because it carries no business prose.
 | "These two documents disagree, I'll keep the clearer one" | Most recent wins by default, and the choice is a ruling, written down. |
 | "This behaviour is obviously intended, so into the spec it goes" | Obvious to you is not validated by them. Undocumented behaviour is a gap until a human says otherwise. |
 | "No documents exist, so I'll draft from the code and have them confirm" | A draft to confirm is a blanket yes waiting to happen. Section by section, one question at a time. |
+| "They said yes to it, so this mechanism is now a rule" | A mechanism is not submitted to validation. Enumerate what is observable at the boundary; a validated mechanism is approved drift. |
 | "I'll write the two documents first and create the branch to carry them" | using-git-worktrees opens a separate, empty directory. The branch comes first, at step 3, or both files stay stranded on `main`. |
 | "I'm already in a worktree, that will do" | Its Step 0 sees `GIT_DIR != GIT_COMMON`, reuses it, and the adoption lands on the previous branch. Main checkout first. |
 | "Prose reads better than a list in the gaps register" | Then nothing can reserve, strike or release an entry, and the three downstream gestures break. |

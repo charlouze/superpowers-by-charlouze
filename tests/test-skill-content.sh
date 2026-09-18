@@ -57,6 +57,9 @@ require adopting-a-module "produces the gaps register"           "gaps register"
 require adopting-a-module "the register declares its coverage"   "declares its own coverage"
 require adopting-a-module "the PR review is the gate"             "review of the adoption pull request"
 require adopting-a-module "handles the no-document fallback"     "no validated document"
+require adopting-a-module "the fallback enumerates at the boundary"   "observable at the module's boundary"
+require adopting-a-module "the question is about the intention"       "about the intention, never about the mechanism"
+require adopting-a-module "a mechanism is not put to validation"      "A mechanism is not submitted to human validation"
 require adopting-a-module "branch naming convention"             "adopt/"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
