@@ -29,8 +29,12 @@ to be adopted.
 
 Three ranks, and they never trade places:
 
-1. **The validated documents.** Here, validated documents are normative,
-   and only they create normative text.
+1. **The validated documents.** Here, validated documents are normative on the
+   **intentions they state**, never on the **mechanisms they describe** — and a
+   design document is full of the latter. A mechanism read in a validated
+   document does not enter the spec: it becomes a gap naming its document, and
+   only your human partner can promote it from there. Within that bound, only
+   they create normative text.
 2. **The code.** It never corrects a document. It fills the *silences* — behaviour
    no document ever described. And what it reveals in a silence does not enter the
    spec on its own authority: it is recorded as a gap. Only your human partner can
@@ -47,6 +51,18 @@ do answers no question worth asking.
 
 The pressure to break this rule is highest exactly where the documents are thinnest
 — that is the moment to slow down, not to improvise.
+
+**And you do not read *through* a mechanism to deduce the intention it served.**
+That is the content rule of `supercharlouze:using-batches` — a spec carries
+business rules and intentions, the mechanism stays in the code — and adoption is
+where breaking it is most tempting: a validated document describes a mechanism,
+the intention behind it looks one paraphrase away, and it is not. Ask the test of
+every sentence you are about to write: *would another developer, having
+implemented the same intention differently, read this sentence as true of their
+code?* What a document states as an intention is normative and goes in; what it
+states as a mechanism becomes a gap. Deducing an intention from a mechanism is
+reconstruction from the code by another road, whether you read that mechanism in
+the code or in a validated document.
 
 ## Steps
 
@@ -137,6 +153,12 @@ inventory, not files. Everything after it writes.
 Merge, deduplicate, reconcile. The spec is normative — what the code must do — not
 descriptive.
 
+- **Every sentence you write passes the other-implementation test**, and what it
+  ejects **goes straight into the gaps register**, naming the document it came
+  from. Create `docs/specs/<module>.gaps.md` the first time you need it. The
+  authority rule of `Source Authority` above holds while you write: a mechanism
+  the document prescribes is no more admissible here than one you read in the
+  code.
 - **Nothing enters the spec that no validated document supports.** Behaviour you
   found in the code but no document describes belongs to the gaps register, not
   here.
@@ -302,6 +324,9 @@ plugin itself is entirely English, because it carries no business prose.
 | Thought | Reality |
 |---------|---------|
 | "The code is the real truth, I'll spec what it does" | That canonizes drift and destroys the premise of corrective batches. |
+| "The document prescribes this mechanism, so it is normative" | A validated document is authority over the intentions it states, not the mechanisms it describes. The mechanism goes to the register, naming its source. |
+| "I ejected those mechanisms while writing, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit. Step 4 files it in the register itself. |
+| "The intention behind this mechanism is obvious, I'll write it down" | Deducing an intention from a mechanism is reconstruction from the code by another road. It comes from a document or from your partner, or it goes to the register. |
 | "I can infer the module boundaries from the directory layout" | Boundaries belong to your human partner. A wrong one contaminates everything downstream. |
 | "This old design doc is close enough to validated" | Ask. The spec's quality is capped by the inventory. |
 | "The audit found nothing, so the register is empty" | An empty register must say whether nothing was found or nothing was examined. |
