@@ -36,6 +36,8 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Corrective batch** — a batch whose spec delta is empty. It brings existing code back into conformance with a spec that is already true. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
 
+**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text it must receive, transcribed word for word by a story.
+
 **Feature flag** — what makes a story deliverable on its own without exposing a half-built batch. `main` is deployed continuously, so every merged story ships; a batch whose stories would expose incomplete behaviour declares a flag.
 
 **The flag is a specified object, not an implementation detail.** The spec section concerned states its name and its default, as a gating sentence in the form the spec fixes — `` 🔒 `billing.recurring`, off by default ``. Without that declaration, a story merged behind a flag would make the spec false as far as users are concerned, and would reopen through the window exactly the gap the drift rule exists to close.

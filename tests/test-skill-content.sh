@@ -166,4 +166,8 @@ require using-batches "corollary: no legislating on quality"    "does not legisl
 require using-batches "carries the section it points at"        "## What a Spec Says"
 require using-batches "the glossary points at that section"     "see \`What a Spec Says\` below"
 
+# --- using-batches: the delta block (spec section "The model") ---
+require using-batches "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
+require using-batches "a block is transcribed word for word" "the exact text it must receive, transcribed word for word by a story"
+
 exit $((FAILURES > 0))
