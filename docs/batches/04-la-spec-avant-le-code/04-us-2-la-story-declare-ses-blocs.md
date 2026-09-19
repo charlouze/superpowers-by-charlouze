@@ -439,4 +439,44 @@ bash ~/.config/github-app/as-agent.sh git commit -F /tmp/msg.txt
 
 ## Rulings log
 
+- **Ruling:** la tâche 1 peut renvoyer par avance au champ `Blocks:` que la tâche 2
+  introduit — le document fini se lit mieux avec l'`Overview` pointant vers le champ
+  qui enregistre le choix, et l'unité de livraison est la pull request, pas le commit
+  isolé. Le dispatch et la revue de la tâche 1 ont donc porté le fait que la tâche 2
+  ajoute ce champ. *Ce que ça coûte si c'est faux :* un relecteur signale une
+  référence pendante, et une ronde de correction la rétablit dans l'autre ordre.
+- **Ruling:** la phrase « mot pour mot » de la tâche 3 a été changée avant exécution,
+  de « the blocks this story took » à « the blocks `Blocks:` declares », par fidélité
+  à D8, qui dit « le texte des blocs que déclare `Blocks:` ». *Ce que ça coûte si
+  c'est faux :* rien au comportement — la garde qui protège cette phrase vise
+  « exactly as the opening review read it », que le changement ne touche pas.
+- **Ruling:** la revue finale a relevé trois formulations vieillies qui restent
+  vraies — « nothing to compare here » dans `closing-a-batch`, « no story
+  transcribed » dans `writing-a-batch`, « One spec change per story » dans les red
+  flags de `writing-a-user-story`. Toutes trois ont d'abord été parquées, la deuxième
+  sous **Observed drift**, pour ne pas élargir une pull request dont la valeur est de
+  se comparer à quatre blocs précis. *Ce que ça coûte si c'est faux :* une skill garde
+  un mot qui n'est plus celui de la spec, et une clôture ultérieure le résorbe.
+  **Revu en revue de livraison :** l'humain a tranché de corriger la deuxième tout de
+  suite, donc elle n'est plus une dérive et sa ligne sous **Observed drift** est
+  retirée. Les deux autres restent parquées.
+
+**Décision humaine, en revue de livraison — une modification de spec hors bloc.**
+`Batch > Closing a batch` disait encore « sa levée, si le spec delta l'annonce, est
+une intention comme une autre », vocabulaire d'avant D3, qu'aucun bloc du lot ne
+vise. L'humain a décidé de le corriger ici — « est un bloc comme un autre » — plutôt
+que d'amender le document de lot pour lui ajouter un bloc. Conséquence à connaître à
+la clôture : cette story écrit dans la spec une phrase que le `Spec delta` du lot ne
+porte pas, et le contrôle des blocs non livrés ne la verra pas. Elle est à reprendre
+dans la ligne de changelog du lot.
+- **Ruling:** la garde `absent` ajoutée pour empêcher le retour du diff des specs
+  reste étroite — elle vise les deux formulations qui existaient, « check the specs on
+  main » et « against what shipped », et non la classe entière de l'erreur. Elle est
+  gardée telle quelle : une expression plus large heurterait la phrase vraie du
+  devoir 5 lui-même, « Diffing the specs against the delta would report it missing »,
+  et une garde qui rougit sur du texte correct invite à supprimer ce texte. Son
+  commentaire dit explicitement ce qu'elle couvre. *Ce que ça coûte si c'est faux :*
+  la même erreur revient sous des mots neufs sans que la CI la voie, et se rattrape à
+  une revue.
+
 ## Observed drift
