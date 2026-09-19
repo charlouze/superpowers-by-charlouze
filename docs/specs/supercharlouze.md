@@ -4,7 +4,7 @@
 
 Ce module couvre une extension de superpowers qui définit un flux de
 développement : une spec vivante par module, des lots de stories qui font grandir
-ces specs, des gates tenus en pull request, les documents que ce flux produit —
+ces specs, des revues humaines tenues en pull request, les documents que ce flux produit —
 spec, gaps register, document de lot, document de story — les conventions qu'il
 laisse dans le dépôt — arborescence, branches, numéros, langue — et son
 installation sur un projet.
@@ -55,9 +55,6 @@ remet du code en conformité avec une spec déjà vraie.
 **Story** (`user story`) — le plan d'implémentation d'une part d'un lot, qui vise un
 seul module et se livre en une pull request.
 
-**Tranche** (`spec slice`) — la modification de spec qu'une story porte avec son
-code : sa part du spec delta, ou le retrait qu'elle opère.
-
 **Flag** (`feature flag`) — ce qui garde un comportement incomplet hors de portée
 des utilisateurs jusqu'à sa levée.
 
@@ -65,11 +62,12 @@ des utilisateurs jusqu'à sa levée.
 déclare qu'un comportement est gardé par un flag, avec son défaut et, s'il survit à
 son lot, la condition qui le lève. Sa forme est fixée dans `Feature flags`.
 
-**Gate** (`gate`) — la revue humaine d'une pull request, dont la fusion fait
-avancer un module, un lot ou une story.
+**Revue** (`gate`) — l'examen par l'humain d'une pull request, dont la fusion
+fait avancer un module, un lot ou une story. La vérification d'un travail par un agent
+est une relecture, pas une revue.
 
-**Ruling** (`ruling`) — un arbitrage pris par un agent sans l'humain, consigné pour
-lui.
+**Arbitrage** (`ruling`) — une décision prise par un agent sans l'humain, consignée
+pour lui.
 
 **Changement borné** (`bounded`) — un changement complet en une pull request, hors
 de tout lot.
@@ -94,9 +92,9 @@ il se sert. superpowers en est le propriétaire.
   tâches.
 - **Exécution par sous-agents** (`superpowers:subagent-driven-development`) —
   l'exécution d'un plan tâche par tâche, chaque tâche confiée à un agent neuf puis
-  revue. Les arbitrages pris en cours de route sont des rulings, de la forme
-  `Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>`, présentés à
-  l'humain en fin d'exécution.
+  relue. Les arbitrages pris en cours de route, de la forme
+  `Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>`, sont
+  présentés à l'humain en fin d'exécution.
 - **Conclusion d'une branche** (`superpowers:finishing-a-development-branch`) — le
   choix de ce que devient une branche terminée : fusion locale, pull request, ou
   branche gardée.
@@ -109,7 +107,7 @@ flux ajoute à un plan ne sont pas des écarts : superpowers les laisse au proje
 
 - **Aucun document de conception daté.** Une conception architecturale se conclut
   par l'ouverture d'un lot : le document de lot remplace le document de conception,
-  sa relecture avant ouverture en remplace l'auto-relecture, et le gate d'ouverture
+  sa relecture avant ouverture en remplace l'auto-relecture, et la revue d'ouverture
   en remplace la revue humaine. Le plan n'est écrit qu'avec chaque story. Quand un
   module touché n'a pas de spec, son adoption précède l'ouverture du lot.
 - **Un lot correctif a une condition d'arrêt de plus.** L'exécution par
@@ -137,17 +135,17 @@ hors de portée des utilisateurs.
 quand l'outil qui l'a créée en a choisi un autre ou a laissé un HEAD détaché : le
 nom est alors rétabli. Une branche nommée autrement ne suffit pas.
 
-**La spec est l'autorité contraignante de toute revue.** Le lot ne porte que ce
-qu'une spec ne peut pas porter : le périmètre de livraison, l'ordre des stories, les
-contraintes de migration et de compatibilité, et la raison pour laquelle ce travail
-a lieu maintenant.
+**La spec est l'autorité contraignante de toute revue et de toute relecture.** Le
+lot ne porte que ce qu'une spec ne peut pas porter : le périmètre de livraison,
+l'ordre des stories, les contraintes de migration et de compatibilité, et la raison
+pour laquelle ce travail a lieu maintenant.
 
-**La pull request d'une story porte sa tranche et le code qui la réalise**, livrés
-ensemble ou pas du tout. **La spec de `main` décrit toujours exactement ce que son
-code fait.** Toute dérive est du travail correctif, sans exception.
+**La pull request d'une story porte sa modification de spec et le code qui la
+réalise**, livrés ensemble ou pas du tout. **La spec de `main` décrit toujours
+exactement ce que son code fait.** Toute dérive est du travail correctif, sans exception.
 
 **Quand un lot et une spec se contredisent, la spec gagne — sans exception et sans
-délibération.** L'agent implémente ce que dit la spec, consigne un ruling, et
+délibération.** L'agent implémente ce que dit la spec, consigne un arbitrage, et
 poursuit. **Corriger une spec en cours de lot est un acte humain, jamais un acte
 d'agent.**
 
@@ -157,19 +155,19 @@ d'agent.**
 > ne modifie le fichier de spec. Une story qui découvre que la spec doit changer
 > s'arrête.
 
-Le gel est levé à l'ouverture de la pull request : les demandes du gate sont des
-décisions humaines, y compris sur la formulation de la tranche.
+Le gel est levé à l'ouverture de la pull request : les demandes de la revue sont des
+décisions humaines, y compris sur la formulation de sa modification de spec.
 
-**Tout conflit est consigné pour l'humain**, comme ruling. Les rulings d'une story
-sont recopiés dans son document, sur sa branche, avant la fusion.
+**Tout conflit est consigné pour l'humain**, comme arbitrage. Les arbitrages d'une
+story sont recopiés dans son document, sur sa branche, avant la fusion.
 
-**Les gates :**
+**Les revues :**
 
-| Gate | Pull request revue | Sa fusion |
+| Revue | Pull request examinée | Sa fusion |
 |---|---|---|
 | Adoption | la spec et le gaps register du module | le module est adopté |
 | Ouverture | le document de lot | le lot est ouvert |
-| Livraison | la tranche et le code d'une story | la story est livrée |
+| Livraison | la modification de spec et le code d'une story | la story est livrée |
 | Amendement | la décision de changer le périmètre ou le flag d'un lot | le lot est amendé |
 | Clôture | le changelog, la consolidation et `status: closed` | le lot est clos |
 
@@ -223,8 +221,8 @@ chemin, que ce mécanisme soit lu dans le code ou dans un document validé.
    cohérence. Chaque phrase écrite passe le test de l'autre implémentation, et ce
    qu'il éjecte devient un gap nommant le document dont il vient. Quand deux
    documents validés se contredisent, le plus récent l'emporte par défaut, et
-   l'arbitrage est consigné comme ruling — jamais résolu en silence. L'adoption
-   n'ayant pas de document de story, ces rulings vivent dans **le corps de la pull
+   cet arbitrage est consigné — jamais résolu en silence. L'adoption n'ayant pas de
+   document de story, ces arbitrages vivent dans **le corps de la pull
    request d'adoption**.
 5. **Auditer le code contre la spec** et compléter le gaps register de ce que
    l'audit révèle, dans ses deux catégories et avec sa couverture déclarée. Ne
@@ -236,7 +234,7 @@ chemin, que ce mécanisme soit lu dans le code ou dans un document validé.
    valide entre dans la spec, dans la section que ce comportement contraint, et
    sort du gaps register ; le reste y demeure. L'intention est formulée ou validée
    par l'humain, jamais déduite, et un mécanisme ne lui est pas soumis.
-7. **Ouvrir la pull request d'adoption.** Son gate est le seul de l'adoption.
+7. **Ouvrir la pull request d'adoption.** Sa revue est la seule de l'adoption.
 
 **Conclue par** la fusion de sa pull request : le module est adopté.
 
@@ -434,10 +432,10 @@ Un `README.md` avec un front matter `status: open | closed`, et :
 
 - **Scope** — ce que ce lot livre, et pourquoi maintenant.
 - **Spec delta** — le comportement ajouté à chaque spec, énoncé comme intention.
-  Ce delta n'est transcrit dans aucune spec à l'ouverture : il l'est tranche par
-  tranche, par la pull request de chaque story. Un lot qui lève un flag déclaré par
-  un autre lot le dit ici : la levée retire une mention de flag, c'est un changement
-  de spec comme un autre. Pour un lot correctif, ce champ est vide et remplacé par
+  Ce delta n'est transcrit dans aucune spec à l'ouverture : il l'est story par
+  story, chacune dans sa propre pull request. Un lot qui lève un flag déclaré par
+  un autre lot le dit ici : la levée retire une mention de flag, c'est une
+  modification de spec comme une autre. Pour un lot correctif, ce champ est vide et remplacé par
   les entrées du gaps register que le lot réserve.
 - **Constraints** — les contraintes de migration et de compatibilité, et l'ordre
   requis des stories ; `none` s'il n'y en a pas. **Rien de normatif n'y figure** :
@@ -493,7 +491,7 @@ gaps register n'est pas touchée. Puis l'humain tranche :
 - soit il corrige la spec — lui seul le peut — et le lot reste correctif sur un
   périmètre réduit ;
 - soit le lot est réécrit comme lot ordinaire, avec un spec delta, par un
-  amendement. **Cette réécriture garde `NN` et son répertoire**, et repasse le gate
+  amendement. **Cette réécriture garde `NN` et son répertoire**, et repasse la revue
   d'ouverture.
 
 Un `NN` neuf n'est attribué que si l'humain juge le travail restant être un
@@ -534,18 +532,18 @@ le devoir 3 libère ; elle n'est pas reclassée en gap neuf.
 des stories gardées sont déjà sur `main` ne reste pas ouvert indéfiniment. L'humain
 choisit : écrire la story de levée et livrer ce qui existe ; déclarer au flag une
 portée étendue par un amendement, ce qui reporte la décision à un lot ultérieur ;
-ou écrire une **story de démontage** qui retire le code gardé et la tranche
-correspondante.
+ou écrire une **story de démontage** qui retire le code gardé et ce
+qu'il avait ajouté à la spec.
 
-**Conclue par** la fusion de sa pull request : le lot est clos. Ce gate acte une
+**Conclue par** la fusion de sa pull request : le lot est clos. Cette revue acte une
 décision humaine, comme les autres.
 
 ## Story
 
 Une story appartient à exactement un lot et vise exactement **un** module, donc une
 seule spec. C'est l'unité de livraison technique : **une story, une branche, une
-pull request**, et cette pull request porte à la fois la tranche et le code qui la
-réalise.
+pull request**, et cette pull request porte à la fois sa modification de spec et le
+code qui la réalise.
 
 **Une story est identifiée par `us-N` dans son lot**, attribué selon la règle qui
 identifie un lot (`Batch`).
@@ -568,7 +566,7 @@ est unique parmi les documents de story du dépôt**, ce que garantit le préfix
 ```
 
 `Spec:` désigne la spec vivante du module visé, autorité contraignante de toute
-revue de la story.
+revue et de toute relecture de la story.
 
 `Sections:` déclare les sections que la story touche, et c'est ce que lit la
 détection de concurrence. Il est déclaré par l'auteur de la story, jamais déduit
@@ -624,15 +622,15 @@ ouvert — sa pull request d'ouverture est fusionnée et son document porte
 
 1. **Détecter la concurrence** sur les deux sources.
 2. **Attribuer `us-N`** et **créer la branche** `story/NN-us-N-<slug>`.
-3. **Commiter la tranche propre à cette story, puis pousser la branche
+3. **Commiter la modification de spec propre à cette story, puis pousser la branche
    immédiatement.** La transcription obéit à deux conditions :
-   - **elle est incrémentale** — une tranche par story, jamais le delta complet du
-     lot ;
+   - **elle est incrémentale** — la part du spec delta que livre cette story,
+     jamais le delta complet du lot ;
    - **elle est le premier commit de la branche**, avant que le plan soit écrit et
      que la moindre tâche s'exécute : la norme précède le code dans l'histoire de
      la branche.
 
-   Si le lot déclare un flag, la tranche porte la mention du flag.
+   Si le lot déclare un flag, la modification de spec porte la mention du flag.
 
    **Cas correctif :** le delta étant vide, ce premier commit ne touche pas la
    spec ; il barre l'entrée du gaps register que la story résorbe.
@@ -640,10 +638,10 @@ ouvert — sa pull request d'ouverture est fusionnée et son document porte
    **le commiter et le pousser immédiatement**, avant que l'exécution démarre.
 5. **Exécuter par sous-agents**, puis conclure la branche par une pull request
    (`Departures from superpowers`).
-6. **Avant la fusion**, recopier les rulings de l'exécution dans le Rulings log,
+6. **Avant la fusion**, recopier les arbitrages de l'exécution dans le Rulings log,
    consigner sous **Observed drift** les dérives constatées hors périmètre, et
    pousser les deux sur la branche.
-7. **Répondre au gate** sur la branche de la story.
+7. **Répondre à la revue** sur la branche de la story.
 
 **Conclue par** la fusion de sa pull request : la story est livrée.
 
@@ -694,15 +692,15 @@ que sa mention y figure, dans la section qu'il couvre.
 ### Lifting a feature flag
 
 La story de levée supprime le branchement dans le code et la mention du flag dans
-la spec. C'est une story ordinaire — du code et une tranche, dans une pull request
-— et c'est elle qui met la fonctionnalité en production.
+la spec. C'est une story ordinaire — du code et une modification de spec, dans une
+pull request — et c'est elle qui met la fonctionnalité en production.
 
 **Une story de levée par flag, donc par module.** Un lot transverse gardant deux
 modules en écrit deux, et chacune respecte l'invariant « une story, un module ».
 
 Elle est la dernière story du lot quand le flag est à portée de lot. Quand la
 portée est étendue, elle appartient au lot dont le spec delta annonce la levée, et
-que l'humain valide au gate d'ouverture comme le reste de ce delta.
+que l'humain valide à la revue d'ouverture comme le reste de ce delta.
 
 La levée est **une story, jamais un devoir de clôture.** Une période d'observation
 entre activation et nettoyage se fait en deux stories — activer, puis retirer.
