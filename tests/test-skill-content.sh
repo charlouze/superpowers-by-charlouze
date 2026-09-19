@@ -133,6 +133,11 @@ require writing-a-user-story "the authority rule is stated in full" "the spec wi
 require writing-a-user-story "GC carries the fifth stop condition" "the fifth stop condition of Step 5, written out in full"
 require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
 
+# --- writing-a-user-story: the story's blocks (spec sections "Story",
+# "The user story document", "Delivering a story") ---
+require writing-a-user-story "each story chooses its own blocks"  "chooses, as it is written, the blocks of the spec delta it transcribes"
+require writing-a-user-story "a block is never shared"            "a block is never shared between two stories"
+
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"

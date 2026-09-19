@@ -26,6 +26,12 @@ Stories are written **one at a time**: story N+1 is written knowing what story
 N produced. Several may be *in flight* simultaneously — that is the normal
 regime of a pull-request flow, not an edge case.
 
+**Each story chooses, as it is written, the blocks of the spec delta it
+transcribes**, and transcribes them entirely: a block is never shared between two
+stories. Nothing attached them in advance — the batch document carries blocks and
+no list of stories — so the choice is made here, and the `Blocks:` field of
+Step 4 is what records it.
+
 A story targets exactly **one** module, therefore exactly one spec. If the work
 spans two modules, it is two stories.
 
