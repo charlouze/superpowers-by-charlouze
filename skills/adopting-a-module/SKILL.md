@@ -100,10 +100,10 @@ think it through with them — show what exists (entry points, directories, obvi
 clusters) as material, ask questions, lay options side by side. The decision stays
 theirs, and nothing is written until they have made it.
 
-Prefer one coarse module to several small ones. Three modules for a project is
-normal; fifteen is a bad split. A wrong boundary contaminates the spec, the gaps
-register, and every batch that follows, and nothing later in the flow will catch
-it.
+Prefer one coarse module to several small ones; how many a project needs depends
+on the size of the product, not on a fixed count. A wrong boundary contaminates
+the spec, the gaps register, and every batch that follows, and nothing later in
+the flow will catch it.
 
 Record the agreed boundary at the top of the spec: what the module covers, and what
 it explicitly does not.

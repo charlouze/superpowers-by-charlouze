@@ -24,7 +24,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 ## The Model
 
-**Module** — a coarse functional domain, seen from the outside. A human draws the boundaries; never infer them. Prefer few large modules to many small ones: three modules is a normal project, fifteen is a slicing error.
+**Module** — a coarse functional domain, seen from the outside. A human draws the boundaries; never infer them. Prefer few large modules to many small ones; how many a project needs depends on the size of the product, not on a fixed count.
 
 **Spec** — one living document per module, at `docs/specs/<module>.md`. It is **normative** (what the code must do), not descriptive (what the code happens to do), and it carries **business rules and intentions; the mechanism stays in the code** — see `What a Spec Says` below. It carries no date, no status, no work-in-progress marker. It is the binding authority of every review.
 
