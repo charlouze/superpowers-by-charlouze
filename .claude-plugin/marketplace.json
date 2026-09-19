@@ -6,7 +6,7 @@
     {
       "name": "supercharlouze",
       "description": "Overrides how superpowers organizes specs and plans: one living spec per module, batches of user stories, corrective batches",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "source": "./",
       "author": { "name": "Charlouze" }
     }
