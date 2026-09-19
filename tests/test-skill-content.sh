@@ -141,6 +141,12 @@ require writing-a-user-story "the header carries four extra fields" "extend the 
 require writing-a-user-story "the header template declares Blocks"  "**Blocks:** D3, D7"
 require writing-a-user-story "Blocks is what closing reads"         "reads to find the blocks nobody delivered"
 require writing-a-user-story "Blocks is none when none is taken"    "\`none\` for a story that transcribes none"
+require writing-a-user-story "three properties are load-bearing"    "Three properties are load-bearing"
+require writing-a-user-story "transcription is word for word"       "exactly as the opening review read it"
+require writing-a-user-story "a divergence is named in the PR"      "Every divergence from a block is named in the body of the pull request"
+require writing-a-user-story "a divergence has two legitimate causes" "only two legitimate causes"
+require writing-a-user-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
+require writing-a-user-story "no divergence amends the batch document" "Neither case amends the batch document"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"

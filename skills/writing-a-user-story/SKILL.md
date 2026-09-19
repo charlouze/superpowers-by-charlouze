@@ -202,25 +202,46 @@ ledger.
 
 ## Step 3 — Commit the Spec Change First
 
-Transcribe into `docs/specs/<module>.md` the part of the batch's spec delta
-that **this** story delivers, and commit it as the **first commit on the
+Transcribe into `docs/specs/<module>.md` the blocks of the batch's spec delta
+that **this** story takes, and commit them as the **first commit on the
 branch** — before the plan is written, before any task runs. **A lifting story
-transcribes a removal:** its spec change deletes the gating sentence from the spec
+transcribes a removal:** its block deletes the gating sentence from the spec
 instead of adding behaviour, and that deletion is this same first commit (see
 Lifting and Teardown Stories below).
 
-Both properties are load-bearing.
+Three properties are load-bearing.
 
-**Incremental.** One spec change per story, never the batch's whole delta. Otherwise
-the spec would describe, while story 1 is still executing, the behaviour of the
-stories that follow — and the SDD reviewers would flag as missing what is not
-yet meant to be delivered.
+**Word for word.** The text of the blocks `Blocks:` declares, exactly as the
+opening review read it, and never the batch's whole delta. Rewording it would put into
+the spec a sentence no gate ever ruled on, and would make the opening review a
+review of something else. Transcribing the whole delta is the other failure: the
+spec would describe, while story 1 is still executing, the behaviour of the
+stories that follow — and the SDD reviewers would flag as missing what is not yet
+meant to be delivered.
 
 **First.** Not for visibility — the file would be readable in the worktree even
 uncommitted — but because this is what makes the norm **prior and binding** on
 the code. It is already in the branch's history when implementation starts, it
 travels in the pull request, and the freeze of Step 4 gets an identifiable
 starting point.
+
+**Named in the pull request.** Every divergence from a block is named in the body
+of the pull request Step 5 opens, and ruled on at the delivery review. A
+divergence has only two legitimate causes:
+
+- **`main` moved.** The passage a block quotes is no longer there as written,
+  because another story or a bounded change landed on that section since the
+  batch opened. Fit the block to what `main` now carries, without changing its
+  meaning, and say in the pull request what you fitted and why.
+- **The block's text is a problem.** Stop, and put it to your human partner
+  before transcribing it. Do not transcribe a text you believe is wrong, and do
+  not repair it on your own: the opening gate is where that text was ruled on,
+  and reopening it is your human partner's act.
+
+**Neither case amends the batch document.** It records what the opening review
+read, and editing it would erase the very text a reviewer compares your
+transcription against. The divergence lives in the pull request, where it is
+visible and gets ruled on.
 
 If the batch declares a feature flag, the transcribed spec change **states the flag
 and its default**, and — when the declared scope reaches beyond the batch — its
@@ -522,6 +543,8 @@ documents.
 | Thought | Reality |
 |---------|---------|
 | "I'll write the whole batch delta now, it's more efficient" | Reviewers would flag the next stories' behaviour as missing. One spec change per story. |
+| "This block's wording is off, I'll improve it as I transcribe" | The opening gate ruled on that exact text. Transcribe it word for word, or stop and put the problem to your human partner. |
+| "`main` moved, so I'll amend the batch document to match" | Fit the block to `main` without changing its meaning, and name the divergence in the pull request. The batch document records what the review read. |
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No merge conflict, so no one else is on this section" | Git conflicts on lines, not sections. Check the open pull requests. |
 | "No open pull request touches this spec, so the section is free" | A story holds its sections from Step 1 until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too. |
