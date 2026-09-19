@@ -140,8 +140,8 @@ implementer can obey, not as background. Left out, each story would silently
 invent its own migration rule and its own order.
 
 This pull request does **no writing into the specs**. The delta is stated
-here as intention only; it is transcribed slice by slice, by the pull request of
-each story (`supercharlouze:writing-a-user-story`). Transcribing the whole delta
+here as intention only; it is transcribed story by story, each in the pull request of
+that story (`supercharlouze:writing-a-user-story`). Transcribing the whole delta
 now would put behaviour into the spec that no code delivers — drift by
 definition, and the reviewers of a story would then report as missing what is
 merely not built yet.
@@ -333,7 +333,7 @@ itself is in question, and no agent may correct a spec.
    this triggers is a branch and a worktree and **no pull request at all**.
    Therefore: **close the story's pull request without merging it if one is
    already open.** Nothing has to be revoked either way, because nothing reached
-   `main`: the spec slice, or the struck gaps-register entry, travels with the
+   `main`: the spec change, or the struck gaps-register entry, travels with the
    code and dies with the branch. The branch and its worktree go once the choice
    below is ruled: delete the story branch locally and on the remote and remove
    its worktree — whether a pull request existed or not — so no later session
@@ -381,7 +381,7 @@ skeleton.
 | "I'll take the next free number from the directory" | Work in an open pull request has not reached main yet, and a pushed branch may hold a number with no pull request at all. Ask gh and `git ls-remote --heads` too. |
 | "I'll add the story list to the batch document, it's clearer" | Every story would then conflict on that file, for information the directory already holds. |
 | "This batch satisfies that flag's lifting condition, I'll lift it in passing" | Lifting is a spec change. State it in the `Spec delta`, where the gate sees it, and a lifting story delivers it. |
-| "I'll transcribe the spec delta now, while it's fresh" | The spec would then describe behaviour no code delivers. Each story transcribes its own slice. |
+| "I'll transcribe the spec delta now, while it's fresh" | The spec would then describe behaviour no code delivers. Each story transcribes its own spec change. |
 | "The module has no spec yet, I'll write the batch and adopt later" | Adoption is blocking. Otherwise the batch invents the norm it is supposed to obey. |
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
 | "This batch is ordinary, reservations are a corrective-batch thing" | Any batch taking on gaps register entries reserves them at opening — a Gaps entry as much as a Violations one. Otherwise two batches specify the same behaviour. |

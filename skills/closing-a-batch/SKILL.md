@@ -9,7 +9,7 @@ description: Use when every user story of a batch is merged or abandoned - write
 
 A batch closes when every one of its user stories is merged or abandoned and the human judges the work finished. Closing is not bookkeeping. It is the only moment in the lifecycle where the residue left on `main` gets collected.
 
-Abandoning a story is almost free: closing its pull request without merging throws away the spec slice and the code together — nothing to revoke, no spec left out of step. But two things it never touched are still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the intention the batch announced in its spec delta. **No other skill picks them up.** If closing skips a duty, that duty is simply never done.
+Abandoning a story is almost free: closing its pull request without merging throws away the spec change and the code together — nothing to revoke, no spec left out of step. But two things it never touched are still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the intention the batch announced in its spec delta. **No other skill picks them up.** If closing skips a duty, that duty is simply never done.
 
 Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 1 is allowed to refuse, and because it is allowed to refuse it comes before the four that write.
 
@@ -49,7 +49,7 @@ Refusing is not a dead end. Report the surviving flag and present the **three ex
 |---|---|---|
 | Lift | Ships what exists: removes the branching in the code and the gating sentence in the spec | A lifting story, written with `supercharlouze:writing-a-user-story` — one per guarded module |
 | Extend the scope | Defers the decision to a later batch by declaring the flag's extended scope and its lifting condition | An amendment pull request on the batch document, written with `supercharlouze:writing-a-batch` — its *Amending a Batch* section owns this path — and reviewed like any other |
-| Tear down | Removes the guarded code and the corresponding spec slice | A teardown story, written with `supercharlouze:writing-a-user-story` |
+| Tear down | Removes the guarded code and the corresponding spec change | A teardown story, written with `supercharlouze:writing-a-user-story` |
 
 Then stop and wait. Do not close the batch under an undeclared surviving flag "to be tidied up later" — that is the outcome this duty exists to prevent. And do not leave the batch open indefinitely either: without these three exits, the refusal would manufacture exactly the dead flagged code it is meant to prevent.
 

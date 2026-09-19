@@ -46,7 +46,7 @@ shared() {
 }
 
 # The mirror of `shared`: a claim that must survive nowhere. Used for a sentence
-# a spec slice removed, which is otherwise guarded by nothing — the positive
+# a spec change removed, which is otherwise guarded by nothing — the positive
 # assertions would stay green on a file that carried both the new phrasing and
 # the old, contradicting one.
 #

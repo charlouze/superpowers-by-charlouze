@@ -107,7 +107,7 @@ require writing-a-user-story "records rulings before the merge"   "Rulings log"
 require writing-a-user-story "records observed drift"             "Observed drift"
 require writing-a-user-story "answers review feedback"            "review feedback"
 require writing-a-user-story "story branch naming convention"     "story/NN"
-require writing-a-user-story "slice states the flag and default"  "states the flag and its default"
+require writing-a-user-story "spec change states flag and default" "states the flag and its default"
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
 require writing-a-user-story "teardown story exists"              "teardown story"
 
