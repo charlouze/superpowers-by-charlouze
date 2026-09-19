@@ -141,7 +141,7 @@ require closing-a-batch "consolidates Observed drift"            "Observed drift
 # `shared` assertion that locks the other three, and drift with nothing to catch it.
 require closing-a-batch "sorts story findings, defines nothing"  "whatever a story reported as"
 require closing-a-batch "releases unconsumed reservations"       "unconsumed reservations"
-require closing-a-batch "records undelivered intentions"         "announced but never delivered"
+require closing-a-batch "records undelivered blocks"             "announced but never delivered"
 require closing-a-batch "refuses to close on an undeclared flag" "no declared scope"
 require closing-a-batch "offers three exits"                     "three exits"
 require closing-a-batch "sets status closed"                     "status: closed"

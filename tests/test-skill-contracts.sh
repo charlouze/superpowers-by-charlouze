@@ -154,4 +154,14 @@ absent "no skill denies that the branch name matters" \
     "(nothing|Nothing|no mechanism|No mechanism)[^.]{0,40}depends on the (branch )?name" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches
 
+# The spec delta is exact text, in blocks (spec section "The batch document"). A
+# skill that still calls what a batch announced an "intention" contradicts it.
+# The regex hunts the delta's former phrasings, and any sentence pairing
+# "delta" or "announced" with "intention": the content rule's own
+# "business rules and intentions", and "the same intention" in the
+# other-implementation test, are true sentences and must stay green.
+absent "no skill calls the spec delta an intention" \
+    "stated as intention|as intention only|like any other intention|an intention like any other|intentions? (the (batch|delta) )?announced|announced intention|announced no intention|an intention not delivered|carries the intention|(delta|announc)[^.]{0,60}[Ii]ntention|[Ii]ntention[^.]{0,60}(delta|announc)" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
 exit $((FAILURES > 0))

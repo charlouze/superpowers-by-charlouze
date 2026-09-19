@@ -442,8 +442,8 @@ straight. If the abandonment happens before the pull request exists — a
 requalification under Override 2, a story dropped mid-run — there is nothing to
 close, only a branch and a worktree to discard. Two residues remain on `main`:
 the gaps register
-reservation posted by the batch's opening pull request, and the intention the
-batch announced and never delivered. Both belong to
+reservation posted by the batch's opening pull request, and the blocks the
+batch announced and no story delivered. Both belong to
 `supercharlouze:closing-a-batch`.
 
 **Clean up after an abandoned or requalified story: remove its worktree and
