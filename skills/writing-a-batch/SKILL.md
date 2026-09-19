@@ -113,13 +113,17 @@ status: open
 
 ## Spec delta
 
-<The behaviour added to each spec, stated as intention, per module — including
-the lifting of any flag an earlier batch declared and this batch takes on.>
+<The exact text this batch writes into the specs, in blocks. Per block: its
+`D<n>` identifier, the spec and the section it targets, then the current passage
+and the text that replaces it, the passage it removes, or the text it inserts and
+where. Including the removal of the gating sentence of any flag an earlier batch
+declared and this batch takes on.>
 
 ## Constraints
 
-<Migration and compatibility constraints, and the required ordering of the user
-stories. `none` if there are none.>
+<Migration and compatibility constraints, the required ordering of the user
+stories, and the order of any two blocks that change the same section. `none`
+if there are none.>
 
 ## Feature flag
 
@@ -139,12 +143,24 @@ implicitly part of every task's requirements. Write it as constraints an
 implementer can obey, not as background. Left out, each story would silently
 invent its own migration rule and its own order.
 
-This pull request does **no writing into the specs**. The delta is stated
-here as intention only; it is transcribed story by story, each in the pull request of
-that story (`supercharlouze:writing-a-user-story`). Transcribing the whole delta
+This pull request does **no writing into the specs**. The delta is
+written here as **exact text, in blocks**, and no block is transcribed at
+opening: each one is transcribed, word for word, by a story, in that story's own
+pull request (`supercharlouze:writing-a-user-story`). Transcribing the whole delta
 now would put behaviour into the spec that no code delivers — drift by
 definition, and the reviewers of a story would then report as missing what is
 merely not built yet.
+
+**A block is the unit of the delta.** Each one carries an identifier `D<n>`,
+unique within the batch, and names the spec and the section it targets. To modify
+a passage, it quotes the current passage, then the text that replaces it; to
+remove one, it quotes it; to add text, it gives that text and where it goes.
+Quote the passage as `main` carries it now: the story transcribes against it.
+
+**No block is attached to a story.** The story chooses, as it is written, the
+blocks it transcribes; the batch document names no story and carries no list of
+them. A section that changes twice in the course of the batch carries two blocks,
+and `Constraints` states their order.
 
 **The gaps register is not a spec.** `docs/specs/<module>.gaps.md` records what
 no spec describes, and where the code contradicts one — it
@@ -261,11 +277,11 @@ document copies none: anyone reading or changing that section sees the flag.
 
 So read the gating sentences of the specs this batch touches. When this batch's
 work satisfies one's lifting condition, and your human partner agrees, **state
-its lifting in the `Spec delta`**, like any other intention. Lifting a flag
-removes its gating sentence: it is a change of spec like any other, delivered by
-a lifting story (`supercharlouze:writing-a-user-story`), and
-`supercharlouze:closing-a-batch` catches it undelivered the way it catches any
-intention the delta announced and no story transcribed.
+its lifting in the `Spec delta`**, as a block that removes its gating sentence.
+Lifting a flag is a change of spec like any other, delivered by a lifting story
+(`supercharlouze:writing-a-user-story`), and `supercharlouze:closing-a-batch`
+catches it undelivered the way it catches any block the delta announced and no
+story transcribed.
 
 A flag whose condition is met and that no batch takes on stays where it is: in
 the spec, with its condition, in front of whoever touches that section next.
@@ -273,17 +289,22 @@ the spec, with its condition, in front of whoever touches that section next.
 ## Opening the Pull Request
 
 Before opening, reread the batch document against the specs with fresh eyes:
-scope stated with its "why now", spec delta per module, `Constraints` stated or
-`none`, `Feature flag` filled, reservations made for every gaps register entry
-this batch takes on — corrective or ordinary — and the lifting of any earlier
-flag this batch takes on stated in the delta.
+scope stated with its "why now", spec delta in blocks — each with its `D<n>`,
+the spec and section it targets, and its exact text, every quoted passage
+matching `main` —, `Constraints` stated or `none` — including the order of any
+section that carries two blocks —, `Feature flag` filled, reservations made for
+every gaps register entry this batch takes on — corrective or ordinary — and the
+lifting of any earlier flag this batch takes on stated as a block.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
-reviewer has to rule on: the flag decision, the scope, and any flag lifting the
-delta announces.
+reviewer has to rule on: the exact text of every block, the flag decision, the
+scope, and any flag lifting the delta announces.
 
 **The review of the batch pull request is the human gate.** Until it merges, no
-story is written and no spec is touched. It replaces the tail of the
+story is written and no spec is touched. It bears on the exact text of every
+block: this is where the human reads what the specs will say, before any code is
+written on it — block by block, in the batch document, and not later as a diff of
+the spec. It replaces the tail of the
 architectural path of `superpowers:brainstorming` — the dated design doc becomes
 this batch document, the self-review becomes the reread above, and the human
 review of the written spec becomes this pull request review. The human review is
@@ -382,6 +403,7 @@ skeleton.
 | "I'll add the story list to the batch document, it's clearer" | Every story would then conflict on that file, for information the directory already holds. |
 | "This batch satisfies that flag's lifting condition, I'll lift it in passing" | Lifting is a spec change. State it in the `Spec delta`, where the gate sees it, and a lifting story delivers it. |
 | "I'll transcribe the spec delta now, while it's fresh" | The spec would then describe behaviour no code delivers. Each story transcribes its own spec change. |
+| "The delta only needs to say what changes — the story will find the words" | The delta is the exact text. The opening review is where the human reads what the specs will say; wording left to a story reaches them only once code is built on it. |
 | "The module has no spec yet, I'll write the batch and adopt later" | Adoption is blocking. Otherwise the batch invents the norm it is supposed to obey. |
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
 | "This batch is ordinary, reservations are a corrective-batch thing" | Any batch taking on gaps register entries reserves them at opening — a Gaps entry as much as a Violations one. Otherwise two batches specify the same behaviour. |

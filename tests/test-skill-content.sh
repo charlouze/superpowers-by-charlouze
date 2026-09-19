@@ -91,6 +91,19 @@ require writing-a-batch "template declares the Constraints section" "## Constrai
 require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
 require writing-a-batch "Constraints carry nothing normative"       "and nothing normative"
 
+require writing-a-batch "the delta is exact text, in blocks"        "written here as **exact text, in blocks**"
+require writing-a-batch "a block carries a unique D<n>"             "Each one carries an identifier \`D<n>\`, unique within the batch"
+require writing-a-batch "a block quotes what it replaces"           "quotes the current passage, then the text that replaces it"
+require writing-a-batch "no block is attached to a story"           "No block is attached to a story"
+require writing-a-batch "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
+require writing-a-batch "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
+
+# --- writing-a-batch: the opening review (spec section "Opening a batch") ---
+require writing-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
+require writing-a-batch "the text is read in the batch document"     "block by block, in the batch document"
+require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
+require writing-a-batch "the reread checks quotes against main"          "every quoted passage matching \`main\`"
+
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "checks it is in the main checkout"  "main checkout"
 require writing-a-user-story "refreshes main from the remote"     "up to date with the remote"
@@ -128,7 +141,7 @@ require closing-a-batch "consolidates Observed drift"            "Observed drift
 # `shared` assertion that locks the other three, and drift with nothing to catch it.
 require closing-a-batch "sorts story findings, defines nothing"  "whatever a story reported as"
 require closing-a-batch "releases unconsumed reservations"       "unconsumed reservations"
-require closing-a-batch "records undelivered intentions"         "announced but never delivered"
+require closing-a-batch "records undelivered blocks"             "announced but never delivered"
 require closing-a-batch "refuses to close on an undeclared flag" "no declared scope"
 require closing-a-batch "offers three exits"                     "three exits"
 require closing-a-batch "sets status closed"                     "status: closed"
@@ -165,5 +178,9 @@ require using-batches "corollary: a rule outlives a mechanism"  "A rule does not
 require using-batches "corollary: no legislating on quality"    "does not legislate on code quality"
 require using-batches "carries the section it points at"        "## What a Spec Says"
 require using-batches "the glossary points at that section"     "see \`What a Spec Says\` below"
+
+# --- using-batches: the delta block (spec section "The model") ---
+require using-batches "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
+require using-batches "a block is transcribed word for word" "the exact text it must receive, transcribed word for word by a story"
 
 exit $((FAILURES > 0))
