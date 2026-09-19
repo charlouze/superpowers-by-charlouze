@@ -11,7 +11,7 @@ A batch closes when every one of its user stories is merged or abandoned and the
 
 Abandoning a story is almost free: closing its pull request without merging throws away the spec slice and the code together — nothing to revoke, no spec left out of step. But two things it never touched are still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the intention the batch announced in its spec delta. **No other skill picks them up.** If closing skips a duty, that duty is simply never done.
 
-Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 5 is allowed to refuse, and because it is allowed to refuse it runs its check before the four that write.
+Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 1 is allowed to refuse, and because it is allowed to refuse it comes before the four that write.
 
 **Announce at start:** "I'm using the closing-a-batch skill to close batch NN."
 
@@ -25,56 +25,21 @@ Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 5 
 
 ## The Six Duties
 
-Do all six on the same branch. Then open one pull request.
+Do all six on the same branch, in order. Then open one pull request.
 
-**Duty 5 is a check, not a write, and its check runs first — before duties 1 to 4 write anything.** The numbering below is the model's and does not change; only the moment of that one check is fixed. Read the code and the specs for surviving flags this batch declared, decide whether this batch may be closed at all, and only then do duties 1, 2, 3, 4 in order, with duty 6 last as always.
+**Duty 1 is a check, not a write, and it comes before duties 2 to 5 write anything.** Read the code and the specs for surviving flags this batch declared and decide whether this batch may be closed at all; only then write.
 
-The reason is what a refusal costs. Duties 1 to 4 all write: changelog lines into every touched spec, consolidated drift and recorded shortfalls into the gaps registers, released reservations. Duty 5 writes nothing — it reports and hands the decision to your human partner. Check first and a refusal costs nothing: the close branch is still empty, there is no commit to abandon, and the batch closes later in one clean run once the lifting story has merged. Check last and a refusal strands four duties' worth of writing on a branch nobody may merge, and none of it is safe to re-run: a second attempt would append the changelog line a second time, re-append every consolidated drift entry, and find reservations duty 3 had already released for a batch that was never closed.
+The reason is what a refusal costs. Duties 2 to 5 all write: changelog lines into every touched spec, consolidated drift and recorded shortfalls into the gaps registers, released reservations. Duty 1 writes nothing — it reports and hands the decision to your human partner. Check first and a refusal costs nothing: the close branch is still empty, there is no commit to abandon, and the batch closes later in one clean run once the lifting story has merged. Check last and a refusal strands four duties' worth of writing on a branch nobody may merge, and none of it is safe to re-run: a second attempt would append the changelog line a second time, re-append every consolidated drift entry, and find reservations duty 4 had already released for a batch that was never closed.
 
-So: if duty 5 refuses, **stop before writing anything.** Report the surviving flag, present the three exits below, and leave the batch open. The only thing to clean up is an empty branch and its workspace.
+So: if duty 1 refuses, **stop before writing anything.** Report the surviving flag, present the three exits below, and leave the batch open. The only thing to clean up is an empty branch and its workspace.
 
-### 1. Write the changelog line
+### 1. Refuse to close on a flag that survives without a declared scope
 
-Append to the **Changelog** table (`batch | date | change`) at the foot of every spec this batch touched: **one line per batch**, per touched spec — not one line per story.
-
-Stories do not write the changelog, and the reason is contention, not taste. The table grows at a single point at the foot of the file. If every story appended its own line, all the stories of a module in flight at the same time would conflict at exactly that point — and several stories in flight is the nominal regime, not an edge case. One writer per batch removes the conflict outright.
-
-The changelog is a reading convenience, not a mechanism: no rule of this system depends on it. The authoritative history is `git log docs/specs/<module>.md`, exact by construction because every spec change travels in the same pull request as its code. Write the line well — a human skims it — but never let a difficulty here become a reason to stop.
-
-The `change` cell is part of the spec file, so the content rule of `supercharlouze:using-batches` holds there too: it says what this batch changed for the business, never by what mechanism. The test is the same one — *would another developer, having implemented the same intention differently, read this sentence as true of their code?* A changelog line that names a branch, a hook or a file the business never asked for is the one place where a whole batch's worth of mechanism gets back into a spec, one line at a time.
-
-### 2. Consolidate observed drift
-
-Collect the **Observed drift** section of every story document in the batch and write its findings into the gaps register of the module concerned, `docs/specs/<module>.gaps.md`: whatever a story reported as code contradicting the spec goes under **Violations**, whatever it reported as behaviour no spec describes goes under **Gaps**. A story finds its gaps in the code it went through; that is this duty's only source, and it is not the only source the register has.
-
-Stories deliberately do not write into the register. Adding an entry appends at the end of its category and competes with every other addition to the same module — the same contention duty 1 avoids, solved the same way: a single writer per batch. Their observations wait in their own document until now, which is why they are recorded there and why you are the one who moves them.
-
-"Out of scope for this batch" is never a reason to drop an observation. It is precisely why the observation belongs in the register: the register is what a later corrective batch draws its scope from. Dropped here, the finding dies with the session that made it.
-
-### 3. Release unconsumed reservations
-
-For every gaps register entry this batch reserved at opening (`reserved by batch-NN`) that was never struck through, remove the reservation annotation. Those are the **unconsumed reservations** — a story abandoned, a scope revised mid-flight. Entries a story did strike stay struck: that gesture was atomic with the code that resolved them.
-
-Closing a story's pull request does not do this for you. The reservation lives on `main` — it got there when the batch's opening pull request merged — and abandoning a story touches nothing on `main`. Left in place, the annotation is a perpetual claim: the gap looks taken forever, and no future batch can pick it up.
-
-### 4. Record intentions announced but never delivered
-
-Compare the spec delta the batch announced at opening against what actually reached the specs. For everything **announced but never delivered** — story abandoned, scope cut along the way — do both of these:
-
-1. Write the shortfall into the gaps register of the module concerned, under **Gaps**.
-2. Amend the batch document so it no longer promises what it did not deliver.
-
-Both, not either. Without this step the abandonment is perfectly invisible: it is not drift, because the spec and the code agree — both are silent about the feature; and it is not a gap, because nothing recorded it. It is a promise forgotten inside a document that just went `closed`. This duty is the only reader of that edge in the whole system.
-
-**A corrective batch has nothing to compare here**, and that is not a gap in the duty. Its spec delta is empty by definition — it restores behaviour a spec already promises — so it announced no intention a spec could fall short of. What it announced instead were the gaps register entries it reserved, and an entry it never resolved is an unconsumed reservation: duty 3 is the whole of this duty for a corrective batch. Do not invent a comparison, and do not re-file the released entries as fresh gaps — they are still in the register where they always were.
-
-### 5. Refuse to close on a flag that survives without a declared scope
-
-**This check runs first, before duties 1 to 4 — see The Six Duties above.** It writes nothing, so performing it on an empty branch makes a refusal free.
+It writes nothing, so performing it on an empty branch makes a refusal free.
 
 Check every feature flag **this batch declared**, in its `Feature flag` field, in two places: the code, and the gating sentences of the specs it touched. A surviving flag is acceptable **only** if its extended scope and its lifting condition are declared — in the batch document's `Feature flag` field and in the spec's gating sentence. A flag that survives with **no declared scope** means the lifting story was never written, and the batch **cannot be closed**.
 
-**A flag declared by an earlier batch is not this duty's business.** If this batch took on lifting one, its `Spec delta` said so, and removing that flag's gating sentence is an intention like any other: duty 4 catches it undelivered, not this one. The specs are the registry of flags, and a flag this batch did not declare and did not announce lifting stays in its spec, with its condition, where the next reader of that section sees it.
+**A flag declared by an earlier batch is not this duty's business.** If this batch took on lifting one, its `Spec delta` said so, and removing that flag's gating sentence is an intention like any other: duty 5 catches it undelivered, not this one. The specs are the registry of flags, and a flag this batch did not declare and did not announce lifting stays in its spec, with its condition, where the next reader of that section sees it.
 
 This is the duty an agent in a hurry will want to skip, so take the reason seriously. A wanted flag and a forgotten flag are indistinguishable in the code — the declaration is the only thing that separates them. Treating an undeclared survivor as "probably fine" reinstates the classic failure mode of feature flags: guarded code nobody dares to remove, and the failure is silent. Deliberate survival stays possible; survival by oversight does not.
 
@@ -87,6 +52,41 @@ Refusing is not a dead end. Report the surviving flag and present the **three ex
 | Tear down | Removes the guarded code and the corresponding spec slice | A teardown story, written with `supercharlouze:writing-a-user-story` |
 
 Then stop and wait. Do not close the batch under an undeclared surviving flag "to be tidied up later" — that is the outcome this duty exists to prevent. And do not leave the batch open indefinitely either: without these three exits, the refusal would manufacture exactly the dead flagged code it is meant to prevent.
+
+### 2. Write the changelog line
+
+Append to the **Changelog** table (`batch | date | change`) at the foot of every spec this batch touched: **one line per batch**, per touched spec — not one line per story.
+
+Stories do not write the changelog, and the reason is contention, not taste. The table grows at a single point at the foot of the file. If every story appended its own line, all the stories of a module in flight at the same time would conflict at exactly that point — and several stories in flight is the nominal regime, not an edge case. One writer per batch removes the conflict outright.
+
+The changelog is a reading convenience, not a mechanism: no rule of this system depends on it. The authoritative history is `git log docs/specs/<module>.md`, exact by construction because every spec change travels in the same pull request as its code. Write the line well — a human skims it — but never let a difficulty here become a reason to stop.
+
+The `change` cell is part of the spec file, so the content rule of `supercharlouze:using-batches` holds there too: it says what this batch changed for the business, never by what mechanism. The test is the same one — *would another developer, having implemented the same intention differently, read this sentence as true of their code?* A changelog line that names a branch, a hook or a file the business never asked for is the one place where a whole batch's worth of mechanism gets back into a spec, one line at a time.
+
+### 3. Consolidate observed drift
+
+Collect the **Observed drift** section of every story document in the batch and write its findings into the gaps register of the module concerned, `docs/specs/<module>.gaps.md`: whatever a story reported as code contradicting the spec goes under **Violations**, whatever it reported as behaviour no spec describes goes under **Gaps**. A story finds its gaps in the code it went through; that is this duty's only source, and it is not the only source the register has.
+
+Stories deliberately do not write into the register. Adding an entry appends at the end of its category and competes with every other addition to the same module — the same contention duty 2 avoids, solved the same way: a single writer per batch. Their observations wait in their own document until now, which is why they are recorded there and why you are the one who moves them.
+
+"Out of scope for this batch" is never a reason to drop an observation. It is precisely why the observation belongs in the register: the register is what a later corrective batch draws its scope from. Dropped here, the finding dies with the session that made it.
+
+### 4. Release unconsumed reservations
+
+For every gaps register entry this batch reserved at opening (`reserved by batch-NN`) that was never struck through, remove the reservation annotation. Those are the **unconsumed reservations** — a story abandoned, a scope revised mid-flight. Entries a story did strike stay struck: that gesture was atomic with the code that resolved them.
+
+Closing a story's pull request does not do this for you. The reservation lives on `main` — it got there when the batch's opening pull request merged — and abandoning a story touches nothing on `main`. Left in place, the annotation is a perpetual claim: the gap looks taken forever, and no future batch can pick it up.
+
+### 5. Record intentions announced but never delivered
+
+Compare the spec delta the batch announced at opening against what actually reached the specs. For everything **announced but never delivered** — story abandoned, scope cut along the way — do both of these:
+
+1. Write the shortfall into the gaps register of the module concerned, under **Gaps**.
+2. Amend the batch document so it no longer promises what it did not deliver.
+
+Both, not either. Without this step the abandonment is perfectly invisible: it is not drift, because the spec and the code agree — both are silent about the feature; and it is not a gap, because nothing recorded it. It is a promise forgotten inside a document that just went `closed`. This duty is the only reader of that edge in the whole system.
+
+**A corrective batch has nothing to compare here**, and that is not a gap in the duty. Its spec delta is empty by definition — it restores behaviour a spec already promises — so it announced no intention a spec could fall short of. What it announced instead were the gaps register entries it reserved, and an entry it never resolved is an unconsumed reservation: duty 4 is the whole of this duty for a corrective batch. Do not invent a comparison, and do not re-file the released entries as fresh gaps — they are still in the register where they always were.
 
 ### 6. Set status: closed
 
@@ -106,10 +106,10 @@ Then push and open the pull request. The **review of the closing pull request** 
 | "The changelog is already up to date, each story added its line" | Stories do not write the changelog. One line per batch, here. |
 | "Observed drift is out of scope for this batch" | That is exactly why it goes to the register instead of being forgotten. |
 | "A flag is still live, so I cannot close — dead end" | Three exits: lift it, declare an extended scope by amendment, or tear the guarded code down. |
-| "I'll work through the duties in order and check the flags at the end" | Duty 5 writes nothing, so it checks first. Checked last, a refusal strands four duties of writing on a branch nobody can merge, and re-running duplicates all of it. |
+| "I'll do the writing duties first and check the flags at the end" | Duty 1 writes nothing, so it checks first. Checked last, a refusal strands four duties of writing on a branch nobody can merge, and re-running duplicates all of it. |
 | "I'm already in a worktree from this batch's last story, I'll close from here" | using-git-worktrees would reuse it and the closure would land on that story's branch. Back to the main checkout first. |
 | "The flag is gone from the code, that is enough" | The gating sentence in the spec is part of the flag. Left behind, it makes the spec false. |
-| "The delta announced lifting an earlier batch's flag, but duty 5 only checks our own flags" | Right, and duty 4 checks the rest: an announced lifting that did not happen is an intention not delivered. |
+| "The delta announced lifting an earlier batch's flag, but duty 1 only checks our own flags" | Right, and duty 5 checks the rest: an announced lifting that did not happen is an intention not delivered. |
 | "I'll flip the status now and file the gaps in a follow-up" | The status is the record that the duties were done. Flipping it first turns the record into a lie. |
-| "The batch document says it delivered X, so it delivered X" | Check the specs on main, not the promise made at opening. The whole point of duty 4 is the difference. |
+| "The batch document says it delivered X, so it delivered X" | Check the specs on main, not the promise made at opening. The whole point of duty 5 is the difference. |
 | "No story reported drift, so there is nothing to consolidate" | Confirm by reading each story document. An empty Observed drift section and an unread one look identical from here. |

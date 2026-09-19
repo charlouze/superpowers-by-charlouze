@@ -503,30 +503,15 @@ cas, les réservations au gaps register sont révisées.
 ### Closing a batch
 
 Quand toutes les stories du lot sont fusionnées ou abandonnées et que l'humain
-considère le lot terminé, une pull request de clôture, sur la branche
-`batch/NN-<slug>-close` :
+considère le lot terminé, sa clôture passe par une pull request, sur la branche
+`batch/NN-<slug>-close`.
 
-1. **Écrit la ligne de changelog** de chaque spec touchée — un lot, une ligne.
-2. **Consolide dans le gaps register** les sections `Observed drift` des stories du
-   lot.
-3. **Libère les réservations non consommées.**
-4. **Constate les intentions non livrées** : si le spec delta annoncé à l'ouverture
-   n'a pas été entièrement transcrit, l'écart est inscrit au gaps register comme
-   *gap*, et le texte du lot est amendé pour ne plus promettre ce qu'il n'a pas
-   livré.
-5. **Vérifie qu'aucun flag déclaré par le lot ne subsiste par accident.** Un flag
-   de son champ `Feature flag` encore présent — dans le code ou par sa mention dans
-   une spec — n'est acceptable que si sa portée étendue et sa condition de levée
-   sont déclarées. Sinon la story de levée n'a pas été écrite et le lot **ne peut
-   pas être clos**. La levée d'un flag déclaré par un autre lot, annoncée dans le
-   spec delta, relève du devoir 4 comme toute autre intention.
-6. **Passe `status: closed`.**
-
-**Le contrôle du devoir 5 s'exécute avant les devoirs 1 à 4.**
-
-**Le devoir 4 n'a rien à comparer pour un lot correctif** : son spec delta est
-vide. Une entrée réservée et jamais résorbée est une réservation non consommée, que
-le devoir 3 libère ; elle n'est pas reclassée en gap neuf.
+**Un lot ne peut pas être clos tant qu'un flag qu'il a déclaré subsiste par
+accident.** Un flag de son champ `Feature flag` encore présent — dans le code ou
+par sa mention dans une spec — n'est acceptable que si sa portée étendue et sa
+condition de levée sont déclarées ; sinon, sa story de levée n'a pas été écrite. Un
+flag déclaré par un autre lot n'entre pas dans ce contrôle : sa levée, si le spec
+delta l'annonce, est une intention comme une autre.
 
 **Trois sorties, pas une impasse.** Un lot dont on renonce au périmètre alors que
 des stories gardées sont déjà sur `main` ne reste pas ouvert indéfiniment. L'humain
@@ -534,6 +519,22 @@ choisit : écrire la story de levée et livrer ce qui existe ; déclarer au flag
 portée étendue par un amendement, ce qui reporte la décision à un lot ultérieur ;
 ou écrire une **story de démontage** qui retire le code gardé et ce
 qu'il avait ajouté à la spec.
+
+**La pull request de clôture porte :**
+
+- **la ligne de changelog** de chaque spec touchée — un lot, une ligne ;
+- **la consolidation dans le gaps register** des sections `Observed drift` des
+  stories du lot ;
+- **la libération des réservations non consommées** ;
+- **le constat des intentions non livrées** : si le spec delta annoncé à
+  l'ouverture n'a pas été entièrement transcrit, l'écart est inscrit au gaps
+  register comme *gap*, et le texte du lot est amendé pour ne plus promettre ce
+  qu'il n'a pas livré ;
+- **`status: closed`** dans le document de lot.
+
+**Un lot correctif n'a pas d'intention non livrée à constater** : son spec delta
+est vide. Une entrée réservée et jamais résorbée est une réservation non consommée,
+libérée comme les autres ; elle n'est pas reclassée en gap neuf.
 
 **Conclue par** la fusion de sa pull request : le lot est clos. Cette revue acte une
 décision humaine, comme les autres.
@@ -702,7 +703,7 @@ Elle est la dernière story du lot quand le flag est à portée de lot. Quand la
 portée est étendue, elle appartient au lot dont le spec delta annonce la levée, et
 que l'humain valide à la revue d'ouverture comme le reste de ce delta.
 
-La levée est **une story, jamais un devoir de clôture.** Une période d'observation
+La levée est **une story, jamais une part de la clôture.** Une période d'observation
 entre activation et nettoyage se fait en deux stories — activer, puis retirer.
 
 **Conclue par** la fusion de sa pull request : le flag est levé.

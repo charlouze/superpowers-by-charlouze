@@ -136,11 +136,12 @@ require closing-a-batch "closing PR is reviewed"                 "review of the 
 require closing-a-batch "branch naming convention"               "batch/NN"
 
 # --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
-require closing-a-batch "duty 5 checks before the writing duties" "before duties 1 to 4"
+require closing-a-batch "the flag check is duty 1"               "### 1. Refuse to close on a flag"
+require closing-a-batch "duty 1 checks before the writing duties" "it comes before duties 2 to 5 write anything"
 require closing-a-batch "a refusal must cost nothing"            "makes a refusal free"
-require closing-a-batch "duty 5 checks the flags it declared"   "Check every feature flag **this batch declared**"
-require closing-a-batch "an earlier batch's flag goes to duty 4" "A flag declared by an earlier batch is not this duty's business"
-require closing-a-batch "duty 4 is empty for a corrective batch" "A corrective batch has nothing to compare here"
+require closing-a-batch "duty 1 checks the flags it declared"   "Check every feature flag **this batch declared**"
+require closing-a-batch "an earlier batch's flag goes to duty 5" "A flag declared by an earlier batch is not this duty's business"
+require closing-a-batch "duty 5 is empty for a corrective batch" "A corrective batch has nothing to compare here"
 require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
 
 # --- using-batches: what a spec says (spec section "The spec document") ---

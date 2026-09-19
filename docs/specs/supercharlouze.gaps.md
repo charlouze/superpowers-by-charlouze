@@ -206,9 +206,9 @@ sont sous *Violations*.
 
 - **Batch / Closing a batch** — la spec affirme sans réserve que « le
   document de lot ne porte aucun état mutable, et rien dans le déroulement normal
-  ne le modifie », et sa propre section `Closing a batch` la contredit : le devoir 4
-  amende le texte du lot pour ne plus promettre ce qu'il n'a pas livré, et le
-  devoir 6 bascule son front matter en `status: closed`. `closing-a-batch` énonce
+  ne le modifie », et sa propre section `Closing a batch` la contredit : le constat
+  des intentions non livrées amende le texte du lot pour ne plus promettre ce qu'il
+  n'a pas livré, et la clôture bascule son front matter en `status: closed`. `closing-a-batch` énonce
   d'ailleurs la règle **avec** l'exception que la spec nie — « nothing in the normal
   course of the batch modifies it **until closing** ». Le code a raison. Résorber
   veut dire borner la phrase sur la clôture, et c'est une décision humaine.
