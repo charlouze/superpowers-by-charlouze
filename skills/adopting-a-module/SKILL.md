@@ -29,8 +29,12 @@ to be adopted.
 
 Three ranks, and they never trade places:
 
-1. **The validated documents.** Here, validated documents are normative,
-   and only they create normative text.
+1. **The validated documents.** Here, validated documents are normative on the
+   **intentions they state**, never on the **mechanisms they describe** — and a
+   design document is full of the latter. A mechanism read in a validated
+   document does not enter the spec: it becomes a gap naming its document, and
+   only your human partner can promote it from there. Within that bound, only
+   they create normative text.
 2. **The code.** It never corrects a document. It fills the *silences* — behaviour
    no document ever described. And what it reveals in a silence does not enter the
    spec on its own authority: it is recorded as a gap. Only your human partner can
@@ -47,6 +51,18 @@ do answers no question worth asking.
 
 The pressure to break this rule is highest exactly where the documents are thinnest
 — that is the moment to slow down, not to improvise.
+
+**And you do not read *through* a mechanism to deduce the intention it served.**
+That is the content rule of `supercharlouze:using-batches` — a spec carries
+business rules and intentions, the mechanism stays in the code — and adoption is
+where breaking it is most tempting: a validated document describes a mechanism,
+the intention behind it looks one paraphrase away, and it is not. Ask the test of
+every sentence you are about to write: *would another developer, having
+implemented the same intention differently, read this sentence as true of their
+code?* What a document states as an intention is normative and goes in; what it
+states as a mechanism becomes a gap. Deducing an intention from a mechanism is
+reconstruction from the code by another road, whether you read that mechanism in
+the code or in a validated document.
 
 ## Steps
 
@@ -137,6 +153,12 @@ inventory, not files. Everything after it writes.
 Merge, deduplicate, reconcile. The spec is normative — what the code must do — not
 descriptive.
 
+- **Every sentence you write passes the other-implementation test**, and what it
+  ejects **goes straight into the gaps register**, naming the document it came
+  from. Create `docs/specs/<module>.gaps.md` the first time you need it. The
+  authority rule of `Source Authority` above holds while you write: a mechanism
+  the document prescribes is no more admissible here than one you read in the
+  code.
 - **Nothing enters the spec that no validated document supports.** Behaviour you
   found in the code but no document describes belongs to the gaps register, not
   here.
@@ -186,14 +208,18 @@ the prose under them follows the project's language.
 
 ### 5. Audit the code against the spec
 
-Read the code against each section you just wrote, and produce the gaps register.
+Read the code against each section you just wrote, and add to the gaps register
+what the audit reveals.
+
 Two sections, kept apart because they are not treated the same way:
 
 - **Violations** — the code contradicts the spec. Feeds a *corrective batch*.
-- **Gaps** — the code does things no spec describes. Feeds an ordinary batch that
-  finally specifies them.
+- **Gaps** — a real behaviour or requirement no spec describes. Feeds an ordinary
+  batch that finally specifies them.
 
-Each entry designates a section of the spec.
+Each entry designates a section of the spec. **An entry that came from a document
+names that document**, so your human partner can promote it knowing what they are
+promoting instead of re-reading the whole thing.
 
 **Each entry is a single addressable item — one list item, never a paragraph of
 running prose.** You are the only skill that ever *creates* this file, and three
@@ -233,6 +259,9 @@ a scope from. Write entries so those gestures are mechanical.
 
 - **<spec section, or the section that should exist>** — <behaviour no spec
   describes.>
+- **<spec section, or the section that should exist>** — <a mechanism
+  `<the validated document, by the path or title the Sources section uses>`
+  prescribes and no spec carries.>
 ```
 
 **The register also declares its own coverage:** which parts of the module were
@@ -271,9 +300,19 @@ excluded — it would canonize drift here exactly as it would anywhere else.
 
 Switch to dialogue:
 
-1. Enumerate the behaviours you find in the code, grouped as candidate sections.
-2. Ask your human partner, section by section: *is this intended?*
+1. Enumerate the behaviours **observable at the module's boundary**, grouped as
+   candidate sections.
+2. Ask your human partner, section by section: *is this intended?* — a question
+   about the intention, never about the mechanism.
 3. What they validate becomes the spec. Everything else goes to **Gaps**.
+
+The boundary is what bounds the enumeration, and it is load-bearing: an agent
+reading code sees infrastructure first, so an unbounded enumeration puts data
+stores, triggers and adapter layers to your partner one at a time. **A mechanism
+is not submitted to human validation** — validating it would not make it a rule,
+only an approved drift, and approved drift is worse than drift because nothing
+downstream can tell it apart from a decision. Enumerate what a user or a
+neighbouring module could observe, and nothing else.
 
 Each answer is a human validation, and human validation is the only thing that can
 create normative text where no document exists. So ask section by section: a wall
@@ -302,6 +341,8 @@ plugin itself is entirely English, because it carries no business prose.
 | Thought | Reality |
 |---------|---------|
 | "The code is the real truth, I'll spec what it does" | That canonizes drift and destroys the premise of corrective batches. |
+| "The document prescribes this mechanism, so it is normative" | A validated document is authority over the intentions it states, not the mechanisms it describes. The mechanism goes to the register, naming its source. |
+| "The intention behind this mechanism is obvious, I'll write it down" | Deducing an intention from a mechanism is reconstruction from the code by another road. It comes from a document or from your partner, or it goes to the register. |
 | "I can infer the module boundaries from the directory layout" | Boundaries belong to your human partner. A wrong one contaminates everything downstream. |
 | "This old design doc is close enough to validated" | Ask. The spec's quality is capped by the inventory. |
 | "The audit found nothing, so the register is empty" | An empty register must say whether nothing was found or nothing was examined. |
@@ -309,8 +350,10 @@ plugin itself is entirely English, because it carries no business prose.
 | "These two documents disagree, I'll keep the clearer one" | Most recent wins by default, and the choice is a ruling, written down. |
 | "This behaviour is obviously intended, so into the spec it goes" | Obvious to you is not validated by them. Undocumented behaviour is a gap until a human says otherwise. |
 | "No documents exist, so I'll draft from the code and have them confirm" | A draft to confirm is a blanket yes waiting to happen. Section by section, one question at a time. |
+| "They said yes to it, so this mechanism is now a rule" | A mechanism is not submitted to validation. Enumerate what is observable at the boundary; a validated mechanism is approved drift. |
 | "I'll write the two documents first and create the branch to carry them" | using-git-worktrees opens a separate, empty directory. The branch comes first, at step 3, or both files stay stranded on `main`. |
 | "I'm already in a worktree, that will do" | Its Step 0 sees `GIT_DIR != GIT_COMMON`, reuses it, and the adoption lands on the previous branch. Main checkout first. |
 | "Prose reads better than a list in the gaps register" | Then nothing can reserve, strike or release an entry, and the three downstream gestures break. |
 | "The adoption PR is open, the batch can start" | Merged is adopted. The review is the gate, not the push. |
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |
+| "I ejected those mechanisms at step 4, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit, and step 4's set-aside list is its only route into the register. |

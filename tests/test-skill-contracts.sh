@@ -12,8 +12,13 @@ echo "test-skill-contracts"
 
 # Body only: everything after the closing --- of the frontmatter, flattened so a
 # phrase matches regardless of wrapping.
+# `tr -s ' '` squeezes runs of spaces to one, so a needle stays matchable when the
+# prose it targets is re-wrapped: without it, a wrapped line whose continuation is
+# indented flattens to several spaces where the needle has one, and the guard turns
+# red on text that is correct. No needle in this suite contains two consecutive
+# spaces, so squeezing changes nothing else.
 body_flat() {
-    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" | tr '\n' ' '
+    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" | tr '\n' ' ' | tr -s ' '
 }
 
 # A coupling between two skills only holds if both ends spell it identically.
@@ -113,10 +118,25 @@ shared "and each says a named branch is not enough" \
 # The content rule lives in one place, `using-batches`. A skill that writes into a
 # spec file names it and reuses its question verbatim rather than restating it —
 # a second formulation of the same rule is exactly what drifts. One assertion over
-# the three files: two separate ones would both stay green while one end reworded.
+# the four files: separate ones would all stay green while one end reworded.
+# `adopting-a-module` is in the list because it does not merely write into a spec,
+# it creates one: every sentence of a spec's first version passes through it.
 shared "whoever writes into a spec spells the other-implementation test identically" \
     "read this sentence as true of their code" \
-    using-batches writing-a-user-story closing-a-batch
+    using-batches writing-a-user-story closing-a-batch adopting-a-module
+
+# A gap's *category* does not depend on where you stand; only its sources do. So
+# the skills that gloss it to route say what a gap is and never where it comes
+# from: naming a source there would teach `using-batches` a word — a validated
+# document — that means nothing outside an adoption, and would have to be kept in
+# step with every context that finds gaps some other way.
+#
+# Scoped to the gloss, not the file: `using-batches` names a validated document
+# legitimately elsewhere, in the content rule, as one of the two places an
+# intention may come from.
+absent "no routing gloss names a source of gaps" \
+    "Gaps\*?\*?[^.|]{0,160}validated document" \
+    using-batches writing-a-batch
 
 # `Branch naming` used to deny, in bold, that any mechanism of this system
 # depends on a branch's name. Two sections of the same spec contradicted it, and

@@ -12,8 +12,13 @@ echo "test-skill-content"
 
 # Body only: everything after the closing --- of the frontmatter, flattened so a
 # phrase matches regardless of wrapping.
+# `tr -s ' '` squeezes runs of spaces to one, so a needle stays matchable when the
+# prose it targets is re-wrapped: without it, a wrapped line whose continuation is
+# indented flattens to several spaces where the needle has one, and the guard turns
+# red on text that is correct. No needle in this suite contains two consecutive
+# spaces, so squeezing changes nothing else.
 body_flat() {
-    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" | tr '\n' ' '
+    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" | tr '\n' ' ' | tr -s ' '
 }
 
 require() {
@@ -35,12 +40,26 @@ done
 # --- adopting-a-module (spec 6) ---
 require adopting-a-module "validated documents are normative"    "validated documents are normative"
 require adopting-a-module "never rebuilds a spec from code"      "never reconstructed from the code"
+require adopting-a-module "authority on intentions, not mechanisms"    "**intentions they state**, never on the **mechanisms they describe**"
+require adopting-a-module "a read mechanism goes to the register"      "does not enter the spec: it becomes a gap naming its document"
+require adopting-a-module "no reading through a mechanism"             "you do not read *through* a mechanism"
+require adopting-a-module "the test is applied sentence by sentence"   "Every sentence you write passes the other-implementation test"
 require adopting-a-module "the human delimits the module"        "You never delimit one yourself"
 require adopting-a-module "records Sources in the spec"          "recorded in the \`Sources\` section of the spec"
 require adopting-a-module "produces the gaps register"           "gaps register"
 require adopting-a-module "the register declares its coverage"   "declares its own coverage"
+require adopting-a-module "exclusivity is scoped, not dropped"   "Within that bound, only they create normative text"
+# Step 4 points at the authority rule rather than restating it: a second full
+# statement of the same rule, a few hundred lines from the first, is what drifts.
+require adopting-a-module "step 4 points at the authority rule" "The authority rule of \`Source Authority\` above holds while you write"
+require adopting-a-module "a gap entry names its source document"   "came from a document names that document"
+require adopting-a-module "step 4 files the gap itself"            "goes straight into the gaps register"
+require adopting-a-module "the register is created when needed"    "the first time you need it"
 require adopting-a-module "the PR review is the gate"             "review of the adoption pull request"
 require adopting-a-module "handles the no-document fallback"     "no validated document"
+require adopting-a-module "the fallback enumerates at the boundary"   "observable at the module's boundary"
+require adopting-a-module "the question is about the intention"       "about the intention, never about the mechanism"
+require adopting-a-module "a mechanism is not put to validation"      "A mechanism is not submitted to human validation"
 require adopting-a-module "branch naming convention"             "adopt/"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
@@ -99,6 +118,10 @@ require writing-a-user-story "GC is the only channel to SDD subagents" "only cha
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
+# This duty sorts what the stories brought back; it must not read as a definition
+# of either category. A fourth wording of "what a gap is" would sit outside the
+# `shared` assertion that locks the other three, and drift with nothing to catch it.
+require closing-a-batch "sorts story findings, defines nothing"  "whatever a story reported as"
 require closing-a-batch "releases unconsumed reservations"       "unconsumed reservations"
 require closing-a-batch "records undelivered intentions"         "announced but never delivered"
 require closing-a-batch "refuses to close on an undeclared flag" "no declared scope"

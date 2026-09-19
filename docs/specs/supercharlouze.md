@@ -372,8 +372,15 @@ n'y a pas de cas « pas encore livré » à excepter, parce que ce cas n'existe 
 sections distinctes, parce qu'elles ne se traitent pas pareil :
 
 - **Violations** — le code contredit la spec. Alimente un lot correctif.
-- **Gaps** — le code fait des choses qu'aucune spec ne décrit. Alimente un lot
-  ordinaire qui les spécifie enfin.
+- **Gaps** — un comportement ou une exigence réels qu'aucune spec ne décrit.
+  Alimente un lot ordinaire qui les spécifie enfin.
+
+**La catégorie ne dépend pas du contexte, ses sources oui.** Une adoption trouve
+ses gaps en auditant le code et dans ce que l'écriture de la spec éjecte des
+documents validés ; une story, dans le code qu'elle traverse ; un bounded, dans
+ce qu'il rencontre. **Une entrée nomme le document dont elle vient** quand elle
+vient d'un document, sans quoi l'humain doit relire ce document en entier pour la
+promouvoir.
 
 Chaque entrée désigne une section de la spec et doit être **un item adressable —
 un élément de liste, jamais un paragraphe de prose courante** : trois gestes en
@@ -855,7 +862,11 @@ portant deux documents et aucun code : la spec et le gaps register.
 
 **Ordre d'autorité des sources :**
 
-1. **Les documents validés** sont normatifs. Ils font la vérité.
+1. **Les documents validés** sont normatifs sur les **intentions qu'ils
+   énoncent**, jamais sur les **mécanismes qu'ils décrivent**. Un mécanisme lu
+   dans un document validé n'entre pas dans la spec : il devient un gap nommant
+   son document, et seul l'humain peut l'en promouvoir. Dans cette limite, eux
+   seuls créent du texte normatif.
 2. **Le code** ne corrige jamais un document. Il comble les *silences* des
    documents — les comportements qu'aucun document n'a jamais décrits — et ce qu'il
    y révèle n'entre pas dans la spec de sa propre autorité : c'est un gap, que seul
@@ -866,6 +877,13 @@ portant deux documents et aucun code : la spec et le gaps register.
 depuis le code est une spec qu'aucun code ne peut contredire. La dérive devient
 canon à l'instant où on l'écrit, les violations deviennent indétectables par
 construction, et les lots correctifs perdent la baseline qui les rend possibles.
+
+**On ne lit pas « à travers » un mécanisme pour en déduire l'intention qu'il
+servait.** La clause *On ne reformule pas un mécanisme en règle* de
+`The spec document` vaut ici. Ce qu'un document énonce comme intention est
+normatif et entre ; ce qu'il énonce comme mécanisme devient un gap. Déduire une
+intention d'un mécanisme est la reconstruction depuis le code par un autre
+chemin, que ce mécanisme soit lu dans le code ou dans un document validé.
 
 **Étapes :**
 
@@ -880,28 +898,34 @@ construction, et les lots correctifs perdent la baseline qui les rend possibles.
 3. **Créer la branche `adopt/<module>`** et son espace de travail, comme toute
    pull request de ce système.
 4. **Écrire la spec depuis ces documents seuls.** Fusion, déduplication, mise en
-   cohérence. Quand deux documents validés se contredisent, le plus récent l'emporte
+   cohérence. Chaque phrase écrite passe le test de l'autre implémentation, et ce
+   qu'il éjecte devient un gap nommant le document dont il vient.
+   Quand deux documents validés se contredisent, le plus récent l'emporte
    par défaut, et l'arbitrage est consigné comme ruling — jamais résolu en silence.
    L'adoption n'ayant pas de document de story, ces rulings vivent dans **le corps
    de la pull request d'adoption**.
-5. **Auditer le code contre la spec** et produire le gaps register, avec ses deux
-   sections et sa couverture déclarée. Ne rien corriger au passage : résorber une
-   entrée est un lot à part entière, avec sa propre revue.
+5. **Auditer le code contre la spec** et compléter le gaps register de ce que
+   l'audit révèle, avec ses deux sections et sa couverture déclarée. Ne rien
+   corriger au passage : résorber une entrée est un lot à part entière, avec sa
+   propre revue.
 6. **Ouvrir la pull request d'adoption.** Sa revue est le gate humain, et il n'y en
    a pas d'autre. **Tant qu'elle n'est pas fusionnée, le module n'est pas adopté et
    aucun batch ne peut démarrer dessus.**
 
 **Cas dégradé — un module sans aucun document validé.** L'adoption depuis les
 documents est impossible et la reconstruction depuis le code reste écartée. Le
-skill bascule en dialogue : il énumère les comportements trouvés dans le code,
-groupés en sections candidates, et demande à l'humain **section par section**,
-« est-ce voulu ? ». Ce que l'humain valide devient la spec ; le reste part en gaps.
-La question se pose section par section parce qu'un mur de questions reçoit un
-« oui » global en retour, et un oui global est de la reconstruction depuis le code
-avec des étapes en plus. La section `Sources` enregistre alors qu'aucun document
-validé n'existait, plutôt que de rester muette. Le même traitement s'applique à un
-inventaire partiel : la partie couverte suit les étapes 2 à 5, la partie non
-couverte suit ce dialogue.
+skill bascule en dialogue : il énumère les comportements **observables à la
+frontière du module**, groupés en sections candidates, et demande à l'humain
+**section par section**, « est-ce voulu ? » — une question posée sur l'intention,
+jamais sur le mécanisme. **Un mécanisme ne se soumet pas à validation humaine** :
+le valider n'en ferait pas une règle, seulement une dérive approuvée. Ce que
+l'humain valide devient la spec ; le reste part en gaps. La question se pose
+section par section
+parce qu'un mur de questions reçoit un « oui » global en retour, et un oui global
+est de la reconstruction depuis le code avec des étapes en plus. La section
+`Sources` enregistre alors qu'aucun document validé n'existait, plutôt que de
+rester muette. Le même traitement s'applique à un inventaire partiel : la partie
+couverte suit les étapes 2 à 5, la partie non couverte suit ce dialogue.
 
 ## Skills
 

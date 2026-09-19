@@ -151,7 +151,7 @@ definition, and the reviewers of a story would then report as missing what is
 merely not built yet.
 
 **The gaps register is not a spec.** `docs/specs/<module>.gaps.md` records what
-the code does that no spec describes, and where the code contradicts one — it
+no spec describes, and where the code contradicts one — it
 carries no norm, so nothing you write there is normative and the rule above is
 untouched. That is why a batch reserves its entries in this same pull request
 while still writing nothing into a spec.
@@ -169,7 +169,7 @@ first place.
 
 **The two sections of the register do not feed the same kind of batch.**
 *Violations* — the code contradicts a spec — feed a **corrective** batch.
-*Gaps* — the code does things no spec describes — feed an **ordinary** batch
+*Gaps* — something real that no spec describes — feed an **ordinary** batch
 that finally specifies them, and such a batch has a real spec delta *and*
 reservations. Reservation is not a corrective-batch ceremony: an ordinary batch
 drawing from *Gaps* reserves exactly like a corrective one. Skip it, and two

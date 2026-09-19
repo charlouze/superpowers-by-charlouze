@@ -107,7 +107,7 @@ fi
 #    Assertion 5 proves the old numbered phrasing is gone; without this one,
 #    nothing proves the replacement points anywhere. A renamed section would
 #    break the reference silently — the same defect, one indirection later.
-for h in "Verification" "The init command"; do
+for h in "Verification" "The init command" "The spec document"; do
     if grep -qxF "## $h" "$REPO_ROOT/docs/specs/supercharlouze.md"; then
         pass "the living spec has a section named: $h"
     else

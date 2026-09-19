@@ -16,7 +16,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | A module this work touches has no spec in `docs/specs/` | `supercharlouze:adopting-a-module` — blocking; nothing starts until its pull request merges |
 | Architectural work on adopted modules | `supercharlouze:writing-a-batch` |
 | Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
-| A module's gaps register holds unreserved **Gaps** — the code does things no spec describes | `supercharlouze:writing-a-batch`, as an ordinary batch that finally specifies them |
+| A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:writing-a-batch`, as an ordinary batch that finally specifies them |
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
 | A batch must change scope or flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
