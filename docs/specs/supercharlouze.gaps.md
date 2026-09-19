@@ -212,6 +212,7 @@ sont sous *Violations*.
   d'ailleurs la règle **avec** l'exception que la spec nie — « nothing in the normal
   course of the batch modifies it **until closing** ». Le code a raison. Résorber
   veut dire borner la phrase sur la clôture, et c'est une décision humaine.
+  `reserved by batch-04`
 
 - ~~**Branch naming** — « Une branche laissée sous le nom qu'un outil natif lui a
   donné est invisible des deux » se lit comme général et ne vaut que de `batch/*` et
