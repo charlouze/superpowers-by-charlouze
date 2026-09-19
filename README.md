@@ -34,7 +34,8 @@ test suite are in place.
 ```
 
 Then, in each project you want to move over, run `/supercharlouze:init`. It opens
-a pull request; nothing is adopted until you decide, module by module.
+a pull request that installs the routing block in the project's `CLAUDE.md`;
+nothing is adopted until you decide, module by module.
 
 ## Skills
 
@@ -52,13 +53,23 @@ a pull request; nothing is adopted until you decide, module by module.
 bash tests/run-all.sh
 ```
 
-Structural checks only — see the `Verification` section of
-`docs/specs/supercharlouze.md` for what is deliberately not tested.
+Structural checks only. What they deliberately do not test:
+
+- whether the `CLAUDE.md` block actually wins precedence over superpowers in a
+  live session;
+- whether subagent-driven implementers honour the freeze of the spec file;
+- whether `finishing-a-development-branch` is kept to the pull-request option
+  on a story.
 
 ## Requirements
 
-- Claude Code
+- Claude Code — the only supported harness
 - superpowers installed
+- `gh`, installed and authenticated — number allocation and concurrency
+  detection query it; without it they fall back to a partial net and no longer
+  prevent anything
+
+Projects organised as git submodules are not supported.
 
 ## License
 

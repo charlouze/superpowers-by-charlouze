@@ -139,30 +139,3 @@ else
         echo "  - $(basename "$spec" .md)"
     done
 fi
-
-# A document is claimed only by appearing inside a spec's own ## Sources
-# section — never by turning up elsewhere in that spec (a Changelog cell,
-# prose) or in a .gaps.md file. Those are mentions, not claims, and treating
-# them as claims would let a document silently drop off the checklist this
-# report exists to produce.
-SOURCES_TEXT=""
-while IFS= read -r spec; do
-    [ -n "$spec" ] || continue
-    SOURCES_TEXT="$SOURCES_TEXT$(awk '/^## Sources/{f=1;next} /^## /{f=0} f' "$spec")"$'\n'
-done < <(find "$PROJECT/docs/specs" -maxdepth 1 -type f -name '*.md' ! -name '*.gaps.md' -print 2>/dev/null | sort)
-
-ORPHANS=""
-while IFS= read -r doc; do
-    [ -n "$doc" ] || continue
-    rel="${doc#"$PROJECT"/}"
-    if ! printf '%s' "$SOURCES_TEXT" | grep -qF "$rel"; then
-        ORPHANS="$ORPHANS  - $rel"$'\n'
-    fi
-done < <(find "$PROJECT/docs/archive" -type f -name '*.md' -print 2>/dev/null | sort)
-
-echo "archived documents not listed in any spec Sources section:"
-if [ -z "$ORPHANS" ]; then
-    echo "  (none)"
-else
-    printf '%s' "$ORPHANS"
-fi

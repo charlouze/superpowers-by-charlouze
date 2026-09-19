@@ -24,7 +24,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 ## The Model
 
-**Module** — a coarse functional domain, seen from the outside. A human draws the boundaries; never infer them. Prefer few large modules to many small ones: three modules is a normal project, fifteen is a slicing error.
+**Module** — a coarse functional domain, seen from the outside. A human draws the boundaries; never infer them. Prefer few large modules to many small ones; how many a project needs depends on the size of the product, not on a fixed count.
 
 **Spec** — one living document per module, at `docs/specs/<module>.md`. It is **normative** (what the code must do), not descriptive (what the code happens to do), and it carries **business rules and intentions; the mechanism stays in the code** — see `What a Spec Says` below. It carries no date, no status, no work-in-progress marker. It is the binding authority of every review.
 
@@ -38,7 +38,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Feature flag** — what makes a story deliverable on its own without exposing a half-built batch. `main` is deployed continuously, so every merged story ships; a batch whose stories would expose incomplete behaviour declares a flag.
 
-**The flag is a specified object, not an implementation detail.** The spec section concerned states its name and its default — *"behind the `billing.recurring` flag, off by default"*. Without that declaration, a story merged behind a flag would make the spec false as far as users are concerned, and would reopen through the window exactly the gap the drift rule exists to close.
+**The flag is a specified object, not an implementation detail.** The spec section concerned states its name and its default, as a gating sentence in the form the spec fixes — `` 🔒 `billing.recurring`, off by default ``. Without that declaration, a story merged behind a flag would make the spec false as far as users are concerned, and would reopen through the window exactly the gap the drift rule exists to close.
 
 **The flag is per (batch, module).** Not per story — the batch is the boundary past which nothing is incomplete. But not per batch either: a batch spanning two modules declares **two** flags, one per module. Otherwise its lifting story would have to remove the gating sentence from two specs, while a story targets exactly one module — it would be impossible to write.
 
@@ -60,7 +60,7 @@ A spec carries **business rules and intentions; the mechanism stays in the code*
 
 Yes: it is a rule, it goes in. No: it is this implementation of it, and it stays in the code. The test restates equivalently as replaceability — *could this mechanism be replaced without making the spec false for anyone outside the module?* — and the first form is the one you apply: imagining a colleague is within anyone's reach, imagining an external observer is not.
 
-The test bears on the module's boundary, never on words, and that is what makes it applicable everywhere. A module whose domain *is* infrastructure — a deployment pipeline, or this plugin — states branch names and `gh` calls as rules, because at its boundary they are observable and another implementer would read them as true of theirs. A forbidden vocabulary would make this plugin's own spec illegal; the test lets it be written.
+The test bears on the module's boundary, never on words, and that is what makes it applicable everywhere. A module whose domain *is* infrastructure — a deployment pipeline, or this plugin — states branch names and pull requests as rules, because at its boundary they are observable and another implementer would read them as true of theirs. A forbidden vocabulary would make this plugin's own spec illegal; the test lets it be written.
 
 Two corollaries. **A rule does not move when a mechanism moves:** if a purely technical change of mind forced you to rewrite the sentence, the sentence was describing the technique. **And a spec does not legislate on code quality:** a clumsy implementation that produces the promised behaviour is conformant. The spec says what must be true, never by which road nor with what elegance.
 
@@ -83,7 +83,7 @@ The other-implementation test is enough for the plain case: another implementer 
 
 A number you cannot answer for is a gap, not a guarantee. Written as a guarantee, it turns a legitimate engineering decision into conformance debt, and the corrective batch that follows is regular — which is what makes it undetectable.
 
-**The spec's structure follows the business.** A rule lives where the behaviour it constrains lives, not gathered into a section that groups rules by nature. A section called "the invariants", "the ports" or "what writes where" has the shape of the code's layers, and that shape alone betrays the origin of the text even when every sentence, taken on its own, would pass the test. It is the shape-of-the-code sign, stated constructively.
+**The spec's structure follows the business.** A rule lives where the behaviour it constrains lives. What is banned is a section that reproduces the code's internal decomposition — "the ports", "the adapters", "what writes where" — or that files rules by their nature rather than by what they constrain — "the invariants", "the constraints". That shape alone betrays the origin of the text even when every sentence, taken on its own, would pass the test; it is the shape-of-the-code sign, stated constructively. A section carrying a concept observable at the module's boundary — a naming convention, an authority rule — follows the business, even when that concept holds for several behaviours. Without that last sentence the clause would outlaw this plugin's own spec, whose `Authority and conflict rules` and `Language` gather rules several workflows share.
 
 **Naming is not mechanising.** A glossary binding a business term to the name the code and the interface carry is a rule, not a leak: it states that this concept is called the same everywhere, which is exactly what lets a domain expert read the code and recognise their intentions in it. It passes the test — renaming the identifier without touching the glossary makes the spec false, since the spec promised the opposite. What a glossary need not carry are the names that are nobody's: a persistence type, an adapter class, a store document.
 
@@ -104,9 +104,9 @@ The second is why feature flags exist, and it rules out the two natural alternat
 
 **One branch, one name.** `main` is that protected, continuously deployed branch, and this plugin calls it `main` everywhere — deliberately not an abstract "integration branch". The abstraction is what invites the `develop`-style branch the paragraph above rejects by name.
 
-**A story's pull request carries the spec slice and the code that implements it.** They ship together or not at all, in the same pull request. That is what gives `main` its central property: **its spec always describes exactly what its code does.** There is no intermediate state to signal, therefore no marker, no semantics to explain to agents that know nothing about this plugin, and no exception to the drift rule.
+**A story's pull request carries the spec change and the code that implements it.** They ship together or not at all, in the same pull request. That is what gives `main` its central property: **its spec always describes exactly what its code does.** There is no intermediate state to signal, therefore no marker, no semantics to explain to agents that know nothing about this plugin, and no exception to the drift rule.
 
-**The spec slice is the first commit of every story branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts. A corrective story is the one exception in form and not in purpose: its spec delta is empty, so its first commit strikes the gaps register entry it resolves instead, which fixes its scope in the branch's history exactly the same way. Batch-opening and batch-closing branches carry no spec slice at all — they carry no code either.
+**The spec change is the first commit of every story branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts. A corrective story is the one exception in form and not in purpose: its spec delta is empty, so its first commit strikes the gaps register entry it resolves instead, which fixes its scope in the branch's history exactly the same way. Batch-opening and batch-closing branches carry no spec change at all — they carry no code either.
 
 **The drift rule therefore has no exception:** any divergence between the spec on `main` and the code on `main` is drift, hence corrective work. There is no "not delivered yet" case to exempt, because that case does not exist. Behaviour still gated states its flag, its default and — when the scope outlives the batch — its lifting condition in the spec itself, so the spec stays exactly true: it describes not only what the code does but what it exposes and under what condition.
 
@@ -116,7 +116,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 |---|---|
 | Module adoption | the pull request carrying the spec and the gaps register |
 | Batch opening | the pull request carrying the batch document |
-| Story delivery | the pull request carrying the spec slice and the code |
+| Story delivery | the pull request carrying the spec change and the code |
 | Batch closing | the pull request carrying the changelog, the consolidation and `status: closed` |
 | Batch amendment | the pull request carrying the decision to change its scope or its flag |
 
@@ -128,7 +128,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 
 **When a batch and a spec contradict each other, the spec wins — no exception, no deliberation.** Implement what the spec says, record a `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an agent's.** An agent that "fixes" the spec silently inverts the authority: the batch's intent wins, and the document reviewers rely on becomes a record of what an agent preferred.
 
-**The spec file is frozen, with a start and an end.** Between the transcription commit and the opening of the pull request, no task modifies the spec file; a story that discovers the spec must change stops. Once the pull request is open the freeze lifts — review requests are human decisions, including on the wording of the spec slice. A freeze without an end would make it literally impossible to answer a review, or to resolve a merge conflict on that file. The rule is copied into the `Global Constraints` of every plan, so it sits under the eyes of every implementer and every reviewer.
+**The spec file is frozen, with a start and an end.** Between the transcription commit and the opening of the pull request, no task modifies the spec file; a story that discovers the spec must change stops. Once the pull request is open the freeze lifts — review requests are human decisions, including on the wording of the spec change. A freeze without an end would make it literally impossible to answer a review, or to resolve a merge conflict on that file. The rule is copied into the `Global Constraints` of every plan, so it sits under the eyes of every implementer and every reviewer.
 
 **Every conflict is recorded for the human.** Reuse the existing mechanism rather than inventing one: `superpowers:subagent-driven-development` keeps a ledger whose decisions take the form `Ruling: <decision> — <why> — <what it costs if it is wrong>`, presented under "Rulings I made" before it deletes its workspace. Copy those lines into the story document, on the story's branch, before the merge — they are perishable, and the workspace is already gone.
 
@@ -218,7 +218,7 @@ That is the superpowers feeling kept: a document of this system reads like a sup
 |---------|---------|
 | "The spec is wrong here, I'll fix it and move on" | Correcting a spec is a human act. Implement what the spec says, record the `Ruling:`, and carry on. |
 | "The batch is newer than the spec, so the batch wins" | The spec is the binding authority, without exception and without deliberation. The batch carries scope and order, never behaviour that contradicts a spec. |
-| "I'll transcribe the whole spec delta now, it's more efficient" | One slice per story. A full delta makes the spec describe behaviour nobody delivered yet, and SDD's reviewers will report it as missing. |
+| "I'll transcribe the whole spec delta now, it's more efficient" | One spec change per story. A full delta makes the spec describe behaviour nobody delivered yet, and SDD's reviewers will report it as missing. |
 | "Only writing-plans may follow brainstorming, so I must write the design doc" | Override 1 is declared: steps 6 to 9 are replaced by `supercharlouze:writing-a-batch`. A dated design doc is precisely what this plugin removes. |
 | "Git will conflict if two stories touch the same section" | Git conflicts on lines, not sections; two edits far apart in one section merge cleanly. Compare the declared `Sections:` fields against the open pull requests and against every remote `story/*` branch that carries no pull request yet and whose diff against `main` touches this spec file — the filter keeps the scan from reading, and stopping on, branches that hold nothing you want. |
 | "This batch is refactor-only, the Feature flag field can stay empty" | The field is never empty. "none" plus its reason is a decision the opening gate reviews; a blank is an omission nobody can review. |

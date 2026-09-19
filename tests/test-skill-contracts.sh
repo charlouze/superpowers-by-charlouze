@@ -46,7 +46,7 @@ shared() {
 }
 
 # The mirror of `shared`: a claim that must survive nowhere. Used for a sentence
-# a spec slice removed, which is otherwise guarded by nothing — the positive
+# a spec change removed, which is otherwise guarded by nothing — the positive
 # assertions would stay green on a file that carried both the new phrasing and
 # the old, contradicting one.
 #
@@ -83,26 +83,16 @@ absent() {
     fi
 }
 
-# The human's ruling on a live flag reaches the closing check through these two
-# fixed strings and nothing else: writing-a-batch writes them into the batch
-# document, closing-a-batch matches the first word for word. A paraphrase on
-# either end reads as an unruled flag rather than a flag ruled away, and the
-# batch closes over a lifting story nobody wrote.
-shared "live-flag ruling: carried by this batch" \
-    "carried by this batch — lifting story owed" \
-    writing-a-batch closing-a-batch
-
-shared "live-flag ruling: not this batch" \
-    "not this batch — <reason>" \
-    writing-a-batch closing-a-batch
-
-# The section that carries those rulings is named on both ends.
-shared "the Live flags section is named on both ends" \
-    "Live flags" \
-    writing-a-batch closing-a-batch
+# The specs are the registry of flags: a batch that lifts a flag declared by
+# another says so in its spec delta, and nothing copies flags into the batch
+# document. The former `Live flags` section and its rulings must survive nowhere,
+# or a skill keeps asking for a section no batch document carries any more.
+absent "no skill keeps a Live flags section or its rulings" \
+    "Live flags|carried by this batch|inherited by a ruling" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
 
-# `Number allocation` and the concurrency scan both recognise a branch by its
+# Number allocation and the concurrency scan both recognise a branch by its
 # name, and both on exactly the window where no pull request exists yet. So a
 # skill that creates a branch owes more than "some named branch exists": it
 # restores the conventional name. The loose reading leaves a branch that is
@@ -124,6 +114,22 @@ shared "and each says a named branch is not enough" \
 shared "whoever writes into a spec spells the other-implementation test identically" \
     "read this sentence as true of their code" \
     using-batches writing-a-user-story closing-a-batch adopting-a-module
+
+# The corrective batch's stop condition is copied "in full" into a story's
+# Global Constraints. `using-batches` states it and `writing-a-user-story` has it
+# copied; a copy that adds or drops a sentence is no longer the condition the
+# spec names. One assertion over both ends.
+shared "the corrective stop condition is copied exactly as stated" \
+    "you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified." \
+    using-batches writing-a-user-story
+
+# The gating sentence has one form, fixed by the spec's template. `using-batches`
+# names it and `writing-a-user-story` shows it. Two spellings of the same sentence
+# is how a live flag stops being found. One assertion over the two skills that
+# write it out.
+shared "the gating sentence is spelled in the spec's one form" \
+    "🔒 \`billing.recurring\`, off by default" \
+    using-batches writing-a-user-story
 
 # A gap's *category* does not depend on where you stand; only its sources do. So
 # the skills that gloss it to route say what a gap is and never where it comes

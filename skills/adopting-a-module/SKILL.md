@@ -94,14 +94,16 @@ Your human partner names the module and draws its contours. You never delimit on
 yourself — not from the directory layout, not from package names, not from how the
 code happens to be split today.
 
-Ask. You may show what exists — entry points, directories, obvious clusters — as
-material for their decision, but do not propose a split: a suggestion is read as a
-decision, and this decision is not yours.
+Ask first. Their breakdown comes before any of yours: never open with a proposal
+of your own, because an opening suggestion is read as a decision. If they want it,
+think it through with them — show what exists (entry points, directories, obvious
+clusters) as material, ask questions, lay options side by side. The decision stays
+theirs, and nothing is written until they have made it.
 
-Prefer one coarse module to several small ones. Three modules for a project is
-normal; fifteen is a bad split. A wrong boundary contaminates the spec, the gaps
-register, and every batch that follows, and nothing later in the flow will catch
-it.
+Prefer one coarse module to several small ones; how many a project needs depends
+on the size of the product, not on a fixed count. A wrong boundary contaminates
+the spec, the gaps register, and every batch that follows, and nothing later in
+the flow will catch it.
 
 Record the agreed boundary at the top of the spec: what the module covers, and what
 it explicitly does not.
@@ -121,10 +123,10 @@ For each candidate, say where it is and why you believe it covers the module. Ne
 assume a document is validated because it exists, looks official, or is the only
 one you found. "Close enough to validated" is not validated: ask.
 
-The retained inventory is recorded in the `Sources` section of the spec, by archive
-path. That section is the only persistent link between a spec and the documents
-that fed it, and the init command depends on it: its status report computes which
-archived documents appear in no spec's `Sources` at all.
+Record the retained inventory in the **body of the adoption pull request**, by
+archive path, next to its rulings (step 7): it is what the reviewer checks the spec
+against. The spec itself lists no sources — it is a living document, and archived
+documents stop evolving the day they are archived.
 
 ### 3. Create the branch
 
@@ -167,7 +169,7 @@ descriptive.
   `Ruling: <decision> — <why> — <what it costs if it is wrong>`. Never resolve a
   contradiction in silence; the ruling is what lets a reviewer disagree with you.
   Adoption has no story document and therefore no Rulings log, so these lines go
-  in the **body of the adoption pull request** (step 6), where the reviewer who
+  in the **body of the adoption pull request** (step 7), where the reviewer who
   might disagree will read them.
 - **No date, no status, no in-progress marker.** A spec carries none, ever. On
   `main`, spec and code always travel in the same pull request, so no state exists
@@ -193,10 +195,6 @@ descriptive.
 <Normative prose: what the code must do. Titled so a gaps entry, a story's
 `Sections:` field and a concurrency check can all point at it.>
 
-## Sources
-
-- `docs/archive/specs/<archived document>.md` — <why it covers this module.>
-
 ## Changelog
 
 | batch | date | change |
@@ -211,7 +209,8 @@ the prose under them follows the project's language.
 Read the code against each section you just wrote, and add to the gaps register
 what the audit reveals.
 
-Two sections, kept apart because they are not treated the same way:
+Two categories, each under its own heading, kept apart because they are not
+treated the same way:
 
 - **Violations** — the code contradicts the spec. Feeds a *corrective batch*.
 - **Gaps** — a real behaviour or requirement no spec describes. Feeds an ordinary
@@ -260,7 +259,7 @@ a scope from. Write entries so those gestures are mechanical.
 - **<spec section, or the section that should exist>** — <behaviour no spec
   describes.>
 - **<spec section, or the section that should exist>** — <a mechanism
-  `<the validated document, by the path or title the Sources section uses>`
+  `<the validated document, by its archive path>`
   prescribes and no spec carries.>
 ```
 
@@ -270,10 +269,26 @@ examined" must never look like an empty register that means "everything conforms
 they are opposite facts and they look identical unless you write the difference
 down. Declare the coverage especially when you found nothing.
 
-Fix nothing while you are here. Adoption produces the register; resorbing an entry
-is a batch of its own, with its own review.
+Fix nothing in the code while you are here. Adoption produces the register;
+resorbing a violation is a batch of its own, with its own review.
 
-### 6. Open the adoption pull request
+### 6. Offer to promote the gaps
+
+The code often carries intentions no document ever made visible. **Offer your
+human partner to promote the gaps into the spec**, one gap at a time, before the
+pull request opens. For each gap that describes a behaviour observable at the
+module's boundary, ask whether that behaviour carries an intended rule — a
+question about the intention, never about the mechanism. What they validate goes
+into the spec, under the section that behaviour constrains, and leaves the
+register; everything else stays there.
+
+The intention comes from them, not from you: you show the behaviour, they state or
+confirm what it is for. Paraphrasing an intention from the code yourself and
+asking for a yes is reconstruction from the code with extra steps. A gap that
+names a mechanism is not put to them at all — validating a mechanism would not
+make it a rule, only an approved drift.
+
+### 7. Open the adoption pull request
 
 The branch already exists — you created it at step 3. Commit both documents on
 it, push, and open the pull request.
@@ -281,9 +296,13 @@ it, push, and open the pull request.
 The pull request carries the spec and the gaps register, and no code. Its body
 carries what a reviewer needs to disagree with you: the boundary as your partner
 drew it, the retained inventory, the rulings from step 4, and the declared
-coverage. **The pull request body is where an adoption's rulings live.** Adoption
-produces no story document, so there is no Rulings log to write them into, and a
-ruling nobody can read is a contradiction resolved in silence.
+coverage. **The pull request body is where an adoption's inventory and rulings
+live.** List every retained document by archive path, with why it covers the
+module — or state that no validated document existed. The spec lists no sources,
+so this body is the one place that says what the spec was written from; it stays
+readable long after the merge. Adoption produces no story document either, so
+there is no Rulings log to write the rulings into, and a ruling nobody can read is
+a contradiction resolved in silence.
 
 **The review of the adoption pull request is the mandatory human review.** It is the
 adoption gate, and there is no other one — this plugin adds no ceremony, it puts
@@ -319,13 +338,12 @@ create normative text where no document exists. So ask section by section: a wal
 of questions gets one blanket "yes" back, and a blanket yes is reconstruction from
 the code with extra steps.
 
-The `Sources` section then records that there was no validated document, rather
-than staying silent — a missing section and an empty one read the same, and the
-init command reads it. The declared coverage says which behaviours were never put
-to your partner.
+The adoption pull request body then records that there was no validated document,
+rather than staying silent. The declared coverage says which behaviours were never
+put to your partner.
 
 The same treatment applies to a partial inventory: the covered part of the module
-follows steps 2 to 5, the uncovered part follows this dialogue. Either way the
+follows steps 2 to 6, the uncovered part follows this dialogue. Either way the
 branch of step 3 is created before anything is written.
 
 ## Language

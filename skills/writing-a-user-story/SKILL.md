@@ -1,6 +1,6 @@
 ---
 name: writing-a-user-story
-description: Use when writing the next user story of an open batch - transcribes the spec slice, then hands off to superpowers:writing-plans and subagent-driven-development
+description: Use when writing the next user story of an open batch - transcribes the spec change, then hands off to superpowers:writing-plans and subagent-driven-development
 ---
 
 # Writing a User Story
@@ -8,7 +8,7 @@ description: Use when writing the next user story of an open batch - transcribes
 ## Overview
 
 A story is the unit of technical delivery: **one story, one branch, one pull
-request** — and that pull request carries *both* the spec slice and the code
+request** — and that pull request carries *both* the spec change and the code
 that implements it. They ship together or not at all. That is what gives
 `main` its central property: **its spec always describes exactly
 what its code does.** No intermediate state to signal, no marker, no exception
@@ -18,7 +18,7 @@ to the drift rule.
 story."
 
 This skill runs the whole cycle in one place — preconditions, concurrency
-detection, branch, spec slice, plan, execution, records, review — because the
+detection, branch, spec change, plan, execution, records, review — because the
 pull request carries the story's state. There is nothing to repatriate
 afterwards and nothing to reconcile.
 
@@ -194,18 +194,18 @@ declined, isolation unavailable — two stories share a checkout, SDD derives it
 workspace from the plan's **basename**, and two `us-1-setup.md` would share one
 ledger.
 
-## Step 3 — Commit the Spec Slice First
+## Step 3 — Commit the Spec Change First
 
 Transcribe into `docs/specs/<module>.md` the part of the batch's spec delta
 that **this** story delivers, and commit it as the **first commit on the
 branch** — before the plan is written, before any task runs. **A lifting story
-transcribes a removal:** its slice deletes the gating sentence from the spec
+transcribes a removal:** its spec change deletes the gating sentence from the spec
 instead of adding behaviour, and that deletion is this same first commit (see
 Lifting and Teardown Stories below).
 
 Both properties are load-bearing.
 
-**Incremental.** One slice per story, never the batch's whole delta. Otherwise
+**Incremental.** One spec change per story, never the batch's whole delta. Otherwise
 the spec would describe, while story 1 is still executing, the behaviour of the
 stories that follow — and the SDD reviewers would flag as missing what is not
 yet meant to be delivered.
@@ -216,7 +216,7 @@ the code. It is already in the branch's history when implementation starts, it
 travels in the pull request, and the freeze of Step 4 gets an identifiable
 starting point.
 
-If the batch declares a feature flag, the transcribed slice **states the flag
+If the batch declares a feature flag, the transcribed spec change **states the flag
 and its default**, and — when the declared scope reaches beyond the batch — its
 lifting condition:
 
@@ -230,7 +230,7 @@ reopen through the window exactly the gap the living spec exists to close. The
 sentence disappears in the lifting story, and that is a spec change like any
 other.
 
-**What the slice may contain.** The transcription applies the content rule of
+**What the spec change may contain.** The transcription applies the content rule of
 `supercharlouze:using-batches` — a spec carries business rules and intentions,
 the mechanism stays in the code — to every sentence it writes. Ask it of each:
 *would another developer, having implemented the same intention differently,
@@ -292,9 +292,11 @@ Write them at the same time as the header, not at Step 6. An empty section says
 reviewer cannot tell the second from an omission.
 
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
-part of every task's requirements — carries two things: the constraints the
-batch imposes, that is its `Constraints` section copied verbatim, and **the
-freeze of the spec file**:
+part of every task's requirements — carries four things: the constraints the
+batch imposes, the freeze of the spec file, the authority rule, and — in a
+corrective batch only — the fifth stop condition. The first is the batch's
+`Constraints` section copied verbatim. The second is **the freeze of the spec
+file**:
 
 > Between the transcription commit and the opening of the pull request, no task
 > modifies the spec file. A story that discovers the spec must change stops.
@@ -306,22 +308,20 @@ implementer and every reviewer.
 
 The freeze has a bound: the **freeze is lifted when the pull request opens**.
 Review requests are human decisions, including on the wording of the spec
-slice, and they apply on the story's branch (Step 7). An unbounded freeze would
+change, and they apply on the story's branch (Step 7). An unbounded freeze would
 make it literally impossible to answer a review — or to resolve a merge
 conflict on the spec file.
 
 **When the batch and the spec contradict each other, the spec wins — without
 exception and without deliberation.** Implement what the spec says, record a
 `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an
-agent's.** Put that rule in `Global Constraints` too.
+agent's.** That rule is the third thing `Global Constraints` carries.
 
-**In a corrective batch, `Global Constraints` carries a third thing: the fifth
-stop condition of Step 5, written out in full.** Copy it verbatim:
+**In a corrective batch, `Global Constraints` carries a fourth thing: the fifth
+stop condition of Step 5, written out in full.** Copy it verbatim, exactly as
+`supercharlouze:using-batches` states it:
 
-> If, while bringing code into conformity with the spec, you discover that the
-> **spec** is wrong and the code is right, stop. The batch is no longer
-> corrective and must be requalified. Do not correct the spec and do not work
-> around it.
+> If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
 
 The freeze above already stops a task that finds the spec must change, but it
 stops it and says nothing more. The consequence — that the batch has lost the
@@ -386,7 +386,7 @@ pull request only opens at the very end of this step, through
 branch and a worktree. So: **close the story's pull request without merging it
 if one is already open; the branch and its worktree stay until the
 requalification is ruled.**
-Nothing on `main` changes either way — the spec slice, or the struck
+Nothing on `main` changes either way — the spec change, or the struck
 gaps-register entry, travels with the code and dies with the branch. The
 reservation posted on `main` by the batch's opening pull request is untouched,
 and `supercharlouze:closing-a-batch` releases it. Once the requalification is
@@ -428,7 +428,7 @@ The review of the story's pull request is the delivery gate — a human gate, in
 the tool where you already review everything else.
 
 Apply the **review feedback** on the story's branch, including on the wording
-of the spec slice: the freeze ended when the pull request opened, precisely so
+of the spec change: the freeze ended when the pull request opened, precisely so
 that this is possible. `superpowers:finishing-a-development-branch` preserved
 the worktree on this path, so iterate there. Read the feedback with
 `superpowers:receiving-code-review` rigour — verify before you agree.
@@ -455,7 +455,7 @@ them.
 
 ## Lifting and Teardown Stories
 
-Both are ordinary stories — code plus a spec slice, in one pull request —
+Both are ordinary stories — code plus a spec change, in one pull request —
 written with this skill. No new mechanism.
 
 **The lifting story** removes the branching from the code and the gating
@@ -470,9 +470,9 @@ single story could not do it: it would have to edit two specs.
 Which batch owns it depends on the declared scope. With batch scope, it is the
 **last story of the batch**. With extended scope, it belongs to the batch that
 satisfies the declared lifting condition — often the last batch of a module
-under construction. It is not for the current batch to guess:
-`supercharlouze:writing-a-batch` surfaces every live flag at the opening gate,
-and your human partner rules on whether this batch is the one that lifts.
+under construction. It is not for the current batch to guess: a batch that
+lifts a flag declared by another one says so in its `Spec delta`, and your human
+partner validates it at the opening gate like the rest of that delta.
 
 It is a story and not a closing chore because it carries code, and code
 deserves a review and a test cycle. If you want an observation period between
@@ -481,7 +481,7 @@ The model supports that without changing anything.
 
 **The teardown story** is the other way out. When a batch's scope is abandoned
 while guarded stories are already merged, a teardown story removes the guarded
-code and the corresponding spec slice. It is one of the three exits
+code and the corresponding spec change. It is one of the three exits
 `supercharlouze:closing-a-batch` offers when a flag would otherwise survive its
 batch; without it, refusing to close would manufacture precisely the dead
 flagged code that check exists to prevent.
@@ -506,20 +506,20 @@ documents.
 
 | Thought | Reality |
 |---------|---------|
-| "I'll write the whole batch delta now, it's more efficient" | Reviewers would flag the next stories' behaviour as missing. One slice per story. |
+| "I'll write the whole batch delta now, it's more efficient" | Reviewers would flag the next stories' behaviour as missing. One spec change per story. |
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No merge conflict, so no one else is on this section" | Git conflicts on lines, not sections. Check the open pull requests. |
 | "No open pull request touches this spec, so the section is free" | A story holds its sections from Step 1 until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too. |
 | "No open pull request uses us-3, so us-3 is free" | A branch claims its number from its first commit until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too — same argument as the concurrency scan. |
 | "This pull request has no story document, so I must stop" | Not if it is a `fix/<slug>`: a bounded change declares its sections in its pull request body. Read it there. Stopping would halt every story for as long as one bounded pull request stays open. |
-| "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-slice commit. |
+| "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-change commit. |
 | "The story is abandoned, the branch can stay" | A pushed `story/*` branch with no pull request reads as a live claim on its sections. Delete it, locally and on the remote. |
 | "I'm already in a worktree, that's fine" | Then this story's code lands on the previous story's branch. Return to the main checkout. |
 | "Merging locally is quicker" | It never pushes. It merges into the local `main`, deletes the worktree and the branch, and takes the unrecorded rulings with it. |
-| "I'll transcribe the spec at the end, with the code" | Then the norm is not prior to the code and the freeze has no starting point. The slice ships as commit one. |
+| "I'll transcribe the spec at the end, with the code" | Then the norm is not prior to the code and the freeze has no starting point. The spec change ships as commit one. |
 | "Keeping the branch is harmless" | Without a pull request the story has no observable state and is never delivered. |
 | "Inline execution is simpler for a small story" | It keeps no ledger, so the rulings never reach your human partner. SDD is required. |
 | "I'll copy the rulings after the merge" | The workspace is already gone and the merge may be days later, in another session. |
 | "This drift is small, I'll just add it to the gaps register" | Every story adding to the same section collides there. Record it under Observed drift; closing consolidates. |
-| "The flag is an implementation detail, the spec need not mention it" | Then the spec is false for users. The slice states the flag, its default, and its lifting condition if the scope is extended. |
+| "The flag is an implementation detail, the spec need not mention it" | Then the spec is false for users. The spec change states the flag, its default, and its lifting condition if the scope is extended. |
 | "The batch says otherwise, and the batch is more recent" | The spec wins, without deliberation. Implement the spec, record a Ruling, continue. |
