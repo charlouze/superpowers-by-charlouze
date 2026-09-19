@@ -404,4 +404,9 @@ EOF
 
 ## Rulings log
 
+- Ruling: la story part d'un worktree neuf créé sur `origin/main` fraîchement fetché, et non du checkout principal — la session était isolée dans le worktree d'ouverture du lot et ne pouvait pas en sortir ; l'intention de la précondition (ne pas empiler la story sur une autre branche) est tenue — ce que ça coûte si c'est faux : rien sur la branche, dont la base est `84e0f26`, le `main` du remote.
+- Ruling: la garde de la tâche 1 est élargie à « **Delta block** — the unit of a batch's spec delta: one targeted section and the exact text », au-delà de ce que le plan écrit — la garde doit échouer si la clause qui porte « une section visée » dérive, et c'est une ligne de test — ce que ça coûte si c'est faux : une aiguille un peu plus longue à reprendre si la définition est reformulée.
+- Ruling: les quatre remarques mineures de la relecture finale sont corrigées en une passe — motif de co-occurrence ajouté à la garde négative, garde positive sur « the exact text of every block » dans le corps de la PR, ponctuation de la liste de relecture remise en parallèle bien que le plan l'ait dictée, placeholder `Constraints` qui nomme l'ordre de deux blocs sur une même section — chacune tient en une ligne, et le lot tient pour une dérive toute skill qui parle encore du delta comme d'une intention, donc la garde doit attraper l'idée et pas seulement les anciennes tournures — ce que ça coûte si c'est faux : une regex un peu large, à desserrer si une phrase légitime rapproche un jour « delta » et « intention ».
+- Ruling: la règle d'autorité de la spec (« le lot ne porte que ce qu'une spec ne peut pas porter ») est laissée telle quelle et soumise à l'humain dans la pull request — corriger une spec est un acte humain, et les skills de cette branche n'ont pas créé la tension — ce que ça coûte si c'est faux : une question de plus à la revue de livraison.
+
 ## Observed drift
