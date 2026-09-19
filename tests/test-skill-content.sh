@@ -91,6 +91,19 @@ require writing-a-batch "template declares the Constraints section" "## Constrai
 require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
 require writing-a-batch "Constraints carry nothing normative"       "and nothing normative"
 
+require writing-a-batch "the delta is exact text, in blocks"        "written here as **exact text, in blocks**"
+require writing-a-batch "a block carries a unique D<n>"             "Each one carries an identifier \`D<n>\`, unique within the batch"
+require writing-a-batch "a block quotes what it replaces"           "quotes the current passage, then the text that replaces it"
+require writing-a-batch "no block is attached to a story"           "No block is attached to a story"
+require writing-a-batch "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
+require writing-a-batch "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
+
+# --- writing-a-batch: the opening review (spec section "Opening a batch") ---
+require writing-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
+require writing-a-batch "the text is read in the batch document"     "block by block, in the batch document"
+require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
+require writing-a-batch "the reread checks quotes against main"          "every quoted passage matching \`main\`"
+
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "checks it is in the main checkout"  "main checkout"
 require writing-a-user-story "refreshes main from the remote"     "up to date with the remote"
