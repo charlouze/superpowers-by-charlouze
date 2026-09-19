@@ -292,9 +292,11 @@ Write them at the same time as the header, not at Step 6. An empty section says
 reviewer cannot tell the second from an omission.
 
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
-part of every task's requirements — carries two things: the constraints the
-batch imposes, that is its `Constraints` section copied verbatim, and **the
-freeze of the spec file**:
+part of every task's requirements — carries four things: the constraints the
+batch imposes, the freeze of the spec file, the authority rule, and — in a
+corrective batch only — the fifth stop condition. The first is the batch's
+`Constraints` section copied verbatim. The second is **the freeze of the spec
+file**:
 
 > Between the transcription commit and the opening of the pull request, no task
 > modifies the spec file. A story that discovers the spec must change stops.
@@ -313,15 +315,13 @@ conflict on the spec file.
 **When the batch and the spec contradict each other, the spec wins — without
 exception and without deliberation.** Implement what the spec says, record a
 `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an
-agent's.** Put that rule in `Global Constraints` too.
+agent's.** That rule is the third thing `Global Constraints` carries.
 
-**In a corrective batch, `Global Constraints` carries a third thing: the fifth
-stop condition of Step 5, written out in full.** Copy it verbatim:
+**In a corrective batch, `Global Constraints` carries a fourth thing: the fifth
+stop condition of Step 5, written out in full.** Copy it verbatim, exactly as
+`supercharlouze:using-batches` states it:
 
-> If, while bringing code into conformity with the spec, you discover that the
-> **spec** is wrong and the code is right, stop. The batch is no longer
-> corrective and must be requalified. Do not correct the spec and do not work
-> around it.
+> If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
 
 The freeze above already stops a task that finds the spec must change, but it
 stops it and says nothing more. The consequence — that the batch has lost the

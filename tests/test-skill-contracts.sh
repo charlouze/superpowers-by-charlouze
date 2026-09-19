@@ -125,6 +125,14 @@ shared "whoever writes into a spec spells the other-implementation test identica
     "read this sentence as true of their code" \
     using-batches writing-a-user-story closing-a-batch adopting-a-module
 
+# The corrective batch's stop condition is copied "in full" into a story's
+# Global Constraints. `using-batches` states it and `writing-a-user-story` has it
+# copied; a copy that adds or drops a sentence is no longer the condition the
+# spec names. One assertion over both ends.
+shared "the corrective stop condition is copied exactly as stated" \
+    "you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified." \
+    using-batches writing-a-user-story
+
 # The gating sentence has one form, fixed by the spec's template. `using-batches`
 # names it and `writing-a-user-story` shows it. Two spellings of the same sentence
 # is how a live flag stops being found. One assertion over the two skills that
