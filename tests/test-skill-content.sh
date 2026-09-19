@@ -80,18 +80,16 @@ require writing-a-batch "declares the Feature flag field"         "Feature flag"
 require writing-a-batch "flag field is never left empty"          "never left empty"
 require writing-a-batch "flag is per batch and module"            "per (batch, module)"
 require writing-a-batch "extended scope names its lifting condition" "lifting condition"
-require writing-a-batch "surfaces live flags per module"          "every gating sentence in the specs of the modules"
+require writing-a-batch "the specs are the registry of flags"     "The specs are the registry of flags"
+require writing-a-batch "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
 require writing-a-batch "amendment pull request exists"           "amendment pull request"
 require writing-a-batch "carries the requalification procedure"   "requalification"
 require writing-a-batch "branch naming convention"                "batch/NN"
 
 # --- writing-a-batch: the batch document contract (spec section "The batch document") ---
 require writing-a-batch "template declares the Constraints section" "## Constraints"
-require writing-a-batch "template declares the Live flags section"  "## Live flags"
 require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
 require writing-a-batch "Constraints carry nothing normative"       "and nothing normative"
-require writing-a-batch "live-flag ruling is a fixed string"        "fixed strings, not paraphrases"
-require writing-a-batch "Live flags is a snapshot for this gate"    "snapshot, taken for this gate"
 
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "checks it is in the main checkout"  "main checkout"
@@ -140,8 +138,8 @@ require closing-a-batch "branch naming convention"               "batch/NN"
 # --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
 require closing-a-batch "duty 5 checks before the writing duties" "before duties 1 to 4"
 require closing-a-batch "a refusal must cost nothing"            "makes a refusal free"
-require closing-a-batch "covers flags inherited by a ruling"     "inherited by a ruling at the opening gate"
-require closing-a-batch "the ruling replaces the declaration"    "the ruling replaces the declaration as the test"
+require closing-a-batch "duty 5 checks the flags it declared"   "Check every feature flag **this batch declared**"
+require closing-a-batch "an earlier batch's flag goes to duty 4" "A flag declared by an earlier batch is not this duty's business"
 require closing-a-batch "duty 4 is empty for a corrective batch" "A corrective batch has nothing to compare here"
 require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
 

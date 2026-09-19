@@ -470,9 +470,9 @@ single story could not do it: it would have to edit two specs.
 Which batch owns it depends on the declared scope. With batch scope, it is the
 **last story of the batch**. With extended scope, it belongs to the batch that
 satisfies the declared lifting condition — often the last batch of a module
-under construction. It is not for the current batch to guess:
-`supercharlouze:writing-a-batch` surfaces every live flag at the opening gate,
-and your human partner rules on whether this batch is the one that lifts.
+under construction. It is not for the current batch to guess: a batch that
+lifts a flag declared by another one says so in its `Spec delta`, and your human
+partner validates it at the opening gate like the rest of that delta.
 
 It is a story and not a closing chore because it carries code, and code
 deserves a review and a test cycle. If you want an observation period between

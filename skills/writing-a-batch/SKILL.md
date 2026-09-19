@@ -113,7 +113,8 @@ status: open
 
 ## Spec delta
 
-<The behaviour added to each spec, stated as intention, per module.>
+<The behaviour added to each spec, stated as intention, per module — including
+the lifting of any flag an earlier batch declared and this batch takes on.>
 
 ## Constraints
 
@@ -123,11 +124,6 @@ stories. `none` if there are none.>
 ## Feature flag
 
 <See the next section. Never omitted.>
-
-## Live flags
-
-<See Surfacing Live Flags. `none` if there are none. Each entry carries the
-human's ruling once the review has given it.>
 ```
 
 `status: open | closed` is a front matter value, so it is English even in a
@@ -167,7 +163,7 @@ does not carry it away. `supercharlouze:closing-a-batch` releases whatever is
 left unconsumed — which it can only do for entries that were reserved in the
 first place.
 
-**The two sections of the register do not feed the same kind of batch.**
+**The two categories of the register do not feed the same kind of batch.**
 *Violations* — the code contradicts a spec — feed a **corrective** batch.
 *Gaps* — something real that no spec describes — feed an **ordinary** batch
 that finally specifies them, and such a batch has a real spec delta *and*
@@ -256,66 +252,35 @@ default and — when the scope extends — its lifting condition are written int
 that here so the story author knows it is owed; do not write it into the spec
 yourself.
 
-## Surfacing Live Flags
+## Flags Declared by Earlier Batches
 
-List **every gating sentence in the specs of the modules** this batch touches —
-at module granularity, whatever sections the batch actually targets — and copy
-each one into the `Live flags` section of the batch document with its lifting
-condition. If there are none, write `none`, so that "checked, nothing found" does
-not look like "never checked".
+**The specs are the registry of flags.** A flag exists as long as its gating
+sentence stands in a spec section, with its default and, when it outlives its
+batch, its lifting condition. There is no other list to keep, and the batch
+document copies none: anyone reading or changing that section sees the flag.
 
-The human then rules at the gate: *does this batch satisfy the condition, and
-does it therefore carry the lifting story?*
+So read the gating sentences of the specs this batch touches. When this batch's
+work satisfies one's lifting condition, and your human partner agrees, **state
+its lifting in the `Spec delta`**, like any other intention. Lifting a flag
+removes its gating sentence: it is a change of spec like any other, delivered by
+a lifting story (`supercharlouze:writing-a-user-story`), and
+`supercharlouze:closing-a-batch` catches it undelivered the way it catches any
+intention the delta announced and no story transcribed.
 
-**Record that ruling next to its entry before the pull request merges.** One
-line per surfaced flag — `carried by this batch — lifting story owed` or
-`not this batch — <reason>` — written into `Live flags` on the batch branch, in
-answer to the review. Recording it is review feedback applied to an open pull
-request, which is exactly how every other correction reaches this document; it
-is not mutable state, because after the merge nothing edits it again. Without
-that line the ruling exists only in a review thread:
-`supercharlouze:closing-a-batch` checks the flags this batch declared **and the
-ones it inherited by a ruling at the opening gate**, and it learns of the second
-kind from `Live flags` alone. So a flag declared by batch 05, surfaced by batch
-08 and assigned by the human to 08 would be checked by nobody if the lifting
-story were never written — the forgotten-flag failure this section exists to
-close, reintroduced at the very gate meant to close it.
-
-**Those two annotations are fixed strings, not paraphrases.** Write
-`carried by this batch — lifting story owed` verbatim, on one line, immediately
-under the surfaced flag it rules on; or `not this batch — <reason>` with the
-reason in the project's language after the dash. `supercharlouze:closing-a-batch`
-reads the `Live flags` section of this document and matches the literal
-`carried by this batch — lifting story owed`; a flag it cannot match that way is
-an unruled flag, not a flag ruled away. Reword the annotation and the reader
-finds nothing, which is the failure this whole section exists to close.
-
-**`Live flags` is a snapshot, taken for this gate.** It records what was live
-when this batch opened and what was ruled about it; it is not a registry to
-keep in step with reality. The gating sentence in each module spec remains the
-authoritative statement of a flag, its default and its lifting condition —
-which is why a closed batch document is never consulted to find out whether a
-flag is still live.
-
-The granularity is what makes the control useful. Surfacing only the sections the
-batch modifies would let an extended-scope flag survive forever: the last batch
-of a module typically adds new sections without touching the old ones, so nothing
-would surface, the module would be "fully delivered", and the flag would stay off
-for good. Modules are coarse by construction, so reading them whole costs little
-and closes that hole. This is the place — and nowhere else — where every batch is
-asked again whether a flag has come due.
+A flag whose condition is met and that no batch takes on stays where it is: in
+the spec, with its condition, in front of whoever touches that section next.
 
 ## Opening the Pull Request
 
 Before opening, reread the batch document against the specs with fresh eyes:
 scope stated with its "why now", spec delta per module, `Constraints` stated or
 `none`, `Feature flag` filled, reservations made for every gaps register entry
-this batch takes on — corrective or ordinary — and live flags surfaced.
+this batch takes on — corrective or ordinary — and the lifting of any earlier
+flag this batch takes on stated in the delta.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
-reviewer has to rule on: the flag decision, the scope, and each surfaced live
-flag. As the review answers, write each live-flag ruling into the document, on
-this branch, before it merges.
+reviewer has to rule on: the flag decision, the scope, and any flag lifting the
+delta announces.
 
 **The review of the batch pull request is the human gate.** Until it merges, no
 story is written and no spec is touched. It replaces the tail of the
@@ -415,12 +380,11 @@ skeleton.
 | "No flag needed, this batch is small" | Small is not the criterion. Would one story, merged alone, leave a user facing something incomplete? |
 | "I'll take the next free number from the directory" | Work in an open pull request has not reached main yet, and a pushed branch may hold a number with no pull request at all. Ask gh and `git ls-remote --heads` too. |
 | "I'll add the story list to the batch document, it's clearer" | Every story would then conflict on that file, for information the directory already holds. |
-| "There's a flag on this module but my batch doesn't touch that section" | Surface it anyway. That is how an extended-scope flag gets lifted instead of forgotten. |
+| "This batch satisfies that flag's lifting condition, I'll lift it in passing" | Lifting is a spec change. State it in the `Spec delta`, where the gate sees it, and a lifting story delivers it. |
 | "I'll transcribe the spec delta now, while it's fresh" | The spec would then describe behaviour no code delivers. Each story transcribes its own slice. |
 | "The module has no spec yet, I'll write the batch and adopt later" | Adoption is blocking. Otherwise the batch invents the norm it is supposed to obey. |
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
 | "This batch is ordinary, reservations are a corrective-batch thing" | Any batch taking on gaps register entries reserves them at opening — a Gaps entry as much as a Violations one. Otherwise two batches specify the same behaviour. |
 | "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open; otherwise discard the branch, locally and on the remote, and its worktree — a branch left on the remote reads as a live claim on its sections. |
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: it moves only through an amendment pull request of its own. |
-| "The human ruled on the live flags in the review, that's recorded" | A review thread is not the document. Write the ruling into `Live flags` before the merge, or closing has nothing to check. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
