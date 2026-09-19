@@ -529,7 +529,7 @@ the project's language. The boundary runs *inside* each document, not between
 documents.
 
 - **Skeleton, always English:** section titles, field names (`Spec:`,
-  `Batch:`, `Sections:`, `Rulings log`, `Observed drift`), template labels,
+  `Batch:`, `Sections:`, `Blocks:`, `Rulings log`, `Observed drift`), template labels,
   front matter values, table headers, path and branch patterns.
 - **Prose, in the project's language:** the body of the requirements, the
   descriptions, the justifications, and the slugs of files and directories —

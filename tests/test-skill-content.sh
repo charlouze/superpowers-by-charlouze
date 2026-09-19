@@ -97,6 +97,11 @@ require writing-a-batch "a block quotes what it replaces"           "quotes the 
 require writing-a-batch "no block is attached to a story"           "No block is attached to a story"
 require writing-a-batch "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
 require writing-a-batch "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
+# Closing finds an undelivered block from the `Blocks:` declarations, not from what
+# reached the specs (spec section "Closing a batch"). The two coincide on the nominal
+# path and part exactly where a block was fitted to a `main` that had moved: it was
+# transcribed and it was declared, but its text no longer matches the delta.
+require writing-a-batch "undelivered means nobody declared it"      "the delta announced and no story declared"
 
 # --- writing-a-batch: the opening review (spec section "Opening a batch") ---
 require writing-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
@@ -157,6 +162,10 @@ require closing-a-batch "consolidates Observed drift"            "Observed drift
 require closing-a-batch "sorts story findings, defines nothing"  "whatever a story reported as"
 require closing-a-batch "releases unconsumed reservations"       "unconsumed reservations"
 require closing-a-batch "records undelivered blocks"             "announced but never delivered"
+require closing-a-batch "duty 5 reads the Blocks declarations"   "Read the \`Blocks:\` field of every story document in the batch directory"
+require closing-a-batch "a block nobody declared is undelivered" "no collected declaration names is a block announced but never delivered"
+require closing-a-batch "the directory holds the merged stories" "holds exactly the batch's merged stories"
+require closing-a-batch "reads the declarations, not the specs"  "Read the declarations, not the specs"
 require closing-a-batch "refuses to close on an undeclared flag" "no declared scope"
 require closing-a-batch "offers three exits"                     "three exits"
 require closing-a-batch "sets status closed"                     "status: closed"

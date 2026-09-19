@@ -164,4 +164,28 @@ absent "no skill calls the spec delta an intention" \
     "stated as intention|as intention only|like any other intention|an intention like any other|intentions? (the (batch|delta) )?announced|announced intention|announced no intention|an intention not delivered|carries the intention|(delta|announc)[^.]{0,60}[Ii]ntention|[Ii]ntention[^.]{0,60}(delta|announc)" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
+# The `Blocks:` field is one coupling with two ends: a story document declares it
+# (spec section "The user story document"), and closing reads it to find the
+# blocks nobody delivered (spec section "Closing a batch"). One assertion over
+# both files — two separate ones would each stay green while one end renamed the
+# field, which is the whole failure this locks out.
+shared "both ends spell the Blocks field alike" \
+    "\`Blocks:\`" \
+    writing-a-user-story closing-a-batch
+
+# Duty 5 reads the `Blocks:` declarations, not the specs: a block fitted to a
+# `main` that moved since the batch opened is delivered even though its text no
+# longer matches the delta word for word, and diffing the specs against that
+# delta would wrongly report it missing. A positive assertion cannot lock this
+# out — the Red Flags table and the duty 5 precondition can both carry the new
+# wording while an old cell or clause still points a reader at the specs, and a
+# `require` on the new text would stay green regardless. The regex targets the
+# two forms that phrase found: "check the specs on main" and "against what
+# actually shipped". It must not match duty 5's own contrast at line 91 —
+# "Diffing the specs against the delta would report it missing" — which pairs
+# "specs" with "the delta", never with "main" or "shipped".
+absent "no skill finds undelivered blocks by reading or diffing the specs" \
+    "[Cc]heck the specs on main|against what (actually )?shipped" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
 exit $((FAILURES > 0))
