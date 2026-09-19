@@ -221,81 +221,24 @@ fi
 REPORT="$TEST_ROOT/report.txt"
 bash "$INIT" "$P1" > "$REPORT"
 ADOPTED_NEXT="$(awk '/^adopted modules:/ { getline; print; exit }' "$REPORT")"
-ARCHIVED_NEXT="$(awk '/^archived documents not listed/ { getline; print; exit }' "$REPORT")"
 if printf '%s' "$ADOPTED_NEXT" | grep -qi "none"; then
     pass "report: an empty adopted-modules list says none"
 else
     fail "report: an empty adopted-modules list says none"
 fi
-if printf '%s' "$ARCHIVED_NEXT" | grep -qi "none"; then
-    pass "report: an empty archived-documents list says none"
-else
-    fail "report: an empty archived-documents list says none"
-fi
 
-# --- Case 15: only a spec's ## Sources section counts as a claim on an
-# archived document. A path that merely appears in a Changelog table cell or
-# in the module's .gaps.md file must NOT suppress the document from being
-# reported as unclaimed — those are prose mentions, not claims. ---
-P12="$TEST_ROOT/sources-scope-unclaimed"
+# --- Case 15: a spec carries no list of sources, so the report ties no archived
+# document to a spec. Archived documents are dead once adopted from; a living
+# spec that pointed at them would drift from them. ---
+P12="$TEST_ROOT/archive-only"
 mkdir -p "$P12/docs/specs" "$P12/docs/archive/specs"
 touch "$P12/docs/archive/specs/2025-01-01-legacy-design.md"
-cat > "$P12/docs/specs/2025-02-01-mything-design.md" <<'EOF'
-# mything design
-
-## Changelog
-
-| Date | Note |
-| --- | --- |
-| 2025-02-01 | migrated from docs/archive/specs/2025-01-01-legacy-design.md |
-
-## Sources
-
-- none
-EOF
-cat > "$P12/docs/specs/2025-02-01-mything-design.gaps.md" <<'EOF'
-# mything gaps
-
-Still refers to docs/archive/specs/2025-01-01-legacy-design.md for context.
-EOF
 REPORT12="$TEST_ROOT/report12.txt"
 bash "$INIT" "$P12" > "$REPORT12"
-if grep -qF "docs/archive/specs/2025-01-01-legacy-design.md" "$REPORT12"; then
-    pass "sources scope: a document named only in Changelog/gaps is reported as unclaimed"
+if grep -qiE "sources|claim|2025-01-01-legacy-design" "$REPORT12"; then
+    fail "report: no archived document is tied to a spec"
 else
-    fail "sources scope: a document named only in Changelog/gaps is reported as unclaimed"
-fi
-
-# --- Case 16: companion to Case 15 — a path actually listed under a spec's
-# ## Sources section must NOT be reported as unclaimed, so the fix cannot pass
-# by simply listing every archived document regardless of content. ---
-P13="$TEST_ROOT/sources-scope-claimed"
-mkdir -p "$P13/docs/specs" "$P13/docs/archive/specs"
-touch "$P13/docs/archive/specs/2025-01-01-legacy-design.md"
-cat > "$P13/docs/specs/2025-02-01-mything-design.md" <<'EOF'
-# mything design
-
-## Changelog
-
-| Date | Note |
-| --- | --- |
-| 2025-02-01 | migrated from docs/archive/specs/2025-01-01-legacy-design.md |
-
-## Sources
-
-- docs/archive/specs/2025-01-01-legacy-design.md
-EOF
-cat > "$P13/docs/specs/2025-02-01-mything-design.gaps.md" <<'EOF'
-# mything gaps
-
-Still refers to docs/archive/specs/2025-01-01-legacy-design.md for context.
-EOF
-REPORT13="$TEST_ROOT/report13.txt"
-bash "$INIT" "$P13" > "$REPORT13"
-if grep -qF "docs/archive/specs/2025-01-01-legacy-design.md" "$REPORT13"; then
-    fail "sources scope: a document named under Sources is not reported as unclaimed"
-else
-    pass "sources scope: a document named under Sources is not reported as unclaimed"
+    pass "report: no archived document is tied to a spec"
 fi
 
 # --- Case 17: what the plugin does not own is neither moved nor removed ---

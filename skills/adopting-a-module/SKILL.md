@@ -123,10 +123,10 @@ For each candidate, say where it is and why you believe it covers the module. Ne
 assume a document is validated because it exists, looks official, or is the only
 one you found. "Close enough to validated" is not validated: ask.
 
-The retained inventory is recorded in the `Sources` section of the spec, by archive
-path. That section is the only persistent link between a spec and the documents
-that fed it, and the init command depends on it: its status report computes which
-archived documents appear in no spec's `Sources` at all.
+Record the retained inventory in the **body of the adoption pull request**, by
+archive path, next to its rulings (step 6): it is what the reviewer checks the spec
+against. The spec itself lists no sources — it is a living document, and archived
+documents stop evolving the day they are archived.
 
 ### 3. Create the branch
 
@@ -195,10 +195,6 @@ descriptive.
 <Normative prose: what the code must do. Titled so a gaps entry, a story's
 `Sections:` field and a concurrency check can all point at it.>
 
-## Sources
-
-- `docs/archive/specs/<archived document>.md` — <why it covers this module.>
-
 ## Changelog
 
 | batch | date | change |
@@ -262,7 +258,7 @@ a scope from. Write entries so those gestures are mechanical.
 - **<spec section, or the section that should exist>** — <behaviour no spec
   describes.>
 - **<spec section, or the section that should exist>** — <a mechanism
-  `<the validated document, by the path or title the Sources section uses>`
+  `<the validated document, by its archive path>`
   prescribes and no spec carries.>
 ```
 
@@ -283,9 +279,13 @@ it, push, and open the pull request.
 The pull request carries the spec and the gaps register, and no code. Its body
 carries what a reviewer needs to disagree with you: the boundary as your partner
 drew it, the retained inventory, the rulings from step 4, and the declared
-coverage. **The pull request body is where an adoption's rulings live.** Adoption
-produces no story document, so there is no Rulings log to write them into, and a
-ruling nobody can read is a contradiction resolved in silence.
+coverage. **The pull request body is where an adoption's inventory and rulings
+live.** List every retained document by archive path, with why it covers the
+module — or state that no validated document existed. The spec lists no sources,
+so this body is the one place that says what the spec was written from; it stays
+readable long after the merge. Adoption produces no story document either, so
+there is no Rulings log to write the rulings into, and a ruling nobody can read is
+a contradiction resolved in silence.
 
 **The review of the adoption pull request is the mandatory human review.** It is the
 adoption gate, and there is no other one — this plugin adds no ceremony, it puts
@@ -321,10 +321,9 @@ create normative text where no document exists. So ask section by section: a wal
 of questions gets one blanket "yes" back, and a blanket yes is reconstruction from
 the code with extra steps.
 
-The `Sources` section then records that there was no validated document, rather
-than staying silent — a missing section and an empty one read the same, and the
-init command reads it. The declared coverage says which behaviours were never put
-to your partner.
+The adoption pull request body then records that there was no validated document,
+rather than staying silent. The declared coverage says which behaviours were never
+put to your partner.
 
 The same treatment applies to a partial inventory: the covered part of the module
 follows steps 2 to 5, the uncovered part follows this dialogue. Either way the

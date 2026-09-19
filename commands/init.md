@@ -20,8 +20,7 @@ exception — see `Installing on a project` in
    unbalanced, stop and tell your human partner — do not repair the file
    yourself.
 3. Commit, push, and open the pull request.
-4. Report the script's output as a state of play: which modules are adopted, and
-   which archived documents no spec claims as a source.
+4. Report the script's output as a state of play: which modules are adopted.
 
 **Do not adopt anything.** Adoption is a deliberate, per-module decision made by
 your human partner, and it runs through `supercharlouze:adopting-a-module`.
