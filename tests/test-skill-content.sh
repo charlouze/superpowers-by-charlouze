@@ -145,6 +145,7 @@ require using-batches "lists the laundering signs"              "Four signs reco
 require using-batches "a business choice carries its number"    "A business choice carries its number"
 require using-batches "vagueness is not prudence"               "Vagueness is not prudence"
 require using-batches "a number says where it comes from"       "a decision, or a reading of the code"
+require using-batches "infrastructure states branches and PRs"  "states branch names and pull requests as rules"
 require using-batches "structure follows the business"          "structure follows the business"
 require using-batches "a glossary is a rule, not a leak"        "Naming is not mechanising"
 require using-batches "one normative level, no ranking"         "normative, at the same level"
