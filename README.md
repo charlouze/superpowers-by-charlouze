@@ -61,6 +61,22 @@ Structural checks only. What they deliberately do not test:
 - whether `finishing-a-development-branch` is kept to the pull-request option
   on a story.
 
+Every pull request runs them in CI, next to a check of its commits: each
+subject follows [Conventional Commits](https://www.conventionalcommits.org),
+and no `fixup!` commit is left unfolded.
+
+## Releasing
+
+[release-please](https://github.com/googleapis/release-please) keeps a release
+pull request open against `main`, updated on every merge: it bumps the version
+in both manifests, derives it from the commits (`feat` a minor, `fix` a patch)
+and writes `CHANGELOG.md`. Merging it tags `vX.Y.Z` and publishes the GitHub
+release. Nothing is lost while it waits — it only delays what installed
+plugins receive.
+
+It runs as the `charlouze-dev-agent` GitHub App, read from the
+`AGENT_APP_CLIENT_ID` variable and the `AGENT_APP_PRIVATE_KEY` secret.
+
 ## Requirements
 
 - Claude Code — the only supported harness

@@ -58,6 +58,20 @@ else
     fail "versions agree (plugin '$PV', marketplace '$MV')"
 fi
 
+# release-please bumps the manifests from its own record of the last version;
+# a record out of step would compute the next release from the wrong base.
+# Its key is ".", which read_field would split, so it is read directly.
+RELEASE_JSON="$REPO_ROOT/.release-please-manifest.json"
+RV="$(node -e '
+    const o = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"));
+    process.stdout.write(String(o["."] ?? ""));
+' "$RELEASE_JSON" 2>/dev/null || true)"
+if [ -n "$RV" ] && [ "$RV" = "$PV" ]; then
+    pass "release-please manifest agrees ($RV)"
+else
+    fail "release-please manifest agrees (release-please '$RV', plugin '$PV')"
+fi
+
 MN="$(read_field "$MARKET_JSON" "plugins.0.name")"
 if [ "$MN" = "supercharlouze" ]; then
     pass "marketplace entry names the plugin"
