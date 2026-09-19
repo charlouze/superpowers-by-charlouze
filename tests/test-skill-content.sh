@@ -50,6 +50,8 @@ require adopting-a-module "the human delimits the module"        "You never deli
 require adopting-a-module "records the inventory in the PR body" "Record the retained inventory in the **body of the adoption pull request**"
 require adopting-a-module "the spec lists no sources"            "The spec itself lists no sources"
 require adopting-a-module "the PR body lists every source"       "List every retained document by archive path"
+require adopting-a-module "offers to promote the gaps"           "to promote the gaps into the spec"
+require adopting-a-module "no mechanism is put up for promotion" "A gap that names a mechanism is not put to them"
 require adopting-a-module "produces the gaps register"           "gaps register"
 require adopting-a-module "the register declares its coverage"   "declares its own coverage"
 require adopting-a-module "exclusivity is scoped, not dropped"   "Within that bound, only they create normative text"

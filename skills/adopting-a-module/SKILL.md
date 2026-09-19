@@ -124,7 +124,7 @@ assume a document is validated because it exists, looks official, or is the only
 one you found. "Close enough to validated" is not validated: ask.
 
 Record the retained inventory in the **body of the adoption pull request**, by
-archive path, next to its rulings (step 6): it is what the reviewer checks the spec
+archive path, next to its rulings (step 7): it is what the reviewer checks the spec
 against. The spec itself lists no sources — it is a living document, and archived
 documents stop evolving the day they are archived.
 
@@ -169,7 +169,7 @@ descriptive.
   `Ruling: <decision> — <why> — <what it costs if it is wrong>`. Never resolve a
   contradiction in silence; the ruling is what lets a reviewer disagree with you.
   Adoption has no story document and therefore no Rulings log, so these lines go
-  in the **body of the adoption pull request** (step 6), where the reviewer who
+  in the **body of the adoption pull request** (step 7), where the reviewer who
   might disagree will read them.
 - **No date, no status, no in-progress marker.** A spec carries none, ever. On
   `main`, spec and code always travel in the same pull request, so no state exists
@@ -209,7 +209,8 @@ the prose under them follows the project's language.
 Read the code against each section you just wrote, and add to the gaps register
 what the audit reveals.
 
-Two sections, kept apart because they are not treated the same way:
+Two categories, each under its own heading, kept apart because they are not
+treated the same way:
 
 - **Violations** — the code contradicts the spec. Feeds a *corrective batch*.
 - **Gaps** — a real behaviour or requirement no spec describes. Feeds an ordinary
@@ -268,10 +269,26 @@ examined" must never look like an empty register that means "everything conforms
 they are opposite facts and they look identical unless you write the difference
 down. Declare the coverage especially when you found nothing.
 
-Fix nothing while you are here. Adoption produces the register; resorbing an entry
-is a batch of its own, with its own review.
+Fix nothing in the code while you are here. Adoption produces the register;
+resorbing a violation is a batch of its own, with its own review.
 
-### 6. Open the adoption pull request
+### 6. Offer to promote the gaps
+
+The code often carries intentions no document ever made visible. **Offer your
+human partner to promote the gaps into the spec**, one gap at a time, before the
+pull request opens. For each gap that describes a behaviour observable at the
+module's boundary, ask whether that behaviour carries an intended rule — a
+question about the intention, never about the mechanism. What they validate goes
+into the spec, under the section that behaviour constrains, and leaves the
+register; everything else stays there.
+
+The intention comes from them, not from you: you show the behaviour, they state or
+confirm what it is for. Paraphrasing an intention from the code yourself and
+asking for a yes is reconstruction from the code with extra steps. A gap that
+names a mechanism is not put to them at all — validating a mechanism would not
+make it a rule, only an approved drift.
+
+### 7. Open the adoption pull request
 
 The branch already exists — you created it at step 3. Commit both documents on
 it, push, and open the pull request.
@@ -326,7 +343,7 @@ rather than staying silent. The declared coverage says which behaviours were nev
 put to your partner.
 
 The same treatment applies to a partial inventory: the covered part of the module
-follows steps 2 to 5, the uncovered part follows this dialogue. Either way the
+follows steps 2 to 6, the uncovered part follows this dialogue. Either way the
 branch of step 3 is created before anything is written.
 
 ## Language
