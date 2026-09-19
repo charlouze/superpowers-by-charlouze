@@ -11,7 +11,7 @@ A batch closes when every one of its user stories is merged or abandoned and the
 
 Abandoning a story is almost free: closing its pull request without merging throws away the spec change and the code together — nothing to revoke, no spec left out of step. But two things it never touched are still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the intention the batch announced in its spec delta. **No other skill picks them up.** If closing skips a duty, that duty is simply never done.
 
-Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 1 is allowed to refuse, and because it is allowed to refuse it comes before the four that write.
+Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 1 is allowed to refuse, and because it is allowed to refuse it comes before the five that write.
 
 **Announce at start:** "I'm using the closing-a-batch skill to close batch NN."
 
@@ -27,9 +27,9 @@ Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 1 
 
 Do all six on the same branch, in order. Then open one pull request.
 
-**Duty 1 is a check, not a write, and it comes before duties 2 to 5 write anything.** Read the code and the specs for surviving flags this batch declared and decide whether this batch may be closed at all; only then write.
+**Duty 1 is a check, not a write, and it comes before any other duty writes anything.** Read the code and the specs for surviving flags this batch declared and decide whether this batch may be closed at all; only then write.
 
-The reason is what a refusal costs. Duties 2 to 5 all write: changelog lines into every touched spec, consolidated drift and recorded shortfalls into the gaps registers, released reservations. Duty 1 writes nothing — it reports and hands the decision to your human partner. Check first and a refusal costs nothing: the close branch is still empty, there is no commit to abandon, and the batch closes later in one clean run once the lifting story has merged. Check last and a refusal strands four duties' worth of writing on a branch nobody may merge, and none of it is safe to re-run: a second attempt would append the changelog line a second time, re-append every consolidated drift entry, and find reservations duty 4 had already released for a batch that was never closed.
+The reason is what a refusal costs. The five others all write: changelog lines into every touched spec, consolidated drift and recorded shortfalls into the gaps registers, released reservations, the closed status. Duty 1 writes nothing — it reports and hands the decision to your human partner. Check first and a refusal costs nothing: the close branch is still empty, there is no commit to abandon, and the batch closes later in one clean run once the lifting story has merged. Check any later and a refusal strands the writing already done on a branch nobody may merge, and none of it is safe to re-run: a second attempt would append the changelog line a second time, re-append every consolidated drift entry, and find reservations duty 4 had already released for a batch that was never closed.
 
 So: if duty 1 refuses, **stop before writing anything.** Report the surviving flag, present the three exits below, and leave the batch open. The only thing to clean up is an empty branch and its workspace.
 
@@ -106,7 +106,7 @@ Then push and open the pull request. The **review of the closing pull request** 
 | "The changelog is already up to date, each story added its line" | Stories do not write the changelog. One line per batch, here. |
 | "Observed drift is out of scope for this batch" | That is exactly why it goes to the register instead of being forgotten. |
 | "A flag is still live, so I cannot close — dead end" | Three exits: lift it, declare an extended scope by amendment, or tear the guarded code down. |
-| "I'll do the writing duties first and check the flags at the end" | Duty 1 writes nothing, so it checks first. Checked last, a refusal strands four duties of writing on a branch nobody can merge, and re-running duplicates all of it. |
+| "I'll do the writing duties first and check the flags at the end" | Duty 1 writes nothing, so it checks first. Checked later, a refusal strands the writing already done on a branch nobody can merge, and re-running duplicates all of it. |
 | "I'm already in a worktree from this batch's last story, I'll close from here" | using-git-worktrees would reuse it and the closure would land on that story's branch. Back to the main checkout first. |
 | "The flag is gone from the code, that is enough" | The gating sentence in the spec is part of the flag. Left behind, it makes the spec false. |
 | "The delta announced lifting an earlier batch's flag, but duty 1 only checks our own flags" | Right, and duty 5 checks the rest: an announced lifting that did not happen is an intention not delivered. |

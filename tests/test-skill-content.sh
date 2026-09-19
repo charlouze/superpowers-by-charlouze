@@ -137,7 +137,7 @@ require closing-a-batch "branch naming convention"               "batch/NN"
 
 # --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
 require closing-a-batch "the flag check is duty 1"               "### 1. Refuse to close on a flag"
-require closing-a-batch "duty 1 checks before the writing duties" "it comes before duties 2 to 5 write anything"
+require closing-a-batch "duty 1 checks before the writing duties" "it comes before any other duty writes anything"
 require closing-a-batch "a refusal must cost nothing"            "makes a refusal free"
 require closing-a-batch "duty 1 checks the flags it declared"   "Check every feature flag **this batch declared**"
 require closing-a-batch "an earlier batch's flag goes to duty 5" "A flag declared by an earlier batch is not this duty's business"
