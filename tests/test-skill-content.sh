@@ -137,6 +137,10 @@ require writing-a-user-story "GC is the only channel to SDD subagents" "only cha
 # "The user story document", "Delivering a story") ---
 require writing-a-user-story "each story chooses its own blocks"  "chooses, as it is written, the blocks of the spec delta it transcribes"
 require writing-a-user-story "a block is never shared"            "a block is never shared between two stories"
+require writing-a-user-story "the header carries four extra fields" "extend the standard header with four fields"
+require writing-a-user-story "the header template declares Blocks"  "**Blocks:** D3, D7"
+require writing-a-user-story "Blocks is what closing reads"         "reads to find the blocks nobody delivered"
+require writing-a-user-story "Blocks is none when none is taken"    "\`none\` for a story that transcribes none"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"

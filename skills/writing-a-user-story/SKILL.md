@@ -271,18 +271,27 @@ an implementation to the length of a single commit.
 ## Step 4 — Write the Plan
 
 Call `superpowers:writing-plans`. The plan **is** the story document: save it
-into the batch directory, and extend the standard header with three fields.
+into the batch directory, and extend the standard header with four fields.
 
 ```markdown
 **Spec:** docs/specs/facturation.md
 **Batch:** docs/batches/07-facturation-recurrente/README.md
 **Sections:** Abonnement > Renouvellement, Abonnement > Proration
+**Blocks:** D3, D7
 ```
 
 `Spec:` is the field `subagent-driven-development` already reads as the binding
 authority — pointing it at the living module spec is what makes this
 integration work without modifying superpowers. `Sections:` is what the *next*
 story's Step 1 reads.
+
+`Blocks:` declares the blocks of the spec delta this story transcribes — the
+`D<n>` identifiers the batch document defines — and it is what
+`supercharlouze:closing-a-batch` reads to find the blocks nobody delivered. It is
+`none` for a story that transcribes none: a corrective batch's story, a teardown
+story. Write it even though the blocks are already committed by now, because
+Step 3's commit says what the spec received, and this field says which blocks
+this story answered for — which is the question closing asks.
 
 Then create, at the end of the document, the two sections Step 6 fills — empty
 now, and left empty if nothing turns up:
