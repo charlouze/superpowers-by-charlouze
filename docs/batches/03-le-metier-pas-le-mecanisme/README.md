@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 03 — Le métier, pas le mécanisme
