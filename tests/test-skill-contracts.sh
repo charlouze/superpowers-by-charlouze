@@ -125,6 +125,14 @@ shared "whoever writes into a spec spells the other-implementation test identica
     "read this sentence as true of their code" \
     using-batches writing-a-user-story closing-a-batch adopting-a-module
 
+# The gating sentence has one form, fixed by the spec's template. `using-batches`
+# names it and `writing-a-user-story` shows it. Two spellings of the same sentence
+# is how a live flag stops being found. One assertion over the two skills that
+# write it out.
+shared "the gating sentence is spelled in the spec's one form" \
+    "🔒 \`billing.recurring\`, off by default" \
+    using-batches writing-a-user-story
+
 # A gap's *category* does not depend on where you stand; only its sources do. So
 # the skills that gloss it to route say what a gap is and never where it comes
 # from: naming a source there would teach `using-batches` a word — a validated

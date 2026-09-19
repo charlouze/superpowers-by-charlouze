@@ -38,7 +38,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Feature flag** — what makes a story deliverable on its own without exposing a half-built batch. `main` is deployed continuously, so every merged story ships; a batch whose stories would expose incomplete behaviour declares a flag.
 
-**The flag is a specified object, not an implementation detail.** The spec section concerned states its name and its default — *"behind the `billing.recurring` flag, off by default"*. Without that declaration, a story merged behind a flag would make the spec false as far as users are concerned, and would reopen through the window exactly the gap the drift rule exists to close.
+**The flag is a specified object, not an implementation detail.** The spec section concerned states its name and its default, as a gating sentence in the form the spec fixes — `` 🔒 `billing.recurring`, off by default ``. Without that declaration, a story merged behind a flag would make the spec false as far as users are concerned, and would reopen through the window exactly the gap the drift rule exists to close.
 
 **The flag is per (batch, module).** Not per story — the batch is the boundary past which nothing is incomplete. But not per batch either: a batch spanning two modules declares **two** flags, one per module. Otherwise its lifting story would have to remove the gating sentence from two specs, while a story targets exactly one module — it would be impossible to write.
 
