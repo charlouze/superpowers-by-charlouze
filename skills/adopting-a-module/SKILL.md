@@ -94,9 +94,11 @@ Your human partner names the module and draws its contours. You never delimit on
 yourself — not from the directory layout, not from package names, not from how the
 code happens to be split today.
 
-Ask. You may show what exists — entry points, directories, obvious clusters — as
-material for their decision, but do not propose a split: a suggestion is read as a
-decision, and this decision is not yours.
+Ask first. Their breakdown comes before any of yours: never open with a proposal
+of your own, because an opening suggestion is read as a decision. If they want it,
+think it through with them — show what exists (entry points, directories, obvious
+clusters) as material, ask questions, lay options side by side. The decision stays
+theirs, and nothing is written until they have made it.
 
 Prefer one coarse module to several small ones. Three modules for a project is
 normal; fifteen is a bad split. A wrong boundary contaminates the spec, the gaps

@@ -38,6 +38,8 @@ for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch;
 done
 
 # --- adopting-a-module (spec 6) ---
+require adopting-a-module "asks for the human's breakdown first" "Their breakdown comes before any of yours"
+require adopting-a-module "may think the breakdown through with them" "think it through with them"
 require adopting-a-module "validated documents are normative"    "validated documents are normative"
 require adopting-a-module "never rebuilds a spec from code"      "never reconstructed from the code"
 require adopting-a-module "authority on intentions, not mechanisms"    "**intentions they state**, never on the **mechanisms they describe**"
