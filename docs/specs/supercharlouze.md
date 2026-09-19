@@ -52,6 +52,9 @@ comportement à une ou plusieurs specs.
 **Lot correctif** (`corrective batch`) — un lot dont le spec delta est vide, et qui
 remet du code en conformité avec une spec déjà vraie.
 
+**Bloc** (`delta block`) — l'unité du spec delta d'un lot : une section visée et
+le texte exact qu'elle doit recevoir, transcrit mot pour mot par une story.
+
 **Story** (`user story`) — le plan d'implémentation d'une part d'un lot, qui vise un
 seul module et se livre en une pull request.
 
@@ -431,12 +434,18 @@ revue comme les autres.
 Un `README.md` avec un front matter `status: open | closed`, et :
 
 - **Scope** — ce que ce lot livre, et pourquoi maintenant.
-- **Spec delta** — le comportement ajouté à chaque spec, énoncé comme intention.
-  Ce delta n'est transcrit dans aucune spec à l'ouverture : il l'est story par
-  story, chacune dans sa propre pull request. Un lot qui lève un flag déclaré par
-  un autre lot le dit ici : la levée retire une mention de flag, c'est une
-  modification de spec comme une autre. Pour un lot correctif, ce champ est vide et remplacé par
-  les entrées du gaps register que le lot réserve.
+- **Spec delta** — le texte exact que ce lot écrit dans les specs, en **blocs**.
+  Chaque bloc porte un identifiant `D<n>`, unique dans le lot, et nomme la spec et
+  la section qu'il vise. Pour modifier un passage, il cite le passage actuel puis
+  le texte qui le remplace ; pour en retirer un, il le cite ; pour ajouter du
+  texte, il donne ce texte et l'endroit où il s'insère. **Aucun bloc n'est rattaché à une story** : c'est la story qui
+  choisit, en s'écrivant, les blocs qu'elle transcrit. Une section qui change deux
+  fois au cours du lot porte deux blocs, et `Constraints` donne leur ordre. Aucun
+  bloc n'est transcrit dans une spec à l'ouverture : chacun l'est par une story,
+  dans sa propre pull request. Un lot qui lève un flag déclaré par un autre lot le
+  fait par un bloc qui retire sa mention : c'est une modification de spec comme une
+  autre. Pour un lot correctif, ce champ est vide et remplacé par les entrées du
+  gaps register que le lot réserve.
 - **Constraints** — les contraintes de migration et de compatibilité, et l'ordre
   requis des stories ; `none` s'il n'y en a pas. **Rien de normatif n'y figure** :
   la spec reste seule autorité sur le comportement. Chaque story la recopie
@@ -462,13 +471,16 @@ L'ouverture :
 1. Vérifie que chaque module touché est adopté ; sinon l'adoption est un
    **préalable bloquant**.
 2. Attribue `NN`.
-3. Rédige le document de lot : scope, spec delta comme intention, champ
+3. Rédige le document de lot : scope, spec delta en blocs de texte exact, champ
    `Feature flag`.
 4. **Réserve dans le gaps register toute entrée que ce lot prend en charge** —
    lot correctif puisant dans *Violations* comme lot ordinaire puisant dans
    *Gaps*. Deux lots ne réservent jamais la même entrée. **Aucune écriture dans
    les specs à ce stade.**
 5. Ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
+
+**La revue d'ouverture porte sur le texte exact de chaque bloc** : c'est là que
+l'humain lit ce que diront les specs, avant qu'aucun code ne s'écrive dessus.
 
 **Conclue par** la fusion de sa pull request : le lot est ouvert. Tant qu'elle n'est
 pas fusionnée, aucune story ne s'écrit.
