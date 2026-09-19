@@ -152,6 +152,8 @@ require using-batches "a module redefines what it borrows"      "redefines what 
 require using-batches "the rule covers the changelog cell"      "including the changelog's \`change\` cell"
 require using-batches "the gaps register is out of scope"       "\`docs/specs/<module>.gaps.md\`, which is not a spec"
 require using-batches "states the content rule itself"          "business rules and intentions; the mechanism stays in the code"
+require using-batches "the ban is on the code's decomposition"   "reproduces the code's internal decomposition"
+require using-batches "a boundary concept may gather rules"      "A section carrying a concept observable at the module's boundary"
 require using-batches "corollary: a rule outlives a mechanism"  "A rule does not move when a mechanism moves"
 require using-batches "corollary: no legislating on quality"    "does not legislate on code quality"
 require using-batches "carries the section it points at"        "## What a Spec Says"
