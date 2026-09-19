@@ -436,4 +436,53 @@ git commit -m "feat: l'exemple de la règle de contenu nomme les pull requests, 
 
 ## Rulings log
 
+**Décisions humaines.** La tranche a été écrite en plusieurs passes, avant et pendant la revue de la pull request, chacune sur une décision de l'humain. L'historique de la branche a ensuite été réécrit à sa demande (voir la dernière de ces décisions) : il ne montre que l'état final, et les passes ne se lisent plus qu'ici.
+
+- **Avant la transcription** : les justifications sortent et chaque règle reste ; la clause « la structure suit le métier » est resserrée à la décomposition interne du code ; les exemples deviennent des gabarits à placeholders ; la section `Verification` garde sa liste. Ces quatre décisions prennent aussi les deux constats que us-1 avait passés à cette tranche.
+- **Après la première revue finale** : l'humain a jugé la spec encore mal rangée et a demandé de la structurer par étapes du flux. Le produit est **une extension de superpowers qui définit un flux de développement**. superpowers entre dans la spec par ses termes empruntés et ses quatre écarts. Le harnais, le packaging, le découpage en skills et la suite de tests (`Verification`, revenant sur la décision précédente) en sortent : ce sont des choix d'implémentation, qui relèvent du README. Les étapes sont rangées sous l'objet dont elles font avancer le cycle de vie, et chaque concept porte un seul terme.
+- **Après la seconde revue finale** : le champ `Feature flag` reste ouvert (« pour chaque flag, l'une de ces formes ») ; l'emplacement des documents et l'en-tête étendu d'un plan ne sont pas des écarts à superpowers ; la spec nomme le fichier d'instructions de l'agent et non `CLAUDE.md` ; et **la contrainte du lot qui interdisait de toucher au gaps register est levée pour cette pull request**. Cinq entrées vivantes y sont ré-ancrées, dix entrées devenues sans objet sont barrées avec leur raison.
+
+- **Changement de norme, hors mise en conformité, ajouté à cette story à la demande de l'humain.** L'étape 1 de l'adoption ne proscrit plus toute proposition de découpage. L'agent ne propose rien de lui-même et demande d'abord son découpage à l'humain ; si celui-ci le souhaite, l'agent y réfléchit avec lui (matière, questions, options), et la décision reste la sienne. La spec, `adopting-a-module` et deux gardes de `tests/test-skill-content.sh` portent ce changement. L'installation reste muette sur le découpage. Il se fait dans us-3 et pas dans un changement borné, parce que us-3 tient déjà toutes les sections de la spec.
+
+- **En revue de la pull request** : `Document layout`, `Branch naming` et `Number allocation` sont dispersées dans les sections qu'elles concernent. Chaque chemin et chaque branche sont désormais énoncés par l'objet ou l'étape qui les porte. Le numéro devient l'identité d'un lot (`Batch`) et d'une story (`Story`). Les deux règles générales de branche rejoignent `Authority and conflict rules`, et la destination des répertoires rejoint `Installing on a project`. Suivent un renvoi de `using-batches`, la garde de renvois et une entrée vivante du gaps register.
+
+- **En revue de la pull request** : « trois modules c'est normal, quinze une erreur » sort de la spec, et le décompte sort aussi de `using-batches` et d'`adopting-a-module`. Le nombre de modules dépend de la taille du produit, et personne n'avait décidé ce chiffre. La préférence pour des modules grossiers reste.
+
+- **En revue de la pull request, la section `Sources` est supprimée**, et l'humain lève la réserve du lot qui la mettait hors périmètre. Relier une spec vivante à des documents morts n'a pas de sens métier, et ce lien ment de plus en plus à mesure que la spec évolue. Conséquences :
+  - l'adoption consigne son inventaire, ou l'absence de tout document validé, dans le corps de sa pull request ;
+  - l'état des lieux de l'installation ne liste plus que les modules adoptés ;
+  - `scripts/init.sh` perd sa recherche des documents archivés non réclamés, et ses deux cas de test sont remplacés par une garde qui vérifie que le rapport ne relie plus aucun document archivé à une spec ;
+  - la section `## Sources` de cette spec disparaît.
+- **Revue en ligne de la spec, jusqu'à `The batch document`** :
+  - le nom anglais d'un ruling perd ses deux-points ;
+  - la formulation par la remplaçabilité sort ;
+  - « est proscrite » passe en fin de phrase, en gras ;
+  - le gaps register a deux **catégories** et non deux sections, puisque « section » est l'unité d'une spec ;
+  - « phrase de gating » devient **mention de flag**, définie par la ligne `🔒 …` qu'elle est. Le nom d'ossature `gating sentence` reste pour les skills ;
+  - **`Live flags` disparaît**, avec les notions de flag vivant et de flag hérité et les deux chaînes littérales. **La spec est le seul registre des flags** : un flag existe tant que sa mention figure dans la section qu'il couvre. Un lot qui lève un flag déclaré par un autre le dit dans son spec delta, validé au gate comme le reste. Le contrôle des flags de la clôture ne vérifie plus que les flags déclarés par le lot, et une levée annoncée mais non faite relève du constat des intentions non livrées. `writing-a-batch`, `closing-a-batch` et `writing-a-user-story` suivent ; trois gardes `shared` sont remplacées par une garde `absent`. Le document du lot 03 porte encore une section `Live flags` : il est historique, et il n'est pas touché ;
+  - **l'adoption gagne une étape**, changement de norme décidé au gate : proposer à l'humain, gap par gap, de promouvoir en spec l'intention d'un comportement observable. Ce qu'il valide entre dans la spec, un mécanisme ne lui est pas soumis. La skill et deux gardes portent l'étape.
+- **Revue en ligne de la spec, suite** :
+  - la prose française prend les mots français : **revue** pour `gate`, **arbitrage** pour `ruling`. Les noms d'ossature restent anglais (`Rulings log`, la forme `Ruling: …` que fixe superpowers). Pour que « revue » garde un seul sens, la vérification d'un travail par un agent s'appelle **relecture** ;
+  - « tranche » sort du glossaire : la prose dit **modification de spec**, qui se lit sans glossaire en tête ;
+  - **la spec n'impose plus d'ordre à la clôture**, parce qu'un ordre est un mécanisme. Elle énonce la règle — un lot ne peut pas être clos tant qu'un flag qu'il a déclaré subsiste par accident, avec ses trois sorties — puis ce que porte la pull request de clôture, sans numéros. L'ordre reste dans `closing-a-batch`, qui fait désormais du contrôle des flags son devoir 1 au lieu d'un devoir 5 exécuté en premier ; les autres devoirs y sont décalés d'un rang, et ses gardes suivent. Le gaps register ne cite plus les devoirs par leur numéro.
+- **En revue de la pull request, l'historique de la branche est réécrit** : chaque correction de la story est absorbée dans le commit qu'elle corrige, comme l'aurait fait un `fixup!` suivi d'un rebase `--autosquash`, et la branche est poussée de force. L'arbre final est identique à l'octet près à celui d'avant la réécriture. La règle générale — une story ne contient aucun commit qui la corrige elle-même — reste à porter par un lot à part.
+
+**Ruling: les tâches 1 et 2, puis 3 à 5, sont confiées chacune à un seul implémenteur.** Ce sont des modifications à texte complet, chacune avec sa garde, soit le cas des petits travaux de même forme. — Coût si c'est faux : une revue couvre plusieurs tâches, et les constats s'attribuent par commit.
+
+**Ruling: les deux constats mineurs hors spec de la première revue finale sont corrigés dans la vague de correction unique** : la skill disait « the one form » alors que le gabarit a deux variantes, et le commentaire de la garde de gating en disait plus qu'elle ne vérifie. Le premier implémenteur n'avait corrigé que le premier ; il a été relancé pour le second. — Coût si c'est faux : deux lignes de libellé.
+
+**Ruling: la relecture ciblée de cette vague a été faite par le contrôleur, en lisant le diff de deux lignes, au lieu d'être confiée à un relecteur.** — Coût si c'est faux : une coquille de commentaire atteint la revue de la pull request.
+
+**Ruling: le paragraphe allongé de la clause de structure dans `using-batches` n'appelle aucune action.** L'allongement vient du brief, et une justification a sa place dans une skill. — Coût si c'est faux : aucun.
+
+**Ruling: les corrections de cohérence de la seconde revue finale ont été appliquées à la spec par le contrôleur sans question préalable**. L'amendement redevient une possibilité et non un monopole ; un flag garde jusqu'à sa levée ; les définitions du gaps register et de la tranche couvrent leurs usages ; `Purpose` ne hiérarchise plus ; les synonymes résiduels et trois justifications sortent ; l'ajout d'une entrée en fin de section revient. Toutes rétablissent le sens de la réécriture que l'humain avait décidée, et aucune ne pose de norme neuve. — Coût si c'est faux : une correction à reprendre en revue.
+
+**Ruling: la précondition « partir d'un `main` à jour » vaut désormais pour toute branche du flux, sous `Authority and conflict rules`, et « depuis le checkout principal » sort comme mécanisme.** L'ancienne spec l'imposait déjà à toute pull request, sous le nom de « préconditions de toute pull request de ce système ». — Coût si c'est faux : un projet qui compterait sur le checkout principal ne le trouve plus dans la spec ; les skills le gardent.
+
+**Ruling: la phrase justificative de la puce `Sources` (« le seul lien persistant… l'état des lieux de `init` en dépend ») reste telle quelle, `init` compris.** Le lot interdit de toucher à `Sources`, que ce soit pour la défendre ou pour la retirer. — Coût si c'est faux : une justification et un terme hors du langage unique subsistent dans la spec. *Sans objet depuis : l'humain a fait supprimer la section `Sources` en revue.*
+
+**Ruling: « un changement borné ne concurrence qu'un autre changement borné » n'est pas rétabli.** C'est la conséquence d'une règle qui, elle, reste (« il ajoute comme il barre, directement »), et non une règle. — Coût si c'est faux : un constat que `using-batches` porte encore quitte la spec.
+
 ## Observed drift
+
+Aucune dérive laissée pour la clôture. L'unique constat de cette story a été résorbé ici, sur décision de l'humain en revue. `writing-a-user-story` annonçait « two things » puis « a third thing » dans `Global Constraints`, là où la spec en compte quatre. Il faisait aussi recopier une condition d'arrêt augmentée d'une phrase absente de la spec. Il compte désormais quatre éléments et recopie la condition mot pour mot, telle que `using-batches` l'énonce, sous une garde `shared`.
