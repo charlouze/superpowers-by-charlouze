@@ -17,10 +17,12 @@ It produces one pull request carrying two documents and no code: the spec at
 Until that pull request is merged the module is not adopted, and no batch may
 start on it.
 
-Run this when a batch is about to touch a module that has no spec yet.
-`supercharlouze:writing-a-batch` treats adoption as a blocking precondition, so
-you arrive here from there, or directly when your human partner asks for a module
-to be adopted.
+Run this when a batch is about to touch a module that has no spec yet — always
+**in a context of its own**. A design that discovers an unadopted module stops
+instead of chaining here; you arrive from a conversation that begins with this
+adoption, or directly when your human partner asks for a module to be adopted.
+`supercharlouze:writing-a-batch` carries the rule and the reason in its
+`Preconditions`.
 
 **Announce at start:** "I'm using the adopting-a-module skill to adopt the
 <module> module."
@@ -329,6 +331,12 @@ gives the prompt for it in a block to copy and paste after the clear. **That
 prompt stands on its own:** it names the skill to invoke, and the prompt names
 the adopted spec by path, and the gaps register beside it, and never refers
 back to this conversation.
+
+That next step is a **start, not a return**. A design that stopped on this
+module does not carry over: it begins again from the adopted spec, not from a
+conversation, and whatever it had established before the stop is restated there
+or lost. Saying so is what keeps the clear honest — a design resumed from memory
+would bring back the very mechanisms the clear was meant to drop.
 
 ## Degraded Case: A Module With No Validated Documents
 

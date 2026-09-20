@@ -112,7 +112,11 @@ flux ajoute à un plan ne sont pas des écarts : superpowers les laisse au proje
   par l'ouverture d'un lot : le document de lot remplace le document de conception,
   sa relecture avant ouverture en remplace l'auto-relecture, et la revue d'ouverture
   en remplace la revue humaine. Le plan n'est écrit qu'avec chaque story. Quand un
-  module touché n'a pas de spec, son adoption précède l'ouverture du lot.
+  module touché n'a pas de spec, son adoption précède la conception du lot, **et ne
+  se conduit jamais dans le même contexte qu'elle** : une conception qui découvre un
+  module non adopté s'arrête, l'humain choisit de l'abandonner ou de la mettre de
+  côté, et elle ne reprend qu'une fois l'adoption fusionnée, dans un nouveau
+  contexte.
 - **Un lot correctif a une condition d'arrêt de plus.** L'exécution par
   sous-agents s'arrête aussi sur celle-ci, dans un lot correctif seulement :
 
@@ -489,8 +493,8 @@ Un `README.md` avec un front matter `status: open | closed`, et :
 Une conception architecturale se conclut ici (`Departures from superpowers`).
 L'ouverture :
 
-1. Vérifie que chaque module touché est adopté ; sinon l'adoption est un
-   **préalable bloquant**.
+1. Vérifie que chaque module touché est adopté ; sinon l'ouverture s'arrête, et
+   l'adoption se conduit à part (`Departures from superpowers`).
 2. Attribue `NN`.
 3. Rédige le document de lot : scope, spec delta en blocs de texte exact, champ
    `Feature flag`.

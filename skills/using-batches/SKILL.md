@@ -13,7 +13,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 | Situation | Go to |
 |---|---|
-| A module this work touches has no spec in `docs/specs/` | `supercharlouze:adopting-a-module` — blocking; nothing starts until its pull request merges |
+| A module this work touches has no spec in `docs/specs/` | `supercharlouze:adopting-a-module`, in a context of its own — the design stops, and resumes in a fresh context once that pull request merges |
 | Architectural work on adopted modules | `supercharlouze:writing-a-batch` |
 | Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
 | A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:writing-a-batch`, as an ordinary batch that finally specifies them |
@@ -185,7 +185,7 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
 
 No batch, no user story: a bounded change is already a pull request, it simply carries its spec update. Its branch is `fix/<slug>`.
 
-**Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`, which may first require `supercharlouze:adopting-a-module` as a blocking precondition. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**: that is the design work itself, and it has no reason to change.
+**Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`, which stops the design outright when a module it touches has no spec. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**: that is the design work itself, and it has no reason to change.
 
 ## Declared Overrides
 
@@ -201,7 +201,7 @@ The architectural checklist of `superpowers:brainstorming` ends with four steps:
 
 **This override replaces all four, not only the last.** Rerouting step 9 alone would let steps 6 to 8 run, and a dated design doc would still be written into `docs/superpowers/specs/` — exactly what this plugin exists to remove. It is one override, correctly bounded, not two: the substitution covers a coherent terminal block.
 
-**The substitute may itself be blocked.** When a module the work touches has no spec, `supercharlouze:writing-a-batch` treats `supercharlouze:adopting-a-module` as a blocking precondition, so that skill runs first — named here rather than left implicit, because a second post-brainstorming skill under a rule stated as closed is exactly what an unnamed exception looks like. It widens nothing: the override still covers steps 6 to 9 and nothing else.
+**The substitute stops rather than chaining.** When a module the work touches has no spec, `supercharlouze:writing-a-batch` does not run `supercharlouze:adopting-a-module` and come back: **the design stops**, your human partner abandons it or sets it aside, and it resumes in a fresh context once the adoption pull request is merged. That skill's `Preconditions` carry the full rule and the reason it rests on — **adoption is never conducted in the same context as a design**. Said here because a post-brainstorming path that ends anywhere other than `supercharlouze:writing-a-batch` is exactly what an unnamed exception looks like, and this one ends nowhere at all — it stops. It widens nothing: the override still covers steps 6 to 9 and nothing else, and the resumed design re-enters the checklist at the same step.
 
 Justification: `supercharlouze:writing-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its re-read before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
 
@@ -260,7 +260,8 @@ That is the superpowers feeling kept: a document of this system reads like a sup
 | "The flag is on for everyone, so it is lifted" | The declared default and the effective state are two different things. A flag exists as long as its gating sentence stands in the spec, and only a story removes it. |
 | "A local merge is quicker than opening a pull request" | It deletes the worktree and the branch after merging into a `main` that can never be pushed. The work and the un-repatriated rulings go with them. |
 | "This case needs one more exception to a superpowers rule" | There is no undeclared fifth override. Stop and take it to the human. |
-| "The module has no spec but the change is small, I'll just code it" | Adoption is a blocking precondition: without an adopted spec there is no authority to review against, and the change becomes drift the moment it merges. |
+| "The module has no spec but the change is small, I'll just code it" | Without an adopted spec there is no authority to review against, and the change becomes drift the moment it merges. The design stops until the module is adopted. |
+| "The module has no spec, I'll adopt it now and carry on designing" | Adoption is never conducted in the same context as a design. Stop, and resume in a fresh context once the adoption merges. |
 | "I'm already in the previous story's worktree, I'll start the next one here" | Preconditions first: main checkout, `main` refreshed. Otherwise the new story's code lands on the previous story's branch. |
 | "This is a small fix, the spec can stay silent about it" | A bounded change updates the spec in the same pull request, with an `out-of-batch` changelog line, and declares its sections. |
 | "The delta names a mechanism — I'll reword it into a business rule" | That is the laundering this rule exists to stop: what you would write describes the observed behaviour, so it canonises the drift. The spec wins, record a `Ruling:` for the clause you left out, and carry on. |

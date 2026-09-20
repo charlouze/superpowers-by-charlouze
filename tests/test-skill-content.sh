@@ -72,9 +72,13 @@ require adopting-a-module "pushes corrections as fixups"         "pushed as a \`
 require adopting-a-module "names the merge a clear moment"       "a moment to clear the context"
 require adopting-a-module "names the next step after the clear"  "names \`supercharlouze:writing-a-batch\` as the next step"
 require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
+require adopting-a-module "arrives in a context of its own"      "in a context of its own"
+require adopting-a-module "the design that follows starts fresh" "from the adopted spec, not from a conversation"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
-require writing-a-batch "adopted spec is a blocking precondition" "blocking precondition"
+require writing-a-batch "an unadopted module stops the design"   "the design stops"
+require writing-a-batch "the human abandons or sets the design aside" "abandon the design or set it aside"
+require writing-a-batch "the design resumes in a fresh context"   "resumes in a fresh context"
 require writing-a-batch "NN accounts for open pull requests"      "open pull request"
 require writing-a-batch "batch document carries no mutable state" "no mutable state"
 require writing-a-batch "no story list in the batch document"     "list of stories"
@@ -262,6 +266,8 @@ require using-batches "names the merge a clear moment"      "a moment to clear t
 require using-batches "the rule covers every gate"          "Merging any review is a moment to clear the context"
 require using-batches "the handover is conditional"         "Where a next step exists"
 require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
+require using-batches "an unadopted module stops the design"     "the design stops"
+require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers steps 6 to 9 and nothing else"
 
 # --- using-batches: guarded code rules (referencing writing-a-user-story) ---
 require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"
