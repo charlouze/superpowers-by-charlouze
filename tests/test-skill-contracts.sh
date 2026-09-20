@@ -281,4 +281,12 @@ shared "a corrective story's first commit deletes its entry" \
     "deletes the gaps register entry it resolves" \
     writing-a-user-story using-batches
 
+# Removal leaves no trace in the register, so what a module already rejected is
+# readable only in the file's history. Both writers that add an entry — a
+# batch's closing and a bounded change — owe that read. One assertion over both,
+# because a rule only one of them carries is a rule the other writer never sees.
+shared "both writers read the file's history before adding" \
+    "Read the file's history before adding an entry" \
+    closing-a-batch using-batches
+
 exit $((FAILURES > 0))

@@ -73,6 +73,8 @@ Stories deliberately do not write into the register. Adding an entry appends at 
 
 "Out of scope for this batch" is never a reason to drop an observation. It is precisely why the observation belongs in the register: the register is what a later corrective batch draws its scope from. Dropped here, the finding dies with the session that made it.
 
+**Read the file's history before adding an entry** (`git log -p docs/specs/<module>.gaps.md`). An entry that once left this file left for a reason, and that reason is in the commit that removed it — resolved, promoted, moot, false, or set aside by your human partner. Re-filing an observation that was already set aside, without saying what has changed since, reopens a decision nobody has reviewed.
+
 ### 4. Release unconsumed reservations
 
 For every gaps register entry this batch reserved at opening (`reserved by batch-NN`) that was never struck through, remove the reservation annotation. Those are the **unconsumed reservations** — a story abandoned, a scope revised mid-flight. Entries a story did strike stay struck: that gesture was atomic with the code that resolved them.
