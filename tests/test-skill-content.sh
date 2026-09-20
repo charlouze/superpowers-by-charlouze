@@ -166,6 +166,11 @@ require writing-a-user-story "flag off restores the former behaviour" "With the 
 require writing-a-user-story "both states and their coexistence are tested" "the flag-on behaviour, of the flag-off behaviour, and of their coexistence"
 require writing-a-user-story "lifting only removes"               "without writing anything new"
 
+# --- writing-a-user-story: Lifting and Teardown Stories ---
+require writing-a-user-story "an observation period is two stories" "the first moves the declared default of the gating sentence from \`off\` to \`on\`"
+require writing-a-user-story "declared default is not the effective state" "The declared default and the effective state are two different things"
+require writing-a-user-story "only a story changes the declared default" "Only a story changes the declared default"
+
 # --- writing-a-user-story: the story's blocks (spec sections "Story",
 # "The user story document", "Delivering a story") ---
 require writing-a-user-story "each story chooses its own blocks"  "chooses, as it is written, the blocks of the spec delta it transcribes"

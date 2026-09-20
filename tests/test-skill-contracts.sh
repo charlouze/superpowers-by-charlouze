@@ -211,4 +211,13 @@ shared "every review-ending skill names the merge a clear moment" \
     "is a moment to clear the context" \
     using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
+# The observation period was two stories "enable, then remove" before the
+# declared default and the effective state were told apart. Enabling is the
+# project's gesture and changes no spec; the first story moves the declared
+# default. The positive needles on the new sentence would stay green beside a
+# restored old one, so the old phrasing is what has to be absent.
+absent "the observation period is not described as enable-then-remove" \
+    "split it into two stories" \
+    writing-a-user-story
+
 exit $((FAILURES > 0))

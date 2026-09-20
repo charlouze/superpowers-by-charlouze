@@ -570,9 +570,17 @@ lifts a flag declared by another one says so in its `Spec delta`, and your human
 partner validates it at the opening gate like the rest of that delta.
 
 It is a story and not a closing chore because it carries code, and code
-deserves a review and a test cycle. If you want an observation period between
-switching on and cleaning up, split it into two stories — enable, then remove.
-The model supports that without changing anything.
+deserves a review and a test cycle. An observation period is two stories: the
+first moves the declared default of the gating sentence from `off` to `on`, the
+second deletes the branching and the gating sentence. The model supports that
+without changing anything.
+
+**The declared default and the effective state are two different things.** The
+spec declares a default; switching the flag on for some users, or off again, is
+a move the project makes, and it changes nothing about what the spec declares.
+Only a story changes the declared default — so a flag switched on everywhere is
+not a flag that has been lifted, and its gating sentence still stands in the
+spec for `supercharlouze:closing-a-batch` to find.
 
 **The teardown story** is the other way out. When a batch's scope is abandoned
 while guarded stories are already merged, a teardown story removes the guarded
