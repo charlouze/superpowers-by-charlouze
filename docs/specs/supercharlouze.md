@@ -418,19 +418,31 @@ leurs constats dans leur propre document, sous **Observed drift**. Une entrée
 s'ajoute à la fin de sa catégorie. Un seul écrivain
 par lot.
 
-**Barrer une entrée existante** — la pull request de la story qui la résorbe, ou
-celle d'un changement borné.
+**On lit l'histoire du fichier avant d'ajouter une entrée**
+(`git log -p docs/specs/<module>.gaps.md`) : ce qui a déjà été écarté l'a été
+pour une raison, écrite dans le commit qui l'a supprimé. Réinscrire un constat
+déjà écarté sans dire ce qui a changé depuis, c'est rouvrir une décision que
+personne n'a revue.
 
-Un changement borné n'appartient à aucun lot : il ajoute comme il barre,
-directement.
+**Supprimer une entrée** — la pull request de la story qui la résorbe, celle d'un
+changement borné, ou celle d'une adoption qui promeut un gap en spécification, la
+**supprime du fichier**, et **le commit qui la supprime dit pourquoi** : l'entrée
+est résorbée, promue, sans objet, fausse, ou écartée par l'humain. Le register ne
+porte que ce qui reste à régler ; ce qu'une entrée a été, et pourquoi elle est
+partie, se lisent dans l'histoire du fichier
+(`git log -p docs/specs/<module>.gaps.md`).
+
+Un changement borné n'appartient à aucun lot : il ajoute une entrée comme il en
+supprime une, directement.
 
 **Réservation, consommation, libération :**
 
 - **Réservée** par la pull request d'ouverture du lot qui la prend en charge
   (annotation `reserved by batch-NN`).
-- **Barrée** par la pull request de la story qui la résorbe, atomiquement avec le
-  code qui la résorbe.
-- **Libérée** par la pull request de clôture si elle n'a pas été consommée.
+- **Supprimée** par la pull request de la story qui la résorbe, atomiquement avec
+  le code qui la résorbe ; le commit qui la supprime dit pourquoi.
+- **Libérée** — son annotation de réservation retirée, l'entrée restant — par la
+  pull request de clôture si elle n'a pas été consommée.
 
 Le gaps register déclare aussi **sa propre couverture** : quelles parties du module ont
 été auditées, lesquelles ne l'ont pas été, et pourquoi.
@@ -696,7 +708,7 @@ ouvert — sa pull request d'ouverture est fusionnée et son document porte
    Si le lot déclare un flag, la modification de spec porte la mention du flag.
 
    **Cas correctif :** le delta étant vide, ce premier commit ne touche pas la
-   spec ; il barre l'entrée du gaps register que la story résorbe.
+   spec ; il supprime l'entrée du gaps register que la story résorbe.
 4. **Écrire le plan** — le document de story, avec ses `Global Constraints`, puis
    **le commiter et le pousser immédiatement**, avant que l'exécution démarre.
 5. **Exécuter par sous-agents**, puis conclure la branche par une pull request
@@ -813,7 +825,8 @@ Un changement borné n'a ni lot ni story : c'est une pull request qui porte sa m
   déclaration.
 - **(c) Il ne porte aucun flag** : il est complet dans sa propre pull request.
 - **(d) Il écrit directement dans un gaps register** : n'appartenant à aucun lot,
-  il peut y ajouter comme y barrer une entrée depuis sa propre pull request.
+  il peut y ajouter une entrée comme en supprimer une, depuis sa propre pull
+  request.
 
 ## Installing on a project
 
