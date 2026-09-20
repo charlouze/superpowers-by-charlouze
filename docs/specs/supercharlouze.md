@@ -72,6 +72,10 @@ est une relecture, pas une revue.
 **Arbitrage** (`ruling`) — une décision prise par un agent sans l'humain, consignée
 pour lui.
 
+**Arbitrage ouvert** (`open ruling`) — un arbitrage dont la décision est de parquer
+un constat ou de le remonter à l'humain, et qui laisse donc quelque chose à trancher
+après la fusion.
+
 **Changement borné** (`bounded`) — un changement complet en une pull request, hors
 de tout lot.
 
@@ -587,11 +591,16 @@ portée étendue par un amendement, ce qui reporte la décision à un lot ultér
 ou écrire une **story de démontage** qui retire le code gardé et ce
 qu'il avait ajouté à la spec.
 
+**Un lot ne peut pas être clos tant qu'un arbitrage ouvert n'a pas reçu sa
+destination.** Celui qui est une violation ou un gap rejoint la consolidation dans
+le gaps register. Pour tout autre, l'humain la donne et la pull request de clôture
+la nomme.
+
 **La pull request de clôture porte :**
 
 - **la ligne de changelog** de chaque spec touchée — un lot, une ligne ;
 - **la consolidation dans le gaps register** des sections `Observed drift` des
-  stories du lot ;
+  stories du lot, et des arbitrages ouverts qui l'ont rejointe ;
 - **la libération des réservations non consommées** ;
 - **le constat des blocs non livrés** : un bloc du spec delta qu'aucune story
   fusionnée ne déclare dans son champ `Blocks:` est inscrit au gaps register comme
@@ -723,8 +732,9 @@ ouvert — sa pull request d'ouverture est fusionnée et son document porte
 5. **Exécuter par sous-agents**, puis conclure la branche par une pull request
    (`Departures from superpowers`).
 6. **Avant la fusion**, recopier les arbitrages de l'exécution dans le Rulings log,
-   consigner sous **Observed drift** les dérives constatées hors périmètre, et
-   pousser les deux sur la branche.
+   en nommant pour chaque arbitrage ouvert ce qui reste à trancher, consigner sous
+   **Observed drift** les dérives constatées hors périmètre, et pousser les deux
+   sur la branche.
 7. **Répondre à la revue** sur la branche de la story.
 
 **Conclue par** la fusion de sa pull request : la story est livrée.
