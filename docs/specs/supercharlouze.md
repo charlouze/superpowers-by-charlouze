@@ -408,8 +408,17 @@ documents validés ; une story, dans le code qu'elle traverse ; un changement bo
 dans ce qu'il rencontre. **Une entrée nomme le document dont elle vient** quand
 elle vient d'un document.
 
-Chaque entrée désigne une section de la spec et est **un item adressable — un
-élément de liste, jamais un paragraphe de prose courante.**
+Chaque entrée désigne une section de la spec et est **un élément de liste, jamais
+un paragraphe de prose courante.**
+
+**Ce qui qualifie une entrée vit dans l'entrée.** Outre sa couverture, le register
+ne porte que des entrées : aucune prose n'y qualifie un *groupe* d'entrées — leur
+provenance commune, leur classement commun, leur nombre. Les entrées s'ajoutent et
+se suppriment une par une, et rien ne fait suivre une telle prose : elle devient
+fausse sans que personne ne l'ait touchée. Ce qu'elle dirait de plusieurs entrées
+se répète dans chacune, et d'où vient une entrée se lit dans l'histoire du fichier.
+
+**Une entrée ne renvoie à aucune autre entrée.**
 
 **Ajouter une entrée** — la pull request d'adoption à la création, puis la pull
 request de clôture d'un lot seule, qui consolide les dérives constatées hors
