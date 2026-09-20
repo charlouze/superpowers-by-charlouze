@@ -289,4 +289,15 @@ shared "both writers read the file's history before adding" \
     "Read the file's history before adding an entry" \
     closing-a-batch using-batches
 
+# The removal duty — say why in the commit, because the file keeps nothing once
+# the entry is gone — is stated in four skills, and it is stated word for word.
+# Three of them prescribe a removal; `closing-a-batch` states it while explaining
+# why an entry a story resolved is not there to release, which is the one place a
+# reader could otherwise conclude that closing removes entries too. One assertion
+# over the four: four `require` calls would each stay green while one end reworded
+# the duty away from the others.
+shared "the removal duty is spelled alike wherever it is stated" \
+    "the commit that removes it says why" \
+    adopting-a-module writing-a-user-story closing-a-batch using-batches
+
 exit $((FAILURES > 0))
