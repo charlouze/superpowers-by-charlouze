@@ -59,7 +59,7 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   story corrective de la déclaration, soit étendre le filtre au gaps register —
   et cette décision est humaine. D'où le classement en *gap* plutôt qu'en
   violation : un lot correctif la prendrait et buterait aussitôt sur la cinquième
-  condition d'arrêt.
+  condition d'arrêt. `reserved by batch-09`
 
 - **Installing on a project** — le second membre de la phrase sur les répertoires
   que l'installation crée, également falsifiable :
