@@ -319,4 +319,20 @@ absent "no skill strikes a gaps register entry" \
     "[Ss]truck|[Ss]trik" \
     adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch
 
+# `addressable` justified an entry's shape and also read as "made to be pointed
+# at" — the reading under which one entry designates another. The spec dropped
+# it; the skill's twin sentence drops it the same way. The gesture's need
+# survives in the sentence that follows, where it describes what a writer
+# needs rather than a property of the entry, and that is the sentence asserted
+# positively right after.
+absent "no skill calls an entry addressable" \
+    "[Aa]ddressable" \
+    adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch
+
+# The word leaves, the rule stays: without this assertion, deleting the whole
+# sentence would pass green.
+shared "the entry's shape is still stated without the word" \
+    "one list item, never a paragraph of running prose" \
+    adopting-a-module
+
 exit $((FAILURES > 0))

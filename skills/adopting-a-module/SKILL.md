@@ -234,12 +234,12 @@ Each entry designates a section of the spec. **An entry that came from a documen
 names that document**, so your human partner can promote it knowing what they are
 promoting instead of re-reading the whole thing.
 
-**Each entry is a single addressable item — one list item, never a paragraph of
-running prose.** You are the only skill that ever *creates* this file, and four
-writers act on its entries afterwards — three skills, plus the bounded path,
-which has no skill of its own — as do you yourself at the step
-`Offer to promote the gaps`. Each of them needs a thing it can point at, whether
-to annotate it in place or to take it out whole:
+**Each entry is one list item, never a paragraph of running prose.** You are
+the only skill that ever *creates* this file, and four writers act on its
+entries afterwards — three skills, plus the bounded path, which has no skill
+of its own — as do you yourself at the step `Offer to promote the gaps`. Each
+of them needs a thing it can point at, whether to annotate it in place or to
+take it out whole:
 
 | Gesture | Who | What it does to the entry |
 |---|---|---|
