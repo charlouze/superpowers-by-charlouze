@@ -470,7 +470,7 @@ pull request only opens at the very end of this step, through
 branch and a worktree. So: **close the story's pull request without merging it
 if one is already open; the branch and its worktree stay until the
 requalification is ruled.**
-Nothing on `main` changes either way — the spec change, or the struck
+Nothing on `main` changes either way — the spec change, or the deleted
 gaps-register entry, travels with the code and dies with the branch. The
 reservation posted on `main` by the batch's opening pull request is untouched,
 and `supercharlouze:closing-a-batch` releases it. Once the requalification is

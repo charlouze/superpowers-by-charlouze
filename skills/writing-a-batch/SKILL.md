@@ -398,7 +398,7 @@ itself is in question, and no agent may correct a spec.
    this triggers is a branch and a worktree and **no pull request at all**.
    Therefore: **close the story's pull request without merging it if one is
    already open.** Nothing has to be revoked either way, because nothing reached
-   `main`: the spec change, or the struck gaps-register entry, travels with the
+   `main`: the spec change, or the deleted gaps-register entry, travels with the
    code and dies with the branch. The branch and its worktree go once the choice
    below is ruled: delete the story branch locally and on the remote and remove
    its worktree — whether a pull request existed or not — so no later session

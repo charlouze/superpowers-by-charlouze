@@ -300,4 +300,12 @@ shared "the removal duty is spelled alike wherever it is stated" \
     "the commit that removes it says why" \
     adopting-a-module writing-a-user-story closing-a-batch using-batches
 
+# The same sentence about what an abandoned story leaves behind is written in
+# two skills, and it names the gesture the register now uses. One assertion over
+# both: separate ones would let the two accounts of an abandonment drift apart,
+# and an agent reading either would believe it had the whole picture.
+shared "both accounts of an abandonment name the same residue" \
+    "the spec change, or the deleted gaps-register entry, travels with the code and dies with the branch" \
+    writing-a-batch writing-a-user-story
+
 exit $((FAILURES > 0))
