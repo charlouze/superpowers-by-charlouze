@@ -207,4 +207,9 @@ require using-batches "the glossary points at that section"     "see \`What a Sp
 require using-batches "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
 require using-batches "a block is transcribed word for word" "the exact text it must receive, transcribed word for word by a story"
 
+# --- using-batches: the shape of a review's end ---
+require using-batches "forbids the agent approving or merging" "never approves and never merges a pull request"
+require using-batches "pushes corrections as fixups"           "pushed as a \`fixup!\` commit"
+require using-batches "the agreement is given in conversation" "The human gives their agreement in the conversation"
+
 exit $((FAILURES > 0))
