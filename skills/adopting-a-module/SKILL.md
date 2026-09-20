@@ -234,12 +234,12 @@ Each entry designates a section of the spec. **An entry that came from a documen
 names that document**, so your human partner can promote it knowing what they are
 promoting instead of re-reading the whole thing.
 
-**Each entry is a single addressable item — one list item, never a paragraph of
-running prose.** You are the only skill that ever *creates* this file, and four
-writers act on its entries afterwards — three skills, plus the bounded path,
-which has no skill of its own — as do you yourself at the step
-`Offer to promote the gaps`. Each of them needs a thing it can point at, whether
-to annotate it in place or to take it out whole:
+**Each entry is one list item, never a paragraph of running prose.** You are
+the only skill that ever *creates* this file, and four writers act on its
+entries afterwards — three skills, plus the bounded path, which has no skill
+of its own — as do you yourself at the step `Offer to promote the gaps`. Each
+of them needs a thing it can point at, whether to annotate it in place or to
+take it out whole:
 
 | Gesture | Who | What it does to the entry |
 |---|---|---|
@@ -254,6 +254,19 @@ and breaks every one of them: there is no item to annotate, none to remove
 cleanly, no list for a bounded change to append one to — what it adds is more
 prose, which the next writer cannot point at either — and nothing a corrective
 batch can draw a scope from. Write entries so those gestures are mechanical.
+
+**What qualifies an entry lives in the entry.** Besides its coverage, the register
+carries nothing but entries: no prose qualifies a *group* of them — where they came
+from, how they were classified, how many there are. Entries are added and removed
+one at a time, and nothing keeps such a paragraph honest: it goes false without
+anyone touching it. What it would say of several entries is repeated in each, and
+where an entry came from is read in the history of the file. You write this file's
+first entries all at once, which is exactly when a group paragraph feels natural —
+and it is the one moment nobody is left to notice it later.
+
+**An entry designates no other entry.** A settled entry leaves the file whole, and
+it takes with it anything that pointed at it — by name or by position. What an
+entry needs from its neighbour it states itself.
 
 **Nothing stays behind in this file once an entry is settled.** The register
 carries what is still open, and what an entry was — and why it left — is read in

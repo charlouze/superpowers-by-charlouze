@@ -61,15 +61,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   violation : un lot correctif la prendrait et buterait aussitôt sur la cinquième
   condition d'arrêt.
 
-**Les entrées qui suivent ont été consolidées par la clôture du lot 02**, depuis
-les sections `Observed drift` de ses quatre stories. Elles partagent une forme :
-**la spec y a tort et le code y a raison.** Elles sont classées en *Gaps* et non en
-*Violations* par le précédent que porte déjà l'entrée *Concurrency detection*
-ci-dessus — un lot correctif qui les prendrait buterait aussitôt sur la cinquième
-condition d'arrêt, puisque les résorber veut dire corriger une spec, ce qu'un agent
-ne peut pas faire. Les deux constats qu'un changement de code seul peut résoudre
-sont sous *Violations*.
-
 - **Installing on a project** — le second membre de la phrase sur les répertoires
   que l'installation crée, également falsifiable :
   « rien dans ce système ne lit ces répertoires avant qu'un document y soit écrit ».
@@ -78,6 +69,11 @@ sont sous *Violations*.
   même sur le répertoire du lot. L'impact est faible — un `ls` qui échoue laisse
   déduire `NN=1` — mais la phrase est présentée comme une garantie. Formulation
   tenable : « aucune **décision** de ce système ne dépend de leur existence ».
+  Consolidée par la clôture du lot 02, depuis l'`Observed drift` d'une de ses
+  stories. Classée en *gap* et non en *violation* : la spec y a tort et le code y
+  a raison, si bien qu'un lot correctif qui la prendrait buterait aussitôt sur la
+  cinquième condition d'arrêt — la résorber veut dire corriger une spec, ce qu'un
+  agent ne peut pas faire.
 
 - **Installing on a project** — « ce qui subsiste n'appartient pas au plugin : il n'est ni
   déplacé, ni supprimé » n'est vrai qu'**en dehors de `specs/` et `plans/`**. Le
@@ -85,6 +81,11 @@ sont sous *Violations*.
   étranger vide placé sous `docs/superpowers/specs/`, et un fichier étranger déposé
   là est déplacé vers `docs/archive/specs/`. Borner la phrase suffirait ; changer le
   code serait l'autre sortie, et c'est ce choix qui rend la décision humaine.
+  Consolidée par la clôture du lot 02, depuis l'`Observed drift` d'une de ses
+  stories. Classée en *gap* et non en *violation* : la spec y a tort et le code y
+  a raison, si bien qu'un lot correctif qui la prendrait buterait aussitôt sur la
+  cinquième condition d'arrêt — la résorber veut dire corriger une spec, ce qu'un
+  agent ne peut pas faire.
 
 - **Code under a feature flag** — la clause qui clôt la section, « Le code gardé
   **est écrit de sorte que** lever le flag se réduise à supprimer le branchement et

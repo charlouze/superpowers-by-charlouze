@@ -319,4 +319,37 @@ absent "no skill strikes a gaps register entry" \
     "[Ss]truck|[Ss]trik" \
     adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch
 
+# `addressable` justified an entry's shape and also read as "made to be pointed
+# at" — the reading under which one entry designates another. The spec dropped
+# it; the skill's twin sentence drops it the same way. The gesture's need
+# survives in the sentence that follows, where it describes what a writer
+# needs rather than a property of the entry, and that is the sentence asserted
+# positively right after.
+absent "no skill calls an entry addressable" \
+    "[Aa]ddressable" \
+    adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch
+
+# The word leaves, the rule stays: without this assertion, deleting the whole
+# sentence would pass green.
+shared "the entry's shape is still stated without the word" \
+    "one list item, never a paragraph of running prose" \
+    adopting-a-module
+
+# A register is reread entry by entry, and nothing keeps a prose that
+# qualifies a group in step: it goes false without anyone having touched it.
+# The three skills that *add* an entry say so — adoption writes all its gaps
+# at once, closing consolidates several stories, the bounded change writes
+# alone. One assertion over the three: three `require`s would stay green while
+# one edge got reworded.
+shared "every writer that adds an entry keeps a group's qualification out" \
+    "What qualifies an entry lives in the entry" \
+    adopting-a-module closing-a-batch using-batches
+
+# A settled entry leaves the file and takes with it whatever pointed at it:
+# the entry-to-entry cross-reference loses its target without anyone editing
+# it. The same three writers say so, in the same words, under one assertion.
+shared "every writer that adds an entry keeps entries from pointing at each other" \
+    "An entry designates no other entry" \
+    adopting-a-module closing-a-batch using-batches
+
 exit $((FAILURES > 0))
