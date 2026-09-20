@@ -149,6 +149,8 @@ require writing-a-user-story "story branch naming convention"     "story/NN"
 require writing-a-user-story "spec change states flag and default" "states the flag and its default"
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
 require writing-a-user-story "teardown story exists"              "teardown story"
+require writing-a-user-story "a rule belongs to exactly one spec" "A rule belongs to exactly one spec."
+require writing-a-user-story "no ruling houses a rule twice"      "no ruling puts a rule in two places"
 
 # --- writing-a-user-story: what Global Constraints carries (spec section "The user story document") ---
 require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
