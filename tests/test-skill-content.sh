@@ -145,10 +145,31 @@ require writing-a-user-story "teardown story exists"              "teardown stor
 require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
 require writing-a-user-story "GC carries the spec freeze"         "freeze of the spec file"
 require writing-a-user-story "GC carries the authority rule"      "That rule is the third thing \`Global Constraints\` carries"
-require writing-a-user-story "GC counts four things"              "carries four things"
 require writing-a-user-story "the authority rule is stated in full" "the spec wins — without exception and without deliberation"
+require writing-a-user-story "GC counts five things"              "carries five things"
 require writing-a-user-story "GC carries the fifth stop condition" "the fifth stop condition of Step 5, written out in full"
+require writing-a-user-story "GC carries the guarded-code rules"  "carries a fifth thing: the rules for code under a flag"
+require writing-a-user-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
 require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
+
+# --- writing-a-user-story: the rules a guarded story copies into Global
+# Constraints (spec section "Code under a feature flag") ---
+# These needles target text inside a Markdown blockquote, where the file's
+# re-wrapping guarantee does not hold: `body_flat` turns newlines into spaces
+# but leaves the `> ` prefixes, so a needle spanning a line break there can
+# never match. Each needle below must stay within one physical line of the
+# block, and re-wrapping that block means revisiting them.
+require writing-a-user-story "the flag mechanism is the project's" "Whatever way the project switches its flags"
+require writing-a-user-story "both states coexist on the same data" "work side by side on the same data"
+require writing-a-user-story "switching off loses nothing"        "with no error and no data loss"
+require writing-a-user-story "flag off restores the former behaviour" "With the flag off, the user finds the behaviour"
+require writing-a-user-story "both states and their coexistence are tested" "the flag-on behaviour, of the flag-off behaviour, and of their coexistence"
+require writing-a-user-story "lifting only removes"               "without writing anything new"
+
+# --- writing-a-user-story: Lifting and Teardown Stories ---
+require writing-a-user-story "an observation period is two stories" "the first moves the declared default of the gating sentence from \`off\` to \`on\`"
+require writing-a-user-story "declared default is not the effective state" "The declared default and the effective state are two different things"
+require writing-a-user-story "only a story changes the declared default" "Only a story changes the declared default"
 
 # --- writing-a-user-story: the story's blocks (spec sections "Story",
 # "The user story document", "Delivering a story") ---
@@ -241,5 +262,9 @@ require using-batches "names the merge a clear moment"      "a moment to clear t
 require using-batches "the rule covers every gate"          "Merging any review is a moment to clear the context"
 require using-batches "the handover is conditional"         "Where a next step exists"
 require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
+
+# --- using-batches: guarded code rules (referencing writing-a-user-story) ---
+require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"
+require using-batches "the guarded-code rules are written in one place" "a second copy of a rule is exactly what drifts"
 
 exit $((FAILURES > 0))

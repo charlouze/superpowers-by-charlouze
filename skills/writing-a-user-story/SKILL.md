@@ -328,11 +328,17 @@ Write them at the same time as the header, not at Step 6. An empty section says
 reviewer cannot tell the second from an omission.
 
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
-part of every task's requirements — carries four things: the constraints the
-batch imposes, the freeze of the spec file, the authority rule, and — in a
-corrective batch only — the fifth stop condition. The first is the batch's
-`Constraints` section copied verbatim. The second is **the freeze of the spec
-file**:
+part of every task's requirements — carries five things:
+
+1. the constraints the batch imposes;
+2. the freeze of the spec file;
+3. the authority rule;
+4. **in a corrective batch only**, the fifth stop condition;
+5. **in a story that writes code guarded by a flag only**, the rules for code
+   under a flag.
+
+The batch's constraints are its `Constraints` section copied verbatim. The
+freeze of the spec file reads:
 
 > Between the transcription commit and the opening of the pull request, no task
 > modifies the spec file. A story that discovers the spec must change stops.
@@ -366,6 +372,36 @@ than a question to ask and move on from. And the discovery happens inside SDD's
 implementer subagents, whose only channel to this skill's rules is this list: a
 stop condition stated to you and not written here never reaches the agent who
 has to obey it.
+
+**In a story that writes code guarded by a feature flag, `Global Constraints`
+carries a fifth thing: the rules for code under a flag, written out in full.**
+This holds whether the flag was declared by this story's batch or by another one:
+what decides is that this story writes guarded code, not which batch owns the
+flag. Copy the block below verbatim:
+
+> Whatever way the project switches its flags, code guarded by a feature flag
+> holds up under activation for some users only, activation for everyone, and
+> deactivation. It holds four rules:
+>
+> - **Both states coexist.** A user with the flag on and a user with the flag
+>   off work side by side on the same data. What one produces, the other can
+>   read and use.
+> - **Switching off stays possible at all times.** Turning the flag off, for one
+>   user or for everyone, leaves what the on state produced readable and usable,
+>   with no error and no data loss.
+> - **Nothing else changes.** With the flag off, the user finds the behaviour
+>   from before the batch, save for the data produced with the flag on.
+> - **Each state is verified.** The story's pull request carries tests of
+>   the flag-on behaviour, of the flag-off behaviour, and of their coexistence.
+>
+> **Lifting will only remove.** Guarded code is written so that lifting the flag
+> comes down to deleting the branching and the behaviour from before the batch,
+> without writing anything new.
+
+This block is the only place those rules are written out, and copying it is what
+puts them in front of the implementer — a norm nobody reads while writing the
+code bites on nothing. They travel the way the freeze does, through the only
+channel SDD's subagents read.
 
 **Commit the story document — header, the two empty sections and
 `Global Constraints` together — and push it immediately**, `git push`, before
@@ -534,9 +570,17 @@ lifts a flag declared by another one says so in its `Spec delta`, and your human
 partner validates it at the opening gate like the rest of that delta.
 
 It is a story and not a closing chore because it carries code, and code
-deserves a review and a test cycle. If you want an observation period between
-switching on and cleaning up, split it into two stories — enable, then remove.
-The model supports that without changing anything.
+deserves a review and a test cycle. An observation period is two stories: the
+first moves the declared default of the gating sentence from `off` to `on`, the
+second deletes the branching and the gating sentence. The model supports that
+without changing anything.
+
+**The declared default and the effective state are two different things.** The
+spec declares a default; switching the flag on for some users, or off again, is
+a move the project makes, and it changes nothing about what the spec declares.
+Only a story changes the declared default — so a flag switched on everywhere is
+not a flag that has been lifted, and its gating sentence still stands in the
+spec for `supercharlouze:closing-a-batch` to find.
 
 **The teardown story** is the other way out. When a batch's scope is abandoned
 while guarded stories are already merged, a teardown story removes the guarded
@@ -583,4 +627,5 @@ documents.
 | "I'll copy the rulings after the merge" | The workspace is already gone and the merge may be days later, in another session. |
 | "This drift is small, I'll just add it to the gaps register" | Every story adding to the same section collides there. Record it under Observed drift; closing consolidates. |
 | "The flag is an implementation detail, the spec need not mention it" | Then the spec is false for users. The spec change states the flag, its default, and its lifting condition if the scope is extended. |
+| "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |
 | "The batch says otherwise, and the batch is more recent" | The spec wins, without deliberation. Implement the spec, record a Ruling, continue. |

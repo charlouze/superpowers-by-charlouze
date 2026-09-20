@@ -6,8 +6,8 @@ Ce module couvre une extension de superpowers qui définit un flux de
 développement : une spec vivante par module, des lots de stories qui font grandir
 ces specs, des revues humaines tenues en pull request, les documents que ce flux produit —
 spec, gaps register, document de lot, document de story — les conventions qu'il
-laisse dans le dépôt — arborescence, branches, numéros, langue — et son
-installation sur un projet.
+laisse dans le dépôt — arborescence, branches, numéros, langue —, ce qu'il exige du
+code applicatif tant qu'un flag le garde, et son installation sur un projet.
 
 Il ne couvre ni superpowers lui-même, ni l'outil qui exécute les agents.
 
@@ -617,7 +617,7 @@ remplis avant la fusion. Les deux sont **créées vides au moment du plan**, en 
 temps que l'en-tête, et laissées vides si rien n'est venu : une section vide
 signifie « examiné, rien trouvé ».
 
-`Global Constraints` porte quatre choses :
+`Global Constraints` porte cinq choses :
 
 1. les contraintes que le lot impose, sa section `Constraints` recopiée mot pour
    mot ;
@@ -625,7 +625,10 @@ signifie « examiné, rien trouvé ».
 3. la règle d'autorité — la spec gagne sans délibération, et corriger une spec est
    un acte humain, jamais un acte d'agent ;
 4. **dans un lot correctif seulement**, la condition d'arrêt propre au lot
-   correctif (`Departures from superpowers`), recopiée intégralement.
+   correctif (`Departures from superpowers`), recopiée intégralement ;
+5. **dans une story qui écrit du code gardé par un flag seulement**, les règles du
+   code gardé (`Code under a feature flag`), recopiées intégralement — que le flag
+   soit déclaré par le lot de la story ou par un autre.
 
 ### Concurrency detection
 
@@ -736,6 +739,28 @@ autre. La condition de levée est écrite dans la spec, et pas seulement dans le
 document de lot. **La spec est le seul registre des flags** : un flag existe tant
 que sa mention y figure, dans la section qu'il couvre.
 
+### Code under a feature flag
+
+Le code gardé par un flag tient l'activation pour une partie des utilisateurs
+seulement, l'activation pour tous et la désactivation, quelle que soit la manière
+dont le projet active ses flags. Il tient quatre règles :
+
+- **Les deux états cohabitent.** Un utilisateur au flag activé et un utilisateur
+  au flag désactivé travaillent côte à côte sur les mêmes données. Ce que l'un
+  produit, l'autre peut le lire et s'en servir.
+- **La désactivation reste toujours possible.** Désactiver le flag, pour un
+  utilisateur ou pour tous, laisse lisible et utilisable ce que l'état activé a
+  produit, sans erreur ni perte de donnée.
+- **Rien d'autre ne change.** Flag désactivé, l'utilisateur retrouve le
+  comportement d'avant le lot, aux données produites sous flag activé près.
+- **Chaque état est vérifié.** La pull request de la story porte des tests du
+  comportement flag activé, du comportement flag désactivé et de leur
+  cohabitation.
+
+**La levée ne fera que retirer.** Le code gardé est écrit de sorte que lever le
+flag se réduise à supprimer le branchement et le comportement d'avant le lot, sans
+rien écrire de neuf.
+
 ### Lifting a feature flag
 
 La story de levée supprime le branchement dans le code et la mention du flag dans
@@ -749,8 +774,14 @@ Elle est la dernière story du lot quand le flag est à portée de lot. Quand la
 portée est étendue, elle appartient au lot dont le spec delta annonce la levée, et
 que l'humain valide à la revue d'ouverture comme le reste de ce delta.
 
-La levée est **une story, jamais une part de la clôture.** Une période d'observation
-entre activation et nettoyage se fait en deux stories — activer, puis retirer.
+La levée est **une story, jamais une part de la clôture.** Une période
+d'observation se fait en deux stories : la première fait passer le défaut déclaré
+par la mention de `off` à `on`, la seconde supprime le branchement et la mention.
+
+**Le défaut déclaré et l'état effectif sont deux choses distinctes.** La spec
+déclare un défaut ; activer le flag pour une partie des utilisateurs, ou le
+désactiver, est un geste du projet, qui ne change rien à ce que la spec déclare.
+Seule une story change le défaut déclaré.
 
 **Conclue par** la fusion de sa pull request : le flag est levé.
 
