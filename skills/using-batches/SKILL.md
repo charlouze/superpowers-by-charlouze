@@ -139,16 +139,15 @@ Rewriting earlier would destroy what the review is reading. A force-push that
 lands mid-review replaces the commits the human has comments on, and their
 comments come back attached to nothing.
 
-**Merging an adoption, opening, delivery or amendment review is a moment to clear
-the context.** The merged document then carries everything the next step needs,
-and the conversation is only a draft that can contradict it. Merging a closing
-review is not one: nothing follows it.
+**Merging any review is a moment to clear the context.** The merged document then
+carries everything that follows needs, and the conversation is only a draft that
+can contradict it.
 
 The agent cannot clear its own context. So when it announces the pull request
-ready, it says that merging it will be that moment, names the next step, and
-gives — in a block to copy and paste — the prompt that starts that step after the
-clear. **That prompt stands on its own:** it names the skill to invoke and the
-document to start from, and never refers back to the conversation.
+ready, it says that merging it will be that moment. Where a next step exists, it
+names that step and gives — in a block to copy and paste — the prompt that starts
+it after the clear. **That prompt stands on its own:** it names the skill to
+invoke and the document to start from, and never refers back to the conversation.
 
 "Never refers back to the conversation" is the whole point. A prompt saying
 "continue what we discussed" is worthless after a clear, and it is worthless in a

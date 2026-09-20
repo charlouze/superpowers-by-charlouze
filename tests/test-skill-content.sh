@@ -189,7 +189,14 @@ require closing-a-batch "closing PR is reviewed"                 "review of the 
 require closing-a-batch "branch naming convention"               "batch/NN"
 require closing-a-batch "ends the review as every gate does"  "never approves and never merges a pull request"
 require closing-a-batch "pushes corrections as fixups"        "pushed as a \`fixup!\` commit"
-require closing-a-batch "denies being a clear moment"         "Merging a closing review is not a moment to clear the context"
+require closing-a-batch "names the merge a clear moment"      "is a moment to clear the context"
+# Closing clears like every gate; what it lacks is a next step, so it alone hands
+# over no prompt. Two assertions because they are two claims: a skill that dropped
+# the second would send an agent inventing a step the model does not have. This is
+# the only place either claim is stated — the spec and `using-batches` carry the
+# general rule ("where a next step exists…"), which already implies the negative.
+require closing-a-batch "has no next step to name"            "no next step to name"
+require closing-a-batch "therefore hands over no prompt"      "hands over no prompt"
 
 # --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
 require closing-a-batch "the flag check is duty 1"               "### 1. Refuse to close on a flag"
@@ -231,7 +238,8 @@ require using-batches "forbids the agent approving or merging" "never approves a
 require using-batches "pushes corrections as fixups"           "pushed as a \`fixup!\` commit"
 require using-batches "the agreement is given in conversation" "The human gives their agreement in the conversation"
 require using-batches "names the merge a clear moment"      "a moment to clear the context"
-require using-batches "excludes the closing review from it" "Merging a closing review is not one"
+require using-batches "the rule covers every gate"          "Merging any review is a moment to clear the context"
+require using-batches "the handover is conditional"         "Where a next step exists"
 require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
 
 exit $((FAILURES > 0))

@@ -185,14 +185,15 @@ conversation avec l'agent.** L'agent fond alors les `fixup!` dans les commits
 qu'ils corrigent, pousse la branche réécrite, et annonce que la pull request est
 prête à être approuvée et fusionnée.
 
-**La fusion d'une revue d'adoption, d'ouverture, de livraison ou d'amendement est
-un moment de vider le contexte** : le document fusionné porte alors tout ce dont
-l'étape suivante a besoin, et la conversation n'est plus qu'un brouillon qui peut
-le contredire. Celle d'une clôture n'en est pas un, rien ne la suivant. L'agent ne peut pas vider son propre contexte : en
-annonçant la pull request prête, il dit que sa fusion sera ce moment, nomme
-l'étape suivante, et donne dans un bloc à copier-coller le prompt qui la lance
-après le clear. **Ce prompt se suffit à lui-même** : il nomme la skill à invoquer
-et le document d'où repartir, et ne renvoie jamais à la conversation.
+**La fusion d'une revue est un moment de vider le contexte** : le document fusionné
+porte alors tout ce dont la suite a besoin, et la conversation n'est plus qu'un
+brouillon qui peut le contredire.
+
+L'agent ne peut pas vider son propre contexte : en annonçant la pull request
+prête, il dit que sa fusion sera ce moment. Quand une étape suivante existe, il la
+nomme et donne dans un bloc à copier-coller le prompt qui la lance après le clear.
+**Ce prompt se suffit à lui-même** : il nomme la skill à invoquer et le document
+d'où repartir, et ne renvoie jamais à la conversation.
 
 ## Module
 

@@ -200,16 +200,15 @@ shared "every review-ending skill pushes corrections as fixup! commits" \
     "pushed as a \`fixup!\` commit" \
     using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
-# Four skills, not five: a closing review is followed by nothing, so it is not a
-# clear moment. `closing-a-batch` carries the exception instead, guarded by the
-# `require` above. Listing it here would demand of it the very sentence it exists
-# to deny — and it would pass, because its denial contains the phrase.
-shared "every clear-moment skill names the merge as one" \
+# All five: every review merge is a clear moment, closing included — nothing
+# follows a closing, so what comes next is unrelated work that the closed batch's
+# context would only pollute. What sets closing apart is that it has no next step
+# to name and so hands over no prompt, which is a different claim and is guarded
+# per-skill in test-skill-content.sh. Keeping that distinction out of this
+# assertion is deliberate: this one asks whether the five skills say the same
+# thing in the same words, and they do.
+shared "every review-ending skill names the merge a clear moment" \
     "is a moment to clear the context" \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story
-
-absent "closing-a-batch does not also affirm the merge is a clear moment" \
-    "is a moment to clear the context" \
-    closing-a-batch
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
 exit $((FAILURES > 0))
