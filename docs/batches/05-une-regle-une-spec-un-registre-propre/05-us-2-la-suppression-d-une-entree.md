@@ -1006,4 +1006,122 @@ EOF
 
 ## Rulings log
 
+Ruling: cette story prend D3, D4, D5, D6 et D7 ensemble — Pourquoi : la
+contrainte d'ordre du lot lie D3, D4 et D7 à la même section, et livrer ceux-là
+sans D5 ni D6 laisserait sur `main` une spec qui dit « supprimer » dans
+`The gaps register` et « barre » dans `Delivering a story` — Coût si faux : la
+pull request est plus large qu'une story minimale, donc plus longue à relire.
+
+Ruling: la story est écrite alors que `story/04-us-5` est en vol et barre une
+entrée du gaps register — Pourquoi : les sections déclarées sont disjointes, donc
+la détection de concurrence n'arrête pas ; et l'humain a tranché l'ordre de
+fusion — Coût si faux : si 04-us-5 avait fusionné après, son barré aurait été un
+geste que la spec ne décrit plus. Elle a fusionné avant, et cette branche a été
+rebasée dessus ; le coût ne s'est pas réalisé.
+
+Ruling: les huit tâches sont dispatchées en quatre lots d'agents au lieu de huit
+— Pourquoi : elles sont toutes le même geste, remplacer un passage donné mot pour
+mot puis poser son assertion, et les dépendances d'ordre réelles tombent sur des
+frontières de lot — Coût si faux : la relecture d'un lot porte sur trois commits
+au lieu d'un.
+
+Ruling: la garde qui interdit le retour du barré est un jeton nu
+`[Ss]truck|[Ss]trik` et non un motif visant le register — Pourquoi : le motif
+`strik[a-z]*[^.]{0,N}(gaps register|entr(y|ies))` a été exécuté contre les cinq
+skills et rate la ligne de table `| Strike | … | strikes it through |`, celle qui
+nomme le geste, à toute fenêtre raisonnable — son « entry » est l'en-tête de
+colonne. Un jeton nu n'a pas de trou — Coût si faux : la phrase de l'inventaire
+des sources de `adopting-a-module` a dû changer de verbe, `strike` devenant
+`drop`, soit un mot modifié hors du périmètre des blocs ; le geste décrit ne
+change pas. Et toute occurrence future et innocente de « strike » dans ces cinq
+fichiers rougira la suite sous un libellé trompeur.
+
+Ruling: `closing-a-batch` reconnaît désormais une réservation non consommée à la
+**présence** de son entrée — Pourquoi : son ancien critère était « jamais
+barrée », et plus rien n'est barré ; D4 dit que l'entrée reste après une
+libération, donc une réservation consommée est une entrée qui n'est plus dans le
+fichier — Coût si faux : aucun, D4 l'énonce ; c'est une transcription.
+
+Ruling: la tâche 7 n'a pas eu de relecture de tâche dédiée, son contrôle étant
+reporté sur la revue finale de branche — Pourquoi : son livrable est une
+assertion de trois lignes plus un mot changé, et la seule chose à vérifier — que
+la garde rougit vraiment — a été observée par l'implémenteur puis revérifiée
+— Coût si faux : un défaut de la garde serait passé jusqu'à la revue finale, qui
+l'a effectivement relue et l'a jugée saine.
+
+Ruling: aucune annotation `reserved by batch-NN` ne survit au ménage —
+Pourquoi : les quatre qui existaient portaient toutes sur une entrée barrée ou
+sur l'entrée que ce lot résorbe, et une entrée barrée est une réservation
+*consommée*, qui part avec son entrée. C'est la règle du lot appliquée, pas une
+exception — Coût si faux : la clôture du lot 04 ne trouvera rien à libérer, ce
+qui est le comportement exact, mais peut se lire comme une perte.
+
+Ruling: le renvoi orphelin qu'a produit le ménage est **réparé** et non parqué —
+Pourquoi : l'entrée vivante *Installing on a project* ouvrait sur « second membre
+de la même phrase », et la phrase en question était celle d'une entrée barrée
+située juste au-dessus, que ce ménage a supprimée. C'est notre suppression qui
+l'a cassée. Le lot interdit de résorber ou d'ajouter une entrée, pas de garder
+lisible celle que notre propre geste a abîmée — et livrer un register qui renvoie
+à ce qui n'existe plus est exactement l'échec que ce lot combat. La réparation
+nomme la phrase visée au lieu de pointer un voisin, et ne touche à rien d'autre —
+Coût si faux : une entrée vivante a été reformulée au-delà du ménage que le lot
+énumère, ce qu'un relecteur peut juger hors périmètre. **Ce coût est éteint** :
+l'amendement du lot, fusionné depuis, fait de cette réparation un élément du
+ménage énuméré. L'arbitrage reste écrit parce qu'il a été pris avant que le lot
+le couvre.
+
+Trois constats mineurs sont laissés en l'état, et nommés ici plutôt que corrigés
+hors périmètre : la section `Coverage` du register annonce « 90 assertions » là
+où la suite en exécute 342 ; `absent` ne balaie que le corps d'un `SKILL.md`,
+front matter exclu, donc une `description:` échapperait à la garde — aucune n'en
+porte aujourd'hui ; et le paragraphe de D7 précède celui de D3 dans la spec, si
+bien que « le commit qui l'a supprimé » se lit avant que le lecteur n'apprenne
+qu'une entrée se supprime. Ce dernier point est fidèle à l'ordre des blocs du
+lot.
+
 ## Observed drift
+
+- **Une entrée du gaps register peut renvoyer à une autre par sa position, et
+  rien ne le rattrape quand la cible disparaît.** Cette story en a produit le cas
+  d'école, et il met en jeu **deux** entrées distinctes. Celle qui renvoie est
+  *Installing on a project*, et elle survit : elle ouvrait sur « second membre de
+  la même phrase ». Celle qui portait cette phrase est une entrée *Document
+  layout*, barrée de longue date, que le ménage a supprimée comme les vingt-trois
+  autres. Le renvoi a donc perdu sa cible sans que personne ne le touche, et c'est
+  l'entrée survivante qu'il a fallu réparer.
+
+  Le lot 01 a déjà fait consigner par la story `05-us-1` que la
+  règle « un renvoi nomme la section qu'il vise » n'est dans aucune spec et
+  qu'aucune garde n'attrape un renvoi positionnel ; ce qui est neuf ici n'est pas
+  la règle manquante mais sa portée : **en remplaçant le barré par la
+  suppression, ce lot fait de ce défaut latent un défaut systématique**, puisque
+  toute entrée réglée quitte désormais le fichier et emporte ce qui pointait
+  vers elle.
+
+  **Ce constat a été pris en charge depuis**, par l'amendement du lot : le bloc D9
+  écrit qu'une entrée ne renvoie à aucune autre, et D10 retire de la spec le mot
+  `adressable`, qui rendait ce renvoi naturel. Ce qui reste hors du lot est la
+  règle générale — celle qui vaudrait pour les skills, les specs et les documents
+  de lot —, portée par le constat de `05-us-1` et rangée en `Hors périmètre`.
+
+- **Rien ne dit ce qu'une prose de register qui qualifie un *groupe* d'entrées
+  doit devenir quand ces entrées partent.** Le fichier du plugin porte, sous
+  `## Gaps`, un paragraphe qui annonce « les entrées qui suivent ont été
+  consolidées par la clôture du lot 02 » et qui porte leur classement en *Gaps*
+  plutôt qu'en *Violations*. La spec énonce qu'une entrée est un item adressable,
+  et ne dit rien de cette prose-là : elle n'est l'entrée de personne, elle ne se
+  réserve pas, ne se supprime pas, et personne ne la tient à jour. Elle était
+  déjà approximative avant cette story — deux entrées levées par le lot 06 la
+  suivent sans avoir été consolidées par le lot 02 —, et le ménage la laisse au
+  même endroit sans qu'aucune règle ne dise si elle doit rétrécir avec le groupe
+  qu'elle décrit. C'est un **gap** : il n'y a pas de norme à faire respecter, il
+  y a une norme à écrire.
+
+  **Elle a été écrite depuis**, par l'amendement du lot : le bloc D8 énonce que ce
+  qui qualifie une entrée vit dans l'entrée, et une contrainte fait dissoudre ce
+  paragraphe par la story qui le transcrit.
+
+**Aucun des deux constats ci-dessus ne part au gaps register.** Le lot les a pris
+en charge après que cette story les a écrits, et une contrainte le dit : la
+clôture ne verse pas ce que le lot a réglé. Ils restent consignés ici parce que
+c'est ici qu'ils ont été vus.
