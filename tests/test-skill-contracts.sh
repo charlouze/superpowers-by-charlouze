@@ -335,4 +335,14 @@ shared "the entry's shape is still stated without the word" \
     "one list item, never a paragraph of running prose" \
     adopting-a-module
 
+# A register is reread entry by entry, and nothing keeps a prose that
+# qualifies a group in step: it goes false without anyone having touched it.
+# The three skills that *add* an entry say so — adoption writes all its gaps
+# at once, closing consolidates several stories, the bounded change writes
+# alone. One assertion over the three: three `require`s would stay green while
+# one edge got reworded.
+shared "every writer that adds an entry keeps a group's qualification out" \
+    "What qualifies an entry lives in the entry" \
+    adopting-a-module closing-a-batch using-batches
+
 exit $((FAILURES > 0))

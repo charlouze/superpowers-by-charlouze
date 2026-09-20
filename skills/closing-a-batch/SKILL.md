@@ -75,6 +75,8 @@ Stories deliberately do not write into the register. Adding an entry appends at 
 
 **Read the file's history before adding an entry** (`git log -p docs/specs/<module>.gaps.md`). An entry that once left this file left for a reason, and that reason is in the commit that removed it — resolved, promoted, moot, false, or set aside by your human partner. Re-filing an observation that was already set aside, without saying what has changed since, reopens a decision nobody has reviewed.
 
+**What qualifies an entry lives in the entry.** Besides its coverage, the register carries nothing but entries: no prose qualifies a *group* of them — where they came from, how they were classified, how many there are. Entries are added and removed one at a time, and nothing keeps such a paragraph honest: it goes false without anyone touching it. What it would say of several entries is repeated in each, and where an entry came from is read in the history of the file. You arrive with a batch's worth of findings at once, so the temptation is yours more than anyone's: write "consolidated by batch NN" into each entry that needs it, never above them.
+
 ### 4. Release unconsumed reservations
 
 For every gaps register entry this batch reserved at opening (`reserved by batch-NN`) that is still in the file, release it. Releasing removes the reservation annotation and leaves the entry: the gap is still open, it is simply no longer claimed. Those are the **unconsumed reservations** — a story abandoned, a scope revised mid-flight. An entry a story did resolve is not there to release: the story deleted it from the file, atomically with the code that resolved it, and the commit that removes it says why.

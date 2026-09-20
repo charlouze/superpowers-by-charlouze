@@ -255,6 +255,15 @@ cleanly, no list for a bounded change to append one to — what it adds is more
 prose, which the next writer cannot point at either — and nothing a corrective
 batch can draw a scope from. Write entries so those gestures are mechanical.
 
+**What qualifies an entry lives in the entry.** Besides its coverage, the register
+carries nothing but entries: no prose qualifies a *group* of them — where they came
+from, how they were classified, how many there are. Entries are added and removed
+one at a time, and nothing keeps such a paragraph honest: it goes false without
+anyone touching it. What it would say of several entries is repeated in each, and
+where an entry came from is read in the history of the file. You write this file's
+first entries all at once, which is exactly when a group paragraph feels natural —
+and it is the one moment nobody is left to notice it later.
+
 **Nothing stays behind in this file once an entry is settled.** The register
 carries what is still open, and what an entry was — and why it left — is read in
 the history of the file (`git log -p docs/specs/<module>.gaps.md`).
