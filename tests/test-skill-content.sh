@@ -72,6 +72,8 @@ require adopting-a-module "pushes corrections as fixups"         "pushed as a \`
 require adopting-a-module "names the merge a clear moment"       "a moment to clear the context"
 require adopting-a-module "names the next step after the clear"  "names \`supercharlouze:writing-a-batch\` as the next step"
 require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
+require adopting-a-module "arrives in a context of its own"      "in a context of its own"
+require adopting-a-module "the design that follows starts fresh" "from the adopted spec, not from a conversation"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "an unadopted module stops the design"   "the design stops"
