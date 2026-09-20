@@ -497,4 +497,64 @@ git commit -m "feat: la consolidation prend les arbitrages ouverts et la clôtur
 
 ## Rulings log
 
+Aucun des deux n'est un arbitrage ouvert : chacun tranche et ne laisse rien à
+trancher après la fusion.
+
+- `Ruling:` la story est conduite dans le worktree du lot 08, sur une branche
+  créée depuis `origin/main`, au lieu d'un worktree neuf créé depuis le checkout
+  principal — parce que la session est isolée dans ce worktree par le harnais,
+  qui refuse toute commande git visant le checkout partagé, et que la spec, seule
+  autorité, n'exige pas un répertoire mais un point de départ : « toute branche du
+  flux part d'un `main` à jour ». Le répertoire est une précondition de skill, et
+  ce qu'elle protège — qu'une story n'atterrisse pas sur la branche de la
+  précédente — est obtenu ici par le point de départ explicite. C'est le défaut
+  même que le bloc D1 de ce lot corrige, et qu'aucune story n'a encore transcrit
+  — ce qu'il coûte si c'est faux : une branche partie d'ailleurs que de `main`,
+  visible dans son diff, et à refaire.
+- `Ruling:` une formule énoncée dans plusieurs skills est verrouillée par une
+  assertion `shared` unique dans `tests/test-skill-contracts.sh`, et non par un
+  `require` par skill dans `tests/test-skill-content.sh` — le plan en portait deux
+  indépendants pour la définition de l'arbitrage ouvert — parce que le commentaire
+  du helper le dit, deux assertions séparées restent vertes toutes les deux
+  pendant qu'un bout dérive, et que le dépôt verrouille déjà quatre couplages
+  ainsi — ce qu'il coûte si c'est faux : trois assertions là où une par skill
+  aurait suffi, et une définition reformulée fait rougir plusieurs skills d'un
+  coup au lieu d'une.
+
 ## Observed drift
+
+Les quatre constats sont hors du périmètre de cette story, et aucun n'est
+résorbé ici.
+
+- **`Batch > The batch document` et `Batch > Opening a batch` énoncent deux
+  totalités que les règles de la spec contredisent.** « Le spec delta est **le
+  texte exact que ce lot écrit dans les specs**, en blocs » et « la revue
+  d'ouverture […] **c'est là que l'humain lit ce que diront les specs** » : or
+  l'étape 3 de `Delivering a story` fait écrire la mention d'un flag par la story
+  sans qu'aucun bloc la porte, la story de démontage retire de la spec ce que le
+  lot y avait ajouté avec `Blocks: none`, et la levée d'un flag à portée de lot
+  n'exige pas davantage de bloc. Le code fait ce que ces règles disent ; ce sont
+  les deux totalités qui ont tort. Constat antérieur à ce lot. Le lot 07 les
+  visait par ses blocs D3 et D4 ; sa revue d'ouverture les a retirés, son delta
+  ne porte plus que `Batch` et `Batch > Opening a batch`, et les deux phrases sont
+  intactes sur `main` — le constat a donc toujours un objet.
+- **`Module > The gaps register` est incomplète après ce lot, sans être fausse.**
+  La phrase qui énumère les sources d'une entrée — « une story, dans le code
+  qu'elle traverse » — ne nomme pas l'arbitrage ouvert que le bloc D4 envoie à la
+  consolidation. L'énumération des **écrivains** reste exacte ; seule la
+  description de ce que la clôture consolide reste partielle, comme elle l'est
+  déjà pour les blocs non livrés. La section est tenue par la story
+  `05-us-3-une-entree-se-lit-seule`.
+- **`Authority and conflict rules` énonce la règle de recopie une seconde fois,
+  et ce lot n'a amendé que la première.** « Les arbitrages d'une story sont
+  recopiés dans son document, sur sa branche, avant la fusion » ne dit pas que la
+  recopie nomme, pour chaque arbitrage ouvert, ce qui reste à trancher — ce que
+  `Story > Delivering a story` exige désormais. Le scope de ce lot avait nommé
+  les **deux** règles qui alimentent le `Rulings log` ; son spec delta n'en porte
+  qu'une. Un lecteur qui n'atteint que cette section-là écrit un `Ruling:` nu, et
+  le contrôle de clôture n'a rien à lire.
+- **`Story > The user story document` omet un cas de `Blocks: none`.**
+  L'énumération des stories qui ne transcrivent aucun bloc cite la story de lot
+  correctif et la story de démontage, et manque la **story de levée d'un flag à
+  portée de lot**, qui n'en transcrit pas davantage. Constat signalé par la
+  session du lot 07, vérifié sur `main`.
