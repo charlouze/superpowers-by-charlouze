@@ -120,7 +120,7 @@ docs under `docs/archive/specs/`, README files, business documentation, ADRs,
 product notes.
 
 **Present the list to your human partner before you write a single line of spec.**
-They can add a source you missed and strike one that was never validated. The
+They can add a source you missed and drop one that was never validated. The
 quality of the spec is capped by this inventory — a source missed here is a hole in
 the spec, and no later step fills it.
 
@@ -235,15 +235,17 @@ names that document**, so your human partner can promote it knowing what they ar
 promoting instead of re-reading the whole thing.
 
 **Each entry is a single addressable item — one list item, never a paragraph of
-running prose.** You are the only skill that ever *creates* this file, and three
-later skills act on its entries — plus the bounded path, a fourth writer with no
-skill of its own — each needing a thing it can point at, whether to annotate it
-in place or to take it out whole:
+running prose.** You are the only skill that ever *creates* this file, and four
+writers act on its entries afterwards — three skills, plus the bounded path,
+which has no skill of its own — as do you yourself at the step
+`Offer to promote the gaps`. Each of them needs a thing it can point at, whether
+to annotate it in place or to take it out whole:
 
 | Gesture | Who | What it does to the entry |
 |---|---|---|
 | Reserve | `supercharlouze:writing-a-batch`, in the batch's opening pull request | appends `reserved by batch-NN` to it |
 | Remove | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | deletes it from the file, atomically with the code, and the commit that removes it says why |
+| Remove | you, at the step `Offer to promote the gaps`, when your human partner promotes one | deletes it from the file, in the same pull request that writes the rule it became |
 | Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed, and leaves the entry |
 | Add or remove | a bounded change, from its own pull request | belonging to no batch, it writes an entry or deletes one directly, contending only with another bounded change |
 
@@ -297,8 +299,9 @@ human partner to promote the gaps into the spec**, one gap at a time, before the
 pull request opens. For each gap that describes a behaviour observable at the
 module's boundary, ask whether that behaviour carries an intended rule — a
 question about the intention, never about the mechanism. What they validate goes
-into the spec, under the section that behaviour constrains, and leaves the
-register; everything else stays there.
+into the spec, under the section that behaviour constrains, and **its entry is
+deleted from the register** — this is an adoption that promotes a gap into the
+spec, and the commit that removes it says why. Everything else stays there.
 
 The intention comes from them, not from you: you show the behaviour, they state or
 confirm what it is for. Paraphrasing an intention from the code yourself and

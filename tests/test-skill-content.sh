@@ -78,6 +78,7 @@ require adopting-a-module "a spilling rule is about the rule's reach" "the signa
 require adopting-a-module "a spilling rule questions the breakdown" "the breakdown is what is in question"
 require adopting-a-module "names the one late signal on a boundary" "One late signal exists, and only one"
 require adopting-a-module "the register's gestures include removal"  "the commit that removes it says why"
+require adopting-a-module "promoting a gap removes its entry"        "an adoption that promotes a gap into the spec"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "an unadopted module stops the design"   "the design stops"
