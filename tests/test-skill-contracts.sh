@@ -188,4 +188,27 @@ absent "no skill finds undelivered blocks by reading or diffing the specs" \
     "[Cc]heck the specs on main|against what (actually )?shipped" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
+# The end of a review is one norm with five ends. `shared` and not five `require`
+# calls: separate assertions would each stay green while one skill drifted away
+# from the wording the others use, and a skill that says "the agent may merge
+# once approved" would contradict the spec with its own test passing.
+shared "every review-ending skill forbids the agent approving or merging" \
+    "never approves and never merges a pull request" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+shared "every review-ending skill pushes corrections as fixup! commits" \
+    "pushed as a \`fixup!\` commit" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+# All five: every review merge is a clear moment, closing included — nothing
+# follows a closing, so what comes next is unrelated work that the closed batch's
+# context would only pollute. What sets closing apart is that it has no next step
+# to name and so hands over no prompt, which is a different claim and is guarded
+# per-skill in test-skill-content.sh. Keeping that distinction out of this
+# assertion is deliberate: this one asks whether the five skills say the same
+# thing in the same words, and they do.
+shared "every review-ending skill names the merge a clear moment" \
+    "is a moment to clear the context" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
 exit $((FAILURES > 0))

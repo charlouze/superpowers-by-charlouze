@@ -67,6 +67,11 @@ require adopting-a-module "the fallback enumerates at the boundary"   "observabl
 require adopting-a-module "the question is about the intention"       "about the intention, never about the mechanism"
 require adopting-a-module "a mechanism is not put to validation"      "A mechanism is not submitted to human validation"
 require adopting-a-module "branch naming convention"             "adopt/"
+require adopting-a-module "ends the review as every gate does"   "never approves and never merges a pull request"
+require adopting-a-module "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
+require adopting-a-module "names the merge a clear moment"       "a moment to clear the context"
+require adopting-a-module "names the next step after the clear"  "names \`supercharlouze:writing-a-batch\` as the next step"
+require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "adopted spec is a blocking precondition" "blocking precondition"
@@ -108,6 +113,13 @@ require writing-a-batch "the opening review bears on the exact text" "It bears o
 require writing-a-batch "the text is read in the batch document"     "block by block, in the batch document"
 require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
 require writing-a-batch "the reread checks quotes against main"          "every quoted passage matching \`main\`"
+
+# --- writing-a-batch: ending the opening and amendment reviews ---
+require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
+require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"
+require writing-a-batch "names the merge a clear moment"          "a moment to clear the context"
+require writing-a-batch "opening hands over to the first story"   "names \`supercharlouze:writing-a-user-story\` as the next step"
+require writing-a-batch "an amendment is a clear moment too"      "An amendment merges into the same clear moment"
 
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "checks it is in the main checkout"  "main checkout"
@@ -152,6 +164,10 @@ require writing-a-user-story "a divergence is named in the PR"      "Every diver
 require writing-a-user-story "a divergence has two legitimate causes" "only two legitimate causes"
 require writing-a-user-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
 require writing-a-user-story "no divergence amends the batch document" "Neither case amends the batch document"
+require writing-a-user-story "ends the review as every gate does"   "never approves and never merges a pull request"
+require writing-a-user-story "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
+require writing-a-user-story "names the merge a clear moment"       "a moment to clear the context"
+require writing-a-user-story "hands over to the next story"         "names the next story as the next step"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
@@ -171,6 +187,16 @@ require closing-a-batch "offers three exits"                     "three exits"
 require closing-a-batch "sets status closed"                     "status: closed"
 require closing-a-batch "closing PR is reviewed"                 "review of the closing pull request"
 require closing-a-batch "branch naming convention"               "batch/NN"
+require closing-a-batch "ends the review as every gate does"  "never approves and never merges a pull request"
+require closing-a-batch "pushes corrections as fixups"        "pushed as a \`fixup!\` commit"
+require closing-a-batch "names the merge a clear moment"      "is a moment to clear the context"
+# Closing clears like every gate; what it lacks is a next step, so it alone hands
+# over no prompt. Two assertions because they are two claims: a skill that dropped
+# the second would send an agent inventing a step the model does not have. This is
+# the only place either claim is stated — the spec and `using-batches` carry the
+# general rule ("where a next step exists…"), which already implies the negative.
+require closing-a-batch "has no next step to name"            "no next step to name"
+require closing-a-batch "therefore hands over no prompt"      "hands over no prompt"
 
 # --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
 require closing-a-batch "the flag check is duty 1"               "### 1. Refuse to close on a flag"
@@ -206,5 +232,14 @@ require using-batches "the glossary points at that section"     "see \`What a Sp
 # --- using-batches: the delta block (spec section "The model") ---
 require using-batches "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
 require using-batches "a block is transcribed word for word" "the exact text it must receive, transcribed word for word by a story"
+
+# --- using-batches: the shape of a review's end ---
+require using-batches "forbids the agent approving or merging" "never approves and never merges a pull request"
+require using-batches "pushes corrections as fixups"           "pushed as a \`fixup!\` commit"
+require using-batches "the agreement is given in conversation" "The human gives their agreement in the conversation"
+require using-batches "names the merge a clear moment"      "a moment to clear the context"
+require using-batches "the rule covers every gate"          "Merging any review is a moment to clear the context"
+require using-batches "the handover is conditional"         "Where a next step exists"
+require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
 
 exit $((FAILURES > 0))

@@ -124,6 +124,35 @@ The second is why feature flags exist, and it rules out the two natural alternat
 
 **Preconditions for every pull request of this system**, checked before creating a branch: be in the **main checkout** (a session chaining two stories without leaving the worktree would stack the second story on the first story's branch), and be on `main`, freshly fetched (numbering and concurrency detection reason on the remote state). `gh` is assumed available and authenticated; without it both degrade to a partial safety net and stop preventing anything.
 
+**The agent never approves and never merges a pull request.** Approving and
+merging are human acts, at every gate in the table above without exception.
+
+**During a review the branch is not rewritten.** Each requested correction is
+pushed as a `fixup!` commit of the commit it corrects, or as a commit of its own
+when it carries a fresh decision, so that the human sees on the pull request what
+changed since they last read it. **The human gives their agreement in the
+conversation**, not through a GitHub approval. The agent then squashes the
+`fixup!` commits into the commits they correct, pushes the rewritten branch, and
+announces that the pull request is ready to be approved and merged.
+
+Rewriting earlier would destroy what the review is reading. A force-push that
+lands mid-review replaces the commits the human has comments on, and their
+comments come back attached to nothing.
+
+**Merging any review is a moment to clear the context.** The merged document then
+carries everything that follows needs, and the conversation is only a draft that
+can contradict it.
+
+The agent cannot clear its own context. So when it announces the pull request
+ready, it says that merging it will be that moment. Where a next step exists, it
+names that step and gives — in a block to copy and paste — the prompt that starts
+it after the clear. **That prompt stands on its own:** it names the skill to
+invoke and the document to start from, and never refers back to the conversation.
+
+"Never refers back to the conversation" is the whole point. A prompt saying
+"continue what we discussed" is worthless after a clear, and it is worthless in a
+way nobody notices until the context is already gone.
+
 ## Authority and Conflict Rules
 
 **The spec is the binding authority.** The batch carries only what a spec cannot carry: delivery scope, story order, migration and compatibility constraints, and why this work happens now.

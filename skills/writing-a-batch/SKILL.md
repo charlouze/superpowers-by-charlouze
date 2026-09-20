@@ -311,6 +311,25 @@ review of the written spec becomes this pull request review. The human review is
 not removed; it changes tool, into the one where you already review everything
 else.
 
+**Ending the review.** The agent never approves and never merges a pull request.
+Each correction the review asks for is pushed as a `fixup!` commit of the commit
+it corrects, or as a commit of its own when it carries a fresh decision — the
+block texts are what the human is reading, and a force-push mid-review replaces
+the very lines their comments hang on. Your human partner gives their agreement
+in the conversation; then you squash the fixups, push, and announce the pull
+request ready.
+
+**Merging this pull request is a moment to clear the context.** The batch
+document now carries the exact text of every block, which is what the design
+conversation was for — and that conversation also carries every option you
+discarded on the way, which the first story must not inherit.
+
+The announcement therefore names `supercharlouze:writing-a-user-story` as the
+next step and gives its prompt in a block to copy and paste. **That prompt stands
+on its own:** it names the skill to invoke, the batch document by path, and says
+to choose the blocks from those the document still carries, and it never refers
+back to this conversation.
+
 ## Amending a Batch
 
 The batch document carries no mutable state, but it stays amendable by an
@@ -334,6 +353,13 @@ reason alone. Edit the batch document **in place** — no
 changelog inside it, no history of its own scope — and say in the pull request
 body what changed and why. An amendment is not mutable state
 flowing along: it is an explicit human decision that goes through a review.
+
+**An amendment merges into the same clear moment as an opening**, and ends its
+review the same way: fixups during the review, agreement in the conversation,
+squash, and an announcement that names the next step. What differs is which step
+that is — an amendment hands back to whatever the batch was doing when it stopped,
+so the announcement names that, and its prompt names the amended batch document
+by path.
 
 ## Requalifying a Corrective Batch
 
