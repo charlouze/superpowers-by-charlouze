@@ -139,6 +139,17 @@ Texte qui le remplace :
   emploient le terme que D2 pose au glossaire, et D4 et D5 visent la même section.
   Livré par tranches, chaque bloc nommerait quelque chose que la spec ne définit pas
   encore. D1 n'impose aucun ordre.
+- **Une dérive constatée en concevant ce lot part en `Observed drift`**, et la
+  clôture la versera au gaps register. La spec énonce deux totalités — « le spec
+  delta est **le texte exact que ce lot écrit dans les specs**, en blocs » et « la
+  revue d'ouverture […] **c'est là que l'humain lit ce que diront les specs** » —
+  que ses propres règles contredisent : l'étape 3 de `Delivering a story` fait
+  écrire la mention d'un flag par la story sans qu'aucun bloc la porte, la story de
+  démontage retire de la spec ce que le lot y avait ajouté avec `Blocks: none`, et
+  la levée d'un flag à portée de lot n'exige pas davantage de bloc. Le code fait ce
+  que ces règles disent ; ce sont les deux totalités qui ont tort. Constat
+  antérieur à ce lot, hors de son périmètre, et à ne pas résorber ici.
+
 - **`Module > The gaps register` est hors périmètre, et le lot le sait.** La phrase
   qui énumère les sources d'une entrée — « une story, dans le code qu'elle
   traverse » — ne nomme pas l'arbitrage ouvert que D4 envoie à la consolidation.
