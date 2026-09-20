@@ -25,6 +25,13 @@ de changelog, qui n'a aucune source pour elle. Précédent : la story
 `04-us-2-la-transcription`, dont un arbitrage a dû écrire « à reprendre dans la
 ligne de changelog du lot » dans un document que la clôture ne lit pas.
 
+Deux conséquences suivent, et ce lot les prend. Une écriture hors bloc peut toucher
+une section que le champ `Sections:` de la story ne déclare pas ; or c'est ce champ
+que lit la détection de concurrence, et un lot voisin scanne alors une déclaration
+périmée tant que la pull request reste ouverte. Et rien ne sépare aujourd'hui une
+écriture hors bloc d'un amendement du lot, alors que les deux chemins se ressemblent
+assez pour qu'un agent prenne le plus court.
+
 **Ce qu'`Observed drift` ne couvre pas**, par construction : la section est définie
 pour les divergences entre spec et code, et les deux objets ci-dessus n'en sont
 pas.
@@ -95,7 +102,8 @@ Texte qui le remplace :
 > signifie « examiné, rien trouvé ».
 >
 > **Off-block spec changes** porte ce que la story a écrit dans la spec hors de tout
-> bloc.
+> bloc. Une telle écriture **ne change pas ce que le lot promet** : ce qui le change
+> passe par un amendement, sinon la story suivante transcrirait son bloc par-dessus.
 >
 > Un arbitrage **laisse quelque chose** quand il parque un constat ou remonte une
 > question à l'humain, et le `Rulings log` le dit en nommant ce qui reste à
@@ -127,11 +135,27 @@ Texte qui le remplace :
 >   ouverts à leur destination, et les écritures de spec hors bloc portées par la
 >   ligne de changelog ;
 
+### D5 — `Story > The user story document`
+
+Passage actuel :
+
+> `Sections:` déclare les sections que la story touche, et c'est ce que lit la
+> détection de concurrence. Il est déclaré par l'auteur de la story, jamais déduit
+> d'un diff.
+
+Texte qui le remplace :
+
+> `Sections:` déclare les sections que la story touche, et c'est ce que lit la
+> détection de concurrence. Il est déclaré par l'auteur de la story, jamais déduit
+> d'un diff, et **une écriture hors bloc qui touche une section qu'il ne déclare pas
+> l'y ajoute**.
+
 ## Constraints
 
-- **Ordre requis.** D2, D3 et D4 sont transcrits **dans la même story**. D3 et D4
-  visent la même section, et tous deux nomment ce que seul D2 définit — « les trois
-  sections » et « un arbitrage resté ouvert ». D1 n'impose aucun ordre.
+- **Ordre requis.** D2, D3, D4 et D5 sont transcrits **dans la même story**. D3 et
+  D4 visent la même section et nomment tous deux ce que seul D2 définit — « les
+  trois sections » et « un arbitrage resté ouvert » ; D5 vise la même section que
+  D2 et nomme l'écriture hors bloc que D2 définit. D1 n'impose aucun ordre.
 - **Ce lot applique déjà ce qu'il introduit.** Ses stories portent les trois
   sections dès la première, et nomment dans leur `Off-block spec changes` toute
   écriture de spec faite hors bloc, même là où les skills publiées n'en demandent
@@ -142,6 +166,6 @@ Texte qui le remplace :
 Feature flag: none — chaque story est complète dans sa propre pull request
 
 Une story de ce lot, fusionnée seule, ne laisse personne devant quelque chose
-d'incomplet. D1 livrée seule est une règle qui vaut dès qu'elle est lue. D2, D3 et
-D4 voyagent ensemble par la contrainte d'ordre ci-dessus, qui interdit qu'une
+d'incomplet. D1 livrée seule est une règle qui vaut dès qu'elle est lue. D2, D3, D4
+et D5 voyagent ensemble par la contrainte d'ordre ci-dessus, qui interdit qu'une
 section soit nommée avant d'être définie ou drainée avant d'exister.
