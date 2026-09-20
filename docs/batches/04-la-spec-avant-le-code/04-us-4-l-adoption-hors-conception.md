@@ -415,4 +415,43 @@ git commit -m "feat: on arrive à l'adoption dans un contexte neuf, et on en rep
 
 ## Rulings log
 
+- **Ruling:** les deux renvois à `writing-a-batch` disent `Preconditions` et non
+  « its first precondition ». — Le lot demande qu'un renvoi nomme la section
+  qu'il vise sans la compter, et `tests/test-cross-references.sh` n'attrape que
+  la forme `section N` : c'est donc la contrainte du lot qui tranche, pas la
+  garde. Appliqué au texte du plan avant la première dépêche. — **Si c'est
+  faux :** le pointeur est moins précis, le lecteur arrive sur une liste de
+  quatre préconditions au lieu de la première.
+- **Ruling:** le paragraphe de l'Override 1 dans `using-batches` renvoie à la
+  règle au lieu de la redire. — La revue de tâche a relevé que le texte annonçait
+  déléguer à `writing-a-batch` « the full rule and the reason », puis fournissait
+  les deux lui-même. Le plan se contredisait : son `Architecture` demande un
+  renvoi « sans recopier l'argument », et son Task 2 recopiait la clause de
+  raison. L'instruction générale l'emporte sur l'instance : la règle reste nommée
+  — l'Override doit dire ce qu'il écarte, et la garde porte sur cette phrase —,
+  la clause de raison part. — **Si c'est faux :** qui lit `using-batches` seule
+  apprend la règle sans sa justification et doit ouvrir `writing-a-batch`.
+- **Ruling:** le paragraphe « Two reasons » de `writing-a-batch` reste sans garde
+  propre. — C'est une justification, pas une norme ; le lot demande une garde par
+  norme ajoutée, et la norme que ce paragraphe justifie est déjà tenue par quatre
+  assertions. — **Si c'est faux :** l'argument pourrait disparaître sans qu'aucun
+  test ne rougisse.
+- **Ruling:** les corrections issues des revues automatiques de la story ont été
+  fondues dans les commits qu'elles corrigent avant d'ouvrir la branche à la
+  relecture humaine. — Le `fixup!` existe pour que l'humain voie ce qui a changé
+  depuis **sa** dernière lecture ; une revue de sous-agent n'est pas une lecture
+  humaine, donc sa correction n'a rien à montrer et ne doit laisser ni commit de
+  fix, ni deux commits pour un même sujet, ni deux commits qui se contredisent.
+  — **Si c'est faux :** le détail de ce que chaque revue automatique a rattrapé
+  ne se lit plus dans l'historique, seulement ici.
+- **Ruling:** la garde transverse (`absent()`) est un commit à part, après les
+  trois skills. — Elle ne peut être verte qu'une fois les trois alignées :
+  la placer plus tôt casserait la bissection. — **Si c'est faux :** un commit de
+  test isolé se rattache moins évidemment à la norme qu'il tient.
+
 ## Observed drift
+
+Rien. La revue de branche a cherché, dans `skills/`, `commands/`, `README.md` et
+la spec, une formulation survivante de l'ancienne norme — l'adoption comme
+préalable bloquant que la conception enchaîne puis quitte — et n'en a trouvé
+aucune.
