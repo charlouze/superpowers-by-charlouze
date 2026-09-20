@@ -504,4 +504,78 @@ git commit -m "test: verrouille ensemble les quatre énoncés du domicile d'une 
 
 ## Rulings log
 
+Ruling: les `Constraints` du lot, recopiées mot pour mot dans `Global
+Constraints`, ne lient cette story que là où elles portent sur D1 — la mise à
+jour des skills, la garde structurelle, `run-all.sh` vert, l'absence de renvoi
+numéroté, la boucle du `Scope` sous `Observed drift`, et « ne rien aligner en
+silence ». Les clauses visant D3, D4, D7, le ménage du gaps register, l'entrée
+*Concurrency detection* et les formulations jumelles décrivent le travail
+d'autres stories du lot — Pourquoi : la skill exige la recopie verbatim, donc la
+copie porte nécessairement des clauses adressées aux stories sœurs ; les lire
+comme liantes ici ferait supprimer à cette story des entrées du register dont D3
+n'a pas encore spécifié le retrait — Coût si faux : la story sous-livre une part
+du lot, ce que la clôture attrape en lisant les champs `Blocks:`.
+
+Ruling: aucune tâche ne met à jour `skills/closing-a-batch/SKILL.md` — Pourquoi :
+D1 dit où une règle s'écrit ; la clôture écrit une ligne de changelog et
+consolide le gaps register, et ni l'un ni l'autre ne crée une règle susceptible
+d'enjamber deux modules — Coût si faux : une skill qui devrait porter la norme ne
+la porte pas. Faible, la clôture n'écrit aucune règle.
+
+Ruling: les trois constats *Important* de la revue de branche et le *Minor 6*
+partent dans une seule vague de correction ; les *Minor 4* et *5* sont différés —
+Pourquoi : les trois premiers sont des défauts que cette story a introduits (un
+commentaire français dans une suite entièrement anglaise, un renvoi positionnel
+qui se reciblait silencieusement sur le paragraphe neuf, et trois gardes qui
+passaient alors même que la prose gardée était supprimée) — Coût si faux : les
+deux différés sont livrés. Le *Minor 4* — le paragraphe d'`adopting-a-module`
+coupe une énumération de trois puces — se rend correctement et se tient là parce
+qu'il prolonge la puce du test de l'autre implémentation ; le *Minor 5* est
+cosmétique. Les deux sont visibles à la revue de livraison.
+
+Ruling: le document de story n'est pas réaligné sur les corrections —
+Pourquoi : le plan est l'argument tel qu'il a été tenu ; là où l'exécution s'en
+écarte, ce `Rulings log` est le canal prévu, et il atteint l'humain au gate de
+livraison. Réécrire le plan pour qu'il colle au résultat effacerait l'écart qu'un
+relecteur doit voir — la même raison qui interdit d'amender le document de lot
+pour qu'il colle à une transcription — Coût si faux : qui relit ce plan y trouve
+le commentaire français et trois aiguilles qui diffèrent de ce qui est livré. Les
+écarts sont nommés ici, donc trouvables plutôt que silencieux. Ils sont trois :
+le commentaire de la tâche 5 est passé à l'anglais, les aiguilles
+`There is no spec above the specs`, `A rule belongs to exactly one spec.` sur
+`adopting-a-module` et la même sur `writing-a-batch` ont été reciblées sur des
+phrases propres à la prose, et deux lignes de tables `Red Flags` ont été
+reformulées pour que la phrase commune ne vive que dans la prose.
+
+Ruling: l'asymétrie du helper `shared` — un fichier absent est signalé comme une
+skill qui a dérivé, là où `absent` échoue distinctement — n'est pas corrigée ici
+— Pourquoi : comportement préexistant d'un helper que onze autres assertions
+traversent, dans une story dont le périmètre déclaré est `Blocks: D1` — Coût si
+faux : une faute de frappe dans un futur appel à `shared` se diagnostique un cran
+plus lentement. Et ce constat ne part pas sous `Observed drift` : la spec énonce
+qu'elle ne légifère pas sur la qualité du code, donc les diagnostics d'un helper
+de test ne sont ni une violation ni un gap. Il reste ici, et il fera un
+changement borné le jour où quelqu'un le voudra.
+
 ## Observed drift
+
+- **Ce que le test de l'autre implémentation éjecte et qui n'est le gap d'aucun
+  module n'a pas de sortie.** C'est la boucle que le `Scope` du lot décrit : une
+  décision d'ingénierie qui vaut pour tout le projet et qu'aucune frontière de
+  module ne rend observable part au gaps register, où la catégorie *Gaps* promet
+  qu'un lot « les spécifie enfin » — lot qui réappliquerait le test et la
+  réejecterait. Consigné ici comme le lot l'exige.
+
+- **La règle « un renvoi nomme la section qu'il vise » n'est dans aucune spec, et
+  rien n'attrape un renvoi positionnel.** Le lot 01 a été ouvert sur ce principe
+  et a livré deux gardes, mais l'assertion 5 de `tests/test-cross-references.sh`
+  ne cherche que les renvois *numérotés* (`section N`, `§N`, `(spec N.N)`). La
+  règle elle-même ne se lit que dans la ligne de changelog du lot 01 — que la
+  spec range en commodité de lecture dont aucune règle ne dépend — et dans les
+  `Constraints` du lot 05, qui ne lient que les stories de ce lot. C'est donc un
+  **gap** et non une violation : il n'y a pas de norme à faire respecter, il y a
+  une norme à écrire. Ce qu'elle devrait couvrir se voit ici : « la règle
+  ci-dessus » se recible toute seule quand un paragraphe s'insère au-dessus,
+  sans que personne n'édite la phrase. Cette story en a produit un exemple dans
+  `writing-a-batch`, corrigé en nommant le référent — mais rien n'aurait rougi,
+  et rien ne rougira la prochaine fois.
