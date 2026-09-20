@@ -133,12 +133,44 @@ Texte qui le remplace :
 > - **la consolidation dans le gaps register** des sections `Observed drift` des
 >   stories du lot, et des arbitrages ouverts qui l'ont rejointe ;
 
+### D6 — `Authority and conflict rules`
+
+Passage actuel :
+
+> **Tout conflit est consigné pour l'humain**, comme arbitrage. Les arbitrages d'une
+> story sont recopiés dans son document, sur sa branche, avant la fusion.
+
+Texte qui le remplace :
+
+> **Tout conflit est consigné pour l'humain**, comme arbitrage. Les arbitrages d'une
+> story sont recopiés dans son document, sur sa branche, avant la fusion, en nommant
+> pour chaque arbitrage ouvert ce qui reste à trancher.
+
+### D7 — `Module > The gaps register`
+
+Passage actuel :
+
+> **La catégorie ne dépend pas du contexte, ses sources oui.** Une adoption trouve
+> ses gaps en auditant le code et dans ce que l'écriture de la spec éjecte des
+> documents validés ; une story, dans le code qu'elle traverse ; un changement borné,
+> dans ce qu'il rencontre. **Une entrée nomme le document dont elle vient** quand
+> elle vient d'un document.
+
+Texte qui le remplace :
+
+> **La catégorie ne dépend pas du contexte, ses sources oui.** Une adoption trouve
+> ses gaps en auditant le code et dans ce que l'écriture de la spec éjecte des
+> documents validés ; une story, dans le code qu'elle traverse et dans ses arbitrages
+> ouverts ; un changement borné, dans ce qu'il rencontre. **Une entrée nomme le
+> document dont elle vient** quand elle vient d'un document.
+
 ## Constraints
 
 - **Ordre requis.** D2 à D5 sont transcrits **dans la même story** : D3, D4 et D5
   emploient le terme que D2 pose au glossaire, et D4 et D5 visent la même section.
   Livré par tranches, chaque bloc nommerait quelque chose que la spec ne définit pas
-  encore. D1 n'impose aucun ordre.
+  encore. D6 et D7 emploient eux aussi le terme que D2 pose : ils sont transcrits
+  dans la même story que D2, ou après elle. D1 n'impose aucun ordre.
 - **Une dérive constatée en concevant ce lot part en `Observed drift`**, et la
   clôture la versera au gaps register. La spec énonce deux totalités — « le spec
   delta est **le texte exact que ce lot écrit dans les specs**, en blocs » et « la
@@ -150,15 +182,6 @@ Texte qui le remplace :
   que ces règles disent ; ce sont les deux totalités qui ont tort. Constat
   antérieur à ce lot, hors de son périmètre, et à ne pas résorber ici.
 
-- **`Module > The gaps register` est hors périmètre, et le lot le sait.** La phrase
-  qui énumère les sources d'une entrée — « une story, dans le code qu'elle
-  traverse » — ne nomme pas l'arbitrage ouvert que D4 envoie à la consolidation.
-  Elle est donc incomplète après ce lot, sans être fausse : l'énumération des
-  **écrivains** reste exacte, et seule la description de ce que la clôture consolide
-  reste partielle, comme elle l'est déjà pour les blocs non livrés. La section est
-  tenue par la story `05-us-3-une-entree-se-lit-seule`. Ce constat part en
-  `Observed drift`, et la clôture de ce lot le versera au gaps register.
-
 ## Feature flag
 
 Feature flag: none — chaque story est complète dans sa propre pull request
@@ -166,4 +189,5 @@ Feature flag: none — chaque story est complète dans sa propre pull request
 Une story de ce lot, fusionnée seule, ne laisse personne devant quelque chose
 d'incomplet. D1 livrée seule est une règle qui vaut dès qu'elle est lue. D2 à D5
 voyagent ensemble par la contrainte d'ordre ci-dessus, qui interdit qu'un terme soit
-employé avant d'être posé.
+employé avant d'être posé ; D6 et D7 relèvent de la même interdiction, et ne peuvent
+donc précéder D2.
