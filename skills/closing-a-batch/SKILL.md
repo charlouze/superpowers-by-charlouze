@@ -9,6 +9,8 @@ description: Use when every user story of a batch is merged or abandoned - write
 
 A batch closes when every one of its user stories is merged or abandoned and the human judges the work finished. Closing is not bookkeeping. It is the only moment in the lifecycle where the residue left on `main` gets collected.
 
+It is also the only moment in a batch's normal course that touches the batch document itself. The batch document carries no mutable state: it is written once, by the opening pull request, and nothing in the normal course of the batch modifies it **until closing** — *Record blocks announced but never delivered* amends it so it no longer promises what it did not deliver, and *Set status: closed* flips its front matter. This closure is that exception and the only one: anything else that would edit the document goes through an amendment pull request of its own, which `supercharlouze:writing-a-batch` owns.
+
 Abandoning a story is almost free: closing its pull request without merging throws away the spec change and the code together — nothing to revoke, no spec left out of step. But two things it never touched are still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the blocks the batch announced in its spec delta. **No other skill picks them up.** If closing skips a duty, that duty is simply never done.
 
 Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 1 is allowed to refuse, and because it is allowed to refuse it comes before the five that write.

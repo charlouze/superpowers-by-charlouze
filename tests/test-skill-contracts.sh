@@ -245,4 +245,14 @@ absent "no skill carries the retired blocking-precondition wording" \
 shared "a rule belongs to exactly one spec" "A rule belongs to exactly one spec." \
     using-batches adopting-a-module writing-a-batch writing-a-user-story
 
+# The batch document's immutability has a bound, and the bound is this closure
+# (spec section `Batch`). `writing-a-batch` states the rule and names closing as
+# the exception; `closing-a-batch` is the end that performs it — it amends the
+# document and flips its front matter. One assertion over both files: two
+# `require` calls would each stay green while one end reworded the bound away
+# from the other, which is the whole failure this locks out.
+shared "the batch document's immutability is bounded at closing, spelled alike" \
+    "nothing in the normal course of the batch modifies it **until closing**" \
+    writing-a-batch closing-a-batch
+
 exit $((FAILURES > 0))
