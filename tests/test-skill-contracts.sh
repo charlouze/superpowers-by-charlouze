@@ -255,4 +255,22 @@ shared "the batch document's immutability is bounded at closing, spelled alike" 
     "nothing in the normal course of the batch modifies it **until closing**" \
     writing-a-batch closing-a-batch
 
+# The spec used to deny the bound outright — the batch document carries no
+# mutable state and *nothing* in the normal course modifies it, full stop — while
+# its own `Closing a batch` section described the closure amending it. Block D2
+# retired the denial; no skill may restate it. The `shared` assertion above
+# cannot catch that: it stays green on a file carrying the bounded sentence and
+# an unbounded one beside it, and the two would contradict each other with the
+# suite green.
+#
+# The regex hunts the denial left *unbounded*, never the true sentence. After
+# `batch modifies it` the bounded form has a space then a star, so neither
+# alternative reaches it: `( [^*])` needs a space followed by anything but a
+# star, `([^ ])` needs anything but a space. Every terminated form is caught —
+# "modifies it.", "modifies it, ever" — as is an unbolded "modifies it until
+# closing", which is a drift from the one spelling the assertion above fixes.
+absent "no skill denies that the batch document changes at closing" \
+    "batch modifies it( [^*]|[^ ])" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
 exit $((FAILURES > 0))
