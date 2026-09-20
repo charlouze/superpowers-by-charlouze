@@ -122,6 +122,8 @@ The second is why feature flags exist, and it rules out the two natural alternat
 | Batch closing | the pull request carrying the changelog, the consolidation and `status: closed` |
 | Batch amendment | the pull request carrying the decision to change its scope or its flag |
 
+**Preconditions for every pull request of this system**, checked before creating a branch: be in the **main checkout** (a session chaining two stories without leaving the worktree would stack the second story on the first story's branch), and be on `main`, freshly fetched (numbering and concurrency detection reason on the remote state). `gh` is assumed available and authenticated; without it both degrade to a partial safety net and stop preventing anything.
+
 **The agent never approves and never merges a pull request.** Approving and
 merging are human acts, at every gate in the table above without exception.
 
@@ -137,7 +139,20 @@ Rewriting earlier would destroy what the review is reading. A force-push that
 lands mid-review replaces the commits the human has comments on, and their
 comments come back attached to nothing.
 
-**Preconditions for every pull request of this system**, checked before creating a branch: be in the **main checkout** (a session chaining two stories without leaving the worktree would stack the second story on the first story's branch), and be on `main`, freshly fetched (numbering and concurrency detection reason on the remote state). `gh` is assumed available and authenticated; without it both degrade to a partial safety net and stop preventing anything.
+**Merging an adoption, opening, delivery or amendment review is a moment to clear
+the context.** The merged document then carries everything the next step needs,
+and the conversation is only a draft that can contradict it. Merging a closing
+review is not one: nothing follows it.
+
+The agent cannot clear its own context. So when it announces the pull request
+ready, it says that merging it will be that moment, names the next step, and
+gives — in a block to copy and paste — the prompt that starts that step after the
+clear. **That prompt stands on its own:** it names the skill to invoke and the
+document to start from, and never refers back to the conversation.
+
+"Never refers back to the conversation" is the whole point. A prompt saying
+"continue what we discussed" is worthless after a clear, and it is worthless in a
+way nobody notices until the context is already gone.
 
 ## Authority and Conflict Rules
 

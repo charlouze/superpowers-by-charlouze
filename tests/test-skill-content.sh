@@ -211,5 +211,8 @@ require using-batches "a block is transcribed word for word" "the exact text it 
 require using-batches "forbids the agent approving or merging" "never approves and never merges a pull request"
 require using-batches "pushes corrections as fixups"           "pushed as a \`fixup!\` commit"
 require using-batches "the agreement is given in conversation" "The human gives their agreement in the conversation"
+require using-batches "names the merge a clear moment"      "a moment to clear the context"
+require using-batches "excludes the closing review from it" "Merging a closing review is not one"
+require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
 
 exit $((FAILURES > 0))
