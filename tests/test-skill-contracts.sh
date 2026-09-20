@@ -220,4 +220,13 @@ absent "the observation period is not described as enable-then-remove" \
     "split it into two stories" \
     writing-a-user-story
 
+# Adoption never sharing the design's context is one coupling with two ends:
+# `writing-a-batch` states it as the reason its Preconditions stop, and
+# `using-batches` repeats it in Override 1. One assertion over both files —
+# two separate `require` calls would each stay green while one end drifted
+# away from the other's wording.
+shared "adoption never shares the design's context" \
+    "never conducted in the same context" \
+    writing-a-batch using-batches
+
 exit $((FAILURES > 0))

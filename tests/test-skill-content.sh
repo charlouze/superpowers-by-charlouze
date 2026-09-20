@@ -75,7 +75,6 @@ require adopting-a-module "hands over a self-contained prompt"   "the prompt nam
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "an unadopted module stops the design"   "the design stops"
-require writing-a-batch "adoption never shares the design's context" "never conducted in the same context"
 require writing-a-batch "the human abandons or sets the design aside" "abandon the design or set it aside"
 require writing-a-batch "the design resumes in a fresh context"   "resumes in a fresh context"
 require writing-a-batch "NN accounts for open pull requests"      "open pull request"
@@ -265,6 +264,8 @@ require using-batches "names the merge a clear moment"      "a moment to clear t
 require using-batches "the rule covers every gate"          "Merging any review is a moment to clear the context"
 require using-batches "the handover is conditional"         "Where a next step exists"
 require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
+require using-batches "an unadopted module stops the design"     "the design stops"
+require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers steps 6 to 9 and nothing else"
 
 # --- using-batches: guarded code rules (referencing writing-a-user-story) ---
 require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"
