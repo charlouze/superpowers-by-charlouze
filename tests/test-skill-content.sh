@@ -263,4 +263,8 @@ require using-batches "the rule covers every gate"          "Merging any review 
 require using-batches "the handover is conditional"         "Where a next step exists"
 require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
 
+# --- using-batches: guarded code rules (referencing writing-a-user-story) ---
+require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"
+require using-batches "the guarded-code rules are written in one place" "a second copy of a rule is exactly what drifts"
+
 exit $((FAILURES > 0))
