@@ -541,4 +541,68 @@ git commit -m "fix: le register du plugin ne porte plus de prose de groupe"
 
 ## Rulings log
 
+- **Ruling:** les commentaires des gardes de `tests/` sont écrits en anglais, pas
+  en français — **pourquoi :** le plan de cette story prescrivait le français, et
+  il avait tort. La section `Language` de la spec énonce que « le plugin lui-même
+  est intégralement anglais », et les douze fichiers de `tests/` et `scripts/`
+  antérieurs à cette branche ne portent pas une ligne de commentaire en français.
+  La spec est l'autorité et le plan n'est que son argumentaire : le plan perd. Le
+  constat ne part pas en `Observed drift` à ce titre — il n'y a pas de question
+  ouverte, seulement un défaut que cette branche avait introduit et qu'elle
+  corrige. **Ce qu'il coûte s'il est faux :** trente-six lignes de commentaire
+  sont dans la mauvaise langue, et une story future doit les retourner après
+  avoir rouvert une question que l'humain voulait peut-être laisser ouverte.
+
+- **Ruling:** la ligne de 131 caractères laissée dans
+  `skills/adopting-a-module/SKILL.md` par la transcription de D10 est repliée
+  avant la fusion, et non reportée — **pourquoi :** c'est la seule ligne de prose
+  de plus de cent caractères dans un fichier qui replie tout le reste à quatre-
+  vingts, le fichier n'est pas sous le gel de la spec, et le correctif tient en un
+  repli. Laissée là, elle met du bruit de repli sans rapport dans le prochain diff
+  de ce paragraphe, dans un dépôt dont les diffs *sont* le produit. **Ce qu'il
+  coûte s'il est faux :** une ligne de diff de plus dans cette pull request.
+
+- **Ruling:** la garde `tests/test-gaps-register.sh` garde son motif
+  d'indentation tel quel — une prose de groupe repliée à deux espaces lui
+  échappe — **pourquoi :** repliée ainsi, elle devient en Markdown la continuation
+  de l'entrée qui la précède et se lit comme faisant partie d'elle : c'est un
+  autre défaut, et un plus petit, que celui que D8 nomme. L'angle mort est
+  déclaré dans le commentaire de la garde, dans les termes que ce dépôt emploie
+  pour un angle mort toléré, et le distinguer demanderait une analyse par blocs
+  qu'une garde textuelle ne peut pas promettre honnêtement. Seul le commentaire
+  a été corrigé, là où il promettait plus de précision que son motif n'en a.
+  **Ce qu'il coûte s'il est faux :** un paragraphe de groupe indenté de deux
+  espaces passe la garde.
+
+- **Ruling:** « la cinquième condition d'arrêt », dans le texte relogé du gaps
+  register, reste écrit ainsi malgré la contrainte « Aucun renvoi numéroté » du
+  lot — **pourquoi :** c'est le *nom* de cette condition et non le comptage de sa
+  position : `using-batches` la titre « Override 2 — fifth stop condition ». Le
+  renvoi nomme donc bien ce qu'il vise. La formulation est par ailleurs reprise
+  telle quelle du paragraphe dissous, et elle existait déjà dans le fichier avant
+  cette branche. Dit dans la pull request, pour que le gate de livraison puisse
+  trancher autrement. **Ce qu'il coûte s'il est faux :** deux lignes du register
+  portent un renvoi numéroté que le lot avait banni.
+
+- **Ruling:** la répétition entre la clause finale de D8 et deux paragraphes
+  voisins de la même section de spec n'est pas corrigée — **pourquoi :** les trois
+  phrases portent des sens distincts — le document d'origine d'une entrée, le lot
+  qui l'a consolidée, ce qu'une entrée partie a été —, et c'est du texte validé au
+  gate d'ouverture qu'aucune story ne reformule. **Ce qu'il coûte s'il est
+  faux :** la section se lit un peu redondante jusqu'à ce qu'un humain la reprenne.
+
 ## Observed drift
+
+- **La section `Language` de la spec dit « intégralement anglais » puis énumère
+  une liste qui n'est pas exhaustive, et rien ne dit laquelle des deux lit.** Le
+  texte énonce que « le plugin lui-même est intégralement anglais — skills,
+  commandes, README, bloc d'instructions, messages » : la règle est générale, mais
+  le tiret qui la suit se lit comme une énumération close, et ni `tests/` ni
+  `scripts/` n'y figurent. La convention réelle est pourtant sans exception —
+  aucun des douze fichiers de ces deux répertoires ne portait une ligne de
+  commentaire en français avant cette branche. C'est un **gap** et non une
+  violation : le code respecte la règle générale, c'est la phrase qui ne dit pas
+  si sa liste illustre ou délimite. Ce qu'elle coûte se voit ici : le plan de
+  cette story a prescrit du français dans `tests/`, une revue de tâche l'a laissé
+  passer, et c'est la revue de branche qui l'a relevé. Résorber veut dire décider
+  ce que la spec doit dire, donc un acte humain.
