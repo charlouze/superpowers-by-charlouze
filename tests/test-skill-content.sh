@@ -279,6 +279,7 @@ require using-batches "the handover is conditional"         "Where a next step e
 require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
 require using-batches "an unadopted module stops the design"     "the design stops"
 require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers steps 6 to 9 and nothing else"
+require using-batches "a bounded change adds and removes entries"  "add an entry and delete one"
 
 # --- using-batches: guarded code rules (referencing writing-a-user-story) ---
 require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"
