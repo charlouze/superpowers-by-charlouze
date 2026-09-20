@@ -173,15 +173,15 @@ shared "both ends spell the Blocks field alike" \
     "\`Blocks:\`" \
     writing-a-user-story closing-a-batch
 
-# Duty 5 reads the `Blocks:` declarations, not the specs: a block fitted to a
+# Duty 6 reads the `Blocks:` declarations, not the specs: a block fitted to a
 # `main` that moved since the batch opened is delivered even though its text no
 # longer matches the delta word for word, and diffing the specs against that
 # delta would wrongly report it missing. A positive assertion cannot lock this
-# out — the Red Flags table and the duty 5 precondition can both carry the new
+# out — the Red Flags table and the duty 6 precondition can both carry the new
 # wording while an old cell or clause still points a reader at the specs, and a
 # `require` on the new text would stay green regardless. The regex targets the
 # two forms that phrase found: "check the specs on main" and "against what
-# actually shipped". It must not match duty 5's own contrast at line 91 —
+# actually shipped". It must not match duty 6's own contrast in closing-a-batch —
 # "Diffing the specs against the delta would report it missing" — which pairs
 # "specs" with "the delta", never with "main" or "shipped".
 absent "no skill finds undelivered blocks by reading or diffing the specs" \
@@ -353,14 +353,15 @@ shared "every writer that adds an entry keeps entries from pointing at each othe
     adopting-a-module closing-a-batch using-batches
 
 # The open ruling is named in the skill whose step 6 copies the rulings and in
-# the routing skill that states the same duty in one clause. Three couplings,
-# three assertions over both ends: what an open ruling is, what the copy owes
-# it, and what refuses to close without it. `require` calls per skill would each
-# stay green while one end reworded, and an agent reading that end would
-# recognise a different set of rulings, or none.
+# the routing skill that states the same duty in one clause, and in the skill
+# that refuses to close on one. Three couplings, three assertions over every
+# end: what an open ruling is, what the copy owes it, and what refuses to
+# close without it. `require` calls per skill would each stay green while one
+# end reworded, and an agent reading that end would recognise a different set
+# of rulings, or none.
 shared "the open ruling is defined alike wherever it is named" \
     "whose decision was to park a finding or to hand it to your human partner" \
-    writing-a-user-story using-batches
+    writing-a-user-story using-batches closing-a-batch
 
 shared "the copy names what is left to settle" \
     "the copy names what is left to settle" \

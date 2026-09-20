@@ -217,7 +217,7 @@ require closing-a-batch "releasing keeps the entry"  "removes the reservation an
 require closing-a-batch "sorts story findings, defines nothing"  "whatever a story reported as"
 require closing-a-batch "releases unconsumed reservations"       "unconsumed reservations"
 require closing-a-batch "records undelivered blocks"             "announced but never delivered"
-require closing-a-batch "duty 5 reads the Blocks declarations"   "Read the \`Blocks:\` field of every story document in the batch directory"
+require closing-a-batch "duty 6 reads the Blocks declarations"   "Read the \`Blocks:\` field of every story document in the batch directory"
 require closing-a-batch "a block nobody declared is undelivered" "no collected declaration names is a block announced but never delivered"
 require closing-a-batch "the directory holds the merged stories" "holds exactly the batch's merged stories"
 require closing-a-batch "reads the declarations, not the specs"  "Read the declarations, not the specs"
@@ -237,14 +237,27 @@ require closing-a-batch "names the merge a clear moment"      "is a moment to cl
 require closing-a-batch "has no next step to name"            "no next step to name"
 require closing-a-batch "therefore hands over no prompt"      "hands over no prompt"
 
-# --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
+# --- closing-a-batch: the duty precisions (spec section "Closing a batch") ---
 require closing-a-batch "the flag check is duty 1"               "### 1. Refuse to close on a flag"
-require closing-a-batch "duty 1 checks before the writing duties" "it comes before any other duty writes anything"
+require closing-a-batch "both checks come before the writing duties" "they come before any other duty writes anything"
 require closing-a-batch "a refusal must cost nothing"            "makes a refusal free"
 require closing-a-batch "duty 1 checks the flags it declared"   "Check every feature flag **this batch declared**"
-require closing-a-batch "an earlier batch's flag goes to duty 5" "A flag declared by an earlier batch is not this duty's business"
-require closing-a-batch "duty 5 is empty for a corrective batch" "A corrective batch has nothing to compare here"
+require closing-a-batch "an earlier batch's flag goes to duty 6" "A flag declared by an earlier batch is not this duty's business"
+require closing-a-batch "duty 6 is empty for a corrective batch" "A corrective batch has nothing to compare here"
 require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
+
+# The open-ruling check (spec section "Closing a batch"). Six assertions: the
+# duty exists and is second, the count that places it there, each of the two
+# destinations, the refusal itself, and why Observed drift is not an outlet.
+# Drop any one and the duty still reads whole while doing less. What an open
+# ruling *is* is not asserted here — it is a coupling with the two skills that
+# name it, locked by `shared` in test-skill-contracts.sh.
+require closing-a-batch "the open ruling check is duty 2"         "### 2. Refuse to close on an open ruling"
+require closing-a-batch "seven duties in all"                     "Do all seven on the same branch"
+require closing-a-batch "a violation or a gap goes to the register" "A violation or a gap goes to the gaps register"
+require closing-a-batch "any other destination is the human's"    "its destination is your human partner's to give"
+require closing-a-batch "refuses without a destination"           "cannot be closed while an open ruling has no destination"
+require closing-a-batch "Observed drift is not an outlet"         "Observed drift cannot collect it either"
 
 # --- using-batches: what a spec says (spec section "The spec document") ---
 require using-batches "the test bears on the module boundary"   "bears on the module's boundary"
