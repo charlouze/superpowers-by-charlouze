@@ -303,3 +303,30 @@ sont sous *Violations*.
   ou cité depuis `README.md` ou `scripts/`, n'est pas vérifié. Cette formulation est
   **antérieure au lot 02**, recopiée mot pour mot de l'ancienne liste de cinq — elle
   n'est donc pas une promesse neuve, seulement une promesse restée trop large.~~ — *sans objet : la spec ne porte plus de règle sur la suite de tests, section `Verification` retirée comme implémentation par le lot 03.*
+
+- **Code under a feature flag** — la clause qui clôt la section, « Le code gardé
+  **est écrit de sorte que** lever le flag se réduise à supprimer le branchement et
+  le comportement d'avant le lot », prescrit une manière d'écrire le code, là où
+  `The spec document` pose qu'une spec dit le métier et jamais le mécanisme. Elle
+  échoue au test que la spec s'impose à elle-même : un développeur ayant implémenté
+  la même intention avec un branchement plus lourd ne lirait pas cette phrase comme
+  vraie de son code. Les quatre règles qui la précèdent y survivent — elles portent
+  sur ce que l'utilisateur observe —, c'est la cinquième qui porte sur la forme du
+  code. Relevée par la story `06-us-1-le-code-garde`, qui l'a transcrite telle
+  quelle : le texte avait été validé au gate d'ouverture du lot 06, il est depuis la
+  spec, et corriger une spec est un acte humain. Résorber veut dire reformuler la
+  clause en termes de ce que la levée doit pouvoir faire, et c'est cette décision
+  qui est humaine — d'où le classement en *gap*.
+
+- **Code under a feature flag / The user story document** — les quatre règles sont
+  écrites en entier à un seul endroit, `writing-a-user-story`, et trois
+  reformulations partielles en circulent ailleurs sans que rien ne les y rattache :
+  le renvoi de la doctrine du flag dans `using-batches`, une ligne `Red Flags` de la
+  même skill, et une troisième formulation de la règle du registre des flags. Aucune
+  spec ne dit ce qu'une glose doit à son texte canonique, ni combien de
+  reformulations partielles d'une même règle un module tolère. La division « écrit
+  en entier à un seul endroit, désigné ailleurs » tient aujourd'hui parce qu'aucune
+  de ces gloses n'est une reformulation complète, mais rien ne la soutient : une
+  glose peut dériver de son texte canonique sans que quoi que ce soit le signale, et
+  un lecteur se fier à la mauvaise. Relevée puis parquée par la story
+  `06-us-1-le-code-garde`.
