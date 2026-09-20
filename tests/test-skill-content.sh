@@ -164,6 +164,10 @@ require writing-a-user-story "a divergence is named in the PR"      "Every diver
 require writing-a-user-story "a divergence has two legitimate causes" "only two legitimate causes"
 require writing-a-user-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
 require writing-a-user-story "no divergence amends the batch document" "Neither case amends the batch document"
+require writing-a-user-story "ends the review as every gate does"   "never approves and never merges a pull request"
+require writing-a-user-story "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
+require writing-a-user-story "names the merge a clear moment"       "a moment to clear the context"
+require writing-a-user-story "hands over to the next story"         "names the next story as the next step"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
@@ -183,6 +187,9 @@ require closing-a-batch "offers three exits"                     "three exits"
 require closing-a-batch "sets status closed"                     "status: closed"
 require closing-a-batch "closing PR is reviewed"                 "review of the closing pull request"
 require closing-a-batch "branch naming convention"               "batch/NN"
+require closing-a-batch "ends the review as every gate does"  "never approves and never merges a pull request"
+require closing-a-batch "pushes corrections as fixups"        "pushed as a \`fixup!\` commit"
+require closing-a-batch "denies being a clear moment"         "Merging a closing review is not a moment to clear the context"
 
 # --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
 require closing-a-batch "the flag check is duty 1"               "### 1. Refuse to close on a flag"

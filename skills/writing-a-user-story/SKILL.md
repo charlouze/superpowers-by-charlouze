@@ -472,6 +472,29 @@ the worktree on this path, so iterate there. Read the feedback with
 The story is delivered when its pull request is merged. There is nothing to
 tick and nothing to reconcile: its state *is* the state of its pull request.
 
+**Ending the review.** The agent never approves and never merges a pull request.
+Each correction is pushed as a `fixup!` commit of the commit it corrects — or as
+a commit of its own when it carries a fresh decision, which on this path is
+common: a review that changes the wording of the spec change is deciding
+something, not fixing a slip. Your human partner gives their agreement in the
+conversation; then you squash the fixups, push the rewritten branch, and announce
+the pull request ready to be approved and merged.
+
+**Merging it is a moment to clear the context**, and the announcement says so. On
+this path the conversation is the heaviest of any gate — it carries a plan, an
+SDD ledger, and every file the implementers touched — while `main` now carries the
+spec change and the code together, which is all the next story needs.
+
+So the announcement names the next story as the next step — unless this story
+took the batch's last undelivered blocks, in which case it names
+`supercharlouze:closing-a-batch` instead, matching how an amendment hands back
+to whatever the batch was doing when it stopped — and gives its prompt in a
+block to copy and paste. **That prompt stands on its own:** it names the skill
+to invoke, the batch document by path, and says to choose from the blocks no
+merged story has declared, and never refers back to this conversation.
+Everything perishable is already in the story document — that is what
+`Step 6 — Record Before the Merge` was for.
+
 **Abandoning is almost free.** Closing the pull request without merging throws
 the transcription away with the code — nothing to revoke, no spec to put back
 straight. If the abandonment happens before the pull request exists — a

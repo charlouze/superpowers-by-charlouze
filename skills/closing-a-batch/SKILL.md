@@ -98,6 +98,10 @@ Set `status: closed` in the batch document's front matter. That is the whole dut
 
 Then push and open the pull request. The **review of the closing pull request** is the human gate, like every other gate in this system — this plugin adds no ceremony, it puts its checkpoints where your flow already has them. Closing records a human decision, that the batch delivered what it owed, and that decision deserves its review. A batch is never closed because an agent judged the work to look finished.
 
+**Ending the review.** The agent never approves and never merges a pull request. Each correction is pushed as a `fixup!` commit of the commit it corrects, or as a commit of its own when it carries a fresh decision; your human partner gives their agreement in the conversation, and only then do you squash the fixups, push, and announce the pull request ready.
+
+**Merging a closing review is not a moment to clear the context**, and this is the one gate where that is true. The other four hand a merged document to a next step that must read it with fresh eyes. Closing hands over to nothing — the batch is done, and the residue it collected has already gone into the gaps registers and the changelog lines. So the announcement says the pull request is ready, names the next step as none, and gives no prompt. Offering one here would invent a step the model does not have.
+
 ## Language
 
 **English skeleton, project-language prose.** Section titles, field names, table headers, front matter values (`status: closed`), path patterns and branch patterns are English, everywhere and always. The prose you write — the `change` cell of a changelog line, the body of a gaps register entry, an amended scope paragraph — follows the project's language, as do the slugs, which name business objects. This skill and every message it produces are English; the documents it writes carry both.

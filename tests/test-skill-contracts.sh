@@ -188,4 +188,28 @@ absent "no skill finds undelivered blocks by reading or diffing the specs" \
     "[Cc]heck the specs on main|against what (actually )?shipped" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
+# The end of a review is one norm with five ends. `shared` and not five `require`
+# calls: separate assertions would each stay green while one skill drifted away
+# from the wording the others use, and a skill that says "the agent may merge
+# once approved" would contradict the spec with its own test passing.
+shared "every review-ending skill forbids the agent approving or merging" \
+    "never approves and never merges a pull request" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+shared "every review-ending skill pushes corrections as fixup! commits" \
+    "pushed as a \`fixup!\` commit" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+# Four skills, not five: a closing review is followed by nothing, so it is not a
+# clear moment. `closing-a-batch` carries the exception instead, guarded by the
+# `require` above. Listing it here would demand of it the very sentence it exists
+# to deny — and it would pass, because its denial contains the phrase.
+shared "every clear-moment skill names the merge as one" \
+    "is a moment to clear the context" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story
+
+absent "closing-a-batch does not also affirm the merge is a clear moment" \
+    "is a moment to clear the context" \
+    closing-a-batch
+
 exit $((FAILURES > 0))
