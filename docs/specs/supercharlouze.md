@@ -174,6 +174,26 @@ story sont recopiés dans son document, sur sa branche, avant la fusion.
 | Amendement | la décision de changer le périmètre ou le flag d'un lot | le lot est amendé |
 | Clôture | le changelog, la consolidation et `status: closed` | le lot est clos |
 
+**L'agent n'approuve ni ne fusionne jamais une pull request de revue.**
+L'approbation et la fusion sont des gestes humains.
+
+**Pendant une revue, la branche n'est pas réécrite.** Chaque correction demandée
+est poussée en commit `fixup!` du commit qu'elle corrige, ou en commit à part
+quand elle porte une décision nouvelle, pour que l'humain voie sur la pull request
+ce qui a changé depuis sa dernière lecture. **L'humain donne son accord dans la
+conversation avec l'agent.** L'agent fond alors les `fixup!` dans les commits
+qu'ils corrigent, pousse la branche réécrite, et annonce que la pull request est
+prête à être approuvée et fusionnée.
+
+**La fusion d'une revue d'adoption, d'ouverture, de livraison ou d'amendement est
+un moment de vider le contexte** : le document fusionné porte alors tout ce dont
+l'étape suivante a besoin, et la conversation n'est plus qu'un brouillon qui peut
+le contredire. Celle d'une clôture n'en est pas un, rien ne la suivant. L'agent ne peut pas vider son propre contexte : en
+annonçant la pull request prête, il dit que sa fusion sera ce moment, nomme
+l'étape suivante, et donne dans un bloc à copier-coller le prompt qui la lance
+après le clear. **Ce prompt se suffit à lui-même** : il nomme la skill à invoquer
+et le document d'où repartir, et ne renvoie jamais à la conversation.
+
 ## Module
 
 Un module a une spec et un gaps register, qui naissent ensemble à son adoption.
