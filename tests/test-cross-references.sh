@@ -16,7 +16,8 @@ KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-sto
 KNOWN_COMMANDS="init"
 
 # 1. Every supercharlouze:<name> reference names a skill or a command that exists.
-#    README.md is scanned too — it names all five skills and the init command.
+#    README.md and CONTRIBUTING.md are scanned too — they name the five skills
+#    and the init command.
 #    begin/end are the CLAUDE.md block markers, not references.
 BAD=0
 while read -r ref; do
@@ -37,7 +38,8 @@ while read -r ref; do
         BAD=$((BAD + 1))
     fi
 done < <(grep -rhoE 'supercharlouze:[a-z-]+' \
-             "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/README.md" 2>/dev/null \
+             "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/README.md" \
+             "$REPO_ROOT/CONTRIBUTING.md" 2>/dev/null \
          | sed 's/^supercharlouze://' | grep -vxE 'begin|end' | sort -u || true)
 
 if [ "$BAD" = "0" ]; then
@@ -94,13 +96,14 @@ while read -r hit; do
     echo "    numbered reference to the archived design document: $hit"
     BAD=$((BAD + 1))
 done < <(grep -rnoEi 'section [0-9]+|§ ?[0-9]+|\(spec [0-9]+(\.[0-9]+)?\)' \
-             "$REPO_ROOT/README.md" "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/scripts" \
+             "$REPO_ROOT/README.md" "$REPO_ROOT/CONTRIBUTING.md" "$REPO_ROOT/skills" \
+             "$REPO_ROOT/commands" "$REPO_ROOT/scripts" \
              2>/dev/null | sort -u || true)
 
 if [ "$BAD" = "0" ]; then
-    pass "README, skills, commands and scripts cite no numbered section of the archived design document"
+    pass "the shipped documents cite no numbered section of the archived design document"
 else
-    fail "README, skills, commands and scripts cite no numbered section of the archived design document ($BAD found)"
+    fail "the shipped documents cite no numbered section of the archived design document ($BAD found)"
 fi
 
 # 6. Every section a shipped cross-reference names exists in the living spec.
