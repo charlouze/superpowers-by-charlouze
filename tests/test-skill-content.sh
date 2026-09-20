@@ -114,6 +114,13 @@ require writing-a-batch "the text is read in the batch document"     "block by b
 require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
 require writing-a-batch "the reread checks quotes against main"          "every quoted passage matching \`main\`"
 
+# --- writing-a-batch: ending the opening and amendment reviews ---
+require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
+require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"
+require writing-a-batch "names the merge a clear moment"          "a moment to clear the context"
+require writing-a-batch "opening hands over to the first story"   "names \`supercharlouze:writing-a-user-story\` as the next step"
+require writing-a-batch "an amendment is a clear moment too"      "An amendment merges into the same clear moment"
+
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "checks it is in the main checkout"  "main checkout"
 require writing-a-user-story "refreshes main from the remote"     "up to date with the remote"
