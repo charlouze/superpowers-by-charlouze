@@ -451,7 +451,8 @@ Seules les branches `batch/*` et `story/*` revendiquent un numéro :
 `us-N`.
 
 **Le document de lot ne porte aucun état mutable**, et rien dans le déroulement
-normal ne le modifie. En conséquence :
+normal ne le modifie avant sa clôture, qui l'amende et le déclare clos. En
+conséquence :
 
 - **la liste des stories n'y figure pas** : elle est le contenu du répertoire du
   lot, complété par les pull requests ouvertes et par les branches `story/*`
