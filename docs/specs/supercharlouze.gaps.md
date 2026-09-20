@@ -113,3 +113,49 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   glose peut dériver de son texte canonique sans que quoi que ce soit le signale, et
   un lecteur se fier à la mauvaise. Relevée puis parquée par la story
   `06-us-1-le-code-garde`.
+
+- **The spec document / The gaps register** — ce que le test de l'autre
+  implémentation éjecte d'une spec, et qui n'est le gap d'aucun module, n'a
+  aucune sortie. Une décision d'ingénierie qui vaut pour tout le projet et
+  qu'aucune frontière de module ne rend observable échoue au test, part donc au
+  gaps register, où la catégorie *Gaps* promet qu'un lot ordinaire « les spécifie
+  enfin » — lot qui réappliquerait le test et l'éjecterait de nouveau. La boucle
+  se referme : rien ne dit où une telle décision vit, ni ce qui l'en sort. Le
+  dépôt `charlouze/beacon-hosting`, qui consomme ce plugin, a tranché tout seul en
+  rangeant ce genre de décision dans son `CLAUDE.md`, hors de toute spec.
+  Constatée par la story `05-us-1-le-domicile-d-une-regle`, dont le lot a
+  explicitement laissé ce cas hors de son périmètre. **Gap et non violation :**
+  les deux règles sont implémentées fidèlement, c'est leur conjonction qui est
+  muette ; résorber veut dire décider ce que la spec doit dire, et cette décision
+  est humaine.
+
+- **The spec document** — la règle « un renvoi nomme la section qu'il vise » n'est
+  écrite dans aucune spec, et rien n'attrape un renvoi par la position. Le lot 01
+  a été ouvert sur ce principe et a livré deux gardes, mais celle qui traque les
+  renvois ne cherche que les renvois **numérotés** (`section N`, `§N`,
+  `(spec N.N)`) ; un renvoi qui désigne sa cible par sa place — « le second membre
+  de la même phrase », « le paragraphe qui précède » — passe au travers. La règle
+  ne se lit aujourd'hui que dans une ligne de changelog, que la spec range en
+  commodité de lecture dont aucune règle ne dépend, et dans les `Constraints` d'un
+  lot, qui ne lient que ses propres stories. Ce que ce silence coûte se voit à
+  l'usage : un renvoi par la position se recible tout seul quand un paragraphe
+  s'insère avant lui, sans que personne n'édite la phrase, et il perd sa cible
+  quand elle disparaît. La règle générale vaudrait pour les skills, les specs et
+  les documents de lot, et déborde donc la section qui l'accueillerait.
+  Constatée par la story `05-us-1-le-domicile-d-une-regle`, puis rangée hors
+  périmètre par son lot, qui n'a tranché que le cas du gaps register. **Gap et non
+  violation :** il n'y a pas de norme à faire respecter, il y a une norme à
+  écrire, et l'écrire est un acte humain.
+
+- **Language** — la section énonce que « le plugin lui-même est intégralement
+  anglais — skills, commandes, README, bloc d'instructions, messages », et rien ne
+  dit si le tiret illustre ou délimite : ni `tests/` ni `scripts/` n'y figurent.
+  La convention réelle est pourtant sans exception — aucun fichier de ces deux
+  répertoires ne portait de commentaire en français —, mais la phrase ne la
+  garantit pas. Ce que ce silence coûte s'est vu : un plan de story a prescrit du
+  français dans `tests/`, une revue de tâche l'a laissé passer, et c'est la revue
+  de branche qui l'a relevé. Constatée par la story
+  `05-us-3-une-entree-se-lit-seule`. **Gap et non violation :** le code respecte
+  la règle générale, c'est la phrase qui ne dit pas si sa liste illustre ou
+  délimite ; trancher veut dire décider ce que la spec doit dire, et cette
+  décision est humaine.

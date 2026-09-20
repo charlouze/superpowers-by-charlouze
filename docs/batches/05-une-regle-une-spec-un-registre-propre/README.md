@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 05 — Une règle, une spec ; un register propre
