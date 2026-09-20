@@ -104,8 +104,11 @@ theirs, and nothing is written until they have made it.
 
 Prefer one coarse module to several small ones; how many a project needs depends
 on the size of the product, not on a fixed count. A wrong boundary contaminates
-the spec, the gaps register, and every batch that follows, and nothing later in
-the flow will catch it.
+the spec, the gaps register, and every batch that follows. One late signal
+exists, and only one: **a rule belongs to exactly one spec**, so a rule that
+later turns out to constrain behaviour observable at the boundary of more than
+one module sends the breakdown back to your human partner. Do not lean on it —
+it fires batches later, and only for the boundaries a rule happens to straddle.
 
 Record the agreed boundary at the top of the spec: what the module covers, and what
 it explicitly does not.
@@ -163,6 +166,15 @@ descriptive.
   authority rule of `Source Authority` above holds while you write: a mechanism
   the document prescribes is no more admissible here than one you read in the
   code.
+
+**A rule belongs to exactly one spec.** If a rule you are about to write would
+constrain behaviour observable at the boundary of more than one module, stop
+before writing it: the breakdown is what is in question, not the wording, and a
+breakdown is your human partner's decision. Do not write it into both specs, and
+do not give it a home above them. You are adopting one module, so the second
+module may not even have a spec yet — that changes nothing: the signal is the
+rule's reach, not what already exists next door.
+
 - **Nothing enters the spec that no validated document supports.** Behaviour you
   found in the code but no document describes belongs to the gaps register, not
   here.
@@ -402,3 +414,4 @@ plugin itself is entirely English, because it carries no business prose.
 | "The adoption PR is open, the batch can start" | Merged is adopted. The review is the gate, not the push. |
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |
 | "I ejected those mechanisms at step 4, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit, and step 4's set-aside list is its only route into the register. |
+| "This rule concerns the neighbouring module too, I'll write it in both specs" | A rule belongs to exactly one spec, and a rule that reaches past one boundary signals the breakdown — your human partner's decision. Stop. |

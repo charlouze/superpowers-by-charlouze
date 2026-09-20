@@ -74,6 +74,9 @@ require adopting-a-module "names the next step after the clear"  "names \`superc
 require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
 require adopting-a-module "arrives in a context of its own"      "in a context of its own"
 require adopting-a-module "the design that follows starts fresh" "from the adopted spec, not from a conversation"
+require adopting-a-module "a spilling rule is about the rule's reach" "the signal is the rule's reach"
+require adopting-a-module "a spilling rule questions the breakdown" "the breakdown is what is in question"
+require adopting-a-module "names the one late signal on a boundary" "One late signal exists, and only one"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "an unadopted module stops the design"   "the design stops"
