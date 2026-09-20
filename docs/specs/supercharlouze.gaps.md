@@ -204,15 +204,14 @@ condition d'arrêt, puisque les résorber veut dire corriger une spec, ce qu'un 
 ne peut pas faire. Les deux constats qu'un changement de code seul peut résoudre
 sont sous *Violations*.
 
-- **Batch / Closing a batch** — la spec affirme sans réserve que « le
+- ~~**Batch / Closing a batch** — la spec affirme sans réserve que « le
   document de lot ne porte aucun état mutable, et rien dans le déroulement normal
   ne le modifie », et sa propre section `Closing a batch` la contredit : le constat
   des intentions non livrées amende le texte du lot pour ne plus promettre ce qu'il
   n'a pas livré, et la clôture bascule son front matter en `status: closed`. `closing-a-batch` énonce
   d'ailleurs la règle **avec** l'exception que la spec nie — « nothing in the normal
   course of the batch modifies it **until closing** ». Le code a raison. Résorber
-  veut dire borner la phrase sur la clôture, et c'est une décision humaine.
-  `reserved by batch-04`
+  veut dire borner la phrase sur la clôture, et c'est une décision humaine.~~ `reserved by batch-04`
 
 - ~~**Branch naming** — « Une branche laissée sous le nom qu'un outil natif lui a
   donné est invisible des deux » se lit comme général et ne vaut que de `batch/*` et
