@@ -109,6 +109,8 @@ require writing-a-batch "a block quotes what it replaces"           "quotes the 
 require writing-a-batch "no block is attached to a story"           "No block is attached to a story"
 require writing-a-batch "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
 require writing-a-batch "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
+require writing-a-batch "the batch document faces several specs" "the one document that faces several specs at once"
+require writing-a-batch "twin blocks are not a delta"        "two blocks writing the same rule into two specs"
 # Closing finds an undelivered block from the `Blocks:` declarations, not from what
 # reached the specs (spec section "Closing a batch"). The two coincide on the nominal
 # path and part exactly where a block was fitted to a `main` that had moved: it was
