@@ -171,11 +171,20 @@ blocks it transcribes; the batch document names no story and carries no list of
 them. A section that changes twice in the course of the batch carries two blocks,
 and `Constraints` states their order.
 
+**A rule belongs to exactly one spec.** A batch may cut across modules, so its
+delta may well carry blocks aimed at several specs — that is ordinary. What is
+not: two blocks writing the same rule into two specs. That is not a delta with a
+duplicate in it, it is a module breakdown asking to be revisited, and this is the
+one place in the flow where it becomes visible, because this is the one document
+that faces several specs at once. Stop and put it to your human partner before
+opening the batch. No wording of the delta settles it, and the opening gate is
+not where a breakdown gets decided in passing.
+
 **The gaps register is not a spec.** `docs/specs/<module>.gaps.md` records what
-no spec describes, and where the code contradicts one — it
-carries no norm, so nothing you write there is normative and the rule above is
-untouched. That is why a batch reserves its entries in this same pull request
-while still writing nothing into a spec.
+no spec describes, and where the code contradicts one — it carries no norm, so
+nothing you write there is normative and the rule that this pull request writes
+nothing into the specs is untouched. That is why a batch reserves its entries
+in this same pull request while still writing nothing into a spec.
 
 **Reserving gaps-register entries — any batch, not only a corrective one.**
 Reservation is a property of the opening pull request of **whatever batch takes
@@ -446,3 +455,4 @@ skeleton.
 | "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open; otherwise discard the branch, locally and on the remote, and its worktree — a branch left on the remote reads as a live claim on its sections. |
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: it moves only through an amendment pull request of its own. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
+| "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |

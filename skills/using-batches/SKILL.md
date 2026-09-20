@@ -95,6 +95,20 @@ A number you cannot answer for is a gap, not a guarantee. Written as a guarantee
 
 **A module redefines what it borrows.** A spec reads on its own. A term a neighbouring module owns is redefined here, **reduced to what this module uses**, naming the spec that owns it. Referring to the definition next door looks cleaner and is not: the term's meaning then changes without this module knowing, and it finds out through a breakage. The reduced borrowing is not duplication but a **contract** — and the day it diverges from the original definition is exactly what you wanted to see.
 
+**A rule belongs to exactly one spec.** A rule that would constrain behaviour
+observable at the boundary of more than one module is not a rule looking for a
+home — it is a module breakdown asking to be revisited, and a breakdown is a
+human decision. Stop and put the case to your human partner, rather than copying
+the rule from one spec into another or giving it a home above them both. The
+reduced borrowing of a term — a term a neighbouring module owns, redefined here
+and reduced to what this module uses — is not concerned: it redefines a term, it
+does not share a rule.
+
+There is no spec above the specs, and that is the point. A rule housed outside
+the module specs — in a CLAUDE.md, in an architecture note — sits beyond
+everything that makes a spec binding: the review held against it, the drift rule,
+the gaps register, the changelog. It would read as a norm and be none.
+
 **Scope.** These clauses bear on the spec file, **all of its lines**, including the changelog's `change` cell: this is a property of the document, so it holds for whoever writes in it. They do not bear on `docs/specs/<module>.gaps.md`, which is not a spec — a register entry names a mechanism, that is its job, and that is where everything the test ejects goes. Saying both is necessary: a rule with no declared outlet leaves an agent who has understood it with nowhere to write down what they found.
 
 ## The Git Model
@@ -266,3 +280,4 @@ That is the superpowers feeling kept: a document of this system reads like a sup
 | "This is a small fix, the spec can stay silent about it" | A bounded change updates the spec in the same pull request, with an `out-of-batch` changelog line, and declares its sections. |
 | "The delta names a mechanism — I'll reword it into a business rule" | That is the laundering this rule exists to stop: what you would write describes the observed behaviour, so it canonises the drift. The spec wins, record a `Ruling:` for the clause you left out, and carry on. |
 | "I can't say where this number came from, I'll write 'a few minutes'" | Vagueness is not prudence — it is a rule no code can contradict. A number you cannot answer for is a gap, not a guarantee. |
+| "This rule holds for every module, so it lives above them all" | There is no spec above the specs. A rule belongs to exactly one spec; a rule that seems to belong to several signals a module breakdown to revisit, and that is your human partner's decision. |

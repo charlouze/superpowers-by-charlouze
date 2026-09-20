@@ -238,4 +238,11 @@ absent "no skill carries the retired blocking-precondition wording" \
     "blocking precondition|Adoption is blocking|blocking; nothing starts" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
+# One home per rule: the norm is stated in the four skills that write normative
+# text, and it is stated there word for word. One assertion, never one per file:
+# four separate assertions would each stay green while one end drifts away from
+# the other three.
+shared "a rule belongs to exactly one spec" "A rule belongs to exactly one spec." \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story
+
 exit $((FAILURES > 0))

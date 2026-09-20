@@ -204,6 +204,14 @@ d'où repartir, et ne renvoie jamais à la conversation.
 Un module a une spec et un gaps register, qui naissent ensemble à son adoption.
 Aucun lot ne touche un module qui n'est pas adopté.
 
+**Une règle appartient à une seule spec.** Une règle qui contraindrait un
+comportement observable à la frontière de plus d'un module signale un découpage
+de modules à revoir, et le découpage est une décision humaine : l'agent s'arrête
+et soumet le cas à l'humain, plutôt que de recopier la règle d'une spec à l'autre
+ou de lui chercher un domicile commun. L'emprunt réduit d'un terme
+(`The spec document`) n'est pas concerné : il redéfinit un terme, il ne partage
+pas une règle.
+
 ### Module adoption
 
 L'adoption produit une pull request portant deux documents et aucun code : la spec

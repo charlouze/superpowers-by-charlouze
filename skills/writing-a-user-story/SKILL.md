@@ -276,6 +276,16 @@ clause describes behaviour the code already has does it *also* belong under
 the gaps register — a mechanism prescribed but not yet built is neither a
 violation nor a gap, and the register has nowhere to put it.
 
+**A rule belongs to exactly one spec.** One case looks like that conflict and is
+not: a block whose rule would constrain behaviour observable at the boundary of
+more than one module. The authority rule cannot settle it, because no ruling puts
+a rule in two places, and transcribing it into this spec alone would leave the
+neighbouring module bound by something its own spec never says. Nor is the
+ordinary way out open, because a clause ejected and ruled on leaves the block's
+intent unreviewed while the breakdown it revealed stays hidden. Stop and put it
+to your human partner: what is in question is the breakdown, and a breakdown is
+their decision.
+
 **Corrective story.** The delta being empty, this first commit does not touch
 the spec. It strikes the gaps register entry the story resolves, in
 `docs/specs/<module>.gaps.md`. That plays the same role: fixing the scope in
@@ -629,3 +639,4 @@ documents.
 | "The flag is an implementation detail, the spec need not mention it" | Then the spec is false for users. The spec change states the flag, its default, and its lifting condition if the scope is extended. |
 | "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |
 | "The batch says otherwise, and the batch is more recent" | The spec wins, without deliberation. Implement the spec, record a Ruling, continue. |
+| "The block's rule spills onto the next module — the spec wins, I record a Ruling" | No ruling puts a rule in two places. A rule belongs to exactly one spec, and a rule that reaches further signals the breakdown. Stop and put it to your human partner. |

@@ -74,6 +74,9 @@ require adopting-a-module "names the next step after the clear"  "names \`superc
 require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
 require adopting-a-module "arrives in a context of its own"      "in a context of its own"
 require adopting-a-module "the design that follows starts fresh" "from the adopted spec, not from a conversation"
+require adopting-a-module "a spilling rule is about the rule's reach" "the signal is the rule's reach"
+require adopting-a-module "a spilling rule questions the breakdown" "the breakdown is what is in question"
+require adopting-a-module "names the one late signal on a boundary" "One late signal exists, and only one"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "an unadopted module stops the design"   "the design stops"
@@ -106,6 +109,8 @@ require writing-a-batch "a block quotes what it replaces"           "quotes the 
 require writing-a-batch "no block is attached to a story"           "No block is attached to a story"
 require writing-a-batch "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
 require writing-a-batch "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
+require writing-a-batch "the batch document faces several specs" "the one document that faces several specs at once"
+require writing-a-batch "twin blocks are not a delta"        "two blocks writing the same rule into two specs"
 # Closing finds an undelivered block from the `Blocks:` declarations, not from what
 # reached the specs (spec section "Closing a batch"). The two coincide on the nominal
 # path and part exactly where a block was fitted to a `main` that had moved: it was
@@ -144,6 +149,8 @@ require writing-a-user-story "story branch naming convention"     "story/NN"
 require writing-a-user-story "spec change states flag and default" "states the flag and its default"
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
 require writing-a-user-story "teardown story exists"              "teardown story"
+require writing-a-user-story "a rule belongs to exactly one spec" "A rule belongs to exactly one spec."
+require writing-a-user-story "no ruling houses a rule twice"      "no ruling puts a rule in two places"
 
 # --- writing-a-user-story: what Global Constraints carries (spec section "The user story document") ---
 require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
@@ -253,6 +260,9 @@ require using-batches "corollary: a rule outlives a mechanism"  "A rule does not
 require using-batches "corollary: no legislating on quality"    "does not legislate on code quality"
 require using-batches "carries the section it points at"        "## What a Spec Says"
 require using-batches "the glossary points at that section"     "see \`What a Spec Says\` below"
+require using-batches "a rule belongs to exactly one spec"  "A rule belongs to exactly one spec."
+require using-batches "a shared rule signals the breakdown" "it is a module breakdown asking to be revisited"
+require using-batches "a rule outside the specs binds nobody"  "sits beyond everything that makes a spec binding"
 
 # --- using-batches: the delta block (spec section "The model") ---
 require using-batches "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
