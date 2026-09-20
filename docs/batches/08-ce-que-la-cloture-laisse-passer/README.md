@@ -10,8 +10,8 @@ status: open
 `Observed drift`.** Une story laisse plus que ça, et ce lot ramasse ce qui tombe
 entre les deux.
 
-**Un arbitrage resté ouvert.** Un `Ruling:` qui parque un constat ou le remonte à
-l'humain n'est lu qu'au gate de livraison ; si l'humain fusionne sans agir, il meurt
+**Un arbitrage resté ouvert.** Un `Ruling:` dont la décision laisse quelque chose à
+trancher n'est lu qu'au gate de livraison ; si l'humain fusionne sans agir, il meurt
 avec la clôture — et rien ne signale sa disparition, puisque ce qui disparaît ne
 laisse pas de trace. La story `06-us-1-le-code-garde` en portait deux, versés au
 gaps register sur décision explicite de l'humain, parce qu'aucun devoir ne les
@@ -19,20 +19,29 @@ ramassait.
 
 **`Observed drift` ne peut pas les recueillir**, par construction : la section est
 définie pour les divergences entre spec et code, et un constat parqué n'en est pas
-une — un mécanisme prescrit mais pas encore construit n'est ni une violation ni un
-gap.
+une — un mécanisme prescrit mais pas encore construit n'est pas une divergence.
 
-**Deux choses écrivent dans cette queue, et aucune ne sait le faire aujourd'hui.**
-La forme d'un arbitrage vient de superpowers —
-`Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>` — et les deux
-règles qui alimentent le `Rulings log` disent **recopier** : une recopie ne peut pas
-produire une information que la forme ne porte pas. Ce lot fait donc nommer, à
-l'étape qui recopie, ce qui reste à trancher — sans quoi son propre contrôle de
-clôture lirait une distinction qu'aucun chemin n'écrit.
+**L'arbitrage ouvert devient un objet du flux, et porte sa forme.** La forme qu'un
+arbitrage tient de superpowers —
+`Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>` — ne dit pas
+qu'il reste quelque chose à trancher, ni quoi. Ce lot l'écrit **une fois**, là où le
+Rulings log est défini : un arbitrage ouvert s'écrit `Open ruling:`, et sa ligne
+nomme ce qui reste à trancher. Les deux règles qui font recopier les arbitrages
+n'ont alors rien à porter de plus, et ce qui lit n'a plus à reconnaître une catégorie
+dans de la prose. Ce nom anglais gagne au passage l'ancrage dans l'ossature que le
+glossaire exige de chaque terme.
 
-**Ce qui n'a pas de destination arrête la clôture**, comme l'arrête déjà un flag qui
-survit sans portée déclarée. Une mention dans un corps de pull request se lit ou ne
-se lit pas ; un refus, non.
+**Le refus vit à la livraison, parce que c'est le seul endroit où il peut encore
+agir.** Une story ne fusionne pas en laissant un arbitrage ouvert sans destination :
+celui qui est une violation ou un gap rejoint le gaps register par la consolidation
+de la clôture, tout autre est tranché avant la fusion, à la revue où l'humain a déjà
+les arbitrages sous les yeux. À la clôture, la story est fusionnée et sa branche
+supprimée : on peut y constater qu'un arbitrage n'a pas été résorbé, on ne peut plus
+le résorber.
+
+**La clôture, elle, apprend où lire.** Elle nomme le `Rulings log` comme elle nomme
+déjà le champ `Feature flag` et le champ `Blocks:`, et le register apprend qu'une
+story a deux canaux vers lui et non un seul.
 
 **Une branche du flux exige un répertoire qu'une session sur deux ne peut pas
 avoir.** Les skills posent, pour chaque pull request de ce flux, la précondition
@@ -45,15 +54,28 @@ la branche, et il suffit de dire lequel : `main` telle que le remote la porte. L
 répertoire disparaît alors de lui-même, sans qu'on ait à écrire qu'il ne compte pas.
 Au passage, « un `main` à jour » ne disait pas à jour par rapport à quoi.
 
-**Ce que ce lot ne fait pas, et pourquoi.** Une modification de spec qu'une story
-écrit sans qu'aucun bloc la porte échappe elle aussi à la clôture. Elle est restée
-hors de ce lot après examen : la nommer suppose d'amender deux phrases de `Batch`
-qui sont des totalités — « le spec delta est **le texte exact que ce lot écrit dans
-les specs** » et « la revue d'ouverture […] **c'est là que l'humain lit ce que diront
-les specs** ». Sans cet amendement, le flux comporterait une catégorie de texte de
-spec qui échappe aux deux phrases, lesquelles resteraient écrites. Ces deux sections
-sont tenues par le lot conçu en parallèle sur la relecture de cohérence du spec
-delta, à qui le sujet est signalé.
+**Ce que ce lot ne fait pas, et pourquoi.**
+
+Une modification de spec qu'une story écrit sans qu'aucun bloc la porte échappe elle
+aussi à la clôture. Elle est restée hors de ce lot après examen : la nommer suppose
+d'amender deux phrases de `Batch` qui sont des totalités — « le spec delta est **le
+texte exact que ce lot écrit dans les specs** » et « la revue d'ouverture […]
+**c'est là que l'humain lit ce que diront les specs** ». Sans cet amendement, le flux
+comporterait une catégorie de texte de spec qui échappe aux deux phrases, lesquelles
+resteraient écrites. Ces deux sections sont tenues par le lot conçu en parallèle sur
+la relecture de cohérence du spec delta, à qui le sujet est signalé.
+
+**L'arbitrage ouvert hors du chemin nominal** reste également dehors, et c'est un lot
+à lui seul. Trois chemins produisent des arbitrages sans qu'aucun Rulings log
+n'atteigne `main` : l'**adoption**, dont l'étape 4 applique « le plus récent
+l'emporte » sans l'humain et loge ses arbitrages dans un corps de pull request ; le
+**changement borné**, qui n'a ni document de story ni clôture ; et la **story
+abandonnée**, dont le document meurt avec sa branche. Le dernier ne se règle pas
+d'une phrase : ce qu'elle a trouvé devrait atteindre `main` avant que sa branche
+disparaisse, alors que `Module > The gaps register` réserve l'écriture à la pull
+request d'adoption et à celle de clôture — « un seul écrivain par lot » — et que la
+clôture ne peut pas lire un document qui n'existe plus. Décider qui écrit est une
+conception, pas un amendement.
 
 **Pourquoi maintenant.** Les deux sujets ont été constatés le même jour, à la clôture
 du lot 06, et par elle : le premier parce que deux arbitrages ont dû être sauvés à la
@@ -62,6 +84,9 @@ main, le second parce que la clôture s'est faite hors précondition.
 ## Spec delta
 
 Module `supercharlouze`, une seule spec : `docs/specs/supercharlouze.md`.
+
+Les identifiants `D3`, `D4` et `D6` ont été portés par des blocs que l'amendement du
+21 septembre a supprimés. Ils ne sont pas réattribués.
 
 ### D1 — `Authority and conflict rules`
 
@@ -91,34 +116,8 @@ Texte qui le remplace :
 > **Arbitrage** (`ruling`) — une décision prise par un agent sans l'humain, consignée
 > pour lui.
 >
-> **Arbitrage ouvert** (`open ruling`) — un arbitrage dont la décision est de parquer
-> un constat ou de le remonter à l'humain, et qui laisse donc quelque chose à trancher
-> après la fusion.
-
-### D3 — `Story > Delivering a story`
-
-Passage actuel :
-
-> 6. **Avant la fusion**, recopier les arbitrages de l'exécution dans le Rulings log,
->    consigner sous **Observed drift** les dérives constatées hors périmètre, et
->    pousser les deux sur la branche.
-
-Texte qui le remplace :
-
-> 6. **Avant la fusion**, recopier les arbitrages de l'exécution dans le Rulings log,
->    en nommant pour chaque arbitrage ouvert ce qui reste à trancher, consigner sous
->    **Observed drift** les dérives constatées hors périmètre, et pousser les deux
->    sur la branche.
-
-### D4 — `Batch > Closing a batch`
-
-Texte inséré après le paragraphe « **Trois sorties, pas une impasse.** … », donc
-avant « **La pull request de clôture porte :** » :
-
-> **Un lot ne peut pas être clos tant qu'un arbitrage ouvert n'a pas reçu sa
-> destination.** Celui qui est une violation ou un gap rejoint la consolidation dans
-> le gaps register. Pour tout autre, l'humain la donne et la pull request de clôture
-> la nomme.
+> **Arbitrage ouvert** (`open ruling`) — un arbitrage dont la décision laisse quelque
+> chose à trancher.
 
 ### D5 — `Batch > Closing a batch`
 
@@ -130,21 +129,9 @@ porte :** » :
 
 Texte qui le remplace :
 
-> - **la consolidation dans le gaps register** des sections `Observed drift` des
->   stories du lot, et des arbitrages ouverts qui l'ont rejointe ;
-
-### D6 — `Authority and conflict rules`
-
-Passage actuel :
-
-> **Tout conflit est consigné pour l'humain**, comme arbitrage. Les arbitrages d'une
-> story sont recopiés dans son document, sur sa branche, avant la fusion.
-
-Texte qui le remplace :
-
-> **Tout conflit est consigné pour l'humain**, comme arbitrage. Les arbitrages d'une
-> story sont recopiés dans son document, sur sa branche, avant la fusion, en nommant
-> pour chaque arbitrage ouvert ce qui reste à trancher.
+> - **la consolidation dans le gaps register** de ce que les documents des stories
+>   du lot ont laissé : leurs sections `Observed drift`, et les arbitrages ouverts
+>   que leur `Rulings log` classe en violation ou en gap ;
 
 ### D7 — `Module > The gaps register`
 
@@ -164,13 +151,56 @@ Texte qui le remplace :
 > ouverts ; un changement borné, dans ce qu'il rencontre. **Une entrée nomme le
 > document dont elle vient** quand elle vient d'un document.
 
+### D8 — `Story > The user story document`
+
+Texte inséré après le paragraphe qui ouvre par « Le document porte en outre un
+**Rulings log** et une section **Observed drift**, », donc avant «
+`Global Constraints` porte » :
+
+> **Un arbitrage ouvert s'écrit `Open ruling:`** là où les autres s'écrivent
+> `Ruling:`, et sa ligne se termine par ce qui reste à trancher, puis par la
+> catégorie du gaps register qui l'accueille quand il en rejoint une.
+
+Bloc d'insertion et non de remplacement à dessein : le lot 09 réécrit ce paragraphe
+par son D6, et une insertion n'a besoin que de son ancre, que ce D6 conserve.
+
+### D9 — `Story > Delivering a story`
+
+Texte inséré après l'étape 7 de la liste numérotée, donc avant « **Conclue par** la
+fusion de sa pull request : la story est livrée. » :
+
+> **Une story ne fusionne pas en laissant un arbitrage ouvert sans destination.**
+> Celui qui est une violation ou un gap rejoint le gaps register par la consolidation
+> de la clôture. Tout autre est tranché avant la fusion, à la revue de livraison, et
+> le `Rulings log` porte ce qui a été tranché.
+
+### D10 — `Module > The gaps register`
+
+Passage actuel :
+
+> **Ajouter une entrée** — la pull request d'adoption à la création, puis la pull
+> request de clôture d'un lot seule, qui consolide les dérives constatées hors
+> périmètre par les stories du lot. Les stories **n'ajoutent pas** : elles consignent
+> leurs constats dans leur propre document, sous **Observed drift**. Une entrée
+> s'ajoute à la fin de sa catégorie. Un seul écrivain
+> par lot.
+
+Texte qui le remplace :
+
+> **Ajouter une entrée** — la pull request d'adoption à la création, puis la pull
+> request de clôture d'un lot seule, qui consolide ce que les documents des stories
+> du lot ont laissé. Les stories **n'ajoutent pas** : elles consignent leurs constats
+> dans leur propre document, sous **Observed drift** et dans leur **Rulings log**.
+> Une entrée s'ajoute à la fin de sa catégorie. Un seul écrivain par lot.
+
 ## Constraints
 
-- **Ordre requis.** D2 à D5 sont transcrits **dans la même story** : D3, D4 et D5
-  emploient le terme que D2 pose au glossaire, et D4 et D5 visent la même section.
-  Livré par tranches, chaque bloc nommerait quelque chose que la spec ne définit pas
-  encore. D6 et D7 emploient eux aussi le terme que D2 pose : ils sont transcrits
-  dans la même story que D2, ou après elle. D1 n'impose aucun ordre.
+- **Ordre requis.** D5, D8, D9 et D10 emploient le terme que D2 pose au glossaire :
+  ils sont transcrits dans la même story que D2, ou après elle. D5 emploie en outre
+  le classement que D8 fait écrire dans le `Rulings log` : il ne précède pas D8. D7
+  et D10 visent la même section sans se recouvrir — D7 la phrase des sources, D10 le
+  paragraphe « Ajouter une entrée » — et leur ordre est libre. D1 n'impose aucun
+  ordre.
 - **Une dérive constatée en concevant ce lot part en `Observed drift`**, et la
   clôture la versera au gaps register. La spec énonce deux totalités — « le spec
   delta est **le texte exact que ce lot écrit dans les specs**, en blocs » et « la
@@ -187,7 +217,6 @@ Texte qui le remplace :
 Feature flag: none — chaque story est complète dans sa propre pull request
 
 Une story de ce lot, fusionnée seule, ne laisse personne devant quelque chose
-d'incomplet. D1 livrée seule est une règle qui vaut dès qu'elle est lue. D2 à D5
-voyagent ensemble par la contrainte d'ordre ci-dessus, qui interdit qu'un terme soit
-employé avant d'être posé ; D6 et D7 relèvent de la même interdiction, et ne peuvent
-donc précéder D2.
+d'incomplet. D1 livrée seule est une règle qui vaut dès qu'elle est lue. Les six
+autres voyagent sous la contrainte d'ordre ci-dessus, qui interdit qu'un terme soit
+employé avant d'être posé.
