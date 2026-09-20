@@ -6,7 +6,7 @@ status: open
 
 ## Scope
 
-Ce lot répond à deux questions que le flux laisse sans réponse, et qui se
+Ce lot répond à trois questions que le flux laisse sans réponse, et qui se
 rejoignent sur un point : **où une chose vit, et ce qui reste écrit quand elle
 n'a plus lieu d'être.**
 
@@ -40,12 +40,41 @@ se lit dans celle du fichier. C'est le même esprit que la suppression de la
 section `Sources` au lot 03 : ne pas garder dans un document ce qui ne fait plus
 référence.
 
-**Pourquoi maintenant.** Les deux sujets sont des silences constatés, pas des
+**Ce que le register porte d'autre, et comment une entrée désigne.** Remplacer le
+barré par la suppression fait apparaître deux silences que le barré masquait, parce
+qu'il gardait tout à jamais. Le fichier du plugin porte, sous `Gaps`, un paragraphe
+qui qualifie un *groupe* d'entrées — leur provenance, leur classement commun, leur
+nombre ; il annonce des entrées consolidées par la clôture du lot 02, et deux de
+celles qui le suivent viennent du lot 06. Il est devenu faux sans que personne ne
+l'ait touché : les entrées s'ajoutent et se suppriment une par une, et rien ne fait
+suivre une telle prose. Et une entrée vivante y renvoyait à sa voisine par la
+position — « second membre de la même phrase » —, voisine que la suppression
+emporte. Ce lot tranche les deux, bornés au gaps register : **ce qui qualifie une
+entrée vit dans l'entrée**, et **une entrée ne renvoie à aucune autre entrée**.
+
+Et il retire le mot qui rendait le second renvoi naturel. La spec dit d'une entrée
+qu'elle est « un item **adressable** », pour justifier qu'elle soit un élément de
+liste : ce qu'un geste doit pouvoir annoter ou retirer en entier. Mais le mot se
+lit aussi comme « faite pour être pointée », et c'est sous cette lecture qu'une
+entrée en désigne une autre. La règle reste — un élément de liste, jamais un
+paragraphe de prose — et le mot qui la justifiait s'en va : il vit déjà dans
+`adopting-a-module`, juste au-dessus de la table des gestes, où il décrit le
+besoin du geste et non une propriété de l'entrée.
+
+Le lot **ne tranche pas** la règle générale du renvoi, celle qui vaudrait aussi
+pour les skills, les specs et les documents de lot. Elle est plus large que ce
+register, et le constat qui la porte est déjà consigné.
+
+**Pourquoi maintenant.** Les trois sujets sont des silences constatés, pas des
 envies. Le premier a déjà coûté : un dépôt consommateur a inventé la règle
 manquante, et son gaps register désigne une règle de `CLAUDE.md` là où une entrée
 doit désigner une section de spec. Le second a déjà produit une entrée que la
 spec ne sait pas relire, et le register du plugin grossit d'un barré à chaque
-story.
+story. Le troisième est la conséquence directe du second : les deux défauts sont
+latents tant qu'une entrée reste dans le fichier à jamais, et **la suppression les
+rend systématiques** — elle emporte ce qui pointait vers l'entrée, et périme la
+prose qui la comptait. Les livrer séparément voudrait dire livrer sciemment la
+cause sans le remède.
 
 Le lot résorbe l'entrée *The gaps register* du gaps register — « le registre n'a
 pas de vocabulaire pour retirée parce que fausse » —, qu'il rend sans objet : il
@@ -190,11 +219,65 @@ déjà écarté sans dire ce qui a changé depuis, c'est rouvrir une décision q
 personne n'a revue.
 ```
 
+### D8 — `Module > The gaps register`
+
+Insérer, juste après :
+
+```markdown
+Chaque entrée désigne une section de la spec et est **un item adressable — un
+élément de liste, jamais un paragraphe de prose courante.**
+```
+
+le texte :
+
+```markdown
+**Ce qui qualifie une entrée vit dans l'entrée.** Outre sa couverture, le register
+ne porte que des entrées : aucune prose n'y qualifie un *groupe* d'entrées — leur
+provenance commune, leur classement commun, leur nombre. Les entrées s'ajoutent et
+se suppriment une par une, et rien ne fait suivre une telle prose : elle devient
+fausse sans que personne ne l'ait touchée. Ce qu'elle dirait de plusieurs entrées
+se répète dans chacune, et d'où vient une entrée se lit dans l'histoire du fichier.
+```
+
+### D9 — `Module > The gaps register`
+
+Insérer, juste après le texte que D8 ajoute, le texte :
+
+```markdown
+**Une entrée ne renvoie à aucune autre entrée.**
+```
+
+### D10 — `Module > The gaps register`
+
+Remplacer :
+
+```markdown
+Chaque entrée désigne une section de la spec et est **un item adressable — un
+élément de liste, jamais un paragraphe de prose courante.**
+```
+
+par :
+
+```markdown
+Chaque entrée désigne une section de la spec et est **un élément de liste, jamais
+un paragraphe de prose courante.**
+```
+
 ## Constraints
 
-- **Ordre requis.** D3, D4 et D7 visent la même section, `The gaps register` :
-  ils sont transcrits dans cet ordre, ou dans la même story. Les autres blocs
-  n'imposent aucun ordre.
+- **Ordre requis.** D3, D4, D7, D8, D9 et D10 visent tous la même section,
+  `The gaps register`. D3, D4 et D7 sont transcrits dans cet ordre, ou dans la
+  même story. D8 et D9 viennent **après** eux — ils décrivent ce que la
+  suppression rend systématique, et n'ont pas de sens avant elle —, et D9 après
+  D8, dont il prolonge le texte. **D10 n'impose aucun ordre** bien qu'il vise la
+  même section : le paragraphe qu'il remplace est celui après lequel D8 insère,
+  et aucun bloc ne le modifie. D1 n'impose aucun ordre non plus.
+- **La phrase jumelle de `adopting-a-module` suit D10.** La skill écrit
+  « Each entry is a single addressable item — one list item, never a paragraph of
+  running prose. » : la story qui transcrit D10 en retire `addressable` de la même
+  façon. Le besoin du geste reste énoncé dans la phrase qui suit, celle qui
+  introduit la table des gestes, où il décrit ce dont un écrivain a besoin et non
+  une propriété de l'entrée.
 - **Le gaps register du plugin est nettoyé de ses entrées barrées**, dans la même
   pull request que D3 et D4. Ce que le barré portait en commentaire — résorbée,
   sans objet, fausse — disparaît avec lui ; la pull request dit en une phrase ce
@@ -230,19 +313,37 @@ personne n'a revue.
 - **Hors périmètre** : où vit une idée qui émerge hors du lot en cours,
   l'historique d'une story et le moment du rebase, les stories en parallèle, les
   stories préparées puis lancées en bloc, la conduite à tenir en écrivant du code
-  sous flag, Conventional Commits, l'identité GitHub de l'agent, et la refonte du
-  `README.md`.
+  sous flag, Conventional Commits, l'identité GitHub de l'agent, la refonte du
+  `README.md`, et **la règle générale du renvoi** — celle qui vaudrait pour les
+  skills, les specs et les documents de lot. D9 est borné au gaps register ; la
+  règle générale est plus large que ce lot.
 - **Une seule entrée du gaps register est résorbée** : *The gaps register* — « le
   registre n'a pas de vocabulaire pour retirée parce que fausse » —, réservée par
   ce lot et résorbée par D3. Le reste de ce que le lot fait au fichier est du
-  ménage, énoncé plus haut : la suppression des entrées barrées et la
-  reformulation de l'entrée *Concurrency detection*. Aucune autre entrée n'est
-  résorbée, ni ajoutée.
+  ménage, et il est énuméré ici en entier : la suppression des entrées barrées,
+  la reformulation de l'entrée *Concurrency detection*, la réparation du renvoi
+  positionnel que cette suppression casse, et la dissolution du paragraphe qui
+  qualifie un groupe d'entrées. Aucune autre entrée n'est résorbée, ni ajoutée.
+- **La clôture ne verse pas au register les deux constats que D8 et D9
+  résorbent.** Ils sont consignés sous l'`Observed drift` d'une story de ce lot,
+  écrite avant que le lot ne les prenne — une prose de register qui qualifie un
+  groupe d'entrées, et un renvoi d'entrée à entrée par la position. La
+  consolidation les inscrirait comme des gaps ouverts le jour même où ils cessent
+  de l'être. Ce que la clôture verse, c'est ce que le lot n'a pas réglé.
+- **Le paragraphe de groupe est dissous** par la story qui transcrit D8, dans la
+  même pull request : celui qui, sous `## Gaps`, annonce « les entrées qui suivent
+  ont été consolidées par la clôture du lot 02 » est retiré, et ce qu'il portait
+  pour une entrée qui ne le porte pas déjà est relogé dans cette entrée. Une norme
+  que le fichier du plugin violerait le jour de sa transcription n'est pas une
+  norme livrée.
 
 ## Feature flag
 
 Feature flag: none — chaque story est complète dans sa propre pull request
 
 Une story de ce lot, fusionnée seule, ne laisse personne devant quelque chose
-d'incomplet. Livrée seule, la règle du domicile (D1) vaut dès qu'elle est lue. Livrée seule, la suppression d'une entrée (D3 à D7) remplace un geste par un
-autre, sans état intermédiaire.
+d'incomplet. Livrée seule, la règle du domicile (D1) vaut dès qu'elle est lue.
+Livrée seule, la suppression d'une entrée (D3 à D7) remplace un geste par un
+autre, sans état intermédiaire. Livrées seules, les règles d'écriture d'un
+register (D8, D9, D10) valent dès qu'elles sont lues, et le fichier du plugin s'y
+conforme dans la même pull request.
