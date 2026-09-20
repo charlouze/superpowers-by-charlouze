@@ -50,7 +50,16 @@ l'ait touché : les entrées s'ajoutent et se suppriment une par une, et rien ne
 suivre une telle prose. Et une entrée vivante y renvoyait à sa voisine par la
 position — « second membre de la même phrase » —, voisine que la suppression
 emporte. Ce lot tranche les deux, bornés au gaps register : **ce qui qualifie une
-entrée vit dans l'entrée**, et **une entrée nomme ce qu'elle vise**.
+entrée vit dans l'entrée**, et **une entrée ne renvoie à aucune autre entrée**.
+
+Et il retire le mot qui rendait le second renvoi naturel. La spec dit d'une entrée
+qu'elle est « un item **adressable** », pour justifier qu'elle soit un élément de
+liste : ce qu'un geste doit pouvoir annoter ou retirer en entier. Mais le mot se
+lit aussi comme « faite pour être pointée », et c'est sous cette lecture qu'une
+entrée en désigne une autre. La règle reste — un élément de liste, jamais un
+paragraphe de prose — et le mot qui la justifiait s'en va : il vit déjà dans
+`adopting-a-module`, juste au-dessus de la table des gestes, où il décrit le
+besoin du geste et non une propriété de l'entrée.
 
 Le lot **ne tranche pas** la règle générale du renvoi, celle qui vaudrait aussi
 pour les skills, les specs et les documents de lot. Elle est plus large que ce
@@ -235,19 +244,40 @@ se répète dans chacune, et d'où vient une entrée se lit dans l'histoire du f
 Insérer, juste après le texte que D8 ajoute, le texte :
 
 ```markdown
-**Une entrée nomme ce qu'elle vise.** Elle ne désigne jamais une autre entrée par
-sa position — « l'entrée ci-dessus », « la même phrase ». Une entrée réglée quitte
-le fichier, et un renvoi qui pointait vers elle se casse sans que personne ne l'ait
-touché.
+**Une entrée ne renvoie à aucune autre entrée.**
+```
+
+### D10 — `Module > The gaps register`
+
+Remplacer :
+
+```markdown
+Chaque entrée désigne une section de la spec et est **un item adressable — un
+élément de liste, jamais un paragraphe de prose courante.**
+```
+
+par :
+
+```markdown
+Chaque entrée désigne une section de la spec et est **un élément de liste, jamais
+un paragraphe de prose courante.**
 ```
 
 ## Constraints
 
-- **Ordre requis.** D3, D4, D7, D8 et D9 visent tous la même section,
+- **Ordre requis.** D3, D4, D7, D8, D9 et D10 visent tous la même section,
   `The gaps register`. D3, D4 et D7 sont transcrits dans cet ordre, ou dans la
   même story. D8 et D9 viennent **après** eux — ils décrivent ce que la
   suppression rend systématique, et n'ont pas de sens avant elle —, et D9 après
-  D8, dont il prolonge le texte. D1 n'impose aucun ordre.
+  D8, dont il prolonge le texte. **D10 n'impose aucun ordre** bien qu'il vise la
+  même section : le paragraphe qu'il remplace est celui après lequel D8 insère,
+  et aucun bloc ne le modifie. D1 n'impose aucun ordre non plus.
+- **La phrase jumelle de `adopting-a-module` suit D10.** La skill écrit
+  « Each entry is a single addressable item — one list item, never a paragraph of
+  running prose. » : la story qui transcrit D10 en retire `addressable` de la même
+  façon. Le besoin du geste reste énoncé dans la phrase qui suit, celle qui
+  introduit la table des gestes, où il décrit ce dont un écrivain a besoin et non
+  une propriété de l'entrée.
 - **Le gaps register du plugin est nettoyé de ses entrées barrées**, dans la même
   pull request que D3 et D4. Ce que le barré portait en commentaire — résorbée,
   sans objet, fausse — disparaît avec lui ; la pull request dit en une phrase ce
@@ -314,6 +344,6 @@ Feature flag: none — chaque story est complète dans sa propre pull request
 Une story de ce lot, fusionnée seule, ne laisse personne devant quelque chose
 d'incomplet. Livrée seule, la règle du domicile (D1) vaut dès qu'elle est lue.
 Livrée seule, la suppression d'une entrée (D3 à D7) remplace un geste par un
-autre, sans état intermédiaire. Livrées seules, les deux règles d'écriture d'un
-register (D8, D9) valent dès qu'elles sont lues, et le fichier du plugin s'y
+autre, sans état intermédiaire. Livrées seules, les règles d'écriture d'un
+register (D8, D9, D10) valent dès qu'elles sont lues, et le fichier du plugin s'y
 conforme dans la même pull request.
