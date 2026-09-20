@@ -236,21 +236,26 @@ promoting instead of re-reading the whole thing.
 
 **Each entry is a single addressable item — one list item, never a paragraph of
 running prose.** You are the only skill that ever *creates* this file, and three
-later skills act on entries in place — plus the bounded path, a fourth writer
-with no skill of its own — each needing a thing it can point at:
+later skills act on its entries — plus the bounded path, a fourth writer with no
+skill of its own — each needing a thing it can point at, whether to annotate it
+in place or to take it out whole:
 
 | Gesture | Who | What it does to the entry |
 |---|---|---|
 | Reserve | `supercharlouze:writing-a-batch`, in the batch's opening pull request | appends `reserved by batch-NN` to it |
-| Strike | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | strikes it through, atomically with the code |
-| Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed |
-| Add or strike | a bounded change, from its own pull request | belonging to no batch, it writes an entry or strikes one directly, contending only with another bounded change |
+| Remove | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | deletes it from the file, atomically with the code, and the commit that removes it says why |
+| Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed, and leaves the entry |
+| Add or remove | a bounded change, from its own pull request | belonging to no batch, it writes an entry or deletes one directly, contending only with another bounded change |
 
 A register written as flowing paragraphs satisfies every other word of this step
-and breaks every one of them: there is no item to annotate, none to strike, no
-list for a bounded change to append one to — what it adds is more prose, which
-the next writer cannot point at either — and nothing a corrective batch can draw
-a scope from. Write entries so those gestures are mechanical.
+and breaks every one of them: there is no item to annotate, none to remove
+cleanly, no list for a bounded change to append one to — what it adds is more
+prose, which the next writer cannot point at either — and nothing a corrective
+batch can draw a scope from. Write entries so those gestures are mechanical.
+
+**Nothing stays behind in this file once an entry is settled.** The register
+carries what is still open, and what an entry was — and why it left — is read in
+the history of the file (`git log -p docs/specs/<module>.gaps.md`).
 
 **The shape of the register:**
 
@@ -266,7 +271,6 @@ a scope from. Write entries so those gestures are mechanical.
 
 - **<spec section>** — <how the code contradicts it.>
 - **<spec section>** — <another one.> `reserved by batch-08`
-- ~~**<spec section>** — <one a story has already resolved.>~~
 
 ## Gaps
 
@@ -410,7 +414,7 @@ plugin itself is entirely English, because it carries no business prose.
 | "They said yes to it, so this mechanism is now a rule" | A mechanism is not submitted to validation. Enumerate what is observable at the boundary; a validated mechanism is approved drift. |
 | "I'll write the two documents first and create the branch to carry them" | using-git-worktrees opens a separate, empty directory. The branch comes first, at step 3, or both files stay stranded on `main`. |
 | "I'm already in a worktree, that will do" | Its Step 0 sees `GIT_DIR != GIT_COMMON`, reuses it, and the adoption lands on the previous branch. Main checkout first. |
-| "Prose reads better than a list in the gaps register" | Then nothing can reserve, strike or release an entry, and the three downstream gestures break. |
+| "Prose reads better than a list in the gaps register" | Then nothing can reserve, remove or release an entry, and the three downstream gestures break. |
 | "The adoption PR is open, the batch can start" | Merged is adopted. The review is the gate, not the push. |
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |
 | "I ejected those mechanisms at step 4, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit, and step 4's set-aside list is its only route into the register. |
