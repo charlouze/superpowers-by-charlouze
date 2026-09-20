@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 04 — La spec avant le code
