@@ -77,6 +77,8 @@ require adopting-a-module "the design that follows starts fresh" "from the adopt
 require adopting-a-module "a spilling rule is about the rule's reach" "the signal is the rule's reach"
 require adopting-a-module "a spilling rule questions the breakdown" "the breakdown is what is in question"
 require adopting-a-module "names the one late signal on a boundary" "One late signal exists, and only one"
+require adopting-a-module "the register's gestures include removal"  "the commit that removes it says why"
+require adopting-a-module "promoting a gap removes its entry"        "an adoption that promotes a gap into the spec"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "an unadopted module stops the design"   "the design stops"
@@ -138,7 +140,6 @@ require writing-a-user-story "git conflict is only a partial net" "partial safet
 require writing-a-user-story "transcription is the first commit"  "first commit on the branch"
 require writing-a-user-story "freeze travels in Global Constraints" "Global Constraints"
 require writing-a-user-story "freeze ends when the PR opens"      "freeze is lifted when the pull request opens"
-require writing-a-user-story "corrective story strikes an entry"  "strikes the gaps register entry the story resolves"
 require writing-a-user-story "hands off to writing-plans"         "superpowers:writing-plans"
 require writing-a-user-story "requires SDD"                       "superpowers:subagent-driven-development"
 require writing-a-user-story "constrains finishing to the PR"     "Push and create a Pull Request"
@@ -204,6 +205,7 @@ require writing-a-user-story "hands over to the next story"         "names the n
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
+require closing-a-batch "releasing keeps the entry"  "removes the reservation annotation and leaves the entry"
 # This duty sorts what the stories brought back; it must not read as a definition
 # of either category. A fourth wording of "what a gap is" would sit outside the
 # `shared` assertion that locks the other three, and drift with nothing to catch it.
@@ -278,6 +280,7 @@ require using-batches "the handover is conditional"         "Where a next step e
 require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
 require using-batches "an unadopted module stops the design"     "the design stops"
 require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers steps 6 to 9 and nothing else"
+require using-batches "a bounded change adds and removes entries"  "add an entry and delete one"
 
 # --- using-batches: guarded code rules (referencing writing-a-user-story) ---
 require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"

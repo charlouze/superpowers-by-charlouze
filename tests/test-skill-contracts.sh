@@ -273,4 +273,50 @@ absent "no skill denies that the batch document changes at closing" \
     "batch modifies it( [^*]|[^ ])" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
+# A corrective story's first commit is described in two places — the skill that
+# prescribes it and the one that explains why it is the single exception of form
+# to "the spec change ships first". One assertion over both: two `require` calls
+# would each stay green while one end drifted back to striking the entry.
+shared "a corrective story's first commit deletes its entry" \
+    "deletes the gaps register entry it resolves" \
+    writing-a-user-story using-batches
+
+# Removal leaves no trace in the register, so what a module already rejected is
+# readable only in the file's history. Both writers that add an entry — a
+# batch's closing and a bounded change — owe that read. One assertion over both,
+# because a rule only one of them carries is a rule the other writer never sees.
+shared "both writers read the file's history before adding" \
+    "Read the file's history before adding an entry" \
+    closing-a-batch using-batches
+
+# The removal duty — say why in the commit, because the file keeps nothing once
+# the entry is gone — is stated in four skills, and it is stated word for word.
+# Three of them prescribe a removal; `closing-a-batch` states it while explaining
+# why an entry a story resolved is not there to release, which is the one place a
+# reader could otherwise conclude that closing removes entries too. One assertion
+# over the four: four `require` calls would each stay green while one end reworded
+# the duty away from the others.
+shared "the removal duty is spelled alike wherever it is stated" \
+    "the commit that removes it says why" \
+    adopting-a-module writing-a-user-story closing-a-batch using-batches
+
+# The same sentence about what an abandoned story leaves behind is written in
+# two skills, and it names the gesture the register now uses. One assertion over
+# both: separate ones would let the two accounts of an abandonment drift apart,
+# and an agent reading either would believe it had the whole picture.
+shared "both accounts of an abandonment name the same residue" \
+    "the spec change, or the deleted gaps-register entry, travels with the code and dies with the branch" \
+    writing-a-batch writing-a-user-story
+
+# The mirror of the positive assertions above: a skill that carried both the new
+# wording and the old would leave every one of them green while still telling an
+# agent to strike a register entry. The needle is the bare token, because a
+# pattern aimed at the register misses the one line that matters most — a table
+# row naming the gesture, whose "entry" is the column header, out of reach of any
+# sane window. A bare token has no holes as long as the word means nothing else
+# in these five files, which is why the source inventory says "drop" instead.
+absent "no skill strikes a gaps register entry" \
+    "[Ss]truck|[Ss]trik" \
+    adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch
+
 exit $((FAILURES > 0))
