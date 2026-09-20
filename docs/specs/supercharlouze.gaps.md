@@ -253,7 +253,7 @@ sont sous *Violations*.
   donc « résorbée par cette pull request », ce qui est faux : aucun code ne l'a
   résorbée, elle a été retirée. Il manque une annotation distinguant les deux
   gestes — et le présent commentaire de consolidation est, lui aussi, une forme que
-  la spec ne décrit pas.
+  la spec ne décrit pas. `reserved by batch-05`
 
 - ~~**Document layout** — la clause écrite par la story 02-us-3 est fausse dans ce
   dépôt même. Elle affirme que `docs/specs/` et `docs/batches/` « ne sont donc pas
