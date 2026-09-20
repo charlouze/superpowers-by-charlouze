@@ -229,4 +229,13 @@ shared "adoption never shares the design's context" \
     "never conducted in the same context" \
     writing-a-batch using-batches
 
+# The old norm called adoption a "blocking precondition" and this branch
+# retired that wording along with the wordings it produced ("Adoption is
+# blocking", "blocking; nothing starts"). Nothing else guards this: the
+# positive assertions above stay green on a file that carries both the new
+# paragraph and a resurrected old one.
+absent "no skill carries the retired blocking-precondition wording" \
+    "blocking precondition|Adoption is blocking|blocking; nothing starts" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
 exit $((FAILURES > 0))
