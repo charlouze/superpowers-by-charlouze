@@ -287,10 +287,12 @@ to your human partner: what is in question is the breakdown, and a breakdown is
 their decision.
 
 **Corrective story.** The delta being empty, this first commit does not touch
-the spec. It strikes the gaps register entry the story resolves, in
-`docs/specs/<module>.gaps.md`. That plays the same role: fixing the scope in
-the branch's history before any code exists. Striking an entry is local to a
-line already written, so two stories striking different entries do not collide.
+the spec. It deletes the gaps register entry it resolves from
+`docs/specs/<module>.gaps.md`, and the commit that removes it says why. That
+plays the same role: fixing the scope in the branch's history before any code
+exists. Removing an entry takes out lines nobody else is writing, so two stories
+removing different entries do not collide — and what the entry said, and why it
+went, stay readable in the history of the file.
 
 **Push the branch as soon as this commit exists** — `git push -u origin
 story/NN-us-N-<slug>`. Nothing depends on it for this story; it is what makes

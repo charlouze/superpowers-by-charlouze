@@ -273,4 +273,12 @@ absent "no skill denies that the batch document changes at closing" \
     "batch modifies it( [^*]|[^ ])" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
+# A corrective story's first commit is described in two places — the skill that
+# prescribes it and the one that explains why it is the single exception of form
+# to "the spec change ships first". One assertion over both: two `require` calls
+# would each stay green while one end drifted back to striking the entry.
+shared "a corrective story's first commit deletes its entry" \
+    "deletes the gaps register entry it resolves" \
+    writing-a-user-story using-batches
+
 exit $((FAILURES > 0))

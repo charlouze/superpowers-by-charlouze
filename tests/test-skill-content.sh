@@ -140,7 +140,6 @@ require writing-a-user-story "git conflict is only a partial net" "partial safet
 require writing-a-user-story "transcription is the first commit"  "first commit on the branch"
 require writing-a-user-story "freeze travels in Global Constraints" "Global Constraints"
 require writing-a-user-story "freeze ends when the PR opens"      "freeze is lifted when the pull request opens"
-require writing-a-user-story "corrective story strikes an entry"  "strikes the gaps register entry the story resolves"
 require writing-a-user-story "hands off to writing-plans"         "superpowers:writing-plans"
 require writing-a-user-story "requires SDD"                       "superpowers:subagent-driven-development"
 require writing-a-user-story "constrains finishing to the PR"     "Push and create a Pull Request"
