@@ -308,4 +308,15 @@ shared "both accounts of an abandonment name the same residue" \
     "the spec change, or the deleted gaps-register entry, travels with the code and dies with the branch" \
     writing-a-batch writing-a-user-story
 
+# The mirror of the positive assertions above: a skill that carried both the new
+# wording and the old would leave every one of them green while still telling an
+# agent to strike a register entry. The needle is the bare token, because a
+# pattern aimed at the register misses the one line that matters most — a table
+# row naming the gesture, whose "entry" is the column header, out of reach of any
+# sane window. A bare token has no holes as long as the word means nothing else
+# in these five files, which is why the source inventory says "drop" instead.
+absent "no skill strikes a gaps register entry" \
+    "[Ss]truck|[Ss]trik" \
+    adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch
+
 exit $((FAILURES > 0))
