@@ -67,6 +67,11 @@ require adopting-a-module "the fallback enumerates at the boundary"   "observabl
 require adopting-a-module "the question is about the intention"       "about the intention, never about the mechanism"
 require adopting-a-module "a mechanism is not put to validation"      "A mechanism is not submitted to human validation"
 require adopting-a-module "branch naming convention"             "adopt/"
+require adopting-a-module "ends the review as every gate does"   "never approves and never merges a pull request"
+require adopting-a-module "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
+require adopting-a-module "names the merge a clear moment"       "a moment to clear the context"
+require adopting-a-module "names the next step after the clear"  "names \`supercharlouze:writing-a-batch\` as the next step"
+require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "adopted spec is a blocking precondition" "blocking precondition"

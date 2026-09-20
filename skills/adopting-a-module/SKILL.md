@@ -311,6 +311,25 @@ the module is not adopted and no batch may start on it. An open adoption pull
 request is not adoption; do not start `supercharlouze:writing-a-batch` on the
 strength of one.
 
+**Ending the review.** The agent never approves and never merges a pull request,
+here as at every gate. Each correction the review asks for is pushed as a
+`fixup!` commit of the commit it corrects, or as a commit of its own when it
+carries a fresh decision; your human partner gives their agreement in the
+conversation, and only then do you squash the fixups, push, and announce the
+pull request ready.
+
+**Merging this pull request is a moment to clear the context**, and announcing it
+ready is where you say so. The adoption conversation carried an inventory,
+rulings and a boundary argument that the merged documents now carry better than
+it does — and worse, it carried every mechanism you read while auditing the code,
+which is exactly what must not leak into the batch that follows.
+
+So the announcement names `supercharlouze:writing-a-batch` as the next step, and
+gives the prompt for it in a block to copy and paste after the clear. **That
+prompt stands on its own:** it names the skill to invoke, and the prompt names
+the adopted spec by path, and the gaps register beside it, and never refers
+back to this conversation.
+
 ## Degraded Case: A Module With No Validated Documents
 
 Sometimes the inventory comes back empty: no validated document covers the module.
