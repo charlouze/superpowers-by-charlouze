@@ -16,7 +16,11 @@ l'autre bout : `closing-a-batch` amende le document de lot et bascule son front
 matter sans jamais dire qu'elle est le seul moment qui y touche. La story écrit
 cette phrase, dans les mots exacts que `writing-a-batch` emploie déjà, puis
 verrouille les deux bouts par une assertion unique, et interdit séparément le
-retour de la dénégation sans borne que D2 vient de retirer.
+retour de la dénégation sans borne que D2 vient de retirer. La revue finale a
+relevé un troisième bout, corrigé ici plutôt que reporté : la table des pièges de
+`writing-a-batch` disait que le document de lot « ne bouge que par une pull
+request d'amendement », un exclusif que D2 rend faux puisque la clôture l'amende
+aussi.
 
 **Tech Stack:** Markdown (skills, spec, document de lot), bash (`tests/*.sh`,
 exécutés par `tests/run-all.sh`).
