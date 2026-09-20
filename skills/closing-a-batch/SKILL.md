@@ -84,7 +84,9 @@ The `change` cell is part of the spec file, so the content rule of `supercharlou
 
 ### 4. Consolidate observed drift
 
-Collect the **Observed drift** section of every story document in the batch and write its findings into the gaps register of the module concerned, `docs/specs/<module>.gaps.md`: whatever a story reported as code contradicting the spec goes under **Violations**, whatever it reported as behaviour no spec describes goes under **Gaps**. A story finds its gaps in the code it went through; that is this duty's only source, and it is not the only source the register has.
+Collect the **Observed drift** section of every story document in the batch and write its findings into the gaps register of the module concerned, `docs/specs/<module>.gaps.md`: whatever a story reported as code contradicting the spec goes under **Violations**, whatever it reported as behaviour no spec describes goes under **Gaps**. A story finds its gaps in the code it went through; that is the first of this duty's two sources, and the register has others besides them both.
+
+**The open rulings duty 2 sent to the register join them here**, filed the same way: a violation under **Violations**, a gap under **Gaps**. They arrive from the Rulings log and not from `Observed drift`, because a parked finding is not a divergence between spec and code — which is exactly why the story that made it could not record it there.
 
 Stories deliberately do not write into the register. Adding an entry appends at the end of its category and competes with every other addition to the same module — the same contention duty 3 avoids, solved the same way: a single writer per batch. Their observations wait in their own document until now, which is why they are recorded there and why you are the one who moves them.
 
@@ -121,7 +123,9 @@ Both, not either. Without this step the abandonment is perfectly invisible: it i
 
 Set `status: closed` in the batch document's front matter. That is the whole duty, and it comes last: it is the record that the other six were done, so it must not precede them.
 
-Then push and open the pull request. The **review of the closing pull request** is the human gate, like every other gate in this system — this plugin adds no ceremony, it puts its checkpoints where your flow already has them. Closing records a human decision, that the batch delivered what it owed, and that decision deserves its review. A batch is never closed because an agent judged the work to look finished.
+Then push and open the pull request. **Its body names the destination of every open ruling that did not join the register** — the one your human partner gave at duty 2. Those have nowhere else to go: the register does not take them, and the batch document records scope, not arbitrations. Written here, they are read at the closing gate by the person who gave them.
+
+The **review of the closing pull request** is the human gate, like every other gate in this system — this plugin adds no ceremony, it puts its checkpoints where your flow already has them. Closing records a human decision, that the batch delivered what it owed, and that decision deserves its review. A batch is never closed because an agent judged the work to look finished.
 
 **Ending the review.** The agent never approves and never merges a pull request. Each correction is pushed as a `fixup!` commit of the commit it corrects, or as a commit of its own when it carries a fresh decision; your human partner gives their agreement in the conversation, and only then do you squash the fixups, push, and announce the pull request ready.
 

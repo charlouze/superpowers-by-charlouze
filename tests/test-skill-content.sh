@@ -259,6 +259,12 @@ require closing-a-batch "any other destination is the human's"    "its destinati
 require closing-a-batch "refuses without a destination"           "cannot be closed while an open ruling has no destination"
 require closing-a-batch "Observed drift is not an outlet"         "Observed drift cannot collect it either"
 
+# Where the two destinations of duty 2 actually land. Both assertions matter: a
+# skill that sorted the rulings and then wrote neither of them anywhere would
+# pass every guard above.
+require closing-a-batch "the consolidation takes the open rulings" "The open rulings duty 2 sent to the register join them here"
+require closing-a-batch "the PR body names the other destinations" "names the destination of every open ruling that did not join the register"
+
 # --- using-batches: what a spec says (spec section "The spec document") ---
 require using-batches "the test bears on the module boundary"   "bears on the module's boundary"
 require using-batches "infrastructure states branches and PRs"  "states branch names and pull requests as rules"
