@@ -360,4 +360,29 @@ git commit -m "feat: la doctrine du flag renvoie aux règles du code gardé"
 
 ## Rulings log
 
+- **Ruling:** le défaut de ponctuation relevé en revue finale sur la phrase qui
+  énonce ce que porte `Global Constraints` — une virgule collée à un tiret cadratin,
+  et `batch's` orphelin en fin de ligne — vient du texte de remplacement prescrit
+  par ce plan, pas de l'implémenteur. **Décidé :** corrigé dans la skill par un
+  commit `fixup!`, le plan laissé tel que le gate l'a lu. **Si c'est faux :** le
+  plan et la skill diffèrent sur la ponctuation d'une phrase, visible dans la
+  pull request.
+- **Ruling:** deux gloses compressées des quatre règles coexistent dans
+  `using-batches` — le renvoi de la doctrine du flag et une ligne `Red Flags` — et
+  la règle du registre des flags y prend une troisième formulation, qu'aucune
+  assertion `shared` ne verrouille. **Décidé :** parquées. Les deux étaient
+  prescrites par ce plan, une ligne `Red Flags` est compressée par convention, et
+  ni l'une ni l'autre n'est une reformulation complète : la division « écrit en
+  entier à un seul endroit » tient. **Si c'est faux :** une glose dérive du bloc
+  canonique et un lecteur se fie à la mauvaise.
+- **Ruling:** la phrase qui clôt D1 — « Le code gardé **est écrit de sorte que**
+  lever le flag se réduise à supprimer le branchement » — est en tension avec le
+  corollaire que porte `The spec document` : la spec ne légifère pas sur la qualité
+  du code. Un autre développeur au branchement plus lourd ne la lirait pas comme
+  vraie de son code. **Décidé :** transcrite telle quelle et laissée debout, la
+  question remontée à l'humain. Le texte a été validé au gate d'ouverture (#29),
+  il est désormais la spec, et corriger une spec est un acte humain. **Si c'est
+  faux :** une phrase de spec prescrit la manière d'écrire le code, et il faut un
+  changement borné pour la reformuler.
+
 ## Observed drift
