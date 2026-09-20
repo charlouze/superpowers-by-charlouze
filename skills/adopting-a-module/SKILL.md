@@ -264,6 +264,10 @@ where an entry came from is read in the history of the file. You write this file
 first entries all at once, which is exactly when a group paragraph feels natural —
 and it is the one moment nobody is left to notice it later.
 
+**An entry designates no other entry.** A settled entry leaves the file whole, and
+it takes with it anything that pointed at it — by name or by position. What an
+entry needs from its neighbour it states itself.
+
 **Nothing stays behind in this file once an entry is settled.** The register
 carries what is still open, and what an entry was — and why it left — is read in
 the history of the file (`git log -p docs/specs/<module>.gaps.md`).

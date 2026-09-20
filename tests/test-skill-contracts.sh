@@ -345,4 +345,11 @@ shared "every writer that adds an entry keeps a group's qualification out" \
     "What qualifies an entry lives in the entry" \
     adopting-a-module closing-a-batch using-batches
 
+# A settled entry leaves the file and takes with it whatever pointed at it:
+# the entry-to-entry cross-reference loses its target without anyone editing
+# it. The same three writers say so, in the same words, under one assertion.
+shared "every writer that adds an entry keeps entries from pointing at each other" \
+    "An entry designates no other entry" \
+    adopting-a-module closing-a-batch using-batches
+
 exit $((FAILURES > 0))
