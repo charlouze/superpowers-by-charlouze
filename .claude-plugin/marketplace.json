@@ -1,14 +1,18 @@
 {
   "name": "supercharlouze",
   "description": "Marketplace for the supercharlouze plugin",
-  "owner": { "name": "Charlouze" },
+  "owner": {
+    "name": "Charlouze"
+  },
   "plugins": [
     {
       "name": "supercharlouze",
       "description": "Overrides how superpowers organizes specs and plans: one living spec per module, batches of user stories, corrective batches",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "source": "./",
-      "author": { "name": "Charlouze" }
+      "author": {
+        "name": "Charlouze"
+      }
     }
   ]
 }
