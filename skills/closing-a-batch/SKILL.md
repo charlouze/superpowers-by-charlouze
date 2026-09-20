@@ -21,7 +21,7 @@ Six duties, one pull request, on a branch named `batch/NN-<slug>-close`. Duty 1 
 - **Your human partner judges the batch finished.** Every story being merged or closed is necessary and not sufficient. Closing records a human decision — that the batch delivered what it owed — and a batch is never closed because an agent judged the work to look finished.
 - **You are in the main checkout, on `main`, refreshed from the remote.** In the main checkout because `superpowers:finishing-a-development-branch` *preserves* the worktree on the pull request path: from inside one, `superpowers:using-git-worktrees` Step 0 sees `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses it, and this closure lands on the previous branch instead of its own. Refreshed because merges arrive from the remote; a stale `main` hides the very stories you are about to account for, and you would consolidate from an incomplete set.
 - **Create the branch and its workspace by invoking `superpowers:using-git-worktrees`.** The conventional name is `batch/NN-<slug>-close`, enforced by this plugin, not by that skill. If it lands on a differently named branch or a detached HEAD, restore the conventional name before going on. **A named branch is not enough** — though here, unlike on a story branch, nothing is lost if you get it wrong: this batch's `NN` is already held by `docs/batches/NN-<slug>/` on `main`, since closing only runs on a batch whose opening pull request merged, so number allocation refuses it on that ground alone whatever this branch is called. The convention is uniform because one honoured only where a scan would catch you is not a convention at all.
-- **Read the batch document `docs/batches/NN-<slug>/README.md` and every story document in that directory.** The story documents carry the drift you are about to consolidate; the batch document carries the blocks you are about to check against what actually shipped. "Every document in that directory" is every document that reached `main`: an abandoned story's document died with its branch, never merged, so it is not there — and neither is whatever it recorded under `Observed drift`. Nothing recovers it; that is part of what abandoning costs. Read what is on `main` and do not go hunting closed pull requests for documents that never landed.
+- **Read the batch document `docs/batches/NN-<slug>/README.md` and every story document in that directory.** The story documents carry the drift you are about to consolidate; the batch document carries the blocks you are about to check against the `Blocks:` declarations of the story documents. "Every document in that directory" is every document that reached `main`: an abandoned story's document died with its branch, never merged, so it is not there — and neither is whatever it recorded under `Observed drift`. Nothing recovers it; that is part of what abandoning costs. Read what is on `main` and do not go hunting closed pull requests for documents that never landed.
 
 ## The Six Duties
 
@@ -79,12 +79,16 @@ Closing a story's pull request does not do this for you. The reservation lives o
 
 ### 5. Record blocks announced but never delivered
 
-Compare the spec delta the batch announced at opening against what actually reached the specs. For everything **announced but never delivered** — story abandoned, scope cut along the way — do both of these:
+Read the `Blocks:` field of every story document in the batch directory, and collect the `D<n>` identifiers they declare; a `none` declares nothing. **A block the batch document's `Spec delta` defines and that no collected declaration names is a block announced but never delivered** — story abandoned, scope cut along the way. For each one, do both of these:
 
 1. Write the shortfall into the gaps register of the module concerned, under **Gaps**.
 2. Amend the batch document so it no longer promises what it did not deliver.
 
 Both, not either. Without this step the abandonment is perfectly invisible: it is not drift, because the spec and the code agree — both are silent about the feature; and it is not a gap, because nothing recorded it. It is a promise forgotten inside a document that just went `closed`. This duty is the only reader of that edge in the whole system.
+
+**The batch directory on `main` holds exactly the batch's merged stories.** An artifact only reaches `main` when its pull request merges, and closing runs once every story is merged or abandoned — so an abandoned story left no document there, and there is nothing to subtract from what you collect.
+
+**Read the declarations, not the specs.** A block fitted to a `main` that had moved is a block that was delivered, and its text in the spec no longer matches the batch document word for word. Diffing the specs against the delta would report it missing; the declaration reports it delivered, which is what it is. Judging a transcription is the delivery review's job, and it is already done.
 
 **A corrective batch has nothing to compare here**, and that is not a gap in the duty. Its spec delta is empty by definition — it restores behaviour a spec already promises — so it announced no block a spec could fall short of. What it announced instead were the gaps register entries it reserved, and an entry it never resolved is an unconsumed reservation: duty 4 is the whole of this duty for a corrective batch. Do not invent a comparison, and do not re-file the released entries as fresh gaps — they are still in the register where they always were.
 
@@ -111,5 +115,5 @@ Then push and open the pull request. The **review of the closing pull request** 
 | "The flag is gone from the code, that is enough" | The gating sentence in the spec is part of the flag. Left behind, it makes the spec false. |
 | "The delta announced lifting an earlier batch's flag, but duty 1 only checks our own flags" | Right, and duty 5 checks the rest: an announced lifting that did not happen is a block not delivered. |
 | "I'll flip the status now and file the gaps in a follow-up" | The status is the record that the duties were done. Flipping it first turns the record into a lie. |
-| "The batch document says it delivered X, so it delivered X" | Check the specs on main, not the promise made at opening. The whole point of duty 5 is the difference. |
+| "The batch document says it delivered X, so it delivered X" | Check the `Blocks:` declarations of the merged stories, not the promise made at opening. The whole point of duty 5 is the difference. |
 | "No story reported drift, so there is nothing to consolidate" | Confirm by reading each story document. An empty Observed drift section and an unread one look identical from here. |

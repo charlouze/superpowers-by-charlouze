@@ -97,6 +97,11 @@ require writing-a-batch "a block quotes what it replaces"           "quotes the 
 require writing-a-batch "no block is attached to a story"           "No block is attached to a story"
 require writing-a-batch "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
 require writing-a-batch "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
+# Closing finds an undelivered block from the `Blocks:` declarations, not from what
+# reached the specs (spec section "Closing a batch"). The two coincide on the nominal
+# path and part exactly where a block was fitted to a `main` that had moved: it was
+# transcribed and it was declared, but its text no longer matches the delta.
+require writing-a-batch "undelivered means nobody declared it"      "the delta announced and no story declared"
 
 # --- writing-a-batch: the opening review (spec section "Opening a batch") ---
 require writing-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
@@ -133,6 +138,21 @@ require writing-a-user-story "the authority rule is stated in full" "the spec wi
 require writing-a-user-story "GC carries the fifth stop condition" "the fifth stop condition of Step 5, written out in full"
 require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
 
+# --- writing-a-user-story: the story's blocks (spec sections "Story",
+# "The user story document", "Delivering a story") ---
+require writing-a-user-story "each story chooses its own blocks"  "chooses, as it is written, the blocks of the spec delta it transcribes"
+require writing-a-user-story "a block is never shared"            "a block is never shared between two stories"
+require writing-a-user-story "the header carries four extra fields" "extend the standard header with four fields"
+require writing-a-user-story "the header template declares Blocks"  "**Blocks:** D3, D7"
+require writing-a-user-story "Blocks is what closing reads"         "reads to find the blocks nobody delivered"
+require writing-a-user-story "Blocks is none when none is taken"    "\`none\` for a story that transcribes none"
+require writing-a-user-story "three properties are load-bearing"    "Three properties are load-bearing"
+require writing-a-user-story "transcription is word for word"       "exactly as the opening review read it"
+require writing-a-user-story "a divergence is named in the PR"      "Every divergence from a block is named in the body of the pull request"
+require writing-a-user-story "a divergence has two legitimate causes" "only two legitimate causes"
+require writing-a-user-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
+require writing-a-user-story "no divergence amends the batch document" "Neither case amends the batch document"
+
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
@@ -142,6 +162,10 @@ require closing-a-batch "consolidates Observed drift"            "Observed drift
 require closing-a-batch "sorts story findings, defines nothing"  "whatever a story reported as"
 require closing-a-batch "releases unconsumed reservations"       "unconsumed reservations"
 require closing-a-batch "records undelivered blocks"             "announced but never delivered"
+require closing-a-batch "duty 5 reads the Blocks declarations"   "Read the \`Blocks:\` field of every story document in the batch directory"
+require closing-a-batch "a block nobody declared is undelivered" "no collected declaration names is a block announced but never delivered"
+require closing-a-batch "the directory holds the merged stories" "holds exactly the batch's merged stories"
+require closing-a-batch "reads the declarations, not the specs"  "Read the declarations, not the specs"
 require closing-a-batch "refuses to close on an undeclared flag" "no declared scope"
 require closing-a-batch "offers three exits"                     "three exits"
 require closing-a-batch "sets status closed"                     "status: closed"

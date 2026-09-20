@@ -281,7 +281,7 @@ its lifting in the `Spec delta`**, as a block that removes its gating sentence.
 Lifting a flag is a change of spec like any other, delivered by a lifting story
 (`supercharlouze:writing-a-user-story`), and `supercharlouze:closing-a-batch`
 catches it undelivered the way it catches any block the delta announced and no
-story transcribed.
+story declared.
 
 A flag whose condition is met and that no batch takes on stays where it is: in
 the spec, with its condition, in front of whoever touches that section next.

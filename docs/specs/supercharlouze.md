@@ -523,7 +523,7 @@ accident.** Un flag de son champ `Feature flag` encore présent — dans le code
 par sa mention dans une spec — n'est acceptable que si sa portée étendue et sa
 condition de levée sont déclarées ; sinon, sa story de levée n'a pas été écrite. Un
 flag déclaré par un autre lot n'entre pas dans ce contrôle : sa levée, si le spec
-delta l'annonce, est une intention comme une autre.
+delta l'annonce, est un bloc comme un autre.
 
 **Trois sorties, pas une impasse.** Un lot dont on renonce au périmètre alors que
 des stories gardées sont déjà sur `main` ne reste pas ouvert indéfiniment. L'humain
@@ -538,14 +538,14 @@ qu'il avait ajouté à la spec.
 - **la consolidation dans le gaps register** des sections `Observed drift` des
   stories du lot ;
 - **la libération des réservations non consommées** ;
-- **le constat des intentions non livrées** : si le spec delta annoncé à
-  l'ouverture n'a pas été entièrement transcrit, l'écart est inscrit au gaps
-  register comme *gap*, et le texte du lot est amendé pour ne plus promettre ce
-  qu'il n'a pas livré ;
+- **le constat des blocs non livrés** : un bloc du spec delta qu'aucune story
+  fusionnée ne déclare dans son champ `Blocks:` est inscrit au gaps register comme
+  *gap*, et le texte du lot est amendé pour ne plus promettre ce qu'il n'a pas
+  livré ;
 - **`status: closed`** dans le document de lot.
 
-**Un lot correctif n'a pas d'intention non livrée à constater** : son spec delta
-est vide. Une entrée réservée et jamais résorbée est une réservation non consommée,
+**Un lot correctif n'a pas de bloc non livré à constater** : son spec delta est
+vide. Une entrée réservée et jamais résorbée est une réservation non consommée,
 libérée comme les autres ; elle n'est pas reclassée en gap neuf.
 
 **Conclue par** la fusion de sa pull request : le lot est clos. Cette revue acte une
@@ -562,9 +562,10 @@ code qui la réalise.
 identifie un lot (`Batch`).
 
 Les stories d'un lot sont écrites **une par une** — la story N+1 en connaissant ce
-qu'a produit la story N — et plusieurs peuvent être en vol simultanément. L'état
-d'une story *est* l'état de sa pull request : il n'y a rien à cocher ni à
-réconcilier.
+qu'a produit la story N — et plusieurs peuvent être en vol simultanément. **Chaque
+story choisit, en s'écrivant, les blocs du spec delta qu'elle transcrit**, et les
+transcrit en entier : un bloc n'est jamais partagé entre deux stories. L'état d'une
+story *est* l'état de sa pull request : il n'y a rien à cocher ni à réconcilier.
 
 ### The user story document
 
@@ -576,6 +577,7 @@ est unique parmi les documents de story du dépôt**, ce que garantit le préfix
 **Spec:** docs/specs/<module>.md
 **Batch:** docs/batches/NN-<slug>/README.md
 **Sections:** <section> > <sous-section>, <section>
+**Blocks:** D<n>, D<n>
 ```
 
 `Spec:` désigne la spec vivante du module visé, autorité contraignante de toute
@@ -584,6 +586,10 @@ revue et de toute relecture de la story.
 `Sections:` déclare les sections que la story touche, et c'est ce que lit la
 détection de concurrence. Il est déclaré par l'auteur de la story, jamais déduit
 d'un diff.
+
+`Blocks:` déclare les blocs du spec delta que la story transcrit, et c'est ce que
+lit la clôture pour constater les blocs non livrés. Il vaut `none` pour une story
+qui n'en transcrit aucun — une story de lot correctif, une story de démontage.
 
 Le document porte en outre un **Rulings log** et une section **Observed drift**,
 remplis avant la fusion. Les deux sont **créées vides au moment du plan**, en même
@@ -635,13 +641,20 @@ ouvert — sa pull request d'ouverture est fusionnée et son document porte
 
 1. **Détecter la concurrence** sur les deux sources.
 2. **Attribuer `us-N`** et **créer la branche** `story/NN-us-N-<slug>`.
-3. **Commiter la modification de spec propre à cette story, puis pousser la branche
-   immédiatement.** La transcription obéit à deux conditions :
-   - **elle est incrémentale** — la part du spec delta que livre cette story,
-     jamais le delta complet du lot ;
+3. **Commiter la transcription des blocs de cette story, puis pousser la branche
+   immédiatement.** La transcription obéit à trois conditions :
+   - **elle est mot pour mot** — le texte des blocs que déclare `Blocks:`, tel que
+     la revue d'ouverture l'a lu, et jamais le delta complet du lot ;
    - **elle est le premier commit de la branche**, avant que le plan soit écrit et
      que la moindre tâche s'exécute : la norme précède le code dans l'histoire de
-     la branche.
+     la branche ;
+   - **tout écart avec un bloc est nommé dans la pull request**, et tranché à la
+     revue de livraison. Un écart n'a que deux causes légitimes. Soit `main` a
+     changé depuis l'ouverture et le passage que le bloc cite n'y figure plus tel
+     quel : la story ajuste le bloc à ce que porte `main`, sans en changer le sens.
+     Soit le texte du bloc pose problème : l'agent s'arrête et le soumet à l'humain
+     avant de le transcrire. Dans les deux cas, le document de lot n'est pas
+     amendé.
 
    Si le lot déclare un flag, la modification de spec porte la mention du flag.
 
