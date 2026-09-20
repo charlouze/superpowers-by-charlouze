@@ -352,4 +352,22 @@ shared "every writer that adds an entry keeps entries from pointing at each othe
     "An entry designates no other entry" \
     adopting-a-module closing-a-batch using-batches
 
+# The open ruling is named in the skill whose step 6 copies the rulings and in
+# the routing skill that states the same duty in one clause. Three couplings,
+# three assertions over both ends: what an open ruling is, what the copy owes
+# it, and what refuses to close without it. `require` calls per skill would each
+# stay green while one end reworded, and an agent reading that end would
+# recognise a different set of rulings, or none.
+shared "the open ruling is defined alike wherever it is named" \
+    "whose decision was to park a finding or to hand it to your human partner" \
+    writing-a-user-story using-batches
+
+shared "the copy names what is left to settle" \
+    "the copy names what is left to settle" \
+    writing-a-user-story using-batches
+
+shared "both ends name closing as what reads it" \
+    "refuses to close a batch while an open ruling has no destination" \
+    writing-a-user-story using-batches
+
 exit $((FAILURES > 0))

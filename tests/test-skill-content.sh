@@ -202,6 +202,11 @@ require writing-a-user-story "pushes corrections as fixups"         "pushed as a
 require writing-a-user-story "names the merge a clear moment"       "a moment to clear the context"
 require writing-a-user-story "hands over to the next story"         "names the next story as the next step"
 
+# Why the copy has to name it: the ruling form carries a decision and its cost,
+# and no place for what is still pending. Stated where the copying happens, and
+# nowhere else — the routing skill points at the duty without re-arguing it.
+require writing-a-user-story "the form cannot carry what is left" "never the fact that something is still pending"
+
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"

@@ -490,7 +490,14 @@ Before the pull request is merged, and in the session where these facts still
 exist:
 
 - Copy every `Ruling:` line from SDD's closing "Rulings I made" message into
-  the **Rulings log** of the story document. The list is exhaustive.
+  the **Rulings log** of the story document. The list is exhaustive. For a
+  ruling whose decision was to park a finding or to hand it to your human
+  partner — an **open ruling** — **the copy names what is left to settle**,
+  under the copied line. Copying alone cannot produce that: the form
+  `Ruling: <decision> — <why> — <what it costs if it is wrong>` carries the
+  decision and what it costs, never the fact that something is still pending.
+  `supercharlouze:closing-a-batch` refuses to close a batch while an open
+  ruling has no destination, and what you write here is what it reads.
 - Record under **Observed drift** every divergence between spec and code you
   noticed *outside* this story's scope.
 
@@ -642,3 +649,4 @@ documents.
 | "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |
 | "The batch says otherwise, and the batch is more recent" | The spec wins, without deliberation. Implement the spec, record a Ruling, continue. |
 | "The block's rule spills onto the next module — the spec wins, I record a Ruling" | No ruling puts a rule in two places. A rule belongs to exactly one spec, and a rule that reaches further signals the breakdown. Stop and put it to your human partner. |
+| "The ruling line already says I parked the finding" | It says what was decided and what it costs, never that something is still pending. Name what is left to settle under the line, or closing has nothing to read. |
