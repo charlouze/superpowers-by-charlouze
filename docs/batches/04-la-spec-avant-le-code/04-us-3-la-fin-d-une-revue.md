@@ -605,4 +605,55 @@ EOF
 
 ## Rulings log
 
+**Ruling: la garde `shared` du moment de clear porte sur quatre skills, pas cinq.**
+`closing-a-batch` en est exclue parce que son texte *nie* être un moment de clear,
+et que sa négation contient la phrase asservie comme sous-chaîne : l'y lister la
+ferait passer sur sa propre négation, donc n'assertrait rien. L'alternative — une
+garde par regex de refus — est pire ici : le commentaire du helper `absent` du
+dépôt avertit lui-même qu'il ne distingue pas une affirmation d'une négation
+écrite dans les mêmes mots, ce qui est exactement ce cas. Ce qui coûte si c'est
+faux : une édition future ajoute `closing-a-batch` à cette liste et obtient un
+vert mensonger — le commentaire posé sur la ligne éditée l'en avertit. *(La revue
+finale a resserré l'aiguille en `is a moment to clear the context`, ce qui a permis
+d'ajouter en plus un `absent` sur `closing-a-batch` : le trou est désormais fermé
+des deux côtés.)*
+
+**Ruling: la place des trois normes dans `using-batches` est `The Git Model`, en
+fin de section.** Mon brief de la tâche 1 situait la table des gates dans
+`Authority and Conflict Rules` ; elle est en fait dans `The Git Model`.
+L'implémenteur l'a signalé au lieu de trancher seul. Décision : garder les normes
+là où la table les ancre — c'est la relation qu'a déjà la spec, où D9 suit
+immédiatement le tableau des revues — mais les déplacer après le paragraphe
+`Preconditions`, parce que la section couvrait sinon la fin d'une revue avant de
+revenir à ce qui doit être vrai avant de créer une branche. Ce qui coûte si c'est
+faux : les trois normes se lisent un paragraphe plus loin que ne l'attend un
+lecteur qui parcourt la table — rien n'en dépend.
+
+**Ruling: la note de la revue de la tâche 1 sur le bloc `Interfaces` est
+déclinée.** Elle y lisait une contradiction avec l'étape 1 de la même tâche et
+proposait de changer l'aiguille des `shared` de la tâche 5. Refusé : le bloc
+`Interfaces` énumère les trois chaînes de **contrat inter-fichiers** du plan
+entier — la tâche 1 en écrit deux, la tâche 2 la troisième. `The human gives their
+agreement in the conversation` est une `require` propre à `using-batches`, jamais
+une chaîne partagée. Ce qui coûte si c'est faux : les gardes de contrat viseraient
+une chaîne qu'une seule skill porte et rougiraient — vu immédiatement au cycle
+rouge/vert de la tâche 5.
+
+**Ruling: les corrections de la revue finale sont passées en `fixup!`, puis
+fondues avant l'ouverture de la pull request.** Deux règles tirent en sens
+contraire : une story ne se corrige pas elle-même en réécrivant ses commits, même
+avant l'ouverture ; mais D9 — la norme que cette story introduit — interdit la
+réécriture *pendant une revue* pour protéger les commentaires en vol d'un humain,
+et il n'y en avait aucun, cette revue étant la mienne. La CI refusant un `fixup!`
+non fondu, ouvrir avec eux aurait mis devant l'humain une pull request rouge,
+encombrée de fixups pour des constats qu'il n'a pas faits. Les corrections ont donc
+été faites en fixups, jamais par une édition en place du travail d'une tâche, puis
+fondues avant que la pull request existe. Le cycle `fixup!`-jusqu'à-accord commence
+avec la revue de l'humain. Ce qui coûte si c'est faux : il voulait voir ces cinq
+corrections en commits séparés et reçoit une histoire propre — le diff est le même,
+et les rapports de la revue finale disent ce que chaque fixup portait.
+
 ## Observed drift
+
+Aucune. Aucune tâche n'a constaté de divergence entre la spec et le code hors du
+périmètre de cette story.
