@@ -30,12 +30,21 @@ Check all four **before creating any branch**. Each one, skipped, produces a
 pull request that has to be thrown away.
 
 1. **Every module this batch touches has an adopted spec** in
-   `docs/specs/<module>.md`. If one does not, then adoption is a
-   **blocking precondition**: stop, run `supercharlouze:adopting-a-module`,
-   and get its pull request merged before coming back. Do not write the batch
-   "in the meantime". A batch argues from a spec — without one, the delta has
-   nothing to attach to, and you would end up inventing the module's norm from
-   its code, which is exactly what adoption exists to prevent.
+   `docs/specs/<module>.md`. If one does not, **the design stops here** — and
+   **adoption is never conducted in the same context as a design**. Say what is missing, and
+   let your human partner abandon the design or set it aside. Adoption then runs
+   on its own, through `supercharlouze:adopting-a-module`, and the design
+   **resumes in a fresh context** once that pull request is merged, starting from
+   the adopted spec.
+
+   Two reasons, and the second is the one that is easy to miss. A batch argues
+   from a spec — without one, the delta has nothing to attach to, and you would
+   end up inventing the module's norm from its code, which is exactly what
+   adoption exists to prevent. And an adoption run in this conversation would
+   carry into the batch every mechanism it read while auditing the code: the
+   design that follows would then argue from what the code does, having been told
+   in the same breath that it must not. Chaining the two is what makes that leak
+   invisible, so the stop is the rule and not a preference.
 2. **You are in the main checkout**, not in a worktree left over from an earlier
    story. `superpowers:finishing-a-development-branch` preserves the worktree on
    the pull request path, so a session that chains two pieces of work without
@@ -430,7 +439,8 @@ skeleton.
 | "This batch satisfies that flag's lifting condition, I'll lift it in passing" | Lifting is a spec change. State it in the `Spec delta`, where the gate sees it, and a lifting story delivers it. |
 | "I'll transcribe the spec delta now, while it's fresh" | The spec would then describe behaviour no code delivers. Each story transcribes its own spec change. |
 | "The delta only needs to say what changes — the story will find the words" | The delta is the exact text. The opening review is where the human reads what the specs will say; wording left to a story reaches them only once code is built on it. |
-| "The module has no spec yet, I'll write the batch and adopt later" | Adoption is blocking. Otherwise the batch invents the norm it is supposed to obey. |
+| "The module has no spec yet, I'll write the batch and adopt later" | The design stops. Otherwise the batch invents the norm it is supposed to obey. |
+| "The module has no spec, I'll adopt it right now and come back" | Adoption is never conducted in the same context. It would carry the mechanisms it read in the code into the design that follows. Stop, and resume in a fresh context after the merge. |
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
 | "This batch is ordinary, reservations are a corrective-batch thing" | Any batch taking on gaps register entries reserves them at opening — a Gaps entry as much as a Violations one. Otherwise two batches specify the same behaviour. |
 | "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open; otherwise discard the branch, locally and on the remote, and its worktree — a branch left on the remote reads as a live claim on its sections. |

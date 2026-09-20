@@ -74,7 +74,10 @@ require adopting-a-module "names the next step after the clear"  "names \`superc
 require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
-require writing-a-batch "adopted spec is a blocking precondition" "blocking precondition"
+require writing-a-batch "an unadopted module stops the design"   "the design stops"
+require writing-a-batch "adoption never shares the design's context" "never conducted in the same context"
+require writing-a-batch "the human abandons or sets the design aside" "abandon the design or set it aside"
+require writing-a-batch "the design resumes in a fresh context"   "resumes in a fresh context"
 require writing-a-batch "NN accounts for open pull requests"      "open pull request"
 require writing-a-batch "batch document carries no mutable state" "no mutable state"
 require writing-a-batch "no story list in the batch document"     "list of stories"
