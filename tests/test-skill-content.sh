@@ -253,6 +253,9 @@ require using-batches "corollary: a rule outlives a mechanism"  "A rule does not
 require using-batches "corollary: no legislating on quality"    "does not legislate on code quality"
 require using-batches "carries the section it points at"        "## What a Spec Says"
 require using-batches "the glossary points at that section"     "see \`What a Spec Says\` below"
+require using-batches "a rule belongs to exactly one spec"  "A rule belongs to exactly one spec."
+require using-batches "a shared rule signals the breakdown" "it is a module breakdown asking to be revisited"
+require using-batches "a rule outside the specs binds nobody"  "sits beyond everything that makes a spec binding"
 
 # --- using-batches: the delta block (spec section "The model") ---
 require using-batches "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
