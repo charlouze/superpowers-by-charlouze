@@ -35,21 +35,26 @@ clôture la draine entière. Ce qui n'a pas de destination l'arrête, comme l'ar
 déjà un flag qui survit sans portée déclarée — une mention dans un corps de pull
 request se lit ou ne se lit pas, un refus non.
 
-Deux conséquences suivent, et ce lot les prend. Une écriture hors bloc peut toucher
-une section que le champ `Sections:` de la story ne déclare pas ; or c'est ce champ
-que lit la détection de concurrence, et un lot voisin scanne alors une déclaration
-périmée tant que la pull request reste ouverte. Et rien ne sépare une écriture hors
-bloc d'un amendement du lot, alors que les deux chemins se ressemblent assez pour
-qu'un agent prenne le plus court.
-
-**Deux choses écrivent dans la queue de ce document, et aucune ne sait le faire
-aujourd'hui.** La forme d'un arbitrage vient de superpowers —
+**Deux choses écrivent dans cette queue, et aucune ne sait le faire aujourd'hui.**
+La forme d'un arbitrage vient de superpowers —
 `Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>` — et les deux
 règles qui alimentent le `Rulings log` disent **recopier** : une recopie ne peut pas
 produire une information que la forme ne porte pas. Et l'étape qui remplit ces
 sections avant la fusion en énumère **deux**, alors qu'il y en aura trois. Ce lot
-répare les deux dans `Delivering a story`, sans quoi son propre contrôle de clôture
-lirait une distinction qu'aucun chemin n'écrit.
+répare les deux, sans quoi son propre contrôle de clôture lirait une distinction
+qu'aucun chemin n'écrit.
+
+**Une écriture hors bloc déborde de la déclaration qui la protège.** Elle peut
+toucher une section que le champ `Sections:` ne déclare pas ; or c'est ce champ que
+lit la détection de concurrence, et un lot voisin scanne alors une déclaration
+périmée tant que la pull request reste ouverte. Étendre la déclaration ne suffit
+pas : la détection n'a qu'une issue écrite, l'arrêt, et elle est inapplicable à une
+story dont le travail est déjà fait. Les deux cas sont réellement distincts, et la
+section qui porte la détection doit les distinguer.
+
+**Ce lot ne dit pas ce qui sépare une écriture hors bloc d'un amendement.** Il
+l'enregistre et la draine ; la frontière vit dans `Amending a batch`, que ce lot ne
+touche pas.
 
 **Une branche du flux exige un répertoire qu'une session sur deux ne peut pas
 avoir.** Les skills posent, pour chaque pull request de ce flux, la précondition
@@ -67,8 +72,7 @@ sauvés à la main, le second parce que la clôture s'est faite hors préconditi
 troisième objet est venu du lot conçu en parallèle sur la relecture de cohérence du
 spec delta, et c'est lui qui a montré que les trois n'en font qu'un. **Ce lot
 n'attend rien de lui** : l'enregistrement d'une écriture hors bloc a de la matière
-dès sa fusion, puisque le geste est déjà légitime en revue ; l'autorisation que
-l'autre lot prépare vit dans `Batch > Amending a batch`, que ce lot ne touche pas.
+dès sa fusion, puisque le geste est déjà légitime en revue.
 
 ## Spec delta
 
@@ -131,16 +135,12 @@ Passage actuel :
 
 Texte qui le remplace :
 
-> Le document porte en outre trois sections — **Rulings log**, **Observed drift** et
-> **Off-block spec changes** —, qui sont **ce qu'une story laisse à la clôture**.
-> Elles sont **créées vides au moment du plan**, en même temps que l'en-tête,
-> remplies avant la fusion, et laissées vides si rien n'est venu : une section vide
-> signifie « examiné, rien trouvé ».
+> Le document porte en outre les sections **Rulings log**, **Observed drift** et
+> **Off-block spec changes**, **créées vides au moment du plan**, en même temps que
+> l'en-tête, remplies avant la fusion, et laissées vides si rien n'est venu : une
+> section vide signifie « examiné, rien trouvé ».
 >
-> Le `Rulings log` porte les arbitrages de la story, et nomme pour chaque arbitrage
-> ouvert ce qui reste à trancher. `Off-block spec changes` porte ses écritures hors
-> bloc, qui **ne changent pas ce que le lot promet** : ce qui le change passe par un
-> amendement.
+> `Off-block spec changes` porte les écritures hors bloc de la story.
 
 ### D5 — `Story > The user story document`
 
@@ -154,39 +154,56 @@ Texte qui le remplace :
 
 > `Sections:` déclare les sections que la story touche, et c'est ce que lit la
 > détection de concurrence. Il est déclaré par l'auteur de la story, jamais déduit
-> d'un diff, et **une écriture hors bloc qui touche une section qu'il ne déclare pas
-> l'y ajoute** ; la détection est refaite sur cette section, et le conflit qu'elle
-> trouve alors se tranche à la revue de livraison.
+> d'un diff, et **l'auteur l'étend à toute section qu'une écriture hors bloc a
+> touchée**.
 
-### D6 — `Story > Delivering a story`
+### D6 — `Story > Concurrency detection`
+
+Passage actuel :
+
+> **Il faut s'arrêter** si l'intersection avec les sections visées n'est pas vide, et
+> **s'arrêter aussi si un champ `Sections:` n'a pas pu être lu** — lecture en échec,
+> document absent, champ manquant. Une branche poussée dont le document de story
+> n'existe pas encore arrête pareillement.
+
+Texte qui le remplace :
+
+> **Une story qui démarre s'arrête** si l'intersection avec les sections qu'elle vise
+> n'est pas vide, et **s'arrête aussi si un champ `Sections:` n'a pas pu être lu** —
+> lecture en échec, document absent, champ manquant. Une branche poussée dont le
+> document de story n'existe pas encore arrête pareillement.
+>
+> **Une story déjà en vol ne s'arrête pas** : quand une écriture hors bloc étend son
+> `Sections:`, la détection est refaite sur la section ajoutée, et le conflit qu'elle
+> trouve se tranche à la revue de livraison. Son travail est fait ; il n'y a plus rien
+> à ne pas commencer.
+
+### D7 — `Story > Delivering a story`
 
 Passage actuel :
 
 > 6. **Avant la fusion**, recopier les arbitrages de l'exécution dans le Rulings log,
 >    consigner sous **Observed drift** les dérives constatées hors périmètre, et
 >    pousser les deux sur la branche.
-> 7. **Répondre à la revue** sur la branche de la story.
 
 Texte qui le remplace :
 
 > 6. **Avant la fusion**, recopier les arbitrages de l'exécution dans le Rulings log,
->    en nommant pour chaque arbitrage ouvert ce qui reste à trancher — leur forme ne
->    le porte pas —, consigner sous **Observed drift** les dérives constatées hors
->    périmètre, et pousser les deux sur la branche.
-> 7. **Répondre à la revue** sur la branche de la story, et consigner sous
->    **Off-block spec changes** ce que la réponse écrit dans la spec hors de tout
->    bloc.
+>    en nommant pour chaque arbitrage ouvert ce qui reste à trancher, consigner sous
+>    **Observed drift** les dérives constatées hors périmètre, et pousser les deux
+>    sur la branche.
 
-### D7 — `Batch > Closing a batch`
+### D8 — `Batch > Closing a batch`
 
 Texte inséré après le paragraphe « **Trois sorties, pas une impasse.** … », donc
 avant « **La pull request de clôture porte :** » :
 
 > **Un lot ne peut pas être clos tant qu'un arbitrage ouvert n'a pas reçu sa
-> destination.** Celui qui est une violation ou un gap en a une : le gaps register.
-> Pour tout autre, l'humain la donne et la pull request de clôture la nomme.
+> destination.** Celui qui est une violation ou un gap rejoint la consolidation dans
+> le gaps register. Pour tout autre, l'humain la donne et la pull request de clôture
+> la nomme.
 
-### D8 — `Batch > Closing a batch`
+### D9 — `Batch > Closing a batch`
 
 Passage actuel, deuxième puce de la liste « **La pull request de clôture
 porte :** » :
@@ -196,37 +213,53 @@ porte :** » :
 
 Texte qui le remplace :
 
-> - **la reprise de ce que chaque story lui laisse** : les `Observed drift`
->   consolidées dans le gaps register, et les écritures hors bloc portées par la
->   ligne de changelog ;
+> - **la consolidation dans le gaps register** des sections `Observed drift` des
+>   stories du lot, et des arbitrages ouverts qui l'ont rejointe ;
+> - **la reprise de leurs écritures hors bloc** dans la ligne de changelog ;
+
+### D10 — `Bounded change`
+
+Passage actuel :
+
+> - **(b) Il subit la même détection de concurrence qu'une story**, et déclare donc
+>   ses sections **dans le corps de sa pull request**. Son angle mort est accepté :
+>   entre son premier commit et l'ouverture de sa pull request, rien ne porte sa
+>   déclaration.
+
+Texte qui le remplace :
+
+> - **(b) Il subit la même détection de concurrence qu'une story**, et déclare donc
+>   ses sections **dans le corps de sa pull request**, qu'il étend comme une story
+>   étend le sien. Son angle mort est accepté : entre son premier commit et
+>   l'ouverture de sa pull request, rien ne porte sa déclaration.
 
 ## Constraints
 
-- **Ordre requis.** D2 à D8 sont transcrits **dans la même story**. Les blocs se
-  citent les uns les autres de bout en bout : D4 à D8 emploient les deux termes que
-  D2 et D3 posent au glossaire, D6 remplit la section que D4 crée, et D7 et D8
-  drainent ce que D4 fait porter au document. Livré par tranches, chaque bloc
-  nommerait quelque chose que la spec ne définit pas encore. D1 n'impose aucun
-  ordre.
+- **Ordre requis.** D2 à D9 sont transcrits **dans la même story**. Les blocs se
+  citent les uns les autres de bout en bout : D4 à D9 emploient les deux termes que
+  D2 et D3 posent au glossaire, D6 règle le sort d'une écriture hors bloc que D4
+  définit, et D8 et D9 drainent ce que D4 fait porter au document. Livré par
+  tranches, chaque bloc nommerait quelque chose que la spec ne définit pas encore.
+  D10 vient après, D1 n'impose aucun ordre.
 - **Ce lot applique déjà ce qu'il introduit.** Ses stories portent les trois
   sections dès la première, et nomment dans leur `Off-block spec changes` toute
   écriture de spec faite hors bloc, même là où les skills publiées n'en demandent
   encore que deux. Leurs propres clôtures n'auront alors rien à rattraper.
 - **`Module > The gaps register` est hors périmètre, et le lot le sait.** La phrase
   qui énumère les sources d'une entrée — « une story, dans le code qu'elle
-  traverse » — ne nomme pas l'arbitrage ouvert que D7 y envoie. Elle est donc
-  incomplète après ce lot, sans être fausse : l'énumération des **écrivains** reste
-  exacte, et seule la description de ce que la clôture consolide reste partielle,
-  comme elle l'est déjà pour les blocs non livrés. La section est tenue par la story
-  `05-us-3-une-entree-se-lit-seule`. Ce constat part en `Observed drift`, et la
-  clôture de ce lot le versera au gaps register.
+  traverse » — ne nomme pas l'arbitrage ouvert que D8 envoie à la consolidation.
+  Elle est donc incomplète après ce lot, sans être fausse : l'énumération des
+  **écrivains** reste exacte, et seule la description de ce que la clôture consolide
+  reste partielle, comme elle l'est déjà pour les blocs non livrés. La section est
+  tenue par la story `05-us-3-une-entree-se-lit-seule`. Ce constat part en
+  `Observed drift`, et la clôture de ce lot le versera au gaps register.
 
 ## Feature flag
 
 Feature flag: none — chaque story est complète dans sa propre pull request
 
 Une story de ce lot, fusionnée seule, ne laisse personne devant quelque chose
-d'incomplet. D1 livrée seule est une règle qui vaut dès qu'elle est lue. D2 à D8
-voyagent ensemble par la contrainte d'ordre ci-dessus, qui interdit qu'un terme soit
-employé avant d'être posé, qu'une section soit remplie avant d'exister, ou drainée
-avant d'être remplie.
+d'incomplet. D1 livrée seule est une règle qui vaut dès qu'elle est lue, D10 aussi.
+D2 à D9 voyagent ensemble par la contrainte d'ordre ci-dessus, qui interdit qu'un
+terme soit employé avant d'être posé, qu'une section soit remplie avant d'exister,
+ou drainée avant d'être remplie.
