@@ -177,3 +177,28 @@ Le type est `feat:` : le changement touche `skills/` et y ajoute une norme.
 ## Rulings log
 
 ## Observed drift
+
+Les deux constats ci-dessous ont été faits en concevant le lot 08, et sa section
+`Constraints` les verse ici. Tous deux sont antérieurs au lot, hors de son
+périmètre, et n'étaient pas à résorber par cette story.
+
+- **Les deux totalités de `Batch`** — « le spec delta est **le texte exact que ce
+  lot écrit dans les specs**, en blocs » et « la revue d'ouverture […] **c'est là
+  que l'humain lit ce que diront les specs** » — que les propres règles de la spec
+  contredisent : l'étape 3 de `Delivering a story` fait écrire la mention d'un flag
+  par la story sans qu'aucun bloc la porte, la story de démontage retire de la spec
+  ce que le lot y avait ajouté avec `Blocks: none`, et la levée d'un flag à portée
+  de lot n'exige pas davantage de bloc. Le code fait ce que ces règles disent ; ce
+  sont les deux totalités qui ont tort.
+
+- **L'énumération de `Blocks: none`** dans `Story > The user story document` cite la
+  story de lot correctif et la story de démontage, et omet la story de levée d'un
+  flag à portée de lot, qui n'en transcrit pas davantage.
+
+**Leur canal n'a pas de définition qui les couvre.** `The model` définit la dérive
+comme une divergence entre la spec de `main` et son code ; ces deux constats sont
+des contradictions entre règles d'une même spec. Ils partent tout de même en
+`Observed drift`, faute d'autre chemin et parce que le précédent existe sur
+`main` — la story `05-us-1-le-domicile-d-une-regle` y a versé un constat de même
+nature, classé en *gap* à la clôture. Que cette section serve à plus que ce que sa
+définition dit est un constat de plus, qu'aucun lot ne tient.
