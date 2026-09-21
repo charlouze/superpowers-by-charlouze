@@ -140,10 +140,10 @@ production. Il n'existe ni branche de lot ni branche d'intégration : une story 
 fusionne dans `main`, et c'est un flag, pas une branche, qui garde un lot incomplet
 hors de portée des utilisateurs.
 
-**Toute branche du flux part d'un `main` à jour**, jamais d'une autre branche, et
-**porte le nom que son étape lui assigne** avant que le travail commence, y compris
-quand l'outil qui l'a créée en a choisi un autre ou a laissé un HEAD détaché : le
-nom est alors rétabli. Une branche nommée autrement ne suffit pas.
+**Toute branche du flux part de `main` telle que le remote la porte**, jamais d'une
+autre branche, et **porte le nom que son étape lui assigne** avant que le travail
+commence, y compris quand l'outil qui l'a créée en a choisi un autre ou a laissé un
+HEAD détaché : le nom est alors rétabli. Une branche nommée autrement ne suffit pas.
 
 **La spec est l'autorité contraignante de toute revue et de toute relecture.** Le
 lot ne porte que ce qu'une spec ne peut pas porter : le périmètre de livraison,
