@@ -339,6 +339,13 @@ Write them at the same time as the header, not at Step 6. An empty section says
 *checked, nothing found*; a missing section says *never examined*, and a
 reviewer cannot tell the second from an omission.
 
+**An open ruling is written `Open ruling:`** where the others are written
+`Ruling:`, and its line ends with what is left to settle, then with the gaps
+register category that takes it when it joins one. An open ruling is a ruling
+whose decision leaves something to settle; written in the common form, nothing
+says that something is still open, nor what — and whoever reads the log would
+have to recognise a category in prose.
+
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
 part of every task's requirements — carries five things:
 

@@ -72,6 +72,9 @@ est une relecture, pas une revue.
 **Arbitrage** (`ruling`) — une décision prise par un agent sans l'humain, consignée
 pour lui.
 
+**Arbitrage ouvert** (`open ruling`) — un arbitrage dont la décision laisse quelque
+chose à trancher.
+
 **Changement borné** (`bounded`) — un changement complet en une pull request, hors
 de tout lot.
 
@@ -670,6 +673,10 @@ Le document porte en outre un **Rulings log** et une section **Observed drift**,
 remplis avant la fusion. Les deux sont **créées vides au moment du plan**, en même
 temps que l'en-tête, et laissées vides si rien n'est venu : une section vide
 signifie « examiné, rien trouvé ».
+
+**Un arbitrage ouvert s'écrit `Open ruling:`** là où les autres s'écrivent
+`Ruling:`, et sa ligne se termine par ce qui reste à trancher, puis par la
+catégorie du gaps register qui l'accueille quand il en rejoint une.
 
 `Global Constraints` porte cinq choses :
 
