@@ -423,12 +423,8 @@ se répète dans chacune, et d'où vient une entrée se lit dans l'histoire du f
 
 **Une entrée ne renvoie à aucune autre entrée.**
 
-**Ajouter une entrée** — la pull request d'adoption à la création, puis la pull
-request de clôture d'un lot seule, qui consolide les dérives constatées hors
-périmètre par les stories du lot. Les stories **n'ajoutent pas** : elles consignent
-leurs constats dans leur propre document, sous **Observed drift**. Une entrée
-s'ajoute à la fin de sa catégorie. Un seul écrivain
-par lot.
+**Ajouter une entrée** — une entrée s'ajoute à la fin de sa catégorie. Un seul
+écrivain par lot.
 
 **On lit l'histoire du fichier avant d'ajouter une entrée**
 (`git log -p docs/specs/<module>.gaps.md`) : ce qui a déjà été écarté l'a été
@@ -613,8 +609,9 @@ qu'il avait ajouté à la spec.
 **La pull request de clôture porte :**
 
 - **la ligne de changelog** de chaque spec touchée — un lot, une ligne ;
-- **la consolidation dans le gaps register** des sections `Observed drift` des
-  stories du lot ;
+- **la consolidation dans le gaps register** de ce que les documents des stories
+  du lot ont laissé : leurs sections `Observed drift`, et les arbitrages ouverts
+  que leur `Rulings log` classe en violation ou en gap ;
 - **la libération des réservations non consommées** ;
 - **le constat des blocs non livrés** : un bloc du spec delta qu'aucune story
   fusionnée ne déclare dans son champ `Blocks:` est inscrit au gaps register comme
@@ -753,6 +750,11 @@ ouvert — sa pull request d'ouverture est fusionnée et son document porte
    consigner sous **Observed drift** les dérives constatées hors périmètre, et
    pousser les deux sur la branche.
 7. **Répondre à la revue** sur la branche de la story.
+
+**Une story ne fusionne pas en laissant un arbitrage ouvert sans destination.**
+Celui qui est une violation ou un gap rejoint le gaps register par la consolidation
+de la clôture. Tout autre est tranché avant la fusion, à la revue de livraison, et
+le `Rulings log` porte ce qui a été tranché.
 
 **Conclue par** la fusion de sa pull request : la story est livrée.
 
