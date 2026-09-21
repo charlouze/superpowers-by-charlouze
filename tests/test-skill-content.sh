@@ -194,6 +194,18 @@ require writing-a-batch "every reader returns before anything goes up" "Every re
 require writing-a-batch "no running report"                     "never a running report"
 require writing-a-batch "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
 require writing-a-batch "a round runs on the revised text"       "A round runs on the revised text"
+# The four stop conditions: one assertion per condition, one more for the rider
+# that decides condition 1's common case, one for the removal half of the same
+# condition, and one for the framing sentence. Each condition turns its own
+# assertion red when it goes, so the framing sentence is guarded for the other
+# end — the prose cannot keep announcing four while the list below it is shorter.
+require writing-a-batch "four things stop the rounds"           "Four things stop the rounds"
+require writing-a-batch "only an unread state reopens a round"  "A fresh round only on a state the reread has not read"
+require writing-a-batch "moving a sentence is an addition"      "moving a sentence is an addition"
+require writing-a-batch "a removal reopens what leaned on it"   "a removal reopens what depended on it and nothing else"
+require writing-a-batch "two stuck rounds close the wording"    "Two rounds stuck on the same clause close the question of its wording"
+require writing-a-batch "a round of declined findings is one too many" "already examined and declined is one round too many"
+require writing-a-batch "the reread does not replace the gate"  "prepares the gate, it does not replace it"
 
 # --- writing-a-batch: ending the opening and amendment reviews ---
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"

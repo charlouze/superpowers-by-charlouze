@@ -401,6 +401,21 @@ could not settle. A round runs on the revised text, and the conditions below say
 when the rounds end. Forwarding raw findings makes your human partner arbitrate a
 draft, which is the work the opening gate exists to spare them.
 
+**Four things stop the rounds**, and without them they chain indefinitely.
+
+1. **A fresh round only on a state the reread has not read.** A revision that
+   adds a sentence produces one — and **moving a sentence is an addition**, its
+   reach changing with its place. A revision that takes a sentence out produces
+   one too, but only where something leaned on what left: coherence is a
+   property of the state, not of the text that remains, so a removal reopens
+   what depended on it and nothing else.
+2. **Two rounds stuck on the same clause close the question of its wording.**
+   Take the clause out, or put it to your human partner.
+3. **A round returning only findings already examined and declined is one round
+   too many.** What is left is a disagreement of judgment, and judgment is
+   settled at the gate.
+4. **The reread prepares the gate, it does not replace it.**
+
 **The pull request body declares the reread**: that it was conducted outside this
 context, and what it found — or that it found nothing. A reread nobody can see
 from the pull request is a practice again, not a rule.
@@ -558,3 +573,4 @@ skeleton.
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
 | "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Dispatch readers outside it. |
+| "One more round, the wording can still improve" | Four conditions close the rounds. Two rounds on the same clause end the question of its wording: take it out or put it to your human partner. |
