@@ -17,9 +17,10 @@ laisse pas de trace. La story `06-us-1-le-code-garde` en portait deux, versés a
 gaps register sur décision explicite de l'humain, parce qu'aucun devoir ne les
 ramassait.
 
-**`Observed drift` ne peut pas les recueillir**, par construction : la section est
-définie pour les divergences entre spec et code, et un constat parqué n'en est pas
-une — un mécanisme prescrit mais pas encore construit n'est pas une divergence.
+**`Observed drift` ne peut pas les recueillir** : cette section recueille des
+**constats**, et un arbitrage ouvert n'en est pas un — c'est une décision restée en
+attente, dont l'information utile est ce qui reste à trancher. Les deux voyagent
+ensuite ensemble, puisque la clôture les verse au même endroit.
 
 **L'arbitrage ouvert devient un objet du flux, et porte sa forme.** La forme qu'un
 arbitrage tient de superpowers —
@@ -62,8 +63,8 @@ d'amender deux phrases de `Batch` qui sont des totalités — « le spec delta e
 texte exact que ce lot écrit dans les specs** » et « la revue d'ouverture […]
 **c'est là que l'humain lit ce que diront les specs** ». Sans cet amendement, le flux
 comporterait une catégorie de texte de spec qui échappe aux deux phrases, lesquelles
-resteraient écrites. Ces deux sections sont tenues par le lot conçu en parallèle sur
-la relecture de cohérence du spec delta, à qui le sujet est signalé.
+resteraient écrites. Le lot 07 les visait par deux blocs que sa revue a retirés ; il
+a fusionné sans eux, et personne ne les tient plus.
 
 **L'arbitrage ouvert hors du chemin nominal** reste également dehors, et c'est un lot
 à lui seul. Trois chemins produisent des arbitrages sans qu'aucun Rulings log
@@ -201,16 +202,30 @@ Texte qui le remplace :
   et D10 visent la même section sans se recouvrir — D7 la phrase des sources, D10 le
   paragraphe « Ajouter une entrée » — et leur ordre est libre. D1 n'impose aucun
   ordre.
-- **Une dérive constatée en concevant ce lot part en `Observed drift`**, et la
-  clôture la versera au gaps register. La spec énonce deux totalités — « le spec
-  delta est **le texte exact que ce lot écrit dans les specs**, en blocs » et « la
-  revue d'ouverture […] **c'est là que l'humain lit ce que diront les specs** » —
-  que ses propres règles contredisent : l'étape 3 de `Delivering a story` fait
-  écrire la mention d'un flag par la story sans qu'aucun bloc la porte, la story de
-  démontage retire de la spec ce que le lot y avait ajouté avec `Blocks: none`, et
-  la levée d'un flag à portée de lot n'exige pas davantage de bloc. Le code fait ce
-  que ces règles disent ; ce sont les deux totalités qui ont tort. Constat
-  antérieur à ce lot, hors de son périmètre, et à ne pas résorber ici.
+- **Deux constats faits en concevant ce lot partent en `Observed drift`**, et la
+  clôture les versera au gaps register. Tous deux sont antérieurs à ce lot, hors de
+  son périmètre, et ne sont pas à résorber ici.
+
+  **Les deux totalités de `Batch`** — « le spec delta est **le texte exact que ce
+  lot écrit dans les specs**, en blocs » et « la revue d'ouverture […] **c'est là
+  que l'humain lit ce que diront les specs** » — que les propres règles de la spec
+  contredisent : l'étape 3 de `Delivering a story` fait écrire la mention d'un flag
+  par la story sans qu'aucun bloc la porte, la story de démontage retire de la spec
+  ce que le lot y avait ajouté avec `Blocks: none`, et la levée d'un flag à portée
+  de lot n'exige pas davantage de bloc. Le code fait ce que ces règles disent ; ce
+  sont les deux totalités qui ont tort.
+
+  **L'énumération de `Blocks: none`** dans `Story > The user story document` cite la
+  story de lot correctif et la story de démontage, et omet la story de levée d'un
+  flag à portée de lot, qui n'en transcrit pas davantage.
+
+- **Consigner avec eux que leur canal n'a pas de définition qui les couvre.**
+  `The model` définit la dérive comme une divergence entre la spec de `main` et son
+  code ; ces deux constats sont des contradictions entre règles d'une même spec.
+  Ils partent tout de même en `Observed drift`, faute d'autre chemin et parce que le
+  précédent existe sur `main` — la story `05-us-1-le-domicile-d-une-regle` y a versé
+  un constat de même nature, classé en *gap* à la clôture. Que cette section serve à
+  plus que ce que sa définition dit est un constat de plus, qu'aucun lot ne tient.
 
 ## Feature flag
 
