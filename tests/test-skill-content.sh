@@ -17,8 +17,13 @@ echo "test-skill-content"
 # indented flattens to several spaces where the needle has one, and the guard turns
 # red on text that is correct. No needle in this suite contains two consecutive
 # spaces, so squeezing changes nothing else.
+# The `sed` drops a leading blockquote marker for the same reason: a norm written
+# as a block quote — the four readings of `## The Coherence Reread` are — would
+# otherwise flatten with a stray `>` at every line break, and a needle spanning
+# two of its lines could never match. No needle in this suite contains `>`.
 body_flat() {
-    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" | tr '\n' ' ' | tr -s ' '
+    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" \
+        | sed 's/^>[[:space:]]\{0,1\}//' | tr '\n' ' ' | tr -s ' '
 }
 
 require() {
@@ -124,6 +129,83 @@ require writing-a-batch "the opening review bears on the exact text" "It bears o
 require writing-a-batch "the text is read in the batch document"     "block by block, in the batch document"
 require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
 require writing-a-batch "the reread checks quotes against main"          "every quoted passage matching \`main\`"
+
+# --- writing-a-batch: the ordered opening, and the two rereads it places ---
+# The distinction lives here and not under `## The Coherence Reread`, which speaks
+# of the coherence reread and nothing else; the order is what a section title
+# cannot carry. The last assertion is the reason the distinction is not cosmetic:
+# merged, the batch-document reread is the one that disappears, and a corrective
+# batch loses its only reread.
+require writing-a-batch "the opening is stated in order"        "Opening a new batch runs these six steps, in this order"
+require writing-a-batch "the coherence reread is step 5"        "Put the whole spec delta through the coherence reread"
+require writing-a-batch "the document reread is step 6"         "Reread the batch document, then open the pull request"
+require writing-a-batch "the document reread is named where it runs" "**The batch-document reread**, step 6, comes after the coherence reread"
+require writing-a-batch "two rereads, two objects"              "The two rereads are steps 5 and 6, and they have different objects"
+require writing-a-batch "the document reread takes the whole document" "bears on the whole document"
+require writing-a-batch "merging them strands a corrective batch" "which has no blocks, with no reread at all"
+
+# --- writing-a-batch: the coherence reread (spec section "The coherence reread") ---
+# The step exists, the applied state is built outside the repository, the rule it
+# must not suspend to get there, what building it catches for free, the
+# independence of the context, and the declaration that makes the whole thing
+# observable. Drop any one and the section still reads whole while doing less.
+require writing-a-batch "the delta goes through the coherence reread" "Before opening, the whole spec delta goes through the **coherence reread**"
+require writing-a-batch "the applied state is built outside the repository" "**outside the repository**"
+require writing-a-batch "no block reaches a spec before a story"      "no block is written into a spec before a story transcribes it"
+require writing-a-batch "a stale block will not apply"                "A block whose quoted passage is no longer in \`main\` will not apply"
+require writing-a-batch "the reread is conducted outside this context" "Conduct it outside the context that wrote the blocks"
+require writing-a-batch "the pull request body declares the reread"   "The pull request body declares the reread"
+
+# The reader roles. The second assertion is what keeps the count from being
+# trimmed: alone, the first reads as a description of a typical reader rather
+# than the rule the number of readers follows from.
+require writing-a-batch "a reader takes one reading"            "A reader takes one reading, on one touched spec"
+require writing-a-batch "the readers follow from the delta"     "one per reading, per touched spec"
+require writing-a-batch "never two readings to one reader"      "never hand a reader two"
+require writing-a-batch "the dispatch is composed from a template" "references/reader-prompt.md"
+# The four readings, in English, in the shipped skill. Nothing else ships them:
+# the living spec is this project's own, it is French prose, and a skill running
+# on another project cannot reach it — a conductor sent there to fetch a reading
+# would find nothing. Each is the text pasted into a reader's prompt, so each is
+# guarded on the opening sentence a reader is handed, and the two that follow are
+# what stop that text being paraphrased for a human reader of the skill instead.
+require writing-a-batch "reading 1: what the change makes false" "What does this change make false elsewhere?"
+require writing-a-batch "reading 2: what the change leaves out"  "What does this change leave out?"
+require writing-a-batch "reading 3: what a spec must hold"       "Does this specification hold what a specification must hold?"
+require writing-a-batch "reading 4: where this sits in the model" "Where does this sit in the model?"
+require writing-a-batch "a reading is pasted word for word"      "pasted word for word into the slot the template leaves for it"
+require writing-a-batch "a reading is written for a bare reader" "written for a reader that has nothing else"
+# The model reading names its own skill, conditionally: a reader on a machine
+# without it must still read. Guarded on the reading's text, not on prose about
+# it, because the reading is what actually reaches that reader.
+require writing-a-batch "the model reading names its skill"     "Use the \`domain-driven-design\` skill if it is available to you"
+require writing-a-batch "the model reading survives its absence" "read without it if it is not"
+require writing-a-batch "the skill is invoked only if present"  "its skill is invoked only if present"
+# Both states, and which one is read. The second assertion is the one that holds:
+# a reader handed a diff drifts into reviewing the change block by block, which is
+# the batch-document reread, and the passage no block aims at is what goes unseen.
+require writing-a-batch "a reader gets both states of the spec" "A reader gets both states, and reads the later one"
+require writing-a-batch "the reading stays on the applied state" "The reading itself stays on the applied state, read whole"
+require writing-a-batch "a reader is handed no blocks"          "which is also why it is handed no blocks"
+# Waiting for every reader, then who revises between two rounds. Without the last
+# two, the stop conditions turn on text nobody is said to revise, and the skill
+# reads as forwarding raw findings while its conditions presuppose the opposite.
+require writing-a-batch "every reader returns before anything goes up" "Every reader returns before anything goes up"
+require writing-a-batch "no running report"                     "never a running report"
+require writing-a-batch "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
+require writing-a-batch "a round runs on the revised text"       "A round runs on the revised text"
+# The four stop conditions: one assertion per condition, one more for the rider
+# that decides condition 1's common case, one for the removal half of the same
+# condition, and one for the framing sentence. Each condition turns its own
+# assertion red when it goes, so the framing sentence is guarded for the other
+# end — the prose cannot keep announcing four while the list below it is shorter.
+require writing-a-batch "four things stop the rounds"           "Four things stop the rounds"
+require writing-a-batch "only an unread state reopens a round"  "A fresh round only on a state the reread has not read"
+require writing-a-batch "moving a sentence is an addition"      "moving a sentence is an addition"
+require writing-a-batch "a removal reopens what leaned on it"   "a removal reopens what depended on it and nothing else"
+require writing-a-batch "two stuck rounds close the wording"    "Two rounds stuck on the same clause close the question of its wording"
+require writing-a-batch "a round of declined findings is one too many" "already examined and declined is one round too many"
+require writing-a-batch "the reread does not replace the gate"  "prepares the gate, it does not replace it"
 
 # --- writing-a-batch: ending the opening and amendment reviews ---
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"

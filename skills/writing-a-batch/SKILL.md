@@ -24,6 +24,31 @@ Three entry points, all landing in a pull request:
 | Changing the scope or the flag of an existing batch | Amending a Batch |
 | A corrective batch that turned out not to be corrective | Requalifying a Corrective Batch |
 
+## Opening, in Order
+
+Opening a new batch runs these six steps, in this order. Each names the section
+that carries it.
+
+1. **Check that every module this batch touches has an adopted spec** — the
+   design stops here if one does not (`Preconditions`).
+2. **Allocate `NN`** and create the branch (`Allocating NN`).
+3. **Write the batch document**: scope, spec delta in blocks of exact text, the
+   `Feature flag` field (`The Batch Document`, `The Feature Flag Field`,
+   `Flags Declared by Earlier Batches`).
+4. **Reserve every gaps register entry this batch takes on.** No writing into
+   the specs at this stage (`The Batch Document`).
+5. **Put the whole spec delta through the coherence reread**
+   (`The Coherence Reread`).
+6. **Reread the batch document, then open the pull request**
+   (`Opening the Pull Request`).
+
+**The two rereads are steps 5 and 6, and they have different objects.** The
+coherence reread bears on the blocks and on the state they produce, read whole.
+The batch-document reread bears on the whole document — scope, `Constraints`,
+the flag field, every quoted passage. Merge them and the second is the one that
+disappears, leaving a corrective batch, which has no blocks, with no reread at
+all.
+
 ## Preconditions
 
 Check all four **before creating any branch**. Each one, skipped, produces a
@@ -304,9 +329,101 @@ story declared.
 A flag whose condition is met and that no batch takes on stays where it is: in
 the spec, with its condition, in front of whoever touches that section next.
 
+## The Coherence Reread
+
+Before opening, the whole spec delta goes through the **coherence reread**, which
+reads each touched spec whole, on the state its blocks produce.
+
+Build that state — a copy of each touched spec with its blocks applied —
+**outside the repository**, in a scratch directory: no block is written into a
+spec before a story transcribes it, and that rule is not suspended to make a
+reread convenient. **A block whose quoted passage is no longer in `main` will not
+apply**, so building this copy is also the first thing that catches a delta that
+has gone stale since the batch was drafted.
+
+**Conduct it outside the context that wrote the blocks**, by dispatching readers
+as subagents. This context argued every block into existence; asked to reread
+them, it rereads its own intentions — and the passage no block aims at, which is
+what this reread exists to find, is precisely what it cannot see.
+
+**A reader takes one reading, on one touched spec.** The readings below ask for
+four different motions — a sweep of the whole document, a reasoning about cases,
+a test applied sentence by sentence, a look at the model — and one reader holding
+several does the cheapest of them and returns. So the readers follow from the
+delta: one per reading, per touched spec.
+
+**The four readings.** Each block below is the text a reader's prompt carries,
+pasted word for word into the slot the template leaves for it. It is written for
+a reader that has nothing else: never abbreviate it, and never hand a reader two.
+
+> **What does this change make false elsewhere?** Find a passage of this
+> specification that the change does not aim at and that it now contradicts.
+
+> **What does this change leave out?** Find a case it walks past, or a
+> consequence it does not draw.
+
+> **Does this specification hold what a specification must hold?** Every
+> sentence states a business rule or an intention, and passes the
+> other-implementation test: a developer who implemented the same intention
+> differently would read that sentence as true of their code. A sentence that
+> describes a mechanism does not pass it. Report the sentences that fail.
+
+> **Where does this sit in the model?** Use the `domain-driven-design` skill if
+> it is available to you, and read without it if it is not. Report what this
+> specification names inconsistently, places where it does not belong, or splits
+> across a boundary it should not cross.
+
+The fourth answers none of the first three and feeds all three, and **its skill
+is invoked only if present** — this plugin recommends `domain-driven-design` and
+depends on it nowhere, so its absence changes how that reader reads, never
+whether the reading happens.
+
+Compose each dispatch from `skills/writing-a-batch/references/reader-prompt.md`,
+which carries what a reader gets — both states of the spec, its one reading, and
+what it must return.
+
+**A reader gets both states, and reads the later one.** Handing it the spec as
+`main` carries it, alongside the applied copy, turns "what changed" into a diff
+it can run rather than a delta it has to rebuild — which is also why it is handed
+no blocks. The reading itself stays on the applied state, read whole: a reader
+that works through the change block by block is doing the batch-document reread
+over again, and the passage no block aims at goes unseen.
+
+**Every reader returns before anything goes up.** Wait for all of them, gather
+their findings, then put them to your human partner — never a running report. A
+partial report gets findings ruled on that the next reader displaces, and asks
+for the same ruling twice.
+
+**You instruct the findings; you do not forward them.** The batch document is
+still your draft at this point, so work every finding through and revise the
+blocks it lands on, then put to your human partner what you changed and what you
+could not settle. A round runs on the revised text, and the conditions below say
+when the rounds end. Forwarding raw findings makes your human partner arbitrate a
+draft, which is the work the opening gate exists to spare them.
+
+**Four things stop the rounds**, and without them they chain indefinitely.
+
+1. **A fresh round only on a state the reread has not read.** A revision that
+   adds a sentence produces one — and **moving a sentence is an addition**, its
+   reach changing with its place. A revision that takes a sentence out produces
+   one too, but only where something leaned on what left: coherence is a
+   property of the state, not of the text that remains, so a removal reopens
+   what depended on it and nothing else.
+2. **Two rounds stuck on the same clause close the question of its wording.**
+   Take the clause out, or put it to your human partner.
+3. **A round returning only findings already examined and declined is one round
+   too many.** What is left is a disagreement of judgment, and judgment is
+   settled at the gate.
+4. **The reread prepares the gate, it does not replace it.**
+
+**The pull request body declares the reread**: that it was conducted outside this
+context, and what it found — or that it found nothing. A reread nobody can see
+from the pull request is a practice again, not a rule.
+
 ## Opening the Pull Request
 
-Before opening, reread the batch document against the specs with fresh eyes:
+**The batch-document reread**, step 6, comes after the coherence reread and
+bears on the whole document. Reread it against the specs with fresh eyes:
 scope stated with its "why now", spec delta in blocks — each with its `D<n>`,
 the spec and section it targets, and its exact text, every quoted passage
 matching `main` —, `Constraints` stated or `none` — including the order of any
@@ -322,12 +439,11 @@ scope, and any flag lifting the delta announces.
 story is written and no spec is touched. It bears on the exact text of every
 block: this is where the human reads what the specs will say, before any code is
 written on it — block by block, in the batch document, and not later as a diff of
-the spec. It replaces the tail of the
-architectural path of `superpowers:brainstorming` — the dated design doc becomes
-this batch document, the self-review becomes the reread above, and the human
-review of the written spec becomes this pull request review. The human review is
-not removed; it changes tool, into the one where you already review everything
-else.
+the spec. It replaces the tail of the architectural path of
+`superpowers:brainstorming` — the dated design doc becomes this batch document,
+the self-review becomes the batch-document reread above, and the human review of
+the written spec becomes this pull request review. The human review is not
+removed; it changes tool, into the one where you already review everything else.
 
 **Ending the review.** The agent never approves and never merges a pull request.
 Each correction the review asks for is pushed as a `fixup!` commit of the commit
@@ -456,3 +572,5 @@ skeleton.
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: before closing, it moves only through an amendment pull request of its own. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
+| "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Dispatch readers outside it. |
+| "One more round, the wording can still improve" | Four conditions close the rounds. Two rounds on the same clause end the question of its wording: take it out or put it to your human partner. |
