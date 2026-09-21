@@ -41,8 +41,11 @@ supprimée : on peut y constater qu'un arbitrage n'a pas été résorbé, on ne 
 le résorber.
 
 **La clôture, elle, apprend où lire.** Elle nomme le `Rulings log` comme elle nomme
-déjà le champ `Feature flag` et le champ `Blocks:`, et le register apprend qu'une
-story a deux canaux vers lui et non un seul.
+déjà le champ `Feature flag` et le champ `Blocks:`. Le register, symétriquement,
+cesse de décrire ce que la clôture ramasse et qui écrit dans son fichier : il ne
+régit plus que sa propre tenue. Qui écrit se lit chez chaque écrivain, où c'est déjà
+écrit ; deux textes qui énoncent la même chose divergent, et c'est le défaut que ce
+lot répare ailleurs — il ne l'introduit pas ici.
 
 **Une branche du flux exige un répertoire qu'une session sur deux ne peut pas
 avoir.** Les skills posent, pour chaque pull request de ce flux, la précondition
@@ -86,8 +89,8 @@ main, le second parce que la clôture s'est faite hors précondition.
 
 Module `supercharlouze`, une seule spec : `docs/specs/supercharlouze.md`.
 
-Les identifiants `D3`, `D4` et `D6` ont été portés par des blocs que l'amendement du
-21 septembre a supprimés. Ils ne sont pas réattribués.
+Les identifiants `D3`, `D4`, `D6` et `D7` ont été portés par des blocs que
+l'amendement du 21 septembre a supprimés. Ils ne sont pas réattribués.
 
 ### D1 — `Authority and conflict rules`
 
@@ -134,24 +137,6 @@ Texte qui le remplace :
 >   du lot ont laissé : leurs sections `Observed drift`, et les arbitrages ouverts
 >   que leur `Rulings log` classe en violation ou en gap ;
 
-### D7 — `Module > The gaps register`
-
-Passage actuel :
-
-> **La catégorie ne dépend pas du contexte, ses sources oui.** Une adoption trouve
-> ses gaps en auditant le code et dans ce que l'écriture de la spec éjecte des
-> documents validés ; une story, dans le code qu'elle traverse ; un changement borné,
-> dans ce qu'il rencontre. **Une entrée nomme le document dont elle vient** quand
-> elle vient d'un document.
-
-Texte qui le remplace :
-
-> **La catégorie ne dépend pas du contexte, ses sources oui.** Une adoption trouve
-> ses gaps en auditant le code et dans ce que l'écriture de la spec éjecte des
-> documents validés ; une story, dans le code qu'elle traverse et dans ses arbitrages
-> ouverts ; un changement borné, dans ce qu'il rencontre. **Une entrée nomme le
-> document dont elle vient** quand elle vient d'un document.
-
 ### D8 — `Story > The user story document`
 
 Texte inséré après le paragraphe qui ouvre par « Le document porte en outre un
@@ -188,20 +173,27 @@ Passage actuel :
 
 Texte qui le remplace :
 
-> **Ajouter une entrée** — la pull request d'adoption à la création, puis la pull
-> request de clôture d'un lot seule, qui consolide ce que les documents des stories
-> du lot ont laissé. Les stories **n'ajoutent pas** : elles consignent leurs constats
-> dans leur propre document, sous **Observed drift** et dans leur **Rulings log**.
-> Une entrée s'ajoute à la fin de sa catégorie. Un seul écrivain par lot.
+> **Ajouter une entrée** — une entrée s'ajoute à la fin de sa catégorie. Un seul
+> écrivain par lot.
+
+Ce bloc **retire** de la section tout ce qui désigne des écrivains. Un register
+régit la tenue de son fichier ; qui y écrit se lit chez chaque écrivain, et y est
+déjà écrit — `Module adoption` produit la pull request qui porte le register puis le
+complète de ce que l'audit révèle, `Batch > Closing a batch` porte la consolidation
+et l'inscription des blocs non livrés, `Bounded change` règle (d) écrit directement.
+Une liste ici est un second texte à tenir synchrone d'un ensemble de sections qui
+bougent, et c'est exactement la dérive que ce lot répare ailleurs.
+
+**« Un seul écrivain par lot » reste**, et c'est délibéré : c'est la seule contrainte
+de ce paragraphe qu'aucune section d'écrivain ne porte, et c'est elle qui interdit à
+une story d'écrire. Elle la pose sans nommer personne.
 
 ## Constraints
 
-- **Ordre requis.** D5, D8, D9 et D10 emploient le terme que D2 pose au glossaire :
-  ils sont transcrits dans la même story que D2, ou après elle. D5 emploie en outre
-  le classement que D8 fait écrire dans le `Rulings log` : il ne précède pas D8. D7
-  et D10 visent la même section sans se recouvrir — D7 la phrase des sources, D10 le
-  paragraphe « Ajouter une entrée » — et leur ordre est libre. D1 n'impose aucun
-  ordre.
+- **Ordre requis.** D5, D8 et D9 emploient le terme que D2 pose au glossaire : ils
+  sont transcrits dans la même story que D2, ou après elle. D5 emploie en outre le
+  classement que D8 fait écrire dans le `Rulings log` : il ne précède pas D8. D1 et
+  D10 n'imposent aucun ordre.
 - **Deux constats faits en concevant ce lot partent en `Observed drift`**, et la
   clôture les versera au gaps register. Tous deux sont antérieurs à ce lot, hors de
   son périmètre, et ne sont pas à résorber ici.
@@ -232,6 +224,6 @@ Texte qui le remplace :
 Feature flag: none — chaque story est complète dans sa propre pull request
 
 Une story de ce lot, fusionnée seule, ne laisse personne devant quelque chose
-d'incomplet. D1 livrée seule est une règle qui vaut dès qu'elle est lue. Les six
-autres voyagent sous la contrainte d'ordre ci-dessus, qui interdit qu'un terme soit
-employé avant d'être posé.
+d'incomplet. D1 et D10 livrées seules sont des règles qui valent dès qu'elles sont
+lues. Les quatre autres voyagent sous la contrainte d'ordre ci-dessus, qui interdit
+qu'un terme soit employé avant d'être posé.
