@@ -331,4 +331,49 @@ feat: la clôture lit le Rulings log autant que l'Observed drift
 
 ## Rulings log
 
+Quatre arbitrages, tous pris à la revue finale de branche ou après elle. Aucun
+n'est ouvert : chacun est tranché et exécuté sur cette branche.
+
+`Ruling:` le constat mineur différé de la tâche 1 — les deux paragraphes insérés
+à l'étape 7 courent sur 80 à 83 colonnes là où le plan annonçait ~76 — est retiré
+plutôt que différé — parce que le relecteur final a montré que
+`writing-a-user-story/SKILL.md` porte déjà 76 lignes hors tableau au-delà de 79
+colonnes : le « ~76 » était mon estimation, et le fichier est la meilleure
+autorité — si c'est faux, deux paragraphes un peu plus larges que leurs voisins,
+corrigeables n'importe quand.
+
+`Ruling:` les quatre constats mineurs de la revue finale sont repris dans une
+vague de correction plutôt que différés — parce que trois sont des périmés que ce
+changement a lui-même créés (« observations » dans le devoir 3, l'énumération du
+README, la clause de la règle (d) de `using-batches`), et les laisser serait
+exactement la dérive par omission que ce lot existe pour fermer ; le quatrième
+renforce une assertion que cette story venait d'ajouter — si c'est faux, un diff
+un peu plus large que les trois blocs ne l'exigeaient strictement.
+
+`Ruling:` les deux lignes préexistantes du tableau `Red Flags` de
+`closing-a-batch` qui ne parlent que de dérive restent telles quelles — parce que
+chacune est vraie prise isolément et qu'aucune ne prétend décrire le devoir
+entier, ce que le relecteur final a confirmé — si c'est faux, deux lignes de FAQ
+étroites qu'un lot ultérieur élargira.
+
+`Ruling:` la régression grammaticale que ma propre vague de correction a
+introduite dans la règle (d) de `using-batches` — « record » privé de son objet,
+« it » privé d'antécédent — est réparée et non parquée, avec « stories only record
+their findings in their own document, and only `supercharlouze:closing-a-batch`
+consolidates them » — parce que le produit de ce projet *est* sa prose, que la
+cassure vient de cette session et non de l'existant, et que la correction tient en
+une phrase ; « their findings » plutôt que le « what they find » que suggérait le
+relecteur, parce que « findings » est le mot que la même vague a posé dans le
+devoir 3 pour exactement cet ensemble — dérives et arbitrages ouverts — et que
+« what they find » rétrécirait de nouveau : un arbitrage ouvert ne se trouve pas,
+il se décide — si c'est faux, une clause d'une skill se lit autrement qu'un
+relecteur l'aurait voulu, sans qu'aucune règle change de sens.
+
 ## Observed drift
+
+Rien.
+
+Les deux constats que la section `Constraints` du lot assigne à cette section
+sont portés par `08-us-1-l-arbitrage-ouvert`, et ne sont pas réinscrits ici : la
+clôture ne lit que les sections `Observed drift`, et deux stories qui les
+porteraient lui donneraient des doublons à consolider.
