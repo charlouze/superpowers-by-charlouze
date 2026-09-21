@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 07 — La relecture de cohérence
