@@ -414,4 +414,22 @@ EOF
 
 ## Rulings log
 
+- **La relecture de cohérence reste là où l'ordre des étapes de la spec la met**,
+  avant la relecture du document de lot qui ouvre `## Opening the Pull Request`,
+  plutôt que d'intervertir les deux. La revue finale a relevé que la relecture du
+  document contrôle notamment que chaque passage cité correspond à `main`, et que
+  la relecture de cohérence construit donc son état appliqué à partir de blocs
+  dont les citations n'ont pas encore été contrôlées. La spec n'ordonne ni l'une
+  par rapport à l'autre, et déplacer la relecture existante modifierait un
+  passage qu'aucun bloc de ce lot ne touche. **Ce que ça coûte si c'est faux :**
+  une relecture conduite sur un état construit depuis un bloc dont la citation ne
+  correspond plus à `main` ; la citation périmée ressort à la relecture du
+  document un instant plus tard, donc le coût est une relecture perdue, jamais
+  une spec fausse.
+- **La clause « and that rule is not suspended to make a reread convenient »
+  reste.** Elle ferme la seule rationalisation que cette étape neuve crée — « ce
+  n'est qu'une copie de travail, juste cette fois » —, ce que le test de
+  concision demande d'une phrase. **Ce que ça coûte si c'est faux :** une phrase
+  de prose qu'une lecture plus stricte couperait.
+
 ## Observed drift
