@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 08 — Ce que la clôture a laissé passer

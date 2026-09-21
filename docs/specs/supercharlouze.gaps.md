@@ -62,18 +62,22 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   condition d'arrêt. `reserved by batch-09`
 
 - **Installing on a project** — le second membre de la phrase sur les répertoires
-  que l'installation crée, également falsifiable :
-  « rien dans ce système ne lit ces répertoires avant qu'un document y soit écrit ».
-  `writing-a-batch` prescrit `ls docs/batches/` pour attribuer `NN`, exécuté
-  exactement quand le répertoire peut être absent, et `writing-a-user-story` fait de
-  même sur le répertoire du lot. L'impact est faible — un `ls` qui échoue laisse
-  déduire `NN=1` — mais la phrase est présentée comme une garantie. Formulation
-  tenable : « aucune **décision** de ce système ne dépend de leur existence ».
-  Consolidée par la clôture du lot 02, depuis l'`Observed drift` d'une de ses
-  stories. Classée en *gap* et non en *violation* : la spec y a tort et le code y
-  a raison, si bien qu'un lot correctif qui la prendrait buterait aussitôt sur la
-  cinquième condition d'arrêt — la résorber veut dire corriger une spec, ce qu'un
-  agent ne peut pas faire.
+  que l'installation crée, également falsifiable : « Rien dans ce flux ne lit ces
+  répertoires avant qu'un document y soit écrit ». `writing-a-batch` lit
+  `docs/batches/` pour attribuer `NN`, et `writing-a-user-story` lit le répertoire
+  du lot, tous deux exactement quand le répertoire peut être absent. Aucune
+  décision n'en dépend : les deux passent par un `git ls-tree` sur `origin/main`,
+  qui rend une liste vide au lieu d'échouer. Mais la phrase ne promet pas
+  qu'aucune décision n'en dépend — elle promet que rien ne les lit, et le flux
+  les lit. Formulation tenable : « aucune **décision** de ce flux ne dépend de
+  leur existence ». Consolidée par la clôture du lot 02, depuis
+  l'`Observed drift` d'une de ses stories ; sa démonstration d'origine reposait
+  sur un `ls docs/batches/` qui échouait, que le lot 08 a remplacé, et la clôture
+  du lot 08 l'a réécrite sur le code actuel. Classée en *gap* et non en
+  *violation* : la spec y a tort et le code y a raison, si bien qu'un lot
+  correctif qui la prendrait buterait aussitôt sur la cinquième condition
+  d'arrêt — la résorber veut dire corriger une spec, ce qu'un agent ne peut pas
+  faire.
 
 - **Installing on a project** — « ce qui subsiste n'appartient pas au plugin : il n'est ni
   déplacé, ni supprimé » n'est vrai qu'**en dehors de `specs/` et `plans/`**. Le
@@ -159,3 +163,60 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   la règle générale, c'est la phrase qui ne dit pas si sa liste illustre ou
   délimite ; trancher veut dire décider ce que la spec doit dire, et cette
   décision est humaine.
+
+- **The batch document / Opening a batch** — deux phrases écrites comme des
+  totalités, « le spec delta est le texte exact que ce lot écrit dans les
+  specs » et « la revue d'ouverture porte sur le texte exact de chaque bloc :
+  c'est là que l'humain lit ce que diront les specs », que les propres règles
+  de la spec contredisent : l'étape 3 de `Delivering a story` fait écrire la
+  mention de flag par la story sans qu'aucun bloc la porte, la story de
+  démontage retire de la spec ce que le lot y avait ajouté avec `Blocks: none`,
+  et la levée d'un flag à portée de lot n'exige pas davantage de bloc. Le
+  changement borné est le cas le plus net : sa règle (a) lui fait mettre la spec
+  à jour dans sa propre pull request, sans lot, sans bloc et sans revue
+  d'ouverture. Du texte de spec échappe donc aux deux phrases, qui restent
+  écrites sans réserve, et ce que l'humain lit à l'ouverture n'est pas tout ce
+  que les specs diront. Le lot 07 les visait par deux blocs que sa revue a
+  retirés, et il a fusionné sans eux. Constatée par la story
+  `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** le code fait ce que
+  les autres règles disent, ce sont les deux
+  phrases qui ont tort ; résorber veut dire corriger une spec, ce qu'un agent
+  ne peut pas faire.
+
+- **The user story document** — l'énumération qui illustre `Blocks: none` cite
+  la story de lot correctif et la story de démontage, et omet la story de levée
+  d'un flag à portée de lot, qui n'en transcrit pas davantage. Rien ne dit si
+  la liste illustre ou délimite : lue comme délimitante, elle oblige une story
+  de levée à déclarer un bloc qui n'existe pas. Constatée par la story
+  `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** le code traite les
+  trois cas de la même façon, c'est la phrase qui n'en énumère que deux ;
+  trancher veut dire décider ce que la spec doit dire, et cette décision est
+  humaine.
+
+- **The model / The user story document** — `The model` définit la dérive comme
+  une divergence entre la spec de `main` et son code, et c'est cette définition
+  qui nomme la section `Observed drift` d'une story ; or cette section reçoit
+  aussi des contradictions entre règles d'une même spec, qu'aucune définition
+  ne couvre. Elles y passent faute d'autre canal, et la clôture les consolide
+  comme le reste : le précédent est sur `main`, la story
+  `05-us-1-le-domicile-d-une-regle` y a versé un constat de même nature, classé
+  en *gap* à la clôture. Ce que ce silence coûte est qu'une story n'a aucun
+  moyen de savoir si un constat de cette nature a le droit d'emprunter ce
+  canal, ni ce qui l'emprunterait autrement. Constatée par la story
+  `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** les deux règles sont
+  implémentées fidèlement, c'est leur conjonction qui est muette ; résorber
+  veut dire décider ce que la spec doit dire, et cette décision est humaine.
+
+- **Opening a batch** — l'étape 1 vérifie que chaque module touché est adopté,
+  et `writing-a-batch` l'implémente en lisant `docs/specs/<module>.md` dans le
+  répertoire de travail, avant qu'aucune branche n'existe. C'est le dernier
+  endroit du flux qui suppose encore que le répertoire de travail porte `main`,
+  alors que la spec n'exige plus que le point de départ d'une branche. Le
+  dommage est un arrêt à tort sur une spec absente d'un répertoire qui n'était
+  pas tenu de la porter, ou un lot conçu contre une spec en retard sur le
+  remote. Reste à trancher si cette lecture doit passer sur `origin/main` comme
+  l'attribution de `NN`, ou si la précondition doit disparaître au profit de la
+  vérification que la même skill fait plus loin. Arbitrage ouvert de la story
+  `08-us-3-le-point-de-depart-d-une-branche`, laissé hors de son périmètre.
+  **Gap et non violation :** aucune règle de spec n'est contredite — la spec ne
+  dit pas d'où cette lecture se fait ; l'écrire est un acte humain.
