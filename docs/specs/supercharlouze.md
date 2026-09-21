@@ -150,9 +150,9 @@ lot ne porte que ce qu'une spec ne peut pas porter : le périmètre de livraison
 l'ordre des stories, les contraintes de migration et de compatibilité, et la raison
 pour laquelle ce travail a lieu maintenant.
 
-**La pull request d'une story porte sa modification de spec et le code qui la
-réalise**, livrés ensemble ou pas du tout. **La spec de `main` décrit toujours
-exactement ce que son code fait.** Toute dérive est du travail correctif, sans exception.
+**La pull request d'une story ne porte jamais sa modification de spec sans le code
+qui la réalise.** **La spec de `main` décrit toujours exactement ce que son code
+fait.** Toute dérive est du travail correctif, sans exception.
 
 **Quand un lot et une spec se contredisent, la spec gagne — sans exception et sans
 délibération.** L'agent implémente ce que dit la spec, consigne un arbitrage, et
@@ -161,9 +161,9 @@ d'agent.**
 
 **Le gel du fichier de spec, avec un début et une fin :**
 
-> Entre le commit de transcription et l'ouverture de la pull request, aucune tâche
-> ne modifie le fichier de spec. Une story qui découvre que la spec doit changer
-> s'arrête.
+> Entre le premier commit de la branche et l'ouverture de la pull request, aucune
+> tâche ne modifie le fichier de spec. Une story qui découvre que la spec doit
+> changer s'arrête.
 
 Le gel est levé à l'ouverture de la pull request : les demandes de la revue sont des
 décisions humaines, y compris sur la formulation de sa modification de spec.
@@ -177,7 +177,7 @@ story sont recopiés dans son document, sur sa branche, avant la fusion.
 |---|---|---|
 | Adoption | la spec et le gaps register du module | le module est adopté |
 | Ouverture | le document de lot | le lot est ouvert |
-| Livraison | la modification de spec et le code d'une story | la story est livrée |
+| Livraison | le code d'une story, et sa modification de spec s'il y en a une | la story est livrée |
 | Amendement | la décision de changer le périmètre ou le flag d'un lot | le lot est amendé |
 | Clôture | le changelog, la consolidation et `status: closed` | le lot est clos |
 
@@ -623,8 +623,8 @@ décision humaine, comme les autres.
 
 Une story appartient à exactement un lot et vise exactement **un** module, donc une
 seule spec. C'est l'unité de livraison technique : **une story, une branche, une
-pull request**, et cette pull request porte à la fois sa modification de spec et le
-code qui la réalise.
+pull request**, et cette pull request ne porte jamais sa modification de spec sans
+le code qui la réalise.
 
 **Une story est identifiée par `us-N` dans son lot**, attribué selon la règle qui
 identifie un lot (`Batch`).
@@ -660,9 +660,9 @@ lit la clôture pour constater les blocs non livrés. Il vaut `none` pour une st
 qui n'en transcrit aucun — une story de lot correctif, une story de démontage.
 
 Le document porte en outre un **Rulings log** et une section **Observed drift**,
-remplis avant la fusion. Les deux sont **créées vides au moment du plan**, en même
-temps que l'en-tête, et laissées vides si rien n'est venu : une section vide
-signifie « examiné, rien trouvé ».
+remplis avant la fusion. Les deux sont **créées vides en même temps que l'en-tête**,
+et laissées vides si rien n'est venu : une section vide signifie « examiné, rien
+trouvé ».
 
 **Un arbitrage ouvert s'écrit `Open ruling:`** là où les autres s'écrivent
 `Ruling:`, et sa ligne se termine par ce qui reste à trancher, puis par la
@@ -733,8 +733,11 @@ ouvert — sa pull request d'ouverture est fusionnée et son document porte
 
    Si le lot déclare un flag, la modification de spec porte la mention du flag.
 
-   **Cas correctif :** le delta étant vide, ce premier commit ne touche pas la
-   spec ; il supprime l'entrée du gaps register que la story résorbe.
+   **Cas d'une story qui ne transcrit aucun bloc :** ce premier commit porte
+   l'en-tête du document de story et ses sections `Rulings log` et `Observed drift`
+   vides. Il y joint ce que cette story-là retire : l'entrée du gaps register
+   qu'elle résorbe, ou la modification de spec qu'aucun bloc n'annonce. Le plan est
+   écrit ensuite dans ce document.
 4. **Écrire le plan** — le document de story, avec ses `Global Constraints`, puis
    **le commiter et le pousser immédiatement**, avant que l'exécution démarre.
 5. **Exécuter par sous-agents**, puis conclure la branche par une pull request
@@ -754,10 +757,9 @@ le `Rulings log` porte ce qui a été tranché.
 ### Abandoning a story
 
 Sa pull request est fermée sans fusion s'il y en a une, et dans tous les cas sa
-branche est supprimée localement **et sur le remote**. Deux résidus subsistent sur
-`main`, que la clôture constate : la réservation au gaps register posée par la
-pull request d'ouverture, et l'intention annoncée dans le spec delta et jamais
-livrée.
+branche est supprimée localement **et sur le remote**. Ce qui subsiste sur `main`,
+la clôture le constate : la réservation au gaps register posée par la pull request
+d'ouverture, et l'intention annoncée dans le spec delta et jamais livrée.
 
 ## Feature flags
 
