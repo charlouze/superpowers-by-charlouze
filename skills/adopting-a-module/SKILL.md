@@ -72,23 +72,21 @@ the code or in a validated document.
 writing a line of either document.** They are the ones every pull request of this
 system checks:
 
-- **You are in the main checkout.** `git rev-parse --git-dir` and
-  `git rev-parse --git-common-dir` resolve to the same directory. The reason
-  matters, because from inside a worktree this rule is exactly the one an agent
-  talks itself out of: `superpowers:finishing-a-development-branch` *preserves*
-  the worktree on the pull request path, so `superpowers:using-git-worktrees`
-  Step 0 sees `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree",
-  reuses it, and the adoption lands on the previous piece of work's branch. Go
-  back to the main checkout first.
-- **You are on `main`, refreshed from the remote.** Merges arrive from the
-  remote, and an adoption written against a stale `main` audits code that is no
-  longer there.
+- **The branch you are about to create starts from `main` as the remote carries
+  it.** Fetch, then branch from `origin/main`, never from another branch. The
+  reason matters, because this is exactly the rule an agent talks itself out of:
+  `superpowers:finishing-a-development-branch` *preserves* the worktree on the
+  pull request path, so `superpowers:using-git-worktrees` Step 0 sees
+  `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree", reuses it,
+  and the adoption lands on the previous piece of work's branch. And merges
+  arrive from the remote: an adoption written from a stale starting point audits
+  code that is no longer there.
 - **`gh` is available and authenticated.** The adoption ends in a pull request.
 
 The order below is not a suggestion. **The branch exists before either document
 is written** — step 3 — because `superpowers:using-git-worktrees` creates a
-*separate directory*: writing the spec first would leave it uncommitted in the
-main checkout on `main`, and the new workspace would open empty.
+*separate directory*: writing the spec first would leave it uncommitted where you
+started, and the new workspace would open empty.
 
 ### 1. Delimit the module
 
@@ -139,18 +137,20 @@ Now, and not later. Create the branch `adopt/<module>` and its workspace by
 invoking `superpowers:using-git-worktrees`, then move into that workspace: every
 file the next two steps write belongs there.
 
-That skill prefers the harness's native tooling, which picks its own branch name
-and may leave you on a detached HEAD. If it leaves you on a differently named
-branch or on a detached HEAD, restore the conventional name before going on:
-`adopt/<module>`. **A named branch is not enough** — and here that is a matter of
-convention rather than mechanism, which is worth saying plainly: nothing scans
-`adopt/*`. Number allocation reads `batch/*` and `story/*`, the concurrency scan
-reads `story/*`, and an adoption branch claims no number and holds no sections,
-so it is equally unseen under either name. The convention is uniform anyway: a
-rule honoured only where a scan would catch you is not a rule. And it is on
-`batch/*` and `story/*` that it bites — there, a branch under the wrong name
-silently hands away its number and its sections for the length of an
-implementation.
+That skill prefers the harness's native tooling, which picks its own branch
+name and may leave you on a detached HEAD, and may branch from wherever you
+happened to be. If it leaves you on a differently named branch, a detached
+HEAD, or a starting point other than `origin/main`, restore the conventional
+name and the starting point before going on: `adopt/<module>`, from
+`origin/main`. **A named branch is not enough** — and here that is a matter
+of convention rather than mechanism, which is worth saying plainly: nothing
+scans `adopt/*`. Number allocation reads `batch/*` and `story/*`, the
+concurrency scan reads `story/*`, and an adoption branch claims no number and
+holds no sections, so it is equally unseen under either name. The convention
+is uniform anyway: a rule honoured only where a scan would catch you is not a
+rule. And it is on `batch/*` and `story/*` that it bites — there, a branch
+under the wrong name silently hands away its number and its sections for the
+length of an implementation.
 
 The two steps before this one are dialogue: they produce a boundary and an
 inventory, not files. Everything after it writes.
@@ -428,8 +428,8 @@ plugin itself is entirely English, because it carries no business prose.
 | "This behaviour is obviously intended, so into the spec it goes" | Obvious to you is not validated by them. Undocumented behaviour is a gap until a human says otherwise. |
 | "No documents exist, so I'll draft from the code and have them confirm" | A draft to confirm is a blanket yes waiting to happen. Section by section, one question at a time. |
 | "They said yes to it, so this mechanism is now a rule" | A mechanism is not submitted to validation. Enumerate what is observable at the boundary; a validated mechanism is approved drift. |
-| "I'll write the two documents first and create the branch to carry them" | using-git-worktrees opens a separate, empty directory. The branch comes first, at step 3, or both files stay stranded on `main`. |
-| "I'm already in a worktree, that will do" | Its Step 0 sees `GIT_DIR != GIT_COMMON`, reuses it, and the adoption lands on the previous branch. Main checkout first. |
+| "I'll write the two documents first and create the branch to carry them" | using-git-worktrees opens a separate, empty directory. The branch comes first, at step 3, or both files stay stranded where you started. |
+| "I'm already in a worktree, that will do" | The worktree is not the problem; the branch is. Step 0 reuses the workspace, and the adoption lands on the previous branch unless you create the branch from `origin/main` yourself. |
 | "Prose reads better than a list in the gaps register" | Then nothing can reserve, remove or release an entry, and the three downstream gestures break. |
 | "The adoption PR is open, the batch can start" | Merged is adopted. The review is the gate, not the push. |
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |

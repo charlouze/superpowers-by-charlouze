@@ -10,8 +10,8 @@ Everything in this system ships through a pull request, and this command is no
 exception — see `Installing on a project` in
 `${CLAUDE_PLUGIN_ROOT}/docs/specs/supercharlouze.md`.
 
-1. From the main checkout, on an up-to-date `main`, create the branch
-   `chore/supercharlouze-init`.
+1. Fetch, then create the branch `chore/supercharlouze-init` from `main` as the
+   remote carries it.
 2. Run `bash ${CLAUDE_PLUGIN_ROOT}/scripts/init.sh <target>`. It is idempotent:
    it creates `docs/specs/`, `docs/batches/` and `docs/archive/`, moves any
    `docs/superpowers/specs` and `docs/superpowers/plans` under `docs/archive/`,
