@@ -389,6 +389,18 @@ no blocks. The reading itself stays on the applied state, read whole: a reader
 that works through the change block by block is doing the batch-document reread
 over again, and the passage no block aims at goes unseen.
 
+**Every reader returns before anything goes up.** Wait for all of them, gather
+their findings, then put them to your human partner — never a running report. A
+partial report gets findings ruled on that the next reader displaces, and asks
+for the same ruling twice.
+
+**You instruct the findings; you do not forward them.** The batch document is
+still your draft at this point, so work every finding through and revise the
+blocks it lands on, then put to your human partner what you changed and what you
+could not settle. A round runs on the revised text, and the conditions below say
+when the rounds end. Forwarding raw findings makes your human partner arbitrate a
+draft, which is the work the opening gate exists to spare them.
+
 **The pull request body declares the reread**: that it was conducted outside this
 context, and what it found — or that it found nothing. A reread nobody can see
 from the pull request is a practice again, not a rule.

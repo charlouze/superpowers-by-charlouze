@@ -187,6 +187,13 @@ require writing-a-batch "the skill is invoked only if present"  "its skill is in
 require writing-a-batch "a reader gets both states of the spec" "A reader gets both states, and reads the later one"
 require writing-a-batch "the reading stays on the applied state" "The reading itself stays on the applied state, read whole"
 require writing-a-batch "a reader is handed no blocks"          "which is also why it is handed no blocks"
+# Waiting for every reader, then who revises between two rounds. Without the last
+# two, the stop conditions turn on text nobody is said to revise, and the skill
+# reads as forwarding raw findings while its conditions presuppose the opposite.
+require writing-a-batch "every reader returns before anything goes up" "Every reader returns before anything goes up"
+require writing-a-batch "no running report"                     "never a running report"
+require writing-a-batch "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
+require writing-a-batch "a round runs on the revised text"       "A round runs on the revised text"
 
 # --- writing-a-batch: ending the opening and amendment reviews ---
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
