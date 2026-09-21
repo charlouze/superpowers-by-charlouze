@@ -159,3 +159,59 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   la règle générale, c'est la phrase qui ne dit pas si sa liste illustre ou
   délimite ; trancher veut dire décider ce que la spec doit dire, et cette
   décision est humaine.
+
+- **The batch document / Opening a batch** — deux phrases écrites comme des
+  totalités, « le spec delta est le texte exact que ce lot écrit dans les
+  specs » et « la revue d'ouverture porte sur le texte exact de chaque bloc :
+  c'est là que l'humain lit ce que diront les specs », que les propres règles
+  de la spec contredisent : l'étape 3 de `Delivering a story` fait écrire la
+  mention de flag par la story sans qu'aucun bloc la porte, la story de
+  démontage retire de la spec ce que le lot y avait ajouté avec `Blocks: none`,
+  et la levée d'un flag à portée de lot n'exige pas davantage de bloc. Le
+  changement borné est le cas le plus net : sa règle (a) lui fait mettre la spec
+  à jour dans sa propre pull request, sans lot, sans bloc et sans revue
+  d'ouverture. Du texte de spec échappe donc aux deux phrases, qui restent
+  écrites sans réserve, et ce que l'humain lit à l'ouverture n'est pas tout ce
+  que les specs diront. Le lot 07 les visait par deux blocs que sa revue a
+  retirés, et il a fusionné sans eux. Constatée par la story `08-us-1-l-arbitrage-ouvert`. **Gap et non
+  violation :** le code fait ce que les autres règles disent, ce sont les deux
+  phrases qui ont tort ; résorber veut dire corriger une spec, ce qu'un agent
+  ne peut pas faire.
+
+- **The user story document** — l'énumération qui illustre `Blocks: none` cite
+  la story de lot correctif et la story de démontage, et omet la story de levée
+  d'un flag à portée de lot, qui n'en transcrit pas davantage. Rien ne dit si
+  la liste illustre ou délimite : lue comme délimitante, elle oblige une story
+  de levée à déclarer un bloc qui n'existe pas. Constatée par la story
+  `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** le code traite les
+  trois cas de la même façon, c'est la phrase qui n'en énumère que deux ;
+  trancher veut dire décider ce que la spec doit dire, et cette décision est
+  humaine.
+
+- **The model / The user story document** — `The model` définit la dérive comme
+  une divergence entre la spec de `main` et son code, et c'est cette définition
+  qui nomme la section `Observed drift` d'une story ; or cette section reçoit
+  aussi des contradictions entre règles d'une même spec, qu'aucune définition
+  ne couvre. Elles y passent faute d'autre canal, et la clôture les consolide
+  comme le reste : le précédent est sur `main`, la story
+  `05-us-1-le-domicile-d-une-regle` y a versé un constat de même nature, classé
+  en *gap* à la clôture. Ce que ce silence coûte est qu'une story n'a aucun
+  moyen de savoir si un constat de cette nature a le droit d'emprunter ce
+  canal, ni ce qui l'emprunterait autrement. Constatée par la story
+  `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** les deux règles sont
+  implémentées fidèlement, c'est leur conjonction qui est muette ; résorber
+  veut dire décider ce que la spec doit dire, et cette décision est humaine.
+
+- **Opening a batch** — l'étape 1 vérifie que chaque module touché est adopté,
+  et `writing-a-batch` l'implémente en lisant `docs/specs/<module>.md` dans le
+  répertoire de travail, avant qu'aucune branche n'existe. C'est le dernier
+  endroit du flux qui suppose encore que le répertoire de travail porte `main`,
+  alors que la spec n'exige plus que le point de départ d'une branche. Le
+  dommage est un arrêt à tort sur une spec absente d'un répertoire qui n'était
+  pas tenu de la porter, ou un lot conçu contre une spec en retard sur le
+  remote. Reste à trancher si cette lecture doit passer sur `origin/main` comme
+  l'attribution de `NN`, ou si la précondition doit disparaître au profit de la
+  vérification que la même skill fait plus loin. Arbitrage ouvert de la story
+  `08-us-3-le-point-de-depart-d-une-branche`, laissé hors de son périmètre.
+  **Gap et non violation :** aucune règle de spec n'est contredite — la spec ne
+  dit pas d'où cette lecture se fait ; l'écrire est un acte humain.
