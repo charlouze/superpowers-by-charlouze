@@ -145,6 +145,8 @@ require writing-a-user-story "requires SDD"                       "superpowers:s
 require writing-a-user-story "constrains finishing to the PR"     "Push and create a Pull Request"
 require writing-a-user-story "records rulings before the merge"   "Rulings log"
 require writing-a-user-story "records observed drift"             "Observed drift"
+require writing-a-user-story "an open ruling has its own form"    "An open ruling is written \`Open ruling:\`"
+require writing-a-user-story "an open ruling says what is left"   "ends with what is left to settle, then with the gaps register category"
 require writing-a-user-story "answers review feedback"            "review feedback"
 require writing-a-user-story "story branch naming convention"     "story/NN"
 require writing-a-user-story "spec change states flag and default" "states the flag and its default"
