@@ -62,18 +62,22 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   condition d'arrêt.
 
 - **Installing on a project** — le second membre de la phrase sur les répertoires
-  que l'installation crée, également falsifiable :
-  « rien dans ce système ne lit ces répertoires avant qu'un document y soit écrit ».
-  `writing-a-batch` prescrit `ls docs/batches/` pour attribuer `NN`, exécuté
-  exactement quand le répertoire peut être absent, et `writing-a-user-story` fait de
-  même sur le répertoire du lot. L'impact est faible — un `ls` qui échoue laisse
-  déduire `NN=1` — mais la phrase est présentée comme une garantie. Formulation
-  tenable : « aucune **décision** de ce système ne dépend de leur existence ».
-  Consolidée par la clôture du lot 02, depuis l'`Observed drift` d'une de ses
-  stories. Classée en *gap* et non en *violation* : la spec y a tort et le code y
-  a raison, si bien qu'un lot correctif qui la prendrait buterait aussitôt sur la
-  cinquième condition d'arrêt — la résorber veut dire corriger une spec, ce qu'un
-  agent ne peut pas faire.
+  que l'installation crée, également falsifiable : « Rien dans ce flux ne lit ces
+  répertoires avant qu'un document y soit écrit ». `writing-a-batch` lit
+  `docs/batches/` pour attribuer `NN`, et `writing-a-user-story` lit le répertoire
+  du lot, tous deux exactement quand le répertoire peut être absent. Aucune
+  décision n'en dépend : les deux passent par un `git ls-tree` sur `origin/main`,
+  qui rend une liste vide au lieu d'échouer. Mais la phrase ne promet pas
+  qu'aucune décision n'en dépend — elle promet que rien ne les lit, et le flux
+  les lit. Formulation tenable : « aucune **décision** de ce flux ne dépend de
+  leur existence ». Consolidée par la clôture du lot 02, depuis
+  l'`Observed drift` d'une de ses stories ; sa démonstration d'origine reposait
+  sur un `ls docs/batches/` qui échouait, que le lot 08 a remplacé, et la clôture
+  du lot 08 l'a réécrite sur le code actuel. Classée en *gap* et non en
+  *violation* : la spec y a tort et le code y a raison, si bien qu'un lot
+  correctif qui la prendrait buterait aussitôt sur la cinquième condition
+  d'arrêt — la résorber veut dire corriger une spec, ce qu'un agent ne peut pas
+  faire.
 
 - **Installing on a project** — « ce qui subsiste n'appartient pas au plugin : il n'est ni
   déplacé, ni supprimé » n'est vrai qu'**en dehors de `specs/` et `plans/`**. Le
@@ -173,8 +177,9 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   d'ouverture. Du texte de spec échappe donc aux deux phrases, qui restent
   écrites sans réserve, et ce que l'humain lit à l'ouverture n'est pas tout ce
   que les specs diront. Le lot 07 les visait par deux blocs que sa revue a
-  retirés, et il a fusionné sans eux. Constatée par la story `08-us-1-l-arbitrage-ouvert`. **Gap et non
-  violation :** le code fait ce que les autres règles disent, ce sont les deux
+  retirés, et il a fusionné sans eux. Constatée par la story
+  `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** le code fait ce que
+  les autres règles disent, ce sont les deux
   phrases qui ont tort ; résorber veut dire corriger une spec, ce qu'un agent
   ne peut pas faire.
 
