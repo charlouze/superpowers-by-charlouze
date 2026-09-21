@@ -230,6 +230,8 @@ require writing-a-user-story "records observed drift"             "Observed drif
 require writing-a-user-story "an open ruling has its own form"    "An open ruling is written \`Open ruling:\`"
 require writing-a-user-story "an open ruling says what is left"   "ends with what is left to settle, then with the gaps register category"
 require writing-a-user-story "answers review feedback"            "review feedback"
+require writing-a-user-story "an open ruling needs a destination"  "A story does not merge leaving an open ruling without a destination"
+require writing-a-user-story "the review is the last place to act" "do not announce the pull request ready while an open ruling without a destination stands"
 require writing-a-user-story "story branch naming convention"     "story/NN"
 require writing-a-user-story "spec change states flag and default" "states the flag and its default"
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
