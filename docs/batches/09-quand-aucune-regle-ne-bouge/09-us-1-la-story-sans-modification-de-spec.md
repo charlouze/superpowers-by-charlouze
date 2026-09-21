@@ -612,4 +612,16 @@ git commit -m "fix: ne compte plus ce qu'un abandon laisse sur main"
 
 ## Rulings log
 
+Ruling: deux phrases de skill portaient encore l'appariement que `D17` et `D19`
+retirent — « `main` now carries the spec change and the code together » dans
+`writing-a-user-story`, « throws away the spec change and the code together » dans
+`closing-a-batch`. Mises en conformité dans cette story, et l'assertion `absent`
+de la tâche 1 élargie pour les tenir. J'avais d'abord voulu les laisser au motif
+qu'aucun bloc ne les ancre : ce motif était faux. Les blocs gouvernent la spec ;
+les skills sont le code, et le code n'a jamais besoin d'un bloc — il doit à la
+spec d'être conforme. Deux phrases de code qui contredisent la modification de
+spec que la story livre sont son périmètre, pas un débordement. Coût si c'est le
+mauvais choix : deux phrases de justification reformulées sans qu'un bloc les
+cite, visibles au diff et annulables d'un mot à la revue.
+
 ## Observed drift
