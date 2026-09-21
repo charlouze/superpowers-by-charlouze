@@ -346,6 +346,49 @@ as subagents. This context argued every block into existence; asked to reread
 them, it rereads its own intentions — and the passage no block aims at, which is
 what this reread exists to find, is precisely what it cannot see.
 
+**A reader takes one reading, on one touched spec.** The readings below ask for
+four different motions — a sweep of the whole document, a reasoning about cases,
+a test applied sentence by sentence, a look at the model — and one reader holding
+several does the cheapest of them and returns. So the readers follow from the
+delta: one per reading, per touched spec.
+
+**The four readings.** Each block below is the text a reader's prompt carries,
+pasted word for word into the slot the template leaves for it. It is written for
+a reader that has nothing else: never abbreviate it, and never hand a reader two.
+
+> **What does this change make false elsewhere?** Find a passage of this
+> specification that the change does not aim at and that it now contradicts.
+
+> **What does this change leave out?** Find a case it walks past, or a
+> consequence it does not draw.
+
+> **Does this specification hold what a specification must hold?** Every
+> sentence states a business rule or an intention, and passes the
+> other-implementation test: a developer who implemented the same intention
+> differently would read that sentence as true of their code. A sentence that
+> describes a mechanism does not pass it. Report the sentences that fail.
+
+> **Where does this sit in the model?** Use the `domain-driven-design` skill if
+> it is available to you, and read without it if it is not. Report what this
+> specification names inconsistently, places where it does not belong, or splits
+> across a boundary it should not cross.
+
+The fourth answers none of the first three and feeds all three, and **its skill
+is invoked only if present** — this plugin recommends `domain-driven-design` and
+depends on it nowhere, so its absence changes how that reader reads, never
+whether the reading happens.
+
+Compose each dispatch from `skills/writing-a-batch/references/reader-prompt.md`,
+which carries what a reader gets — both states of the spec, its one reading, and
+what it must return.
+
+**A reader gets both states, and reads the later one.** Handing it the spec as
+`main` carries it, alongside the applied copy, turns "what changed" into a diff
+it can run rather than a delta it has to rebuild — which is also why it is handed
+no blocks. The reading itself stays on the applied state, read whole: a reader
+that works through the change block by block is doing the batch-document reread
+over again, and the passage no block aims at goes unseen.
+
 **The pull request body declares the reread**: that it was conducted outside this
 context, and what it found — or that it found nothing. A reread nobody can see
 from the pull request is a practice again, not a rule.

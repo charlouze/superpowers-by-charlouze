@@ -156,6 +156,38 @@ require writing-a-batch "a stale block will not apply"                "A block w
 require writing-a-batch "the reread is conducted outside this context" "Conduct it outside the context that wrote the blocks"
 require writing-a-batch "the pull request body declares the reread"   "The pull request body declares the reread"
 
+# The reader roles. The second assertion is what keeps the count from being
+# trimmed: alone, the first reads as a description of a typical reader rather
+# than the rule the number of readers follows from.
+require writing-a-batch "a reader takes one reading"            "A reader takes one reading, on one touched spec"
+require writing-a-batch "the readers follow from the delta"     "one per reading, per touched spec"
+require writing-a-batch "never two readings to one reader"      "never hand a reader two"
+require writing-a-batch "the dispatch is composed from a template" "references/reader-prompt.md"
+# The four readings, in English, in the shipped skill. Nothing else ships them:
+# the living spec is this project's own, it is French prose, and a skill running
+# on another project cannot reach it — a conductor sent there to fetch a reading
+# would find nothing. Each is the text pasted into a reader's prompt, so each is
+# guarded on the opening sentence a reader is handed, and the two that follow are
+# what stop that text being paraphrased for a human reader of the skill instead.
+require writing-a-batch "reading 1: what the change makes false" "What does this change make false elsewhere?"
+require writing-a-batch "reading 2: what the change leaves out"  "What does this change leave out?"
+require writing-a-batch "reading 3: what a spec must hold"       "Does this specification hold what a specification must hold?"
+require writing-a-batch "reading 4: where this sits in the model" "Where does this sit in the model?"
+require writing-a-batch "a reading is pasted word for word"      "pasted word for word into the slot the template leaves for it"
+require writing-a-batch "a reading is written for a bare reader" "written for a reader that has nothing else"
+# The model reading names its own skill, conditionally: a reader on a machine
+# without it must still read. Guarded on the reading's text, not on prose about
+# it, because the reading is what actually reaches that reader.
+require writing-a-batch "the model reading names its skill"     "Use the \`domain-driven-design\` skill if it is available to you"
+require writing-a-batch "the model reading survives its absence" "read without it if it is not"
+require writing-a-batch "the skill is invoked only if present"  "its skill is invoked only if present"
+# Both states, and which one is read. The second assertion is the one that holds:
+# a reader handed a diff drifts into reviewing the change block by block, which is
+# the batch-document reread, and the passage no block aims at is what goes unseen.
+require writing-a-batch "a reader gets both states of the spec" "A reader gets both states, and reads the later one"
+require writing-a-batch "the reading stays on the applied state" "The reading itself stays on the applied state, read whole"
+require writing-a-batch "a reader is handed no blocks"          "which is also why it is handed no blocks"
+
 # --- writing-a-batch: ending the opening and amendment reviews ---
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
 require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"
