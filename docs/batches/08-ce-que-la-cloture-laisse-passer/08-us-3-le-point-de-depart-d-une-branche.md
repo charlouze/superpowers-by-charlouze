@@ -89,6 +89,7 @@ ils restent anglais.
 | `skills/closing-a-batch/SKILL.md` | La précondition sur le chemin clôture, la vérification à la création de branche, et son red flag |
 | `commands/init.md` | La même précondition, sur le chemin d'installation |
 | `tests/test-skill-content.sh` | Les assertions qui gardent les deux propriétés |
+| `tests/test-skill-contracts.sh` | Le contrat que les quatre skills qui créent une branche partagent |
 
 Deux tâches, sur une couture réelle : la tâche 1 réécrit la règle partout où elle
 est posée ; la tâche 2 répare le seul mécanisme que cette réécriture rend faux —
@@ -130,8 +131,12 @@ par :
 
 ```bash
 require writing-a-user-story "branches from main as the remote carries it" "starts from \`main\` as the remote carries it"
-require writing-a-user-story "the directory it runs in does not matter"    "Where you are standing does not matter"
+require using-batches "the directory it runs in does not matter"           "Where you are standing does not matter"
 ```
+
+La seconde vise `using-batches` et non `writing-a-user-story` : c'est là qu'est
+écrite, une seule fois, la raison pour laquelle le répertoire ne compte pas. Une
+assertion garde une propriété à son domicile, pas une copie.
 
 - [ ] **Step 2: Lancer la suite pour vérifier que les deux assertions échouent**
 
@@ -181,12 +186,13 @@ remote.**`` — par :
   branch. And merges arrive from the remote, so a starting point taken from a
   stale `main` leaves number allocation and concurrency detection reasoning on a
   state that is already behind.
-- **Where you are standing does not matter**, and it must not: a session the
-  harness launched inside a worktree cannot run git against the shared checkout,
-  so a precondition on the directory would be unreachable exactly there. Inside a
-  reused workspace, `git fetch origin && git switch -c story/NN-us-N-<slug>
-  origin/main` satisfies the rule without leaving it.
 ```
+
+**La justification n'est pas reprise ici.** Pourquoi le répertoire ne compte pas
+est écrit une fois, à l'étape 3, dans `using-batches` — domicile des préconditions
+communes à toute pull request du flux, et première skill invoquée sur tous les
+chemins. Ce que chaque skill garde est sa phrase à elle : quelle branche part
+d'où, et ce que cette skill-là perd si elle part d'ailleurs.
 
 Puis supprimer le paragraphe qui suivait la liste et ne gardait plus rien :
 
@@ -241,19 +247,21 @@ seul point 2, et renuméroter l'actuel 4 en 3 :
 
 ```markdown
 2. **The branch you are about to create starts from `main` as the remote carries
-   it.** Fetch, then branch from `origin/main`, never from a branch left over
-   from an earlier story. `superpowers:finishing-a-development-branch` preserves
-   the worktree on the pull request path, so a session that chains two pieces of
-   work without leaving it would otherwise stack this batch on the previous
-   branch; and without the fetch, number allocation reasons on a state that is
-   already behind. **Where you are standing does not matter**, and it must not: a
-   session the harness launched inside a worktree cannot run git against the
-   shared checkout, so a precondition on the directory would be unreachable
-   exactly there.
+   it.** Fetch first — allocating `NN` below already reads `origin/main` — then
+   branch from `origin/main`, never from a branch left over from an earlier
+   story. `superpowers:finishing-a-development-branch` preserves the worktree on
+   the pull request path, so a session that chains two pieces of work without
+   leaving it would otherwise stack this batch on the previous branch; and
+   without the fetch, number allocation reasons on a state that is already
+   behind.
 3. **`gh` is available and authenticated.** Number allocation queries it. Without
    it you still have a partial safety net — the collision becomes visible when
    the pull request opens — but nothing prevents it.
 ```
+
+Le fetch est daté parce que l'allocation lit `origin/main` avant que la branche
+existe, et que cette skill n'en ordonne nulle part ailleurs — là où
+`writing-a-user-story` en lance un à son étape 1.
 
 - [ ] **Step 9: Étendre la vérification à la création de branche dans `writing-a-batch`**
 
@@ -288,12 +296,7 @@ commence par `- **You are in the main checkout.**` et celle qui commence par
   `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree", reuses it,
   and the adoption lands on the previous piece of work's branch. And merges
   arrive from the remote: an adoption written from a stale starting point audits
-  code that is no longer there. **Where you are standing does not matter**, and
-  it must not: a session the harness launched inside a worktree cannot run git
-  against the shared checkout, so a precondition on the directory would be
-  unreachable exactly there. Inside a reused workspace,
-  `git fetch origin && git switch -c adopt/<module> origin/main` satisfies the
-  rule without leaving it.
+  code that is no longer there.
 ```
 
 - [ ] **Step 11: Corriger la note d'ordre des étapes de `adopting-a-module`**
@@ -334,7 +337,7 @@ Dans `skills/closing-a-batch/SKILL.md`, remplacer la puce qui commence par
 ``- **You are in the main checkout, on `main`, refreshed from the remote.**`` par :
 
 ```markdown
-- **The close branch starts from `main` as the remote carries it.** Fetch, then branch from `origin/main`, never from another branch. Otherwise two things go wrong at once: `superpowers:finishing-a-development-branch` *preserves* the worktree on the pull request path, so from inside one `superpowers:using-git-worktrees` Step 0 sees `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses it, and this closure lands on the previous branch instead of its own; and a starting point behind the remote hides the very stories you are about to account for, so you would consolidate from an incomplete set. **Where you are standing does not matter**, and it must not: a session the harness launched inside a worktree cannot run git against the shared checkout, so a precondition on the directory would be unreachable exactly there — `git fetch origin && git switch -c batch/NN-<slug>-close origin/main` satisfies the rule from inside one.
+- **The close branch starts from `main` as the remote carries it.** Fetch, then branch from `origin/main`, never from another branch. Otherwise two things go wrong at once: `superpowers:finishing-a-development-branch` *preserves* the worktree on the pull request path, so from inside one `superpowers:using-git-worktrees` Step 0 sees `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses it, and this closure lands on the previous branch instead of its own; and a starting point behind the remote hides the very stories you are about to account for, so you would consolidate from an incomplete set.
 ```
 
 - [ ] **Step 14: Étendre la vérification à la création de branche dans `closing-a-batch`**
@@ -443,6 +446,22 @@ par :
 # base.
 ```
 
+- [ ] **Step 18b: Interdire que la justification revienne dans les quatre chemins**
+
+Toujours dans `tests/test-skill-contracts.sh`, ajouter — dans le style du fichier,
+avec le commentaire qui dit ce qu'elle garde :
+
+```bash
+absent "only using-batches justifies dropping the directory precondition" \
+    "Where you are standing does not matter" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+```
+
+Supprimer une redite ne suffit pas : sans garde, elle revient à la première story
+qui trouvera la précondition trop sèche, et la seconde formulation recommencera à
+dériver. C'est la forme que ce projet donne déjà à cette contrainte ailleurs dans
+le même fichier.
+
 - [ ] **Step 19: Lancer la suite et vérifier qu'elle passe**
 
 Run: `bash tests/run-all.sh`
@@ -516,21 +535,23 @@ par :
 
 ````markdown
 ```bash
-git fetch origin
 git ls-tree --name-only origin/main docs/batches/
 gh pr list --state open --json number,headRefName
 git ls-remote --heads origin 'batch/*' 'story/*'
 ```
 ````
 
-Puis, juste sous le bloc, insérer ce paragraphe :
+Puis, dans le paragraphe qui suit, remplacer « so the directory listing knows
+nothing about work in flight. Trusting the directory alone hands the same
+number » par « so that listing knows nothing about work in flight. Trusting that
+listing alone hands the same number ». Plus bas dans la même section, remplacer
+« the directory listing above sees it » par « that listing above sees it ».
 
-```markdown
-The first source is read on `origin/main` and not in the working tree, because
-nothing guarantees the working tree carries `main`: the flow's only requirement is
-where the branch *starts*, and this listing may be run from a workspace on another
-branch entirely.
-```
+**Rien n'est ajouté sous le bloc.** La commande dit d'elle-même qu'elle lit
+`main` sur le remote, et la règle qui l'explique — le répertoire de travail n'est
+pas contraint, seul le point de départ de la branche l'est — est énoncée dans
+`using-batches`, qui est son domicile. L'y redire ici en ferait une seconde
+formulation, et c'est ce qui dérive.
 
 - [ ] **Step 4: Faire lire `origin/main` à l'allocation de `us-N`**
 
@@ -549,7 +570,6 @@ par :
 
 ````markdown
 ```bash
-git fetch origin
 git ls-tree --name-only origin/main docs/batches/NN-<slug>/
 gh pr list --state open --limit 100 --json number,headRefName
 git ls-remote --heads origin 'story/*'
@@ -568,9 +588,7 @@ par :
 
 ```markdown
 An artifact only reaches `main` when its pull request merges, so that listing
-knows nothing about what is in flight; it is read on `origin/main` and not in the
-working tree, because nothing guarantees the working tree carries `main` — the
-flow's only requirement is where the branch *starts*;
+knows nothing about what is in flight;
 ```
 
 Et, plus bas dans le même paragraphe, remplacer :
@@ -608,4 +626,73 @@ git commit -m "fix: l'allocation d'un numéro lit docs/batches/ sur main"
 
 ## Rulings log
 
+Ruling: la phrase de restauration que les quatre skills qui créent une branche
+partagent — étendre le contrat plutôt que le relâcher. Les quatre portent
+désormais une seule phrase littérale, « restore the conventional name and the
+starting point before going on », et l'assertion de
+`tests/test-skill-contracts.sh` vise cette phrase. — Le commentaire de cette
+assertion dit lui-même ce qu'elle protège : une skill qui crée une branche doit
+plus qu'« une branche nommée existe ». La modification de spec fait porter à ce
+devoir deux choses au lieu d'une, et la phrase littérale identique est exactement
+ce qui empêche la propriété de pourrir à un bout pendant qu'elle tient aux trois
+autres. Relâcher l'assertion, ou laisser trois skills reformuler, aurait supprimé
+la garde au moment où ce qu'elle garde grandissait. — Si c'est faux : les quatre
+skills portent une phrase plus longue que nécessaire, et une future story qui
+touche à l'un des deux devoirs a un endroit de plus à tenir. Rien ne casse en
+silence ; c'est l'assertion qui passerait au rouge.
+
+Ruling: la justification de l'abandon de la précondition de répertoire — l'écrire
+une fois, dans `using-batches`, et la retirer des quatre skills de chemin. — Elle
+avait été écrite dans cinq fichiers, quatre identiques au caractère près et le
+cinquième à deux mots d'écart, sans qu'aucune assertion ne la tienne : la
+troisième forme que ce projet refuse, et elle avait déjà dérivé avant la fusion.
+`using-batches` se déclare le domicile des « Preconditions for every pull request
+of this system » et est invoquée la première sur tous les chemins. Ce que chaque
+skill garde est sa phrase à elle — quelle branche part d'où, et ce que cette
+skill-là perd si elle part d'ailleurs —, car cela diffère réellement d'un chemin
+à l'autre. L'assertion suit le texte, de `writing-a-user-story` vers
+`using-batches`, et une assertion `absent` sur les quatre chemins rend la redite
+impossible à réintroduire discrètement ; supprimer sans cette garde n'aurait fait
+que remettre le compteur à zéro. — Si c'est faux : qui lit les préconditions
+d'une seule skill n'y trouve plus pourquoi le répertoire n'est pas nommé, et doit
+aller jusqu'à `using-batches`. L'autre forme reste ouverte : cinq copies
+identiques et une assertion `shared`.
+
+Ruling: la place du fetch dans `writing-a-batch` — sa précondition 2 dit
+désormais que le fetch précède l'allocation. — L'allocation de `NN` lit
+`origin/main` et s'exécute avant que la branche existe, alors que le fetch de la
+précondition était rédigé comme une étape de la création de branche ; cette skill
+n'en ordonne nulle part ailleurs, là où `writing-a-user-story` en lance un à son
+étape 1. — Si c'est faux : une proposition de plus dans une précondition qui se
+lisait déjà bien.
+
+Ruling: `skills/writing-a-batch/SKILL.md` disait encore « the directory listing
+above » d'une commande qui n'est plus un `ls` — aligné sur « that listing above »,
+comme les deux autres occurrences de la même section. — Même phrase, même rôle,
+mots qui ne décrivent plus ce que la commande fait ; laisser diverger deux
+passages parallèles est précisément la façon dont ça commence. — Si c'est faux :
+deux mots changés dans un paragraphe que le plan n'avait pas prévu de toucher.
+
+Open ruling: la précondition 1 de `skills/writing-a-batch/SKILL.md`, qui lit
+`docs/specs/<module>.md` dans le répertoire de travail avant qu'aucune branche
+n'existe — laissée en place, hors périmètre. — C'est le dernier endroit du flux
+qui suppose encore que le répertoire de travail porte `main`, mais le périmètre de
+cette story est le point de départ d'une branche et l'allocation qui en dépendait.
+Le dommage est un arrêt à tort ou une spec légèrement en retard, et le document de
+lot est ensuite écrit dans un espace de travail pris sur `origin/main`. — Si c'est
+faux : la précondition s'arrête sur une spec absente d'un répertoire de travail
+qui n'était pas tenu de la porter. — Reste à trancher : si cette lecture doit
+passer sur `origin/main` comme l'allocation, ou si la précondition doit disparaître
+au profit de la vérification que `writing-a-batch` fait déjà plus loin. — *gap*
+
 ## Observed drift
+
+**L'entrée du gaps register sur l'échec de `ls docs/batches/` cite du code que
+cette story a retiré.** Elle argumente que « rien dans ce système ne lit ces
+répertoires avant qu'un document y soit écrit » est une fausse garantie, et sa
+seule preuve est que `writing-a-batch` et `writing-a-user-story` prescrivent
+`ls docs/batches/` pour attribuer un numéro, exactement quand le répertoire peut
+être absent. Les deux lisent désormais `git ls-tree --name-only origin/main …`,
+qui lit l'arbre de `main` et rend une liste vide au lieu d'échouer. L'entrée est
+donc fausse telle qu'elle est écrite, et le manque qu'elle enregistre a peut-être
+été résorbé par effet de bord. À reprendre à la clôture.
