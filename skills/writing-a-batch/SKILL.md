@@ -329,6 +329,27 @@ story declared.
 A flag whose condition is met and that no batch takes on stays where it is: in
 the spec, with its condition, in front of whoever touches that section next.
 
+## The Coherence Reread
+
+Before opening, the whole spec delta goes through the **coherence reread**, which
+reads each touched spec whole, on the state its blocks produce.
+
+Build that state — a copy of each touched spec with its blocks applied —
+**outside the repository**, in a scratch directory: no block is written into a
+spec before a story transcribes it, and that rule is not suspended to make a
+reread convenient. **A block whose quoted passage is no longer in `main` will not
+apply**, so building this copy is also the first thing that catches a delta that
+has gone stale since the batch was drafted.
+
+**Conduct it outside the context that wrote the blocks**, by dispatching readers
+as subagents. This context argued every block into existence; asked to reread
+them, it rereads its own intentions — and the passage no block aims at, which is
+what this reread exists to find, is precisely what it cannot see.
+
+**The pull request body declares the reread**: that it was conducted outside this
+context, and what it found — or that it found nothing. A reread nobody can see
+from the pull request is a practice again, not a rule.
+
 ## Opening the Pull Request
 
 **The batch-document reread**, step 6, comes after the coherence reread and
@@ -481,3 +502,4 @@ skeleton.
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: before closing, it moves only through an amendment pull request of its own. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
+| "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Dispatch readers outside it. |

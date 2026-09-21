@@ -144,6 +144,18 @@ require writing-a-batch "two rereads, two objects"              "The two rereads
 require writing-a-batch "the document reread takes the whole document" "bears on the whole document"
 require writing-a-batch "merging them strands a corrective batch" "which has no blocks, with no reread at all"
 
+# --- writing-a-batch: the coherence reread (spec section "The coherence reread") ---
+# The step exists, the applied state is built outside the repository, the rule it
+# must not suspend to get there, what building it catches for free, the
+# independence of the context, and the declaration that makes the whole thing
+# observable. Drop any one and the section still reads whole while doing less.
+require writing-a-batch "the delta goes through the coherence reread" "Before opening, the whole spec delta goes through the **coherence reread**"
+require writing-a-batch "the applied state is built outside the repository" "**outside the repository**"
+require writing-a-batch "no block reaches a spec before a story"      "no block is written into a spec before a story transcribes it"
+require writing-a-batch "a stale block will not apply"                "A block whose quoted passage is no longer in \`main\` will not apply"
+require writing-a-batch "the reread is conducted outside this context" "Conduct it outside the context that wrote the blocks"
+require writing-a-batch "the pull request body declares the reread"   "The pull request body declares the reread"
+
 # --- writing-a-batch: ending the opening and amendment reviews ---
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
 require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"
