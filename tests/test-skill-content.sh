@@ -130,6 +130,20 @@ require writing-a-batch "the text is read in the batch document"     "block by b
 require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
 require writing-a-batch "the reread checks quotes against main"          "every quoted passage matching \`main\`"
 
+# --- writing-a-batch: the ordered opening, and the two rereads it places ---
+# The distinction lives here and not under `## The Coherence Reread`, which speaks
+# of the coherence reread and nothing else; the order is what a section title
+# cannot carry. The last assertion is the reason the distinction is not cosmetic:
+# merged, the batch-document reread is the one that disappears, and a corrective
+# batch loses its only reread.
+require writing-a-batch "the opening is stated in order"        "Opening a new batch runs these six steps, in this order"
+require writing-a-batch "the coherence reread is step 5"        "Put the whole spec delta through the coherence reread"
+require writing-a-batch "the document reread is step 6"         "Reread the batch document, then open the pull request"
+require writing-a-batch "the document reread is named where it runs" "**The batch-document reread**, step 6, comes after the coherence reread"
+require writing-a-batch "two rereads, two objects"              "The two rereads are steps 5 and 6, and they have different objects"
+require writing-a-batch "the document reread takes the whole document" "bears on the whole document"
+require writing-a-batch "merging them strands a corrective batch" "which has no blocks, with no reread at all"
+
 # --- writing-a-batch: ending the opening and amendment reviews ---
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
 require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"

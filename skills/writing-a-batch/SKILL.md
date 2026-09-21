@@ -24,6 +24,31 @@ Three entry points, all landing in a pull request:
 | Changing the scope or the flag of an existing batch | Amending a Batch |
 | A corrective batch that turned out not to be corrective | Requalifying a Corrective Batch |
 
+## Opening, in Order
+
+Opening a new batch runs these six steps, in this order. Each names the section
+that carries it.
+
+1. **Check that every module this batch touches has an adopted spec** — the
+   design stops here if one does not (`Preconditions`).
+2. **Allocate `NN`** and create the branch (`Allocating NN`).
+3. **Write the batch document**: scope, spec delta in blocks of exact text, the
+   `Feature flag` field (`The Batch Document`, `The Feature Flag Field`,
+   `Flags Declared by Earlier Batches`).
+4. **Reserve every gaps register entry this batch takes on.** No writing into
+   the specs at this stage (`The Batch Document`).
+5. **Put the whole spec delta through the coherence reread**
+   (`The Coherence Reread`).
+6. **Reread the batch document, then open the pull request**
+   (`Opening the Pull Request`).
+
+**The two rereads are steps 5 and 6, and they have different objects.** The
+coherence reread bears on the blocks and on the state they produce, read whole.
+The batch-document reread bears on the whole document — scope, `Constraints`,
+the flag field, every quoted passage. Merge them and the second is the one that
+disappears, leaving a corrective batch, which has no blocks, with no reread at
+all.
+
 ## Preconditions
 
 Check all four **before creating any branch**. Each one, skipped, produces a
@@ -306,7 +331,8 @@ the spec, with its condition, in front of whoever touches that section next.
 
 ## Opening the Pull Request
 
-Before opening, reread the batch document against the specs with fresh eyes:
+**The batch-document reread**, step 6, comes after the coherence reread and
+bears on the whole document. Reread it against the specs with fresh eyes:
 scope stated with its "why now", spec delta in blocks — each with its `D<n>`,
 the spec and section it targets, and its exact text, every quoted passage
 matching `main` —, `Constraints` stated or `none` — including the order of any
@@ -322,12 +348,11 @@ scope, and any flag lifting the delta announces.
 story is written and no spec is touched. It bears on the exact text of every
 block: this is where the human reads what the specs will say, before any code is
 written on it — block by block, in the batch document, and not later as a diff of
-the spec. It replaces the tail of the
-architectural path of `superpowers:brainstorming` — the dated design doc becomes
-this batch document, the self-review becomes the reread above, and the human
-review of the written spec becomes this pull request review. The human review is
-not removed; it changes tool, into the one where you already review everything
-else.
+the spec. It replaces the tail of the architectural path of
+`superpowers:brainstorming` — the dated design doc becomes this batch document,
+the self-review becomes the batch-document reread above, and the human review of
+the written spec becomes this pull request review. The human review is not
+removed; it changes tool, into the one where you already review everything else.
 
 **Ending the review.** The agent never approves and never merges a pull request.
 Each correction the review asks for is pushed as a `fixup!` commit of the commit
