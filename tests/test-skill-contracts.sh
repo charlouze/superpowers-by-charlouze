@@ -100,10 +100,12 @@ absent "no skill keeps a Live flags section or its rulings" \
 # Number allocation and the concurrency scan both recognise a branch by its
 # name, and both on exactly the window where no pull request exists yet. So a
 # skill that creates a branch owes more than "some named branch exists": it
-# restores the conventional name. The loose reading leaves a branch that is
-# invisible to both scans, holding neither its number nor its sections.
-shared "every branch-creating skill restores the conventional name" \
-    "restore the conventional name before going on" \
+# restores the conventional name, and the starting point the flow requires. The
+# loose reading leaves a branch that is invisible to both scans, holding neither
+# its number nor its sections — or one that is visible and built on the wrong
+# base.
+shared "every branch-creating skill restores the name and the starting point" \
+    "restore the conventional name and the starting point before going on" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
 shared "and each says a named branch is not enough" \
@@ -242,6 +244,14 @@ shared "adoption never shares the design's context" \
 absent "no skill carries the retired blocking-precondition wording" \
     "blocking precondition|Adoption is blocking|blocking; nothing starts" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# The directory-does-not-matter justification belongs to using-batches, which
+# states the preconditions common to every pull request of this system. A
+# path skill that restates it creates a second formulation of one rule, and a
+# second formulation is what drifts.
+absent "only using-batches justifies dropping the directory precondition" \
+    "Where you are standing does not matter" \
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
 # One home per rule: the norm is stated in the four skills that write normative
 # text, and it is stated there word for word. One assertion, never one per file:

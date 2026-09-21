@@ -70,14 +70,15 @@ pull request that has to be thrown away.
    design that follows would then argue from what the code does, having been told
    in the same breath that it must not. Chaining the two is what makes that leak
    invisible, so the stop is the rule and not a preference.
-2. **You are in the main checkout**, not in a worktree left over from an earlier
-   story. `superpowers:finishing-a-development-branch` preserves the worktree on
-   the pull request path, so a session that chains two pieces of work without
-   leaving it would silently stack this batch on the previous branch.
-3. **You are on `main`, up to date with the remote.** Merges
-   arrive from the remote; without a fetch, number allocation reasons on a stale
-   directory.
-4. **`gh` is available and authenticated.** Number allocation queries it. Without
+2. **The branch you are about to create starts from `main` as the remote carries
+   it.** Fetch first — allocating `NN` below already reads `origin/main` — then
+   branch from `origin/main`, never from a branch left over from an earlier
+   story. `superpowers:finishing-a-development-branch` preserves the worktree
+   on the pull request path, so a session that chains two pieces of work
+   without leaving it would otherwise stack this batch on the previous branch;
+   and without the fetch, number allocation reasons on a state that is already
+   behind.
+3. **`gh` is available and authenticated.** Number allocation queries it. Without
    it you still have a partial safety net — the collision becomes visible when
    the pull request opens — but nothing prevents it.
 
@@ -88,13 +89,13 @@ claimed by an open pull request, and not claimed by a pushed `batch/*` or
 `story/*` branch that carries no pull request yet**. All three, always:
 
 ```bash
-ls docs/batches/
+git ls-tree --name-only origin/main docs/batches/
 gh pr list --state open --json number,headRefName
 git ls-remote --heads origin 'batch/*' 'story/*'
 ```
 
 An artifact only reaches `main` when its pull request merges, so
-the directory listing knows nothing about work in flight. Trusting the directory
+that listing knows nothing about work in flight. Trusting that listing
 alone hands the same number to two batches opened in parallel — and the second
 one discovers it at merge time, after review.
 
@@ -113,7 +114,7 @@ Both patterns are scanned because both spell `NN`, but they do not carry the
 same weight. On the nominal path the `story/*` half finds nothing new:
 `supercharlouze:writing-a-user-story` requires the batch's opening pull request
 to be **merged** before any story is written, so wherever a `story/NN-us-N-`
-branch exists, `docs/batches/NN-<slug>/` is already on `main` and the directory
+branch exists, `docs/batches/NN-<slug>/` is already on `main` and that
 listing above sees it. Scan it anyway — it is one line and it is the only thing
 that answers in the degraded case where that precondition was skipped and a
 story branch is the sole trace of its batch.
@@ -122,13 +123,15 @@ The branch is `batch/NN-<slug>`. Path and branch patterns are English and fixed;
 the slug follows the project's language, because it names a business object.
 
 Create the branch and workspace by invoking `superpowers:using-git-worktrees`.
-That skill prefers the harness's native tooling, which picks its own branch name
-and may leave you on a detached HEAD. This plugin enforces its own naming: if you
-end up elsewhere, restore the conventional name before going on:
-`batch/NN-<slug>`. **A named branch is not enough.** Allocating `NN` above reads
-`batch/*` and `story/*` on the remote to refuse a number already claimed, so a
-branch left under a harness-chosen name claims nothing, and hands its number to
-the next batch opened in parallel.
+That skill prefers the harness's native tooling, which picks its own branch name,
+may leave you on a detached HEAD, and may branch from wherever you happened to
+be. This plugin enforces its own naming and its own starting point: if you end up
+elsewhere, restore the conventional name and the starting point before going on —
+`batch/NN-<slug>`, from `origin/main`, with `git switch -c batch/NN-<slug>
+origin/main` inside the workspace. **A named branch is not enough.**
+Allocating `NN` above reads `batch/*` and `story/*` on the remote to refuse a
+number already claimed, so a branch left under a harness-chosen name claims
+nothing, and hands its number to the next batch opened in parallel.
 
 ## The Batch Document
 

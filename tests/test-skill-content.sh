@@ -213,10 +213,10 @@ require writing-a-batch "pushes corrections as fixups"            "pushed as a \
 require writing-a-batch "names the merge a clear moment"          "a moment to clear the context"
 require writing-a-batch "opening hands over to the first story"   "names \`supercharlouze:writing-a-user-story\` as the next step"
 require writing-a-batch "an amendment is a clear moment too"      "An amendment merges into the same clear moment"
+require writing-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
-require writing-a-user-story "checks it is in the main checkout"  "main checkout"
-require writing-a-user-story "refreshes main from the remote"     "up to date with the remote"
+require writing-a-user-story "branches from main as the remote carries it" "starts from \`main\` as the remote carries it"
 require writing-a-user-story "concurrency via declared Sections"  "Sections:"
 require writing-a-user-story "git conflict is only a partial net" "partial safety net"
 require writing-a-user-story "transcription is the first commit"  "first commit on the branch"
@@ -287,6 +287,7 @@ require writing-a-user-story "ends the review as every gate does"   "never appro
 require writing-a-user-story "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
 require writing-a-user-story "names the merge a clear moment"       "a moment to clear the context"
 require writing-a-user-story "hands over to the next story"         "names the next story as the next step"
+require writing-a-user-story "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
@@ -329,6 +330,9 @@ require closing-a-batch "duty 1 checks the flags it declared"   "Check every fea
 require closing-a-batch "an earlier batch's flag goes to duty 5" "A flag declared by an earlier batch is not this duty's business"
 require closing-a-batch "duty 5 is empty for a corrective batch" "A corrective batch has nothing to compare here"
 require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
+
+# --- using-batches: preconditions for every pull request of this system ---
+require using-batches "the directory it runs in does not matter"    "Where you are standing does not matter"
 
 # --- using-batches: what a spec says (spec section "The spec document") ---
 require using-batches "the test bears on the module boundary"   "bears on the module's boundary"

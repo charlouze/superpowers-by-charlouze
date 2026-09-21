@@ -40,28 +40,22 @@ spans two modules, it is two stories.
 Check all of these before creating anything. They apply to every pull request
 of this system, not only to stories.
 
-- **You are in the main checkout.** `git rev-parse --git-dir` and
-  `git rev-parse --git-common-dir` resolve to the same directory. Reason:
-  `superpowers:finishing-a-development-branch` *preserves* the worktree on the
-  pull request path. A session that chains two stories without leaving it would
-  let `superpowers:using-git-worktrees` skip creation — its Step 0 sees
+- **This story's branch starts from `main` as the remote carries it.** Fetch,
+  then branch from `origin/main`, never from another branch. Two things ride on
+  it. `superpowers:finishing-a-development-branch` *preserves* the worktree on
+  the pull request path, so a session that chains two stories without leaving
+  it lets `superpowers:using-git-worktrees` skip creation — its Step 0 sees
   `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses
   the existing one — and this story's code would land on the previous story's
-  branch. Go back to the main checkout first.
-- **`main` is checked out and up to date with the remote.**
-  Fetch, then fast-forward. Merges arrive from the remote; without that
-  refresh, number allocation and concurrency detection both reason on a stale
-  state.
+  branch. And merges arrive from the remote, so a starting point taken from a
+  stale `main` leaves number allocation and concurrency detection reasoning on a
+  state that is already behind.
 - **`gh` is available and authenticated.** Number allocation and concurrency
   detection both query it. Without it, both degrade to a partial net —
   collision visible when the pull request opens, merge conflict — and they no
   longer *prevent* anything. Say so rather than proceeding silently.
 - **The batch exists and is open.** Its opening pull request is merged and its
   document says `status: open`. Until that gate is passed, no story is written.
-
-That first check assumes a plain repository. In a submodule, `GIT_DIR` and
-`GIT_COMMON` differ without a worktree being involved; a submodule project is
-outside the path this plugin covers.
 
 ## Step 1 — Detect Concurrency
 
@@ -154,7 +148,7 @@ case this check exists to catch.
 `story/*` branch that carries no pull request yet**:
 
 ```bash
-ls docs/batches/NN-<slug>/
+git ls-tree --name-only origin/main docs/batches/NN-<slug>/
 gh pr list --state open --limit 100 --json number,headRefName
 git ls-remote --heads origin 'story/*'
 ```
@@ -163,13 +157,13 @@ All three are necessary. The two remote ones are exactly the two scans Step 1
 runs — one idea applied twice, not two coincidences; the third is `main`
 itself, which Step 1 never reads, because concurrency is a question about work
 in flight and allocation is also a question about work already landed. An
-artifact only reaches `main` when its pull request merges, so the directory
-listing knows nothing about what is in flight;
-and a story's pull request opens only at the very end of Step 5, so from its
-first commit until then a branch holds its number without ever appearing in
+artifact only reaches `main` when its pull request merges, so that listing
+knows nothing about what is in flight; and a story's pull request opens only
+at the very end of Step 5, so from its first commit until then a branch holds
+its number without ever appearing in
 `gh pr list`. The branch name carries the number — `story/NN-us-N-<slug>` — so
 the remote listing answers on its own, with nothing to fetch and no file to
-read. Going by the directory alone gives the same number to two stories written
+read. Going by that listing alone gives the same number to two stories written
 while a third is in review; adding only the pull requests still gives it to two
 stories written while a third is being implemented, and that window is the
 longer of the two.
@@ -185,13 +179,17 @@ project's language — it names a business object.
 
 Create the branch and the workspace by invoking
 `superpowers:using-git-worktrees`. That skill prefers the harness's native
-tooling, which picks its own branch name, and may leave a detached HEAD. If it
-produces another name, a detached HEAD, or if isolation is declined, restore the
-conventional name before going on: `story/NN-us-N-<slug>`. **A named branch is
-not enough.** Step 1's third source and this step's allocation both read
-`story/*` on the remote, so a branch under any other name is invisible to every
-sibling for the whole length of an implementation — it holds neither its `us-N`
-nor its sections, and the push at the end of Step 3 buys nothing.
+tooling, which picks its own branch name, may leave a detached HEAD, and may
+branch from wherever you happened to be. If it produces another name, a detached
+HEAD, a starting point other than `origin/main`, or if isolation is declined,
+restore the conventional name and the starting point before going on:
+`story/NN-us-N-<slug>`, from `origin/main`. `git merge-base --is-ancestor
+origin/main HEAD` answers the second, and `git switch -c story/NN-us-N-<slug>
+origin/main` inside the workspace puts it right. **A named branch is not
+enough.** Step 1's third source and this step's allocation both read
+`story/*` on the remote, so a branch under any other name is invisible to
+every sibling for the whole length of an implementation — it holds neither
+its `us-N` nor its sections, and the push at the end of Step 3 buys nothing.
 
 The story document lives at `docs/batches/NN-<slug>/NN-us-N-<slug>.md`. The
 `NN-` prefix keeps basenames unique across batches. On the nominal path it is
@@ -651,7 +649,7 @@ documents.
 | "This pull request has no story document, so I must stop" | Not if it is a `fix/<slug>`: a bounded change declares its sections in its pull request body. Read it there. Stopping would halt every story for as long as one bounded pull request stays open. |
 | "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-change commit. |
 | "The story is abandoned, the branch can stay" | A pushed `story/*` branch with no pull request reads as a live claim on its sections. Delete it, locally and on the remote. |
-| "I'm already in a worktree, that's fine" | Then this story's code lands on the previous story's branch. Return to the main checkout. |
+| "I'm already in a worktree, that's fine" | It is, as a place to work. A branch that starts there is not: this story's code would land on the previous story's branch. Branch from `origin/main`, wherever you stand. |
 | "Merging locally is quicker" | It never pushes. It merges into the local `main`, deletes the worktree and the branch, and takes the unrecorded rulings with it. |
 | "I'll transcribe the spec at the end, with the code" | Then the norm is not prior to the code and the freeze has no starting point. The spec change ships as commit one. |
 | "Keeping the branch is harmless" | Without a pull request the story has no observable state and is never delivered. |
