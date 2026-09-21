@@ -74,7 +74,7 @@ gitGraph
    checkout main
    merge story/04-us-2 tag: "delivery gate"
    branch batch/04-slug-close
-   commit id: "changelog, drift, closed"
+   commit id: "changelog, consolidation, closed"
    checkout main
    merge batch/04-slug-close tag: "closing gate"
 ```
@@ -88,7 +88,7 @@ own; it puts its checkpoints where your flow already has them.
 | Batch opening | the exact text each spec will receive, before a line of code is written against it |
 | Story delivery | the spec change and the code that implements it, in one diff |
 | Batch amendment | a change of scope or of flag on an open batch |
-| Batch closing | the changelog, the consolidated drift, `status: closed` |
+| Batch closing | the changelog, the consolidation, `status: closed` |
 
 The opening gate is the one that pays. You read the wording of a spec at the
 moment changing it still costs nothing — and no story may be written until it

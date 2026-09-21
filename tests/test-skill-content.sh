@@ -291,6 +291,9 @@ require writing-a-user-story "hands over to the next story"         "names the n
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
+require closing-a-batch "reads both sections of a story"         "Two sections carry it"
+require closing-a-batch "names the Rulings log as a source"      "The **Rulings log** holds its \`Open ruling:\` lines"
+require closing-a-batch "consolidates the open rulings too"      "the ones classified as a violation or a gap are yours"
 require closing-a-batch "releasing keeps the entry"  "removes the reservation annotation and leaves the entry"
 # This duty sorts what the stories brought back; it must not read as a definition
 # of either category. A fourth wording of "what a gap is" would sit outside the
