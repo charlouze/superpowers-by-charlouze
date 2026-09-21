@@ -17,8 +17,13 @@ echo "test-skill-contracts"
 # indented flattens to several spaces where the needle has one, and the guard turns
 # red on text that is correct. No needle in this suite contains two consecutive
 # spaces, so squeezing changes nothing else.
+# The `sed` drops a leading blockquote marker, so a norm written as a block quote
+# flattens like any other prose and a needle may span two of its lines. Kept
+# identical to the helper in test-skill-content.sh: two flatteners of the same
+# name behaving differently is a trap for whoever writes the next needle.
 body_flat() {
-    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" | tr '\n' ' ' | tr -s ' '
+    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" \
+        | sed 's/^>[[:space:]]\{0,1\}//' | tr '\n' ' ' | tr -s ' '
 }
 
 # A coupling between two skills only holds if both ends spell it identically.
