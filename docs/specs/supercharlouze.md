@@ -518,6 +518,24 @@ Un `README.md` avec un front matter `status: open | closed`, et :
   Feature flag: none — <raison de l'exemption>
   ```
 
+### The coherence reread
+
+La relecture de cohérence lit les blocs d'un spec delta contre la totalité de
+chaque spec qu'ils touchent, sur l'état qu'ils produiront et sans qu'aucun soit
+écrit dans une spec.
+
+**Elle pose trois questions à chaque spec touchée :**
+
+- **Qu'est-ce que les blocs rendent faux ailleurs ?** Un passage qu'aucun d'eux
+  ne vise et qu'ils contredisent.
+- **Qu'est-ce qu'ils omettent ?** Un cas devant lequel ils passent, une
+  conséquence qu'ils ne tirent pas.
+- **Tiennent-ils ce qu'une spec doit tenir ?** (`The spec document`)
+
+**Elle n'est jamais conduite dans le contexte qui a écrit les blocs**, et le
+corps de la pull request d'ouverture le déclare, avec ce qu'elle a trouvé ou
+qu'elle n'a rien trouvé.
+
 ### Opening a batch
 
 Une conception architecturale se conclut ici (`Departures from superpowers`).
@@ -532,7 +550,9 @@ L'ouverture :
    lot correctif puisant dans *Violations* comme lot ordinaire puisant dans
    *Gaps*. Deux lots ne réservent jamais la même entrée. **Aucune écriture dans
    les specs à ce stade.**
-5. Ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
+5. **Fait passer le spec delta entier par la relecture de cohérence**
+   (`The coherence reread`).
+6. Ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
 
 **La revue d'ouverture porte sur le texte exact de chaque bloc** : c'est là que
 l'humain lit ce que diront les specs, avant qu'aucun code ne s'écrive dessus.
