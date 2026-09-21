@@ -230,6 +230,8 @@ require writing-a-user-story "records observed drift"             "Observed drif
 require writing-a-user-story "an open ruling has its own form"    "An open ruling is written \`Open ruling:\`"
 require writing-a-user-story "an open ruling says what is left"   "ends with what is left to settle, then with the gaps register category"
 require writing-a-user-story "answers review feedback"            "review feedback"
+require writing-a-user-story "an open ruling needs a destination"  "A story does not merge leaving an open ruling without a destination"
+require writing-a-user-story "the review is the last place to act" "do not announce the pull request ready while an open ruling without a destination stands"
 require writing-a-user-story "story branch naming convention"     "story/NN"
 require writing-a-user-story "spec change states flag and default" "states the flag and its default"
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
@@ -289,6 +291,9 @@ require writing-a-user-story "hands over to the next story"         "names the n
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "one changelog line per batch"           "one line per batch"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
+require closing-a-batch "reads both sections of a story"         "Two sections carry it"
+require closing-a-batch "names the Rulings log as a source"      "The **Rulings log** holds its \`Open ruling:\` lines"
+require closing-a-batch "consolidates the open rulings too"      "the ones classified as a violation or a gap are yours"
 require closing-a-batch "releasing keeps the entry"  "removes the reservation annotation and leaves the entry"
 # This duty sorts what the stories brought back; it must not read as a definition
 # of either category. A fourth wording of "what a gap is" would sit outside the

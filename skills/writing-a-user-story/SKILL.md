@@ -527,6 +527,19 @@ the worktree on this path, so iterate there. Read the feedback with
 The story is delivered when its pull request is merged. There is nothing to
 tick and nothing to reconcile: its state *is* the state of its pull request.
 
+**A story does not merge leaving an open ruling without a destination.** Read the
+`Rulings log` at the review and take every `Open ruling:` line it carries. One
+that is a violation or a gap already has its destination: the gaps register, where
+`supercharlouze:closing-a-batch` files it alongside the `Observed drift` sections.
+Every other one is settled here, before the merge, and the `Rulings log` records
+what was settled.
+
+The review is the last place where an open ruling can still be acted on. By
+closing, the story is merged and its branch is gone: closing can note that a
+ruling was never taken up, it can no longer take it up. So do not announce the
+pull request ready while an open ruling without a destination stands — your human
+partner has the rulings in front of them here, and nowhere later.
+
 **Ending the review.** The agent never approves and never merges a pull request.
 Each correction is pushed as a `fixup!` commit of the commit it corrects — or as
 a commit of its own when it carries a fresh decision, which on this path is
@@ -645,6 +658,7 @@ documents.
 | "Inline execution is simpler for a small story" | It keeps no ledger, so the rulings never reach your human partner. SDD is required. |
 | "I'll copy the rulings after the merge" | The workspace is already gone and the merge may be days later, in another session. |
 | "This drift is small, I'll just add it to the gaps register" | Every story adding to the same section collides there. Record it under Observed drift; closing consolidates. |
+| "Every ruling is recorded, the log is done" | An open ruling also needs a destination. A violation or a gap goes to the register through closing; anything else is settled at the review, before the merge. |
 | "The flag is an implementation detail, the spec need not mention it" | Then the spec is false for users. The spec change states the flag, its default, and its lifting condition if the scope is extended. |
 | "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |
 | "The batch says otherwise, and the batch is more recent" | The spec wins, without deliberation. Implement the spec, record a Ruling, continue. |
