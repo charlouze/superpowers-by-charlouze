@@ -432,25 +432,18 @@ pour une raison, écrite dans le commit qui l'a supprimé. Réinscrire un consta
 déjà écarté sans dire ce qui a changé depuis, c'est rouvrir une décision que
 personne n'a revue.
 
-**Supprimer une entrée** — la pull request de la story qui la résorbe, celle d'un
-changement borné, ou celle d'une adoption qui promeut un gap en spécification, la
-**supprime du fichier**, et **le commit qui la supprime dit pourquoi** : l'entrée
-est résorbée, promue, sans objet, fausse, ou écartée par l'humain. Le register ne
-porte que ce qui reste à régler ; ce qu'une entrée a été, et pourquoi elle est
-partie, se lisent dans l'histoire du fichier
+**Supprimer une entrée** — une entrée se **supprime du fichier**, et **le commit
+qui la supprime dit pourquoi** : l'entrée est résorbée, promue, sans objet, fausse,
+ou écartée par l'humain. Le register ne porte que ce qui reste à régler ; ce qu'une
+entrée a été, et pourquoi elle est partie, se lisent dans l'histoire du fichier
 (`git log -p docs/specs/<module>.gaps.md`).
-
-Un changement borné n'appartient à aucun lot : il ajoute une entrée comme il en
-supprime une, directement.
 
 **Réservation, consommation, libération :**
 
-- **Réservée** par la pull request d'ouverture du lot qui la prend en charge
-  (annotation `reserved by batch-NN`).
-- **Supprimée** par la pull request de la story qui la résorbe, atomiquement avec
-  le code qui la résorbe ; le commit qui la supprime dit pourquoi.
-- **Libérée** — son annotation de réservation retirée, l'entrée restant — par la
-  pull request de clôture si elle n'a pas été consommée.
+- **Réservée** — l'entrée porte l'annotation `reserved by batch-NN` du lot qui la
+  prend en charge.
+- **Supprimée** — sa réservation part avec elle.
+- **Libérée** — son annotation de réservation retirée, l'entrée restant.
 
 Le gaps register déclare aussi **sa propre couverture** : quelles parties du module ont
 été auditées, lesquelles ne l'ont pas été, et pourquoi.
@@ -932,3 +925,4 @@ chaque document : ossature en anglais, prose dans la langue du projet.
 | 05 | 2026-09-21 | Une règle appartient à une seule spec : celle qui contraindrait un comportement observable à la frontière de plus d'un module signale un découpage de modules à revoir, et l'agent s'arrête pour soumettre le cas à l'humain au lieu de recopier la règle d'une spec à l'autre ou de lui chercher un domicile commun. Le gaps register, lui, ne porte plus que ce qui reste à régler : une entrée réglée n'est plus barrée mais **supprimée du fichier**, et le commit qui la supprime dit pourquoi — résorbée, promue, sans objet, fausse, ou écartée par l'humain ; ce qu'une entrée a été se lit dans l'histoire du fichier, qu'on relit avant d'en ajouter une afin de ne pas réinscrire un constat déjà écarté sans dire ce qui a changé depuis. Et parce que la suppression emporte ce que le barré gardait à jamais, deux silences qu'elle rend systématiques sont comblés : ce qui qualifie une entrée vit dans l'entrée — aucune prose n'y qualifie un groupe d'entrées, ni leur provenance, ni leur classement, ni leur nombre —, et une entrée ne renvoie à aucune autre ; le mot qui rendait ce renvoi naturel quitte la spec, la règle qu'il justifiait reste. |
 | 06 | 2026-09-20 | Ce que le code gardé par un flag doit tenir entre sa déclaration et sa levée est désormais écrit : les deux états cohabitent sur les mêmes données, la désactivation reste toujours possible, rien d'autre ne change, chaque état est vérifié, et la levée ne fera que retirer. Ces règles atteignent celui qui écrit le code par les `Global Constraints` de toute story qui en écrit sous flag, que le flag soit déclaré par son lot ou par un autre. La frontière du module annonce pour la première fois ce que ce flux exige du code applicatif d'un projet. Et une période d'observation se fait en deux stories : le défaut que la mention de flag déclare cesse d'être confondu avec l'état effectif du flag, que le projet règle comme il veut sans que la spec en soit changée. |
 | 07 | 2026-09-21 | Le spec delta d'un lot est relu contre la totalité de chaque spec qu'il touche avant que sa pull request d'ouverture s'ouvre, et non plus seulement bloc par bloc : la relecture de cohérence lit l'état que les blocs produiront, sans qu'aucun soit écrit dans une spec, et pose trois questions — ce que les blocs rendent faux ailleurs, ce qu'ils omettent, et s'ils tiennent ce qu'une spec doit tenir. Elle n'est jamais conduite dans le contexte qui a écrit les blocs, qui en relirait les intentions plutôt que le texte, et le corps de la pull request d'ouverture déclare cette indépendance et ce qu'elle a trouvé — ou qu'elle n'a rien trouvé —, sans quoi rien n'en serait observable. La pratique existait et ne tenait qu'au fait que quelqu'un pense à la demander ; elle devient une étape de l'ouverture, avant celle qui ouvre la pull request. |
+| out-of-batch | 2026-09-21 | Le gaps register régit la tenue de son fichier et ne désigne plus ses écrivains : qui ajoute, supprime, réserve ou libère une entrée est déjà écrit chez chacun d'eux — l'adoption, l'ouverture d'un lot, la livraison d'une story, la clôture, le changement borné —, et une liste qui le redisait ici était un second texte à tenir synchrone d'un ensemble de sections qui bougent. Ne reste que ce qui vaut quelle que soit la pull request qui écrit : une entrée se supprime du fichier et le commit qui la supprime dit pourquoi, la réservation s'annote `reserved by batch-NN`, la libération retire l'annotation et laisse l'entrée. La phrase qui redonnait au changement borné le droit d'écrire ici, duplicata littéral de sa propre règle, disparaît avec elles. |
