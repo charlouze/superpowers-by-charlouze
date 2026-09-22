@@ -46,10 +46,13 @@ and that document — not this one — is the authority.
 - **Gaps register** — `docs/specs/<module>.gaps.md`, the home of what a spec may
   not carry: code that contradicts it, and behaviour no spec describes.
 - **Batch** — the delivery unit, at `docs/batches/NN-<slug>/`. It groups stories
-  and exists to make specs grow. Its document carries, in blocks, the exact text
-  those specs will receive.
+  and targets one or more modules, hence one or more specs. Its document carries,
+  in blocks, the exact text those specs will receive.
 - **User story** — one implementation plan, one module, one branch, one pull
   request.
+- **Technical story** — a story that changes nothing observable at its module's
+  boundary: a dependency bump, an internal rename, a preparatory refactor. It
+  declares the qualification, and a stop condition catches it if it is false.
 - **Feature flag** — what lets a story ship alone without exposing a half-built
   batch. It is a specified object, not an implementation detail: the spec states
   its name and its default.
@@ -183,9 +186,11 @@ places, each declared rather than improvised:
 
 1. **No dated design document.** An architectural design ends by opening a batch;
    the plan is written with each story, not before.
-2. **A corrective batch has one more stop condition.** If the code turns out to
-   be right and the spec wrong, the batch is no longer corrective and must be
-   requalified. An agent may not correct a spec.
+2. **The flow adds two stop conditions.** If the code turns out to be right and
+   the spec wrong, a corrective batch is no longer corrective and must be
+   requalified. If a story declared technical turns out to change something
+   observable at its module's boundary, it is no longer technical. An agent may
+   neither correct a spec nor keep a qualification it has lost.
 3. **The execution mode is imposed** — subagent-driven development, because
    repatriating its rulings depends on its ledger, and those rulings are the only
    record of where the spec was ambiguous.

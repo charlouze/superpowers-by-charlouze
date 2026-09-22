@@ -130,6 +130,22 @@ shared "the corrective stop condition is copied exactly as stated" \
     "you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified." \
     using-batches writing-a-user-story
 
+# The technical story's stop condition travels the same way: `using-batches`
+# states it and `writing-a-user-story` has it copied into a story's Global
+# Constraints. Same argument as above — a copy that adds or drops a sentence is no
+# longer the condition the spec names. One assertion over both ends.
+shared "the technical stop condition is copied exactly as stated" \
+    "If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical." \
+    using-batches writing-a-user-story
+
+# The three families that answer the exemption criterion by construction are
+# listed in both skills. A family spelled two ways is a family a reader cannot
+# claim: the batch document quotes the wording, and the opening review reads it.
+# One assertion over both ends.
+shared "the flag exemption names the technical batch identically" \
+    "**A batch all of whose stories are technical** — none of them changes what is observable at its module's boundary, so every pull request is deployable as it stands. That is what the qualification means, not a tolerance granted to it." \
+    using-batches writing-a-batch
+
 # The gating sentence has one form, fixed by the spec's template. `using-batches`
 # names it and `writing-a-user-story` shows it. Two spellings of the same sentence
 # is how a live flag stops being found. One assertion over the two skills that
@@ -300,6 +316,14 @@ shared "a story with no block still deletes its entry that way" \
 # from its first commit and the plan has somewhere to be written at Step 4.
 shared "that first commit carries the story document's header" \
     "the header of the story document and its empty \`Rulings log\` and \`Observed drift\` sections" \
+    writing-a-user-story using-batches
+
+# The removal is not obligatory: a technical story removes nothing, so that first
+# commit carries the header alone. Both skills enumerate the removals, and an
+# enumeration nothing marks as illustrative reads as the list of cases allowed —
+# which would send a technical story looking for something to strike.
+shared "the removal is not obligatory" \
+    "removes, if it removes anything" \
     writing-a-user-story using-batches
 
 # The mirror: the case is no longer the corrective batch's alone, and a skill that

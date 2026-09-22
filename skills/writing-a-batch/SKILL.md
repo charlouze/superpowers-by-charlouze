@@ -266,9 +266,9 @@ exposing a half-built batch.
 merged alone, leave a user facing something incomplete?* If no, no flag. Three
 families answer no by construction:
 
-- **Refactor and infrastructure** — they change no behaviour, so every pull
-  request is deployable as is. That is the definition of a refactor, not a
-  tolerance granted to it.
+- **A batch all of whose stories are technical** — none of them changes what is
+  observable at its module's boundary, so every pull request is deployable as it
+  stands. That is what the qualification means, not a tolerance granted to it.
 - **Corrective batch** — it restores behaviour the spec already promises. Gating
   it would delay a conformance fix, the opposite of its purpose.
 - **Single-story batch** — nothing is ever half delivered.
@@ -473,8 +473,9 @@ The batch document carries no mutable state, but it stays amendable by an
 **amendment pull request**, reviewed like the others. That is the exit from two
 real dead ends:
 
-- **An exempted batch that discovers it needed a flag** — a "refactor" that
-  turned out to change behaviour, a single-story batch that splits in two.
+- **An exempted batch that discovers it needed a flag** — a batch whose stories
+  were all technical and one of them turned out not to be, a single-story batch
+  that splits in two.
 - **A batch whose scope is reduced or abandoned**, including reducing it after a
   requalification, or giving a flag an extended scope so a later batch can decide.
 
@@ -500,13 +501,14 @@ by path.
 
 ## Requalifying a Corrective Batch
 
-**Trigger — Override 2, the fifth stop condition (corrective batches).** This
-plugin adds a fifth stop condition to
-`superpowers:subagent-driven-development`: while bringing code into conformance
-with a spec, if a story discovers that the **spec** is wrong and the code is
-right, it stops. The batch is no longer corrective and must be requalified. The
-other four stop conditions assume a valid authority exists; here the authority
-itself is in question, and no agent may correct a spec.
+**Trigger — Override 2, the stop condition proper to a corrective batch.** This
+plugin adds two stop conditions to
+`superpowers:subagent-driven-development`, and this is the corrective one: while
+bringing code into conformance with a spec, if a story discovers that the
+**spec** is wrong and the code is right, it stops. The batch is no longer
+corrective and must be requalified. The four native stop conditions assume a
+valid authority exists; here the authority itself is in question, and no agent
+may correct a spec.
 
 **Procedure.**
 
@@ -544,6 +546,39 @@ itself is in question, and no agent may correct a spec.
 Never carry out a requalification by deciding the substance yourself. Correcting
 a spec is a human act, never an agent act. Your job is to present the choice with
 its consequences, then execute what is ruled.
+
+## Requalifying a Technical Story
+
+**Trigger — the stop condition of a technical story.** `supercharlouze:using-batches`
+states it and `supercharlouze:writing-a-user-story` copies it into the
+`Global Constraints` of every technical story: a story that discovers it changes
+something observable at its module's boundary is no longer technical. It reaches
+you already stopped, from inside `superpowers:subagent-driven-development`.
+
+**Procedure.**
+
+1. **Abandon the story**, exactly as a requalified corrective story is abandoned:
+   this fires mid-implementation, so the usual situation is a branch and a
+   worktree and **no pull request at all**. Close one without merging it only if
+   it is already open; the branch and its worktree stay until the choice below is
+   ruled, and go once it is — deleted locally and on the remote, worktree removed.
+   Nothing reached `main`, so nothing has to be revoked, and a branch left on the
+   remote reads as a live claim on its sections.
+2. **Put the choice to the human**, who alone may rule. If they judge the
+   observable change wanted, it needs a block, and a block is acquired by an
+   amendment that goes back through the opening review — the exact text of a block
+   is what that review reads, and a story that transcribes none never passes it.
+3. **A batch exempted from a flag because all of its stories were technical
+   declares one by that same amendment.** The exemption rested on the
+   qualification the story has just lost; leaving it standing would ship
+   observable behaviour with nothing guarding it, which is the whole of what the
+   criterion prevents.
+
+**Concluded by** the merge of the amendment pull request: the work is rewritten as
+an ordinary story of the amended batch, with `supercharlouze:writing-a-user-story`.
+
+If the human judges the observable change unwanted instead, there is nothing to
+amend: the story is abandoned and the batch carries on as it was.
 
 ## Language
 

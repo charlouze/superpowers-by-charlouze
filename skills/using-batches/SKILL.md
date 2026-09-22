@@ -30,9 +30,11 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Section** — the smallest titled unit of a spec, and the unit everything is counted in: a concurrency conflict is judged on a section, a gaps register entry names a section. "Requirement" is not used as a unit — its granularity cannot be defined, so it cannot be checked.
 
-**Batch** — the delivery unit, at `docs/batches/NN-<slug>/`. It groups several user stories, and exists to add behaviour to one or more specs. A batch may cut across modules.
+**Batch** — the delivery unit, at `docs/batches/NN-<slug>/`. It groups several user stories, and targets one or more modules, hence one or more specs. A batch may cut across modules.
 
 **User story** — an implementation plan at `docs/batches/NN-<slug>/NN-us-N-<slug>.md`. It belongs to exactly one batch and targets exactly **one** module, hence one spec. It is also the technical delivery unit: **one story, one branch, one pull request**.
+
+**Technical story** — a story that changes nothing observable at its module's boundary. A dependency bump, an internal rename, a preparatory refactor are technical: no rule moves, so no block is transcribed. It is a declared qualification, caught by its stop condition if it turns out to be false.
 
 **Corrective batch** — a batch whose spec delta is empty. It brings existing code back into conformance with a spec that is already true. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
 
@@ -50,7 +52,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **The exemption criterion is one question:** *would a single story of this batch, merged on its own, leave a user in front of something incomplete?* If no, no flag. Three families answer no by construction:
 
-- **Refactor and infrastructure** — they change no behaviour, so every pull request is deployable as it stands. That is the definition of a refactor, not a tolerance granted to it.
+- **A batch all of whose stories are technical** — none of them changes what is observable at its module's boundary, so every pull request is deployable as it stands. That is what the qualification means, not a tolerance granted to it.
 - **Corrective batch** — it restores behaviour the spec already promises. Gating it would delay a conformance fix, which is the opposite of its purpose.
 - **Single-story batch** — nothing is ever half delivered.
 
@@ -124,7 +126,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 
 **A story's pull request never carries its spec change without the code that implements it.** It may carry code alone: a corrective batch's story does, and so may any story that transcribes no block. It may carry a spec change no block announced: a teardown story removes from the spec what no block announced. What never reaches `main` is a norm ahead of the code that honours it. That is what gives `main` its central property: **its spec always describes exactly what its code does.** There is no intermediate state to signal, therefore no marker, no semantics to explain to agents that know nothing about this plugin, and no exception to the drift rule.
 
-**The spec change is the first commit of every story branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts. A story that transcribes no block is the exception in form and not in purpose: no block dictates its first commit, so that commit carries the header of the story document and its empty `Rulings log` and `Observed drift` sections, plus what that story removes — a corrective batch's story deletes the gaps register entry it resolves, a teardown story removes from the spec what no block announced — which fixes its scope in the branch's history exactly the same way. Batch-opening and batch-closing branches carry no spec change at all — they carry no code either.
+**The spec change is the first commit of every story branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts. A story that transcribes no block is the exception in form and not in purpose: no block dictates its first commit, so that commit carries the header of the story document and its empty `Rulings log` and `Observed drift` sections, plus what that story removes, if it removes anything — a corrective batch's story deletes the gaps register entry it resolves, a teardown story removes from the spec what no block announced, a technical story removes nothing — which fixes its scope in the branch's history exactly the same way. Batch-opening and batch-closing branches carry no spec change at all — they carry no code either.
 
 **The drift rule therefore has no exception:** any divergence between the spec on `main` and the code on `main` is drift, hence corrective work. There is no "not delivered yet" case to exempt, because that case does not exist. Behaviour still gated states its flag, its default and — when the scope outlives the batch — its lifting condition in the spec itself, so the spec stays exactly true: it describes not only what the code does but what it exposes and under what condition.
 
@@ -219,15 +221,21 @@ The architectural checklist of `superpowers:brainstorming` ends with four steps:
 
 Justification: `supercharlouze:writing-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its re-read before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
 
-### Override 2 — fifth stop condition (corrective batches)
+### Override 2 — the stop conditions the flow adds
 
-`superpowers:subagent-driven-development` states *"Four things stop you, and only these"*. This plugin adds one, for corrective batches only:
+`superpowers:subagent-driven-development` states *"Four things stop you, and only these"*. This plugin adds two. For corrective batches only:
 
 > If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
 
-Justification: the four conditions assume a valid authority exists. Here the authority itself is what is in question, and an agent may not correct a spec.
+For a technical story only:
 
-Requalification is carried by `supercharlouze:writing-a-batch`, and it **does not start by closing a pull request**: this condition fires *inside* `superpowers:subagent-driven-development`, mid-implementation, while a story's pull request opens only at the very end of Step 5 through `superpowers:finishing-a-development-branch` — so normally there is no pull request at all, only a branch and a worktree. Abandon the story, closing its pull request without merging only if one is already open, and once the choice below is ruled discard the branch **locally and on the remote**, with its worktree — a branch left on the remote is re-read as a live claim on its sections by every sibling's concurrency scan. Nothing has to be revoked either way, because nothing reached `main`. Then the human decides — either they correct the spec, which only they can do, and the batch stays corrective on a reduced scope; or the batch is rewritten as an ordinary batch, with a spec delta, through an **amendment pull request** on the existing document, which keeps `NN` and its directory and still passes the opening review — any story already merged lives under that number, and a new one would strand it. A fresh `NN` only if the human rules the remaining work a *different* batch, and this one is then closed rather than left open. Either way the gaps register reservations are revised.
+> If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical.
+
+A ruling replaces neither of them. A ruling is a decision an agent takes on its human partner's behalf, and neither of these is an agent's to take: the first would correct a spec, the second would keep a qualification the story has just lost. Recording one and carrying on is exactly the failure both conditions exist to prevent.
+
+Justification: the four native conditions assume a valid authority exists, and assume the story is the story it says it is. The first is what a corrective batch puts in question; the second is what a technical story puts in question — "purely technical" is otherwise the door through which behaviour enters with no gate behind it, since a story that transcribes no block passes no opening review.
+
+Requalification is carried by `supercharlouze:writing-a-batch` in both cases, and it **does not start by closing a pull request**: the corrective condition fires *inside* `superpowers:subagent-driven-development`, mid-implementation, while a story's pull request opens only at the very end of Step 5 through `superpowers:finishing-a-development-branch` — so normally there is no pull request at all, only a branch and a worktree. Abandon the story, closing its pull request without merging only if one is already open, and once the choice below is ruled discard the branch **locally and on the remote**, with its worktree — a branch left on the remote is re-read as a live claim on its sections by every sibling's concurrency scan. Nothing has to be revoked either way, because nothing reached `main`. Then the human decides — either they correct the spec, which only they can do, and the batch stays corrective on a reduced scope; or the batch is rewritten as an ordinary batch, with a spec delta, through an **amendment pull request** on the existing document, which keeps `NN` and its directory and still passes the opening review — any story already merged lives under that number, and a new one would strand it. A fresh `NN` only if the human rules the remaining work a *different* batch, and this one is then closed rather than left open. Either way the gaps register reservations are revised. The technical story's condition is routed the same way and settled elsewhere: `supercharlouze:writing-a-batch` carries it under `Requalifying a Technical Story`, where what the human rules is whether the observable change is wanted — and a wanted one needs a block, hence an amendment.
 
 ### Override 3 — imposed execution mode
 

@@ -289,8 +289,9 @@ their decision.
 fixes the scope in the branch's history before any code exists. It carries the
 header of the story document and its empty `Rulings log` and `Observed drift`
 sections — Step 4 then writes the plan into that document rather than creating it
-— together with what this particular story removes.
+— together with what this particular story removes, if it removes anything.
 
+A technical story removes nothing, and its first commit carries that header alone.
 A corrective batch's story removes an entry: it deletes the gaps register entry it
 resolves from `docs/specs/<module>.gaps.md`, and the commit that removes it says
 why. Removing an entry takes out lines nobody else is writing, so two stories
@@ -308,7 +309,8 @@ an implementation to the length of a single commit.
 ## Step 4 — Write the Plan
 
 Call `superpowers:writing-plans`. The plan **is** the story document: save it
-into the batch directory, and extend the standard header with four fields.
+into the batch directory, and extend the standard header with four fields — five
+on a technical story.
 
 ```markdown
 **Spec:** docs/specs/facturation.md
@@ -325,10 +327,27 @@ story's Step 1 reads.
 `Blocks:` declares the blocks of the spec delta this story transcribes — the
 `D<n>` identifiers the batch document defines — and it is what
 `supercharlouze:closing-a-batch` reads to find the blocks nobody delivered. It is
-`none` for a story that transcribes none: a corrective batch's story, a teardown
-story. Write it even though the blocks are already committed by now, because
-Step 3's commit says what the spec received, and this field says which blocks
-this story answered for — which is the question closing asks.
+`none` for a story that transcribes none: a corrective batch's story, a technical
+story, a teardown story. Write it even though the blocks are already committed by
+now, because Step 3's commit says what the spec received, and this field says
+which blocks this story answered for — which is the question closing asks.
+
+**A technical story carries `Technical: yes` in its header**, and touches no
+section: its `Sections:` is `none`. No other story carries that field — an
+absent field is the ordinary case, so nothing has to be written to say "not
+technical", and the qualification is visible wherever it is claimed.
+
+```markdown
+**Spec:** docs/specs/facturation.md
+**Batch:** docs/batches/07-facturation-recurrente/README.md
+**Sections:** none
+**Blocks:** none
+**Technical:** yes
+```
+
+The qualification is yours to declare and nobody else's to check at this point:
+what catches a false one is the stop condition, in `Global Constraints` below,
+and it fires during the implementation rather than here.
 
 Then create, at the end of the document, the two sections Step 6 fills — empty
 now, and left empty if nothing turns up:
@@ -353,14 +372,17 @@ says that something is still open, nor what — and whoever reads the log would
 have to recognise a category in prose.
 
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
-part of every task's requirements — carries five things:
+part of every task's requirements — carries:
 
 1. the constraints the batch imposes;
 2. the freeze of the spec file;
 3. the authority rule;
-4. **in a corrective batch only**, the fifth stop condition;
+4. **in a corrective batch only**, the stop condition proper to a corrective
+   batch;
 5. **in a story that writes code guarded by a flag only**, the rules for code
-   under a flag.
+   under a flag;
+6. **in a technical story only**, the stop condition proper to a technical
+   story.
 
 The batch's constraints are its `Constraints` section copied verbatim. The
 freeze of the spec file reads:
@@ -384,9 +406,9 @@ exception and without deliberation.** Implement what the spec says, record a
 `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an
 agent's.** That rule is the third thing `Global Constraints` carries.
 
-**In a corrective batch, `Global Constraints` carries a fourth thing: the fifth
-stop condition of Step 5, written out in full.** Copy it verbatim, exactly as
-`supercharlouze:using-batches` states it:
+**In a corrective batch, `Global Constraints` carries a fourth thing: the stop
+condition proper to a corrective batch, written out in full.** Copy it verbatim,
+exactly as `supercharlouze:using-batches` states it:
 
 > If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
 
@@ -428,6 +450,21 @@ puts them in front of the implementer — a norm nobody reads while writing the
 code bites on nothing. They travel the way the freeze does, through the only
 channel SDD's subagents read.
 
+**In a technical story, `Global Constraints` carries a sixth thing: the stop
+condition proper to a technical story, written out in full.** Copy it verbatim,
+exactly as `supercharlouze:using-batches` states it:
+
+> If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical.
+
+The freeze above stops a task that finds the spec must change, and it is not this.
+A technical story was written on the claim that nothing needed changing at all, so
+nobody is looking at the spec when the claim fails: what fails is the
+qualification the story carries, and losing it sends the work back to the opening
+gate rather than forward. And the discovery happens inside SDD's implementer
+subagents, whose only channel to this skill's rules is this list — a stop
+condition stated to you and not written here never reaches the agent who has to
+obey it.
+
 **Commit the story document — header, the two empty sections and
 `Global Constraints` together — and push it immediately**, `git push`, before
 anything else in Step 5 starts. Until that push the branch is on the remote but
@@ -466,14 +503,24 @@ reason is exact:
 So this override removes one choice that cannot succeed, and one that leads
 nowhere.
 
-**Override 2 — fifth stop condition (corrective batches).** SDD states that
-four things stop you and only these. In a corrective batch, this plugin adds
-one: if, while bringing code into conformity with the spec, you discover that
-the **spec** is wrong and the code is right, stop. The batch is no longer
-corrective and must be requalified — **abandon the story**, then hand the
-decision to `supercharlouze:writing-a-batch`. The four native
-conditions assume a valid authority exists; here the authority itself is in
-question, and an agent may not correct a spec.
+**Override 2 — the stop conditions the flow adds.** SDD states that four things
+stop you and only these. This plugin adds two, and each one ends the same way:
+**abandon the story**, then hand the decision to
+`supercharlouze:writing-a-batch`.
+
+In a corrective batch: if, while bringing code into conformity with the spec, you
+discover that the **spec** is wrong and the code is right, stop. The batch is no
+longer corrective and must be requalified. The four native conditions assume a
+valid authority exists; here the authority itself is in question, and an agent may
+not correct a spec.
+
+In a technical story, whatever its batch: if, while conducting it, you discover
+that it changes something observable at the module's boundary, stop. The story is
+no longer technical. The four native conditions also assume the story is the story
+it says it is; here the qualification it was written under is what is in question,
+and only your human partner may rule what follows — a block for the observable
+change, and a flag if the batch was exempted because all of its stories were
+technical.
 
 **Abandoning here does not start by closing a pull request, because there is
 normally no pull request yet.** This condition fires *inside*
@@ -490,7 +537,7 @@ and `supercharlouze:closing-a-batch` releases it. Once the requalification is
 ruled, delete the abandoned branch, locally and on the remote, and remove its
 worktree — the branch left on the remote would read as a live claim on its
 sections, and the worktree left behind is where a later session resumes work
-under a qualification the batch no longer has.
+under a qualification the batch — or the story — no longer has.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session
@@ -635,8 +682,8 @@ the project's language. The boundary runs *inside* each document, not between
 documents.
 
 - **Skeleton, always English:** section titles, field names (`Spec:`,
-  `Batch:`, `Sections:`, `Blocks:`, `Rulings log`, `Observed drift`), template labels,
-  front matter values, table headers, path and branch patterns.
+  `Batch:`, `Sections:`, `Blocks:`, `Technical:`, `Rulings log`, `Observed drift`),
+  template labels, front matter values, table headers, path and branch patterns.
 - **Prose, in the project's language:** the body of the requirements, the
   descriptions, the justifications, and the slugs of files and directories —
   they name business objects.
