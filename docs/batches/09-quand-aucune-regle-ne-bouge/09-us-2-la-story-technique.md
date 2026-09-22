@@ -821,4 +821,72 @@ git commit -m "feat: une story technique qui perd sa qualification passe par un 
 
 ## Rulings log
 
+Ruling: réparer dans la Task 6, et non dans la Task 2, le renvoi périmé à « la
+cinquième condition d'arrêt » que `writing-a-batch` portait — la Task 6 ouvre déjà
+ce fichier pour y ajouter la section de requalification, et répartir un même
+renommage sur deux tâches donnerait au relecteur deux vues partielles d'un seul
+geste. Coût si c'est faux : entre les deux tâches, le dépôt nomme l'override de
+deux façons, et aucun test ne l'attrape.
+
+Ruling: replier sur deux lignes le sixième élément des `Global Constraints`, dont
+le plan donnait une ligne plus longue que la largeur du fichier. Coût si c'est
+faux : nul — l'assertion aplatit les blancs et tient dans les deux cas.
+
+Ruling: corriger dans le document de plan les trois défauts que le scan pré-vol y
+a trouvés, plutôt que de les rattraper tâche par tâche au moment de dépêcher.
+Coût si c'est faux : le plan de la branche diffère de celui qui a été commité en
+premier — mais le plan d'une story ne passe aucun gate, et un défaut qu'on y
+laisse est relu par chaque implémenteur suivant.
+
+Ruling: sur la contradiction entre trois documents quant au moment où la branche
+d'une story abandonnée est supprimée, c'est la branche et son worktree qui restent
+jusqu'à ce que l'humain ait tranché. Les trois autres passages le disent déjà — y
+compris la procédure corrective que la section neuve annonce recopier —, et
+supprimer d'abord est irréversible. Coût si c'est faux : une branche abandonnée
+retient ses sections sur le remote tant que l'humain n'a pas répondu.
+
+Ruling: laisser l'assertion négative de la Task 5 ne chercher que la chaîne exacte
+`Refactor and infrastructure`, sans l'élargir au mot « refactor ». Deux emplois
+légitimes subsistent, où un refactor préparatoire est donné en exemple de story
+technique. Coût si c'est faux : un emploi périmé de l'ancienne famille en
+minuscules passerait au travers.
+
+Ruling: soumettre à l'humain, à la revue de livraison, le constat de la revue
+finale sur ce que porte le premier commit d'une story technique, plutôt que de le
+verser en `Observed drift`. Le gel du fichier de spec se lève à l'ouverture de la
+pull request, et « corriger une spec est un acte humain » n'est pas une raison de
+reporter : c'est une raison de demander. Tranché à la revue : la phrase est
+corrigée sur cette branche, et `Story > Delivering a story` rejoint le
+`Sections:` de la story. Coût si c'est faux : la story touche une section qu'elle
+n'avait pas déclarée en ouvrant sa branche — sans conflit possible, aucune autre
+n'étant en vol.
+
+Ruling: ne pas consigner en `Observed drift` l'état transitoire d'un lot dont le
+champ `Spec delta` ne porte aucun bloc, en attendant `D3`, `D14`, `D21` et `D22`.
+Le document de lot liste ces blocs et n'en a attribué aucun, l'ordre des blocs du
+lot autorise explicitement cet état, et la clôture contrôle déjà les blocs
+annoncés et jamais livrés. Consigné, le constat produirait à la clôture une entrée
+de gaps register périmée avant d'être écrite. Coût si c'est faux : si le lot
+s'arrêtait ici, rien dans le document de story ne rappellerait que la famille
+d'exemption livrée par `D4` attend encore ce qui dit ce que porte le champ.
+
+Ruling: sur le doute soulevé à la revue — un lot dont toutes les stories sont
+techniques ne vise aucune spec —, `D2` n'était pas faux mais restait lâche.
+« Viser » ne peut déjà pas vouloir dire « modifier » ailleurs dans le document,
+puisque la story d'un lot correctif vise un module et ne modifie aucune spec ; mais
+`D2` écrivait « vise … specs » là où `Story` écrit « vise … module, **donc** une
+seule spec ». Tranché à la revue : `Lot` calque désormais la construction de
+`Story`. Coût si c'est faux : la définition livrée s'écarte du texte que la revue
+d'ouverture avait lu, et l'écart doit se lire dans la pull request.
+
+Ruling: j'avais gardé hors des commits qu'elles corrigent les deux modifications de
+spec tranchées à la revue, pour que le commit de transcription garde son « mot pour
+mot ». L'humain a tranché l'inverse à la revue : l'historique d'une story se
+regroupe selon l'idée qu'elle livre, qui est une, et la branche porte donc les
+quatre commits d'usage — la spec, le plan, le code, les arbitrages. Les deux
+corrections rejoignent la spec et le code, et l'écart avec `D2` reste nommé là où
+la spec l'exige, dans le corps de la pull request. Coût si c'est faux : le commit
+de spec ne se lit plus comme la seule transcription des blocs, et c'est son message
+qui doit dire ce qu'il porte en plus.
+
 ## Observed drift
