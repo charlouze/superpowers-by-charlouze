@@ -86,7 +86,7 @@ own; it puts its checkpoints where your flow already has them.
 |---|---|
 | Module adoption | the spec and the gaps register, before any batch touches that module |
 | Batch opening | the exact text each spec will receive, before a line of code is written against it |
-| Story delivery | the spec change and the code that implements it, in one diff |
+| Story delivery | a story's code, and its spec change if it has one, in one diff |
 | Batch amendment | a change of scope or of flag on an open batch |
 | Batch closing | the changelog, the consolidation, `status: closed` |
 
@@ -105,20 +105,22 @@ flowchart LR
         C3["3 · its tests"]
         C1 --> C2 --> C3
     end
-    PR ==> M["main<br/>spec and code, together or not at all"]
+    PR ==> M["main<br/>never the spec change without the code"]
 ```
 
 **The spec change is the first commit of the branch**, before the plan is
 written and before any task runs. Not for visibility — the file would be
 readable in the worktree either way — but because this is what makes the norm
 *prior and opposable* to the code: it is already in the branch's history when
-implementation starts.
+implementation starts. A story that transcribes no block has no spec change
+to put first; its first commit carries the story document's header instead,
+and fixes its scope the same way.
 
-**The pull request carries both, or neither.** That is what gives `main` its
-central property: its spec always describes exactly what its code does. There is
-no intermediate state, therefore no marker to invent and no exception to the
-drift rule — any divergence between the spec on `main` and the code on `main` is
-drift, and drift is corrective work.
+**The pull request never carries the spec change without the code.** That is
+what gives `main` its central property: its spec always describes exactly
+what its code does. There is no intermediate state, therefore no marker to
+invent and no exception to the drift rule — any divergence between the spec
+on `main` and the code on `main` is drift, and drift is corrective work.
 
 Between that first commit and the opening of the pull request, the spec file is
 **frozen**: a task discovering that the spec must change stops instead, because
