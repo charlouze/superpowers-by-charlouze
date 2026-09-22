@@ -428,4 +428,19 @@ git commit -m "docs: le README présente le filtre par nom de branche"
 
 ## Rulings log
 
+Ruling: les commentaires des deux nouvelles assertions passent en anglais — le
+plan les imposait en français mot pour mot, et le dépôt est entièrement anglais,
+`tests/` compris ; le plan est l'argument, la règle de langue est l'autorité, et
+le document de plan a été corrigé pour ne plus prescrire ce qu'il interdit — ce
+que ça coûte si c'est faux : deux blocs de commentaires à retraduire.
+
+Open ruling: `Story > Concurrency detection` dit, d'une part, qu'une branche
+poussée dont le document de story n'existe pas encore arrête pareillement, et
+d'autre part — c'est ce que `D10` ajoute — qu'une telle branche concerne la spec
+qu'elle a déjà modifiée. La première phrase, lue seule, arrête sur toute branche
+sans déclaration du dépôt, ce que `D10` retire précisément au filtre ; les skills
+livrent donc la conjonction : elle arrête si la spec qu'elle a déjà modifiée est
+la tienne. Reste à trancher si la spec doit écrire cette conjonction plutôt que
+de la laisser déduire — catégorie *gap*.
+
 ## Observed drift
