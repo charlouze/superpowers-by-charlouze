@@ -46,8 +46,8 @@ qu'elle ne décrit pas.
 **Dérive** (`drift`) — toute divergence entre la spec de `main` et le code de
 `main`.
 
-**Lot** (`batch`) — l'unité de livraison : un ensemble de stories qui ajoute du
-comportement à une ou plusieurs specs.
+**Lot** (`batch`) — l'unité de livraison : un ensemble de stories qui vise un ou
+plusieurs modules, donc une ou plusieurs specs.
 
 **Lot correctif** (`corrective batch`) — un lot dont le spec delta est vide, et qui
 remet du code en conformité avec une spec déjà vraie.
@@ -57,6 +57,10 @@ le texte exact qu'elle doit recevoir, transcrit mot pour mot par une story.
 
 **Story** (`user story`) — le plan d'implémentation d'une part d'un lot, qui vise un
 seul module et se livre en une pull request.
+
+**Story technique** (`technical story`) — une story qui ne change rien d'observable
+à la frontière de son module. C'est une qualification déclarée, que sa condition
+d'arrêt rattrape si elle se révèle fausse.
 
 **Flag** (`feature flag`) — ce qui garde un comportement incomplet hors de portée
 des utilisateurs jusqu'à sa levée.
@@ -120,12 +124,20 @@ flux ajoute à un plan ne sont pas des écarts : superpowers les laisse au proje
   module non adopté s'arrête, l'humain choisit de l'abandonner ou de la mettre de
   côté, et elle ne reprend qu'une fois l'adoption fusionnée, dans un nouveau
   contexte.
-- **Un lot correctif a une condition d'arrêt de plus.** L'exécution par
-  sous-agents s'arrête aussi sur celle-ci, dans un lot correctif seulement :
+- **Le flux ajoute des conditions d'arrêt.** L'exécution par sous-agents s'arrête
+  aussi sur celles-ci. Dans un lot correctif seulement :
 
   > Si, en mettant du code en conformité avec une spec, tu découvres que c'est la
   > **spec** qui a tort et le code qui a raison, arrête-toi. Le lot n'est plus
   > correctif et doit être requalifié.
+
+  Dans une story technique seulement :
+
+  > Si, en conduisant une story technique, tu découvres qu'elle change quelque chose
+  > d'observable à la frontière du module, arrête-toi. La story n'est plus
+  > technique.
+
+  Un arbitrage ne remplace ni l'une ni l'autre.
 
 - **Le mode d'exécution est imposé.** Une story s'exécute par sous-agents, et le
   choix d'un autre mode n'est pas proposé.
@@ -577,6 +589,12 @@ Un `NN` neuf n'est attribué que si l'humain juge le travail restant être un
 *autre* lot, et celui-ci est alors clos plutôt que laissé ouvert. Dans tous les
 cas, les réservations au gaps register sont révisées.
 
+**Requalification d'une story technique.** Quand sa condition d'arrêt se déclenche
+(`Departures from superpowers`), la story est abandonnée (`Abandoning a story`). Si
+l'humain juge le changement observable voulu, il lui faut un bloc, acquis par un
+amendement qui repasse la revue d'ouverture ; et un lot exempté de flag parce que
+toutes ses stories étaient techniques en déclare un par le même amendement.
+
 **Conclu par** la fusion de sa pull request : le lot est amendé.
 
 ### Closing a batch
@@ -646,6 +664,7 @@ est unique parmi les documents de story du dépôt**, ce que garantit le préfix
 **Batch:** docs/batches/NN-<slug>/README.md
 **Sections:** <section> > <sous-section>, <section>
 **Blocks:** D<n>, D<n>
+**Technical:** yes
 ```
 
 `Spec:` désigne la spec vivante du module visé, autorité contraignante de toute
@@ -657,7 +676,11 @@ d'un diff.
 
 `Blocks:` déclare les blocs du spec delta que la story transcrit, et c'est ce que
 lit la clôture pour constater les blocs non livrés. Il vaut `none` pour une story
-qui n'en transcrit aucun — une story de lot correctif, une story de démontage.
+qui n'en transcrit aucun — une story de lot correctif, une story technique, une
+story de démontage.
+
+**Une story technique porte `Technical: yes` dans son en-tête**, et ne touche aucune
+section : son `Sections:` vaut `none`. Aucune autre story ne porte ce champ.
 
 Le document porte en outre un **Rulings log** et une section **Observed drift**,
 remplis avant la fusion. Les deux sont **créées vides en même temps que l'en-tête**,
@@ -668,7 +691,7 @@ trouvé ».
 `Ruling:`, et sa ligne se termine par ce qui reste à trancher, puis par la
 catégorie du gaps register qui l'accueille quand il en rejoint une.
 
-`Global Constraints` porte cinq choses :
+`Global Constraints` porte :
 
 1. les contraintes que le lot impose, sa section `Constraints` recopiée mot pour
    mot ;
@@ -679,7 +702,9 @@ catégorie du gaps register qui l'accueille quand il en rejoint une.
    correctif (`Departures from superpowers`), recopiée intégralement ;
 5. **dans une story qui écrit du code gardé par un flag seulement**, les règles du
    code gardé (`Code under a feature flag`), recopiées intégralement — que le flag
-   soit déclaré par le lot de la story ou par un autre.
+   soit déclaré par le lot de la story ou par un autre ;
+6. **dans une story technique seulement**, la condition d'arrêt propre à la story
+   technique (`Departures from superpowers`), recopiée intégralement.
 
 ### Concurrency detection
 
@@ -735,9 +760,9 @@ ouvert — sa pull request d'ouverture est fusionnée et son document porte
 
    **Cas d'une story qui ne transcrit aucun bloc :** ce premier commit porte
    l'en-tête du document de story et ses sections `Rulings log` et `Observed drift`
-   vides. Il y joint ce que cette story-là retire : l'entrée du gaps register
-   qu'elle résorbe, ou la modification de spec qu'aucun bloc n'annonce. Le plan est
-   écrit ensuite dans ce document.
+   vides. Il y joint ce que cette story-là retire, s'il y a quelque chose :
+   l'entrée du gaps register qu'elle résorbe, ou la modification de spec qu'aucun
+   bloc n'annonce. Le plan est écrit ensuite dans ce document.
 4. **Écrire le plan** — le document de story, avec ses `Global Constraints`, puis
    **le commiter et le pousser immédiatement**, avant que l'exécution démarre.
 5. **Exécuter par sous-agents**, puis conclure la branche par une pull request
@@ -780,7 +805,8 @@ portée et la condition qui le lève.
 seule, laisserait-elle un utilisateur devant quelque chose d'incomplet ? Si non,
 pas de flag. Trois familles répondent non par construction :
 
-- **Refactor et infrastructure** — ils ne changent aucun comportement.
+- **Un lot dont toutes les stories sont techniques** — aucune ne change ce qui est
+  observable à la frontière de son module.
 - **Lot correctif** — il rétablit un comportement que la spec promet déjà.
 - **Lot à story unique** — rien n'est jamais à moitié livré.
 

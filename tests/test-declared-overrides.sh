@@ -66,7 +66,7 @@ check_verb "steps 6 to 9 are replaced by writing-a-batch" \
     "are replaced by \`supercharlouze:writing-a-batch\`" \
     "replaces steps 6 to 9 of the architectural checklist"
 check_verb "the stop conditions are extended, not restated" \
-    "This plugin adds one, for corrective batches only" \
+    "This plugin adds two. For corrective batches only:" \
     "extends the stop conditions of superpowers:subagent-driven-development"
 check_verb "SDD is imposed as the execution mode" \
     "This plugin imposes SDD as the execution mode" \
@@ -93,8 +93,9 @@ else
     pass "block does not claim subagent-driven-development applies unchanged"
 fi
 
-# "fifth" alone is satisfied by the heading of Override 2 ("fifth stop condition"),
-# so the needle is a fragment of the prohibition itself.
+# "fifth" alone is satisfied by the prose around the override count — "an
+# undeclared fifth", "a fifth clause" — so the needle is a fragment of the
+# prohibition itself.
 if has "there must never be an undeclared" "$SKILL_FLAT"; then
     pass "using-batches forbids an undeclared fifth override"
 else

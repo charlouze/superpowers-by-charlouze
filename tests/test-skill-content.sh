@@ -103,6 +103,12 @@ require writing-a-batch "the specs are the registry of flags"     "The specs are
 require writing-a-batch "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
 require writing-a-batch "amendment pull request exists"           "amendment pull request"
 require writing-a-batch "carries the requalification procedure"   "requalification"
+require writing-a-batch "requalifies a technical story" \
+    "## Requalifying a Technical Story"
+require writing-a-batch "an observable change needs a block" \
+    "it needs a block, and a block is acquired by an amendment that goes back through the opening review"
+require writing-a-batch "the lost qualification takes the exemption with it" \
+    "declares one by that same amendment"
 require writing-a-batch "branch naming convention"                "batch/NN"
 
 # --- writing-a-batch: the batch document contract (spec section "The batch document") ---
@@ -236,6 +242,16 @@ require writing-a-user-story "story branch naming convention"     "story/NN"
 require writing-a-user-story "spec change states flag and default" "states the flag and its default"
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
 require writing-a-user-story "teardown story exists"              "teardown story"
+require writing-a-user-story "a technical story declares itself" \
+    "**A technical story carries \`Technical: yes\` in its header**"
+require writing-a-user-story "a technical story touches no section" \
+    "its \`Sections:\` is \`none\`"
+require writing-a-user-story "no other story carries that field" \
+    "No other story carries that field"
+require writing-a-user-story "Blocks none covers the technical story" \
+    "a corrective batch's story, a technical story, a teardown story"
+require writing-a-user-story "the technical condition hands off to writing-a-batch" \
+    "**abandon the story**, then hand the decision to \`supercharlouze:writing-a-batch\`"
 require writing-a-user-story "a rule belongs to exactly one spec" "A rule belongs to exactly one spec."
 require writing-a-user-story "no ruling houses a rule twice"      "no ruling puts a rule in two places"
 
@@ -244,8 +260,9 @@ require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints
 require writing-a-user-story "GC carries the spec freeze"         "freeze of the spec file"
 require writing-a-user-story "GC carries the authority rule"      "That rule is the third thing \`Global Constraints\` carries"
 require writing-a-user-story "the authority rule is stated in full" "the spec wins — without exception and without deliberation"
-require writing-a-user-story "GC counts five things"              "carries five things"
-require writing-a-user-story "GC carries the fifth stop condition" "the fifth stop condition of Step 5, written out in full"
+require writing-a-user-story "GC carries the corrective stop condition" "the stop condition proper to a corrective batch, written out in full"
+require writing-a-user-story "GC carries the technical stop condition" "carries a sixth thing: the stop condition proper to a technical story"
+require writing-a-user-story "GC lists a sixth item"              "6. **in a technical story only**, the stop condition proper to a technical story"
 require writing-a-user-story "GC carries the guarded-code rules"  "carries a fifth thing: the rules for code under a flag"
 require writing-a-user-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
 require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
@@ -363,6 +380,18 @@ require using-batches "a rule outside the specs binds nobody"  "sits beyond ever
 require using-batches "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
 require using-batches "a block is transcribed word for word" "the exact text it must receive, transcribed word for word by a story"
 
+# --- using-batches: the technical story (spec section "The model") ---
+require using-batches "defines the technical story" \
+    "**Technical story** — a story that changes nothing observable at its module's boundary."
+require using-batches "the qualification is declared" \
+    "a declared qualification, caught by its stop condition if it turns out to be false"
+require using-batches "a batch no longer promises behaviour" \
+    "It groups several user stories, and targets one or more modules, hence one or more specs."
+require using-batches "a technical story has a stop condition too" \
+    "you discover that it changes something observable at the module's boundary, stop. The story is no longer technical."
+require using-batches "a ruling replaces neither condition" \
+    "A ruling replaces neither of them"
+
 # --- using-batches: the shape of a review's end ---
 require using-batches "forbids the agent approving or merging" "never approves and never merges a pull request"
 require using-batches "pushes corrections as fixups"           "pushed as a \`fixup!\` commit"
@@ -378,5 +407,16 @@ require using-batches "a bounded change adds and removes entries"  "add an entry
 # --- using-batches: guarded code rules (referencing writing-a-user-story) ---
 require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"
 require using-batches "the guarded-code rules are written in one place" "a second copy of a rule is exactly what drifts"
+
+# `Refactor and infrastructure` named a family no `Spec delta` field could carry:
+# a batch of that kind has no block, and nothing said what its field held. Nothing
+# may name it again — an assertion on the new family alone would stay green beside
+# a leftover copy of the old one.
+for s in using-batches writing-a-batch; do
+    case "$(body_flat "$REPO_ROOT/skills/$s/SKILL.md")" in
+        *"Refactor and infrastructure"*) fail "$s: the old exemption family is gone" ;;
+        *)                               pass "$s: the old exemption family is gone" ;;
+    esac
+done
 
 exit $((FAILURES > 0))
