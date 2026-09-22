@@ -875,17 +875,19 @@ Seule une story change le défaut déclaré.
 
 ## Bounded change
 
-Un changement borné n'a ni lot ni story : c'est une pull request qui porte sa mise
-à jour de spec, sur une branche `fix/<slug>`. Quatre règles :
+Un changement borné n'a ni lot ni story : c'est une pull request unique, sur une
+branche `fix/<slug>`. Quatre règles :
 
-- **(a) Il ne laisse jamais la spec muette.** Qu'il *altère* un comportement déjà
-  décrit ou qu'il en *ajoute* un que nulle spec ne décrit, sa pull request met la
-  spec à jour en même temps que le code, avec une ligne de changelog
-  `out-of-batch`.
+- **(a) Il laisse la spec muette si et seulement si rien d'observable à la frontière
+  du module ne change.** Qu'il *altère* un comportement déjà décrit ou qu'il en
+  *ajoute* un que nulle spec ne décrit, sa pull request met la spec à jour en même
+  temps que le code, avec une ligne de changelog `out-of-batch` ; s'il ne change
+  rien d'observable, la spec reste muette et aucune ligne n'est écrite.
 - **(b) Il subit la même détection de concurrence qu'une story**, et déclare donc
-  ses sections **dans le corps de sa pull request**. Son angle mort est accepté :
-  entre son premier commit et l'ouverture de sa pull request, rien ne porte sa
-  déclaration.
+  **dans le corps de sa pull request** la spec qu'il vise et les sections qu'il
+  touche, `none` s'il n'en touche aucune ; une déclaration qui change avant
+  l'ouverture refait la détection. Son angle mort est accepté : entre son premier
+  commit et l'ouverture de sa pull request, rien ne porte sa déclaration.
 - **(c) Il ne porte aucun flag** : il est complet dans sa propre pull request.
 - **(d) Il écrit directement dans un gaps register** : n'appartenant à aucun lot,
   il peut y ajouter une entrée comme en supprimer une, depuis sa propre pull
