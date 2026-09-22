@@ -8,11 +8,12 @@ description: Use when writing the next user story of an open batch - transcribes
 ## Overview
 
 A story is the unit of technical delivery: **one story, one branch, one pull
-request** — and that pull request carries *both* the spec change and the code
-that implements it. They ship together or not at all. That is what gives
-`main` its central property: **its spec always describes exactly
-what its code does.** No intermediate state to signal, no marker, no exception
-to the drift rule.
+request** — and that pull request never carries its spec change without the code
+that implements it. The reverse is legitimate: a story that transcribes no block
+may carry code alone, as a corrective batch's story does. That is what gives
+`main` its central property: **its spec always describes exactly what its
+code does.** No intermediate state to signal, no marker, no exception to the
+drift rule.
 
 **Announce at start:** "I'm using the writing-a-user-story skill to write this
 story."
@@ -284,13 +285,18 @@ intent unreviewed while the breakdown it revealed stays hidden. Stop and put it
 to your human partner: what is in question is the breakdown, and a breakdown is
 their decision.
 
-**Corrective story.** The delta being empty, this first commit does not touch
-the spec. It deletes the gaps register entry it resolves from
-`docs/specs/<module>.gaps.md`, and the commit that removes it says why. That
-plays the same role: fixing the scope in the branch's history before any code
-exists. Removing an entry takes out lines nobody else is writing, so two stories
+**A story that transcribes no block** still has this first commit, and it still
+fixes the scope in the branch's history before any code exists. It carries the
+header of the story document and its empty `Rulings log` and `Observed drift`
+sections — Step 4 then writes the plan into that document rather than creating it
+— together with what this particular story removes.
+
+A corrective batch's story removes an entry: it deletes the gaps register entry it
+resolves from `docs/specs/<module>.gaps.md`, and the commit that removes it says
+why. Removing an entry takes out lines nobody else is writing, so two stories
 removing different entries do not collide — and what the entry said, and why it
-went, stay readable in the history of the file.
+went, stay readable in the history of the file. A teardown story removes from
+the spec what no block announced, and that removal is this same commit.
 
 **Push the branch as soon as this commit exists** — `git push -u origin
 story/NN-us-N-<slug>`. Nothing depends on it for this story; it is what makes
@@ -333,9 +339,11 @@ now, and left empty if nothing turns up:
 ## Observed drift
 ```
 
-Write them at the same time as the header, not at Step 6. An empty section says
-*checked, nothing found*; a missing section says *never examined*, and a
-reviewer cannot tell the second from an omission.
+Write them at the same time as the header, never at Step 6. An empty section says
+*checked, nothing found*; a missing section says *never examined*, and a reviewer
+cannot tell the second from an omission. A story that transcribed no block wrote
+both at Step 3, with the header: they are already there, and this step writes the
+plan into the document between them.
 
 **An open ruling is written `Open ruling:`** where the others are written
 `Ruling:`, and its line ends with what is left to settle, then with the gaps
@@ -357,8 +365,8 @@ part of every task's requirements — carries five things:
 The batch's constraints are its `Constraints` section copied verbatim. The
 freeze of the spec file reads:
 
-> Between the transcription commit and the opening of the pull request, no task
-> modifies the spec file. A story that discovers the spec must change stops.
+> Between the first commit of the branch and the opening of the pull request, no
+> task modifies the spec file. A story that discovers the spec must change stops.
 
 The freeze exists because the spec file now travels in the same branch as the
 code, so SDD's tasks can physically edit it — which was not true when it lived
@@ -548,8 +556,9 @@ the pull request ready to be approved and merged.
 
 **Merging it is a moment to clear the context**, and the announcement says so. On
 this path the conversation is the heaviest of any gate — it carries a plan, an
-SDD ledger, and every file the implementers touched — while `main` now carries the
-spec change and the code together, which is all the next story needs.
+SDD ledger, and every file the implementers touched — while `main` now carries
+this story's code, and its spec change if it had one, which is all the next story
+needs.
 
 So the announcement names the next story as the next step — unless this story
 took the batch's last undelivered blocks, in which case it names
@@ -565,11 +574,11 @@ Everything perishable is already in the story document — that is what
 the transcription away with the code — nothing to revoke, no spec to put back
 straight. If the abandonment happens before the pull request exists — a
 requalification under Override 2, a story dropped mid-run — there is nothing to
-close, only a branch and a worktree to discard. Two residues remain on `main`:
-the gaps register
-reservation posted by the batch's opening pull request, and the blocks the
-batch announced and no story delivered. Both belong to
-`supercharlouze:closing-a-batch`.
+close, only a branch and a worktree to discard. What remains on `main` belongs
+to `supercharlouze:closing-a-batch`: the gaps register reservation posted by
+the batch's opening pull request, and the blocks the batch announced and no
+story delivered. Do not count them — a story that transcribed no block
+announced nothing in the spec delta and leaves the reservation alone.
 
 **Clean up after an abandoned or requalified story: remove its worktree and
 delete its branch, locally and on the remote.** This is not tidiness. A pushed

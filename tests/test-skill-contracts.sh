@@ -288,13 +288,26 @@ absent "no skill denies that the batch document changes at closing" \
     "batch modifies it( [^*]|[^ ])" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
-# A corrective story's first commit is described in two places — the skill that
-# prescribes it and the one that explains why it is the single exception of form
-# to "the spec change ships first". One assertion over both: two `require` calls
-# would each stay green while one end drifted back to striking the entry.
-shared "a corrective story's first commit deletes its entry" \
+# The first commit of a story that transcribes no block is described in two places —
+# the skill that prescribes it and the one that explains why it is the exception of
+# form to "the spec change ships first". One assertion over both: two `require`
+# calls would each stay green while one end drifted back to striking the entry.
+shared "a story with no block still deletes its entry that way" \
     "deletes the gaps register entry it resolves" \
     writing-a-user-story using-batches
+
+# What that first commit carries besides the removal, so the branch holds a document
+# from its first commit and the plan has somewhere to be written at Step 4.
+shared "that first commit carries the story document's header" \
+    "the header of the story document and its empty \`Rulings log\` and \`Observed drift\` sections" \
+    writing-a-user-story using-batches
+
+# The mirror: the case is no longer the corrective batch's alone, and a skill that
+# still scopes it there sends any other blockless story looking for a rule that
+# names a batch kind it does not belong to.
+absent "no skill scopes the blockless first commit to a corrective story" \
+    "\*\*Corrective story\.\*\*|A corrective story is the one exception" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
 # Removal leaves no trace in the register, so what a module already rejected is
 # readable only in the file's history. Both writers that add an entry — a
@@ -366,5 +379,54 @@ shared "every writer that adds an entry keeps a group's qualification out" \
 shared "every writer that adds an entry keeps entries from pointing at each other" \
     "An entry designates no other entry" \
     adopting-a-module closing-a-batch using-batches
+
+# The pairing of a spec change with its code is stated by the negation, because a
+# story may carry code alone — a corrective batch's story does today. Both skills
+# that state it must spell it alike: the doctrine and the procedure drifting apart
+# here is exactly how an agent ends up believing a story owes the spec a sentence.
+shared "the pairing is stated by the negation" \
+    "never carries its spec change without the code that implements it" \
+    using-batches writing-a-user-story
+
+# The mirror. The positive assertion above stays green on a file that carries both
+# the negation and the old unconditional claim, and it is the old one an agent would
+# obey — it is the shorter and the more emphatic of the two.
+absent "no skill pairs spec change and code unconditionally" \
+    "ship together or not at all|\*both\* the spec change|the spec change and the code together" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# The freeze is copied verbatim into the Global Constraints of every plan, so the
+# skill that states the norm and the skill that copies it must spell it identically.
+# Two separate assertions would each stay green while the copied wording drifted
+# from the stated one, and the implementers only ever read the copy.
+shared "the freeze is spelled alike wherever it is stated" \
+    "Between the first commit of the branch and the opening of the pull request, no task modifies the spec file" \
+    using-batches writing-a-user-story
+
+# The mirror. A skill carrying both anchors would leave the positive assertion
+# green while still handing implementers the old one. The needle is the bare term:
+# no branch of this flow has a commit called that any more — the branch has a first
+# commit, whose content is a transcription or something else depending on the story
+# — so the term returning anywhere is the drift, not just the old freeze opening.
+absent "no skill anchors the freeze on a transcription commit" \
+    "transcription commit" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# What an abandonment leaves on `main` is not a fixed count: a story that
+# transcribed no block announced no intention in the spec delta, so it leaves the
+# reservation alone. A skill that counts hands closing a checklist of the wrong
+# length, and closing is the only skill that picks these up.
+absent "no skill counts what an abandonment leaves on main" \
+    "Two residues|two residues|two things it never touched" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# Transcribing no block does not mean touching no spec: a teardown story removes
+# from the spec what no block announced, and its first commit carries that removal.
+# Both skills that describe the blockless first commit must name that case. The
+# negation they state is already guarded; its justification was not, and the two
+# ends drifted into claiming a blockless story never touches the spec.
+shared "both skills name the blockless story that still changes the spec" \
+    "teardown story removes from the spec what no block announced" \
+    using-batches writing-a-user-story
 
 exit $((FAILURES > 0))
