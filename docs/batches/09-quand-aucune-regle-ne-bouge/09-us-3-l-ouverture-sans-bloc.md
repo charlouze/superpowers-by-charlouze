@@ -484,4 +484,33 @@ git commit -m "feat: la revue d'ouverture porte sur ce qui tient lieu de blocs" 
 
 ## Rulings log
 
+L'exécution n'a produit aucun arbitrage : le scan préalable du plan n'a rien
+trouvé, aucune revue de tâche n'a ouvert de boucle de correction, et aucune
+condition d'arrêt ne s'est déclenchée. Les trois constats mineurs de la revue
+finale de branche ont été corrigés, pas arbitrés.
+
 ## Observed drift
+
+Deux passages, hors des sections que cette story tient, que les quatre normes
+livrées ici rendent trompeurs. Ni l'un ni l'autre n'est corrigé sur cette
+branche : ils appartiennent à des sections tenues par d'autres stories.
+
+- **`docs/specs/supercharlouze.md`, `The model`** — « **Lot correctif**
+  (`corrective batch`) — un lot dont le spec delta est **vide** ». Le glossaire
+  dit *vide* là où `Batch > The batch document` dit désormais que le champ
+  *n'est jamais laissé blanc*. Les deux sont vrais sous la distinction que D3
+  pose — *vide de blocs* n'est pas *champ muet* —, mais le lecteur qui rencontre
+  le glossaire d'abord en repart avec « un lot correctif laisse ce champ vide »,
+  que D3 interdit. **Aucun bloc du lot 09 ne le résorbe** : `D1` et `D2` visent
+  bien `The model`, mais tombent sur les définitions de *Story* et de *Lot*.
+- **`skills/using-batches/SKILL.md`, glossaire** — « **Corrective batch** — a
+  batch whose spec delta is empty. » Même raccourci, un cran plus exposé : c'est
+  l'entrée qu'un lecteur du plugin rencontre en premier, elle tient en une phrase
+  que rien n'entoure, et `writing-a-batch` ouvre désormais son paragraphe
+  homologue par « The `Spec delta` field is never left blank. »
+
+Examiné et jugé non divergent : `skills/closing-a-batch/SKILL.md`, « Its spec
+delta is empty by definition — … — so it announced no block a spec could fall
+short of. What it announced instead were the gaps register entries it reserved ».
+La phrase définit son raccourci dans le même souffle, et ce qu'elle décrit est
+exactement la deuxième forme que D3 nomme.
