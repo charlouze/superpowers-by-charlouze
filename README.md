@@ -159,11 +159,14 @@ request flow, not an edge case. A conflict is two stories touching **the same
 section of the same spec**; the section is the unit everything is counted in.
 
 Detection is by **declaration**, never by diff. Each story document lists the
-sections it touches, and a starting story reads those declarations from the open
-pull requests *and* from every pushed `story/*` branch that carries no pull
-request yet. Both sources are needed: a story's pull request opens only at the
-very end, so for the whole length of an implementation its pushed branch is the
-only thing showing what it holds.
+spec it targets and the sections it touches, and a starting story reads those
+declarations from the open pull requests whose branch is `story/*` or `fix/*`
+*and* from every pushed `story/*` branch that carries no pull request yet.
+**The branch name is the filter**: those two patterns are the only branches that
+claim sections, so a pull request that touches no spec at all is seen like any
+other. Both sources are needed: a story's pull request opens only at the very
+end, so for the whole length of an implementation its pushed branch is the only
+thing showing what it holds.
 
 Git is a partial net here, not the net. It conflicts on lines, not on sections,
 so two edits far apart inside one section merge cleanly — exactly the case worth
