@@ -253,6 +253,8 @@ require writing-a-batch "allocation reads main on the remote" "git ls-tree --nam
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "branches from main as the remote carries it" "starts from \`main\` as the remote carries it"
 require writing-a-user-story "concurrency via declared Sections"  "Sections:"
+require writing-a-user-story "a declaration names its spec as well"  "\`Spec:\` names the spec"
+require writing-a-user-story "a bounded change names both in its body" "names both in the body of its pull request"
 require writing-a-user-story "git conflict is only a partial net" "partial safety net"
 require writing-a-user-story "transcription is the first commit"  "first commit on the branch"
 require writing-a-user-story "freeze travels in Global Constraints" "Global Constraints"

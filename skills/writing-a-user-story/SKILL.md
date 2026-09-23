@@ -63,32 +63,44 @@ of this system, not only to stories.
 Two stories touching the same section of the same spec are a conflict. Decide
 which sections this story will touch, then check that nobody else holds them.
 
-1. **List the open pull requests together with the files they touch**, and keep
-   those whose files include this story's spec file. Bare `gh pr list` does not
-   print the files of a pull request, so it can never answer this question —
-   ask for them explicitly, together with the head ref point 2 reads:
+1. **List the open pull requests together with their head ref**, and keep those
+   whose branch is `story/*` or `fix/*`. Bare `gh pr list` does not print the
+   head ref, so ask for it explicitly:
 
    ```bash
-   gh pr list --state open --limit 100 --json number,headRefName,files
-   gh pr view <n> --json number,headRefName,files   # one pull request at a time
+   gh pr list --state open --limit 100 --json number,headRefName
+   gh pr view <n> --json number,headRefName   # one pull request at a time
    ```
 
-2. **For each of those, read its `Sections:` declaration — wherever that pull
-   request keeps it.** A story keeps it in its story document, which lives on
-   the *other* pull request's head branch and not in your worktree, so read it
-   at the head ref. A **bounded change** (`fix/<slug>`) has no story document at
-   all: it declares its sections in the body of its pull request, so read the
-   body. Look in the place that kind of pull request actually uses — demanding a
-   story document from a bounded change would find nothing, and "nothing found"
-   is the unknown of point 6, so every story would stop for as long as any
-   bounded pull request stayed open. That is a false stop, and a false stop jams
-   the nominal path instead of protecting it.
+   **The filter is the branch name, not the files the pull request touches.**
+   Those two patterns are the only branches that claim sections, so the head ref
+   answers on its own — nothing to fetch and no file to read. And a pull request
+   that touches no spec at all still holds its sections: a corrective story's
+   first commit deletes a gaps register entry, so a filter on the spec file made
+   it invisible to every sibling for its whole life.
+
+2. **For each of those, read its declaration — wherever that pull request
+   keeps it.** A story keeps it in its story document, which lives on the
+   *other* pull request's head branch and not in your worktree, so read it at
+   the head ref: `Spec:` names the spec, `Sections:` the sections. A **bounded
+   change** (`fix/<slug>`) has no story document at all: it names both in the
+   body of its pull request, so read the body. Look in the place that kind of
+   pull request actually uses — demanding a story document from a bounded
+   change would find nothing, and "nothing found" is the unknown of point 6,
+   so every story would stop for as long as any bounded pull request stayed
+   open. That is a false stop, and a false stop jams the nominal path instead
+   of protecting it.
 
    ```bash
    gh api "repos/{owner}/{repo}/contents/<path>?ref=<headRefName>" --jq .content | base64 -d
    git fetch origin <headRefName> && git show FETCH_HEAD:<path>   # local alternative
    gh pr view <n> --json body --jq .body                          # bounded change: fix/<slug>
    ```
+
+   **A declaration naming a spec other than yours holds nothing against you.**
+   The branch name says who claims sections; the declaration says in which spec.
+   That is why the filter of point 1 can be as wide as it is — it lets in every
+   claimant, and the declaration sorts them.
 
 3. **Read the same field on every remote `story/*` branch that carries no pull
    request yet.** A story's pull request opens only at the end of Step 5, so a
@@ -99,17 +111,21 @@ which sections this story will touch, then check that nobody else holds them.
    ```bash
    git ls-remote --heads origin 'story/*'
    git fetch origin
-   git diff --name-only origin/main...origin/<branch>   # does it touch this spec file?
    git show origin/<branch>:docs/batches/NN-<slug>/NN-us-N-<slug>.md
+   git diff --name-only origin/main...origin/<branch>   # no document yet: which spec has it already changed?
    ```
 
-   Keep the branches whose diff against `main` touches this story's spec file —
-   the same filter point 1 applies to pull requests. Skip the branches already
-   covered by a pull request there, and skip your own. A kept branch whose
-   story document does not exist yet is a story between its spec commit and its
-   plan commit: it holds the spec file and has not yet declared its sections,
-   which is an unknown and stops you exactly as point 6 does. That window is one
-   plan-writing step long.
+   `story/*` is the whole filter here — the same one point 1 applies to pull
+   requests. Skip the branches already covered by a pull request there, and skip
+   your own.
+
+   **A branch whose story document does not exist yet concerns the spec it has
+   already changed.** It is a story between its spec commit and its plan commit:
+   it holds sections it has not declared. If that spec is yours, it is an unknown
+   and stops you exactly as point 6 does; if it is another module's, it holds
+   nothing against you. That window is one plan-writing step long, and only a
+   story that transcribes a block ever has it — a story whose first commit
+   carries its story document declares from its first commit.
 4. Intersect all of those with the sections this story will touch.
 5. **Stop if the intersection is not empty.** Report which pull request or
    branch holds the section, and let your human partner sequence the two.
@@ -118,11 +134,13 @@ which sections this story will touch, then check that nobody else holds them.
    silent on a bounded change, field missing. An unread declaration is an
    unknown, not a pass. Name the pull request and say why, and let your human
    partner decide. Silently treating it as empty turns the one real net into
-   "found nothing". The same applies to a story branch kept at point 3. What is
-   *not* an unknown: a bounded change having no story document. It never has
-   one, and its declaration is in its pull request body — read there, per
-   point 2. Only a declaration genuinely absent from the place its kind of pull
-   request keeps it stops you.
+   "found nothing". The same applies to a story branch kept at point 3 that
+   carries no declaration yet **and has already changed your spec file** — one
+   that has changed another module's is scoped away by point 3, not an unknown.
+   What is *not* an unknown: a bounded change having no story document. It
+   never has one, and its declaration is in its pull request body — read
+   there, per point 2. Only a declaration genuinely absent from the place its
+   kind of pull request keeps it stops you.
 
 **Name the blind spot rather than trusting the net.** What this check sees is
 what is on the remote: open pull requests, and pushed story branches. A story
@@ -700,7 +718,7 @@ documents.
 | "`main` moved, so I'll amend the batch document to match" | Fit the block to `main` without changing its meaning, and name the divergence in the pull request. The batch document records what the review read. |
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No merge conflict, so no one else is on this section" | Git conflicts on lines, not sections. Check the open pull requests. |
-| "No open pull request touches this spec, so the section is free" | A story holds its sections from Step 1 until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too. |
+| "No open pull request touches this spec, so the section is free" | The filter is the branch name, not the files: a pull request that touches no spec holds its sections all the same. And a story holds them from Step 1 until its pull request opens at the end of Step 5 — read the pushed `story/*` branches too. |
 | "No open pull request uses us-3, so us-3 is free" | A branch claims its number from its first commit until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too — same argument as the concurrency scan. |
 | "This pull request has no story document, so I must stop" | Not if it is a `fix/<slug>`: a bounded change declares its sections in its pull request body. Read it there. Stopping would halt every story for as long as one bounded pull request stays open. |
 | "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-change commit. |

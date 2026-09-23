@@ -46,21 +46,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Gaps
 
-- **Concurrency detection / The user story document** — la spec fait du champ
-  `Sections:` « ce que lit la détection de concurrence », et la détection ne
-  retient que les pull requests et les branches **dont le diff touche le fichier
-  de spec**. Or le premier commit d'une story corrective ne touche pas la spec,
-  par construction : il supprime une entrée du gaps register. Une story corrective
-  est donc structurellement invisible de ce mécanisme, et le `Sections:` que la
-  spec lui impose de déclarer n'est jamais lu par personne. Constaté par le
-  lot 01, dont c'était le cas. **Rien à corriger dans le code : les deux règles
-  sont implémentées fidèlement, c'est leur conjonction qui est muette.** Résorber
-  cette entrée veut dire décider ce que la spec doit dire — soit exempter une
-  story corrective de la déclaration, soit étendre le filtre au gaps register —
-  et cette décision est humaine. D'où le classement en *gap* plutôt qu'en
-  violation : un lot correctif la prendrait et buterait aussitôt sur la cinquième
-  condition d'arrêt. `reserved by batch-09`
-
 - **Installing on a project** — le second membre de la phrase sur les répertoires
   que l'installation crée, également falsifiable : « Rien dans ce flux ne lit ces
   répertoires avant qu'un document y soit écrit ». `writing-a-batch` lit

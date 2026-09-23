@@ -715,22 +715,25 @@ catégorie du gaps register qui l'accueille quand il en rejoint une.
 Deux stories qui touchent la même section d'une même spec sont un conflit. La
 détection est **par déclaration**, et lit **deux sources distantes** :
 
-- les **pull requests ouvertes** touchant le même fichier de spec, dont on lit le
-  champ `Sections:` ;
-- les **branches `story/*` poussées qui ne portent pas encore de pull request et
-  dont le diff contre `main` touche le même fichier de spec**, dont on lit le même
-  champ sur leur tête.
+- les **pull requests ouvertes dont la branche est `story/*` ou `fix/*`**, dont on
+  lit le champ `Sections:` ;
+- les **branches `story/*` poussées qui ne portent pas encore de pull request**,
+  dont on lit le même champ sur leur tête.
 
-Le même filtre par fichier de spec s'applique aux deux sources.
+**Le filtre est le nom de la branche** : seules `story/*` et `fix/*` revendiquent
+des sections.
 
-**La déclaration `Sections:` se lit là où la pull request la tient** : dans le
-document de story pour une story, dans le corps de la pull request pour un
-changement borné, qui n'a pas de document de story.
+**La déclaration se lit là où la pull request la tient** : dans le document de story
+pour une story, où `Spec:` nomme la spec et `Sections:` les sections ; dans le corps
+de la pull request pour un changement borné, qui n'a pas de document de story et y
+nomme les deux. Une branche poussée qui ne porte pas encore de déclaration concerne
+la spec qu'elle a déjà modifiée.
 
 **Il faut s'arrêter** si l'intersection avec les sections visées n'est pas vide, et
 **s'arrêter aussi si un champ `Sections:` n'a pas pu être lu** — lecture en échec,
 document absent, champ manquant. Une branche poussée dont le document de story
-n'existe pas encore arrête pareillement.
+n'existe pas encore arrête pareillement quand la spec qu'elle a déjà modifiée est
+celle des sections visées.
 
 **La détection ne voit que ce qui est sur le remote** : une branche créée mais non
 poussée lui est invisible.
