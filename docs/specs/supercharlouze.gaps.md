@@ -205,3 +205,21 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   `08-us-3-le-point-de-depart-d-une-branche`, laissé hors de son périmètre.
   **Gap et non violation :** aucune règle de spec n'est contredite — la spec ne
   dit pas d'où cette lecture se fait ; l'écrire est un acte humain.
+
+- **The model / The batch document** — le glossaire définit le **lot correctif**
+  comme « un lot dont le spec delta est vide », là où `Batch > The batch document`
+  pose que le champ `Spec delta` **n'est jamais laissé blanc** et qu'un lot sans
+  bloc y porte ce qu'il réserve au gaps register. Les deux phrases
+  tiennent ensemble si « vide » veut dire *sans bloc*, mais rien ne le dit, et le
+  lecteur qui rencontre le glossaire d'abord en repart avec « un lot correctif
+  laisse ce champ vide », ce que l'autre section interdit. Le glossaire de
+  `using-batches` porte le même raccourci — « a batch whose spec delta is
+  empty » —, dans la skill qu'un lecteur du plugin rencontre en premier, alors
+  que `writing-a-batch` ouvre son paragraphe homologue par « The `Spec delta`
+  field is never left blank » ; reformuler la définition de la spec entraînerait
+  celle de la skill. Constatée par la story `09-us-3-l-ouverture-sans-bloc`, dont
+  aucun bloc du lot ne visait cette définition, et consolidée par la clôture du
+  lot 09. **Gap et non violation :** la skill suit fidèlement le glossaire de la
+  spec, c'est la spec qui porte deux formulations que seule une distinction non
+  écrite réconcilie ; trancher veut dire corriger une spec, ce qu'un agent ne
+  peut pas faire.
