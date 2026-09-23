@@ -76,13 +76,25 @@ fi
 # 4. The bounded path is spelled out (spec 8.2) — it has no skill of its own.
 UB="$(awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$REPO_ROOT/skills/using-batches/SKILL.md" | tr '\n' ' ')"
 has() { case "$2" in *"$1"*) return 0 ;; *) return 1 ;; esac }
-for needle in "out-of-batch" "never leaves the spec silent" "fix/" "no feature flag"; do
+for needle in "out-of-batch" "if and only if nothing observable" "fix/" "no feature flag"; do
     if has "$needle" "$UB"; then
         pass "bounded path states: $needle"
     else
         fail "bounded path states: $needle"
     fi
 done
+
+# The README states the same four rules for a human reader who has read nothing
+# else. It is the one shipped artifact that paraphrases them, so it is also the
+# one that can keep asserting the unconditional version after the skill stopped.
+# The needle carries "no change" so it cannot match the true rule, which reads
+# "leaves the spec silent if and only if" — the trap the `absent` helper in
+# test-skill-contracts.sh documents avoiding.
+if grep -q "no change leaves the spec silent" "$REPO_ROOT/README.md"; then
+    fail "the README does not assert the unconditional spec update"
+else
+    pass "the README does not assert the unconditional spec update"
+fi
 
 # 5. No shipped artifact cites a numbered section of the archived design
 #    document. The living spec is the binding authority and its sections are

@@ -175,9 +175,11 @@ The spike / bounded / architectural classification of superpowers is kept as it
 is. A spike is an answer, and leaves no artifact. A **bounded change** — a
 well-scoped change to code that already exists — keeps its own ceremony and its
 `fix/<slug>` branch, under four rules: it updates the spec in the same pull
-request, so no change leaves the spec silent; it declares its sections like a
-story; it carries no flag, being complete on its own; and it may write to a gaps
-register directly. Only architectural work opens a batch.
+request whenever something observable at the module's boundary changes, and says
+nothing there only when nothing does; it declares the spec it targets and the
+sections it touches, like a story; it carries no flag, being complete on its own;
+and it may write to a gaps register directly. Only architectural work opens a
+batch.
 
 ### The four departures
 

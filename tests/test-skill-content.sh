@@ -448,4 +448,16 @@ for s in using-batches writing-a-batch; do
     esac
 done
 
+# --- using-batches: the bounded change (spec `Bounded change`) ---
+require using-batches "a bounded change may leave the spec silent" \
+        "if and only if nothing observable at the module's boundary changes"
+require using-batches "a silent bounded change writes no changelog line" \
+        "the spec stays silent and no changelog line is written"
+require using-batches "a bounded change names the spec it targets" \
+        "the spec it targets and the sections it touches"
+require using-batches "a bounded change touching no section declares none" \
+        "when it touches none"
+require using-batches "a changed declaration redoes the detection" \
+        "redoes the detection"
+
 exit $((FAILURES > 0))
