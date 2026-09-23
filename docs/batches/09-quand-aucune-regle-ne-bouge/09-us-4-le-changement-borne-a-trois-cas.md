@@ -379,4 +379,29 @@ git commit -m "docs: le README présente les trois cas du changement borné"
 
 ## Rulings log
 
+L'exécution par sous-agents n'a produit aucun arbitrage : la relecture
+préalable du plan était propre, aucune tâche n'a buté sur une contradiction
+entre le lot et la spec, et aucun constat de revue n'a été parqué. Un seul
+arbitrage a été pris, au moment d'écrire le plan.
+
+Ruling: la story ne livre que le côté *écrivain* de la déclaration d'un
+changement borné — ce qu'il doit déclarer et quand il refait la détection — et
+laisse intact le côté *lecteur*, l'étape 1 de `writing-a-user-story` —
+parce que le bloc `D10` réécrit `Story > Concurrency detection`, qui est la
+section où le lecteur est normé, et qu'une story sœur de ce lot le tient ;
+transcrire le lecteur ici aurait livré deux fois la même règle, sur deux
+branches, dans deux sections — ce qu'il en coûte si c'est faux : si `D10` est
+abandonné, `main` porte un écrivain qui nomme la spec visée et un lecteur qui
+ne la lit pas, et c'est alors la clôture du lot qui doit constater l'écart.
+
 ## Observed drift
+
+Aucune divergence entre la spec et le code sur `main` en dehors du périmètre de
+cette story.
+
+Une **asymétrie interne au lot** mérite d'être signalée, qui n'est pas une
+dérive aujourd'hui : après cette story, `Bounded change` (b) veut qu'un
+changement borné nomme la spec qu'il vise, et rien ne lit encore ce nom, parce
+que `Story > Concurrency detection` — que le bloc `D10` réécrit — ne le demande
+pas encore. Les deux moitiés se rejoignent quand `D10` est livré. Si `D10` ne
+l'est pas, l'écart devient réel et relève de la clôture du lot.
