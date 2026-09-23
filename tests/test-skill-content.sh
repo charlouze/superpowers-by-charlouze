@@ -102,6 +102,9 @@ require writing-a-batch "extended scope names its lifting condition" "lifting co
 require writing-a-batch "the specs are the registry of flags"     "The specs are the registry of flags"
 require writing-a-batch "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
 require writing-a-batch "amendment pull request exists"           "amendment pull request"
+require writing-a-batch "an amendment branch follows no pattern"  "follows none of this plugin's branch patterns"
+require writing-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`fix/<slug>\`, \`chore/supercharlouze-init\`"
+require writing-a-batch "a pattern name claims what it does not hold" "would claim what it does not hold"
 require writing-a-batch "carries the requalification procedure"   "requalification"
 require writing-a-batch "requalifies a technical story" \
     "## Requalifying a Technical Story"

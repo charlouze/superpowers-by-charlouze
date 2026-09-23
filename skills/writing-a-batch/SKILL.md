@@ -504,12 +504,16 @@ real dead ends:
 Without this path neither situation has an issue: the `Feature flag` field was
 decided at opening, and closing checks it against reality.
 
-Do it on a **distinct branch whose name carries no meaning** — do not reuse
-`batch/NN-<slug>`, which the opening pull request may still hold on the remote.
-An amendment claims neither a fresh number nor any sections, so no scan looks for
-its branch and its name has nothing to carry: that is what makes it the one
-exception to restoring a conventional name, and the exception holds for that
-reason alone. Edit the batch document **in place** — no
+Do it on a branch whose name **follows none of this plugin's branch patterns** —
+`adopt/<module>`, `batch/NN-<slug>`, `batch/NN-<slug>-close`,
+`story/NN-us-N-<slug>`, `fix/<slug>`, `chore/supercharlouze-init`. Some of those
+names are read as claims: `batch/*` and `story/*` claim a number, `story/*` and
+`fix/*` claim sections. An amendment claims neither a number nor any section, so a
+branch named after one of the claiming patterns would claim what it does not hold,
+and a name that follows none has nothing to carry: that is what makes it the one
+exception to
+restoring a conventional name, and the exception holds for that reason alone.
+Edit the batch document **in place** — no
 changelog inside it, no history of its own scope — and say in the pull request
 body what changed and why. An amendment is not mutable state
 flowing along: it is an explicit human decision that goes through a review.
@@ -630,6 +634,7 @@ skeleton.
 | "This batch is ordinary, reservations are a corrective-batch thing" | Any batch taking on gaps register entries reserves them at opening — a Gaps entry as much as a Violations one. Otherwise two batches specify the same behaviour. |
 | "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open; otherwise discard the branch, locally and on the remote, and its worktree — a branch left on the remote reads as a live claim on its sections. |
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: before closing, it moves only through an amendment pull request of its own. |
+| "I'll call the amendment branch `batch/NN-<slug>-amend`, it says what it is" | A name under one of this plugin's branch patterns claims what that pattern claims — a number, sections — and an amendment holds neither. Its branch follows none of them. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
 | "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Dispatch readers outside it. |
