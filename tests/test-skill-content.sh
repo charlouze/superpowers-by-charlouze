@@ -130,11 +130,28 @@ require writing-a-batch "twin blocks are not a delta"        "two blocks writing
 # transcribed and it was declared, but its text no longer matches the delta.
 require writing-a-batch "undelivered means nobody declared it"      "the delta announced and no story declared"
 
+# The `Spec delta` field is never blank — it carries blocks, or what stands in
+# their place (spec section "The batch document"). A blank is an omission nobody
+# can review, exactly as an omitted `Feature flag` would be; the three forms are
+# what makes "no block" a statable decision rather than a silence.
+require writing-a-batch "the delta field is never left blank"       "The \`Spec delta\` field is never left blank"
+require writing-a-batch "the field's three forms are named"         "It carries the blocks; or, when the batch has none, the gaps register entries it reserves, or \`none\` and the reason"
+require writing-a-batch "a corrective batch takes the second form"  "A corrective batch takes the second form by definition"
+require writing-a-batch "the template forbids a blank delta"        "Never left blank: with no block, the gaps register entries this batch reserves, or \`none\` and the reason"
+require writing-a-batch "the document reread checks the field"      "\`Spec delta\` filled"
+
 # --- writing-a-batch: the opening review (spec section "Opening a batch") ---
 require writing-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
 require writing-a-batch "the text is read in the batch document"     "block by block, in the batch document"
 require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
 require writing-a-batch "the reread checks quotes against main"          "every quoted passage matching \`main\`"
+# With no block there is no block text to read, and the gate is the same gate
+# (spec section "Opening a batch"). What it reads instead is what the field
+# carries in their place, so a blockless batch passes the opening review rather
+# than passing it by.
+require writing-a-batch "a blockless delta still faces the gate" "the review bears on what stands in their place"
+require writing-a-batch "what the gate reads in the blocks' place" "the reserved entries, or the reason for the \`none\`"
+require writing-a-batch "the PR body carries it to the reviewer" "or, with no block, what stands in their place"
 
 # --- writing-a-batch: the ordered opening, and the two rereads it places ---
 # The distinction lives here and not under `## The Coherence Reread`, which speaks
@@ -143,6 +160,11 @@ require writing-a-batch "the reread checks quotes against main"          "every 
 # merged, the batch-document reread is the one that disappears, and a corrective
 # batch loses its only reread.
 require writing-a-batch "the opening is stated in order"        "Opening a new batch runs these six steps, in this order"
+# Step 3 names every field the opening writes (spec section "Opening a batch").
+# `Constraints` was the one missing: a step that lists three fields out of four
+# reads as exhaustive, and the field it leaves out is the one each story copies
+# verbatim into its `Global Constraints`.
+require writing-a-batch "step 3 names every field it writes"    "\`Scope\`, \`Spec delta\`, \`Constraints\`, \`Feature flag\`"
 require writing-a-batch "the coherence reread is step 5"        "Put the whole spec delta through the coherence reread"
 require writing-a-batch "the document reread is step 6"         "Reread the batch document, then open the pull request"
 require writing-a-batch "the document reread is named where it runs" "**The batch-document reread**, step 6, comes after the coherence reread"
@@ -156,6 +178,13 @@ require writing-a-batch "merging them strands a corrective batch" "which has no 
 # independence of the context, and the declaration that makes the whole thing
 # observable. Drop any one and the section still reads whole while doing less.
 require writing-a-batch "the delta goes through the coherence reread" "Before opening, the whole spec delta goes through the **coherence reread**"
+# A delta with no block skips this reread (spec section "The coherence reread").
+# Not a dispensation: this reread reads blocks against the spec they will change,
+# so with no block it has nothing to read. The batch-document reread of step 6 is
+# untouched, and it is what still bears on a blockless delta.
+require writing-a-batch "a blockless delta skips this reread"    "A delta that carries no block skips this step"
+require writing-a-batch "the skip is not a dispensation"         "it has nothing to read and no state to build"
+require writing-a-batch "step 5 states the skip where it is ordered" "skipped when the delta carries no block"
 require writing-a-batch "the applied state is built outside the repository" "**outside the repository**"
 require writing-a-batch "no block reaches a spec before a story"      "no block is written into a spec before a story transcribes it"
 require writing-a-batch "a stale block will not apply"                "A block whose quoted passage is no longer in \`main\` will not apply"
