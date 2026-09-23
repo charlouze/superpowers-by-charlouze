@@ -434,13 +434,15 @@ plan les imposait en français mot pour mot, et le dépôt est entièrement angl
 le document de plan a été corrigé pour ne plus prescrire ce qu'il interdit — ce
 que ça coûte si c'est faux : deux blocs de commentaires à retraduire.
 
-Open ruling: `Story > Concurrency detection` dit, d'une part, qu'une branche
-poussée dont le document de story n'existe pas encore arrête pareillement, et
-d'autre part — c'est ce que `D10` ajoute — qu'une telle branche concerne la spec
-qu'elle a déjà modifiée. La première phrase, lue seule, arrête sur toute branche
-sans déclaration du dépôt, ce que `D10` retire précisément au filtre ; les skills
-livrent donc la conjonction : elle arrête si la spec qu'elle a déjà modifiée est
-la tienne. Reste à trancher si la spec doit écrire cette conjonction plutôt que
-de la laisser déduire — catégorie *gap*.
+Ruling: une branche poussée sans document de story n'arrête que si la spec
+qu'elle a déjà modifiée est la tienne — `Story > Concurrency detection` disait
+qu'une telle branche arrête pareillement et, par `D10`, qu'elle concerne la spec
+qu'elle a déjà modifiée ; la première phrase, lue seule, arrêtait sur toute
+branche sans déclaration du dépôt, ce que `D10` retire précisément au filtre, et
+la seconde ne sert qu'à cette conjonction — ce que ça coûte si c'est faux : des
+arrêts manquants dans un projet à plusieurs modules. La question que cet
+arbitrage laissait ouverte, écrire la conjonction dans la spec plutôt que la
+laisser déduire, a été tranchée à la revue de livraison : la spec l'écrit, dans
+cette story, sans amendement du lot.
 
 ## Observed drift

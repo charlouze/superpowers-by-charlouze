@@ -732,7 +732,8 @@ la spec qu'elle a déjà modifiée.
 **Il faut s'arrêter** si l'intersection avec les sections visées n'est pas vide, et
 **s'arrêter aussi si un champ `Sections:` n'a pas pu être lu** — lecture en échec,
 document absent, champ manquant. Une branche poussée dont le document de story
-n'existe pas encore arrête pareillement.
+n'existe pas encore arrête pareillement quand la spec qu'elle a déjà modifiée est
+celle des sections visées.
 
 **La détection ne voit que ce qui est sur le remote** : une branche créée mais non
 poussée lui est invisible.
