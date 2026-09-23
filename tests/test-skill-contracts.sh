@@ -112,6 +112,30 @@ shared "and each says a named branch is not enough" \
     "named branch is not enough" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
+# The concurrency scan's filter is the branch name, and both ends must spell it
+# the same: the one that scans (`writing-a-user-story`) and the one that states
+# the rule (`using-batches`). One assertion over both files — two separate ones
+# would each stay green while one end reworded away from the other.
+shared "the concurrency filter is the branch name on both ends" \
+    "filter is the branch name" \
+    using-batches writing-a-user-story
+
+# The former filter — keep only the pull requests and the branches whose diff
+# touches the spec file — made invisible every story whose pull request touches
+# no spec at all. It must survive nowhere, or the scan regains the blind spot
+# this one closes.
+absent "no skill filters the concurrency scan by the spec file a diff touches" \
+    "touches this story's spec file|touches this spec file|touch this spec file|files include this story's spec file" \
+    using-batches writing-a-user-story
+
+# The branch name says who claims sections; the declaration says in which spec.
+# A pushed branch that carries no declaration yet has only its diff to say so,
+# and both ends must state it the same way: the one that scans and the one that
+# states the rule.
+shared "a branch with no declaration yet is scoped by what it changed" \
+    "concerns the spec it has already changed" \
+    using-batches writing-a-user-story
+
 # The content rule lives in one place, `using-batches`. A skill that writes into a
 # spec file names it and reuses its question verbatim rather than restating it —
 # a second formulation of the same rule is exactly what drifts. One assertion over
