@@ -32,13 +32,13 @@ that carries it.
 1. **Check that every module this batch touches has an adopted spec** — the
    design stops here if one does not (`Preconditions`).
 2. **Allocate `NN`** and create the branch (`Allocating NN`).
-3. **Write the batch document**: scope, spec delta in blocks of exact text, the
-   `Feature flag` field (`The Batch Document`, `The Feature Flag Field`,
+3. **Write the batch document**: `Scope`, `Spec delta`, `Constraints`,
+   `Feature flag` (`The Batch Document`, `The Feature Flag Field`,
    `Flags Declared by Earlier Batches`).
 4. **Reserve every gaps register entry this batch takes on.** No writing into
    the specs at this stage (`The Batch Document`).
-5. **Put the whole spec delta through the coherence reread**
-   (`The Coherence Reread`).
+5. **Put the whole spec delta through the coherence reread** — skipped when the
+   delta carries no block (`The Coherence Reread`).
 6. **Reread the batch document, then open the pull request**
    (`Opening the Pull Request`).
 
@@ -154,7 +154,8 @@ status: open
 `D<n>` identifier, the spec and the section it targets, then the current passage
 and the text that replaces it, the passage it removes, or the text it inserts and
 where. Including the removal of the gating sentence of any flag an earlier batch
-declared and this batch takes on.>
+declared and this batch takes on. Never left blank: with no block, the gaps
+register entries this batch reserves, or `none` and the reason.>
 
 ## Constraints
 
@@ -234,9 +235,15 @@ drawing from *Gaps* reserves exactly like a corrective one. Skip it, and two
 batches set out to specify the same undocumented behaviour in parallel, which is
 the collision the annotation exists to prevent.
 
-**Corrective batch** — its spec delta is empty by definition: it restores
-behaviour a spec already promises. Replace that section with the *Violations*
-entries the batch takes on, reserved in `docs/specs/<module>.gaps.md` as above.
+**The `Spec delta` field is never left blank.** It carries the blocks; or, when
+the batch has none, the gaps register entries it reserves, or `none` and the
+reason. "No block" is a decision, and a decision is stated — the same reason the
+`Feature flag` field is mandatory.
+
+A corrective batch takes the second form by definition: it restores behaviour a
+spec already promises, so what it announces are the *Violations* entries it takes
+on, reserved in `docs/specs/<module>.gaps.md` as above, and no block. A batch that
+reserves nothing either takes the third.
 
 **The batch document carries no mutable state.** It is written once, by this
 opening pull request, and nothing in the normal course of the batch modifies it
@@ -337,6 +344,12 @@ the spec, with its condition, in front of whoever touches that section next.
 Before opening, the whole spec delta goes through the **coherence reread**, which
 reads each touched spec whole, on the state its blocks produce.
 
+**A delta that carries no block skips this step.** That is not a dispensation
+granted to a smaller batch: this reread reads blocks against the spec they will
+change, so with no block it has nothing to read and no state to build. What such a
+batch still owes, it owes at step 6 — the batch-document reread, which bears on
+whatever stands in the blocks' place.
+
 Build that state — a copy of each touched spec with its blocks applied —
 **outside the repository**, in a scratch directory: no block is written into a
 spec before a story transcribes it, and that rule is not suspended to make a
@@ -427,22 +440,31 @@ from the pull request is a practice again, not a rule.
 
 **The batch-document reread**, step 6, comes after the coherence reread and
 bears on the whole document. Reread it against the specs with fresh eyes:
-scope stated with its "why now", spec delta in blocks — each with its `D<n>`,
-the spec and section it targets, and its exact text, every quoted passage
-matching `main` —, `Constraints` stated or `none` — including the order of any
+scope stated with its "why now", `Spec delta` filled — its blocks each with its
+`D<n>`, the spec and section it targets, and its exact text, every quoted passage
+matching `main`, or, with no block, what stands in their
+place —, `Constraints` stated or `none` — including the order of any
 section that carries two blocks —, `Feature flag` filled, reservations made for
 every gaps register entry this batch takes on — corrective or ordinary — and the
 lifting of any earlier flag this batch takes on stated as a block.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
-reviewer has to rule on: the exact text of every block, the flag decision, the
-scope, and any flag lifting the delta announces.
+reviewer has to rule on: the exact text of every block — or, with no block, what
+stands in their place —, the flag decision, the scope, and any flag lifting the
+delta announces.
 
 **The review of the batch pull request is the human gate.** Until it merges, no
 story is written and no spec is touched. It bears on the exact text of every
 block: this is where the human reads what the specs will say, before any code is
 written on it — block by block, in the batch document, and not later as a diff of
-the spec. It replaces the tail of the architectural path of
+the spec.
+
+**Where the delta carries no block, the review bears on what stands in their
+place**: the reserved entries, or the reason for the `none`. The gate does not
+move and nothing is waived — a batch with no block is read at the same review, on
+the only text its `Spec delta` holds.
+
+This review replaces the tail of the architectural path of
 `superpowers:brainstorming` — the dated design doc becomes this batch document,
 the self-review becomes the batch-document reread above, and the human review of
 the written spec becomes this pull request review. The human review is not

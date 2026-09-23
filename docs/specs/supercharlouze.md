@@ -503,8 +503,9 @@ Un `README.md` avec un front matter `status: open | closed`, et :
   bloc n'est transcrit dans une spec à l'ouverture : chacun l'est par une story,
   dans sa propre pull request. Un lot qui lève un flag déclaré par un autre lot le
   fait par un bloc qui retire sa mention : c'est une modification de spec comme une
-  autre. Pour un lot correctif, ce champ est vide et remplacé par les entrées du
-  gaps register que le lot réserve.
+  autre. **Ce champ n'est jamais laissé blanc** : il porte les blocs du spec delta ;
+  ou, quand le lot n'en a aucun, les entrées du gaps register qu'il réserve, ou
+  `none` suivi de la raison.
 - **Constraints** — les contraintes de migration et de compatibilité, et l'ordre
   requis des stories ; `none` s'il n'y en a pas. **Rien de normatif n'y figure** :
   la spec reste seule autorité sur le comportement. Chaque story la recopie
@@ -526,7 +527,8 @@ Un `README.md` avec un front matter `status: open | closed`, et :
 
 La relecture de cohérence lit les blocs d'un spec delta contre la totalité de
 chaque spec qu'ils touchent, sur l'état qu'ils produiront et sans qu'aucun soit
-écrit dans une spec.
+écrit dans une spec. Quand le champ `Spec delta` ne porte aucun bloc, l'ouverture
+passe cette étape.
 
 **Elle pose trois questions à chaque spec touchée :**
 
@@ -548,7 +550,7 @@ L'ouverture :
 1. Vérifie que chaque module touché est adopté ; sinon l'ouverture s'arrête, et
    l'adoption se conduit à part (`Departures from superpowers`).
 2. Attribue `NN`.
-3. Rédige le document de lot : scope, spec delta en blocs de texte exact, champ
+3. Rédige le document de lot : `Scope`, `Spec delta`, `Constraints`,
    `Feature flag`.
 4. **Réserve dans le gaps register toute entrée que ce lot prend en charge** —
    lot correctif puisant dans *Violations* comme lot ordinaire puisant dans
@@ -559,7 +561,9 @@ L'ouverture :
 6. Ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
 
 **La revue d'ouverture porte sur le texte exact de chaque bloc** : c'est là que
-l'humain lit ce que diront les specs, avant qu'aucun code ne s'écrive dessus.
+l'humain lit ce que diront les specs, avant qu'aucun code ne s'écrive dessus. Quand
+le champ `Spec delta` ne porte aucun bloc, elle porte sur ce qui en tient lieu : les
+entrées réservées, ou la raison du `none`.
 
 **Conclue par** la fusion de sa pull request : le lot est ouvert. Tant qu'elle n'est
 pas fusionnée, aucune story ne s'écrit.
