@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.7.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.6.0...v0.7.0) (2026-09-23)
+
+
+### Features
+
+* la détection de concurrence filtre par nom de branche ([6eff033](https://github.com/charlouze/superpowers-by-charlouze/commit/6eff0334213362e762b1b086cc985e9da2d870bf))
+* la story technique ([#60](https://github.com/charlouze/superpowers-by-charlouze/issues/60)) ([1bae213](https://github.com/charlouze/superpowers-by-charlouze/commit/1bae2131bdf7a851227685221814a908428a16b2))
+* le nom de la branche d'un amendement ne suit aucun patron du plugin ([cf08307](https://github.com/charlouze/superpowers-by-charlouze/commit/cf08307e8031278eb7ccea28af00cc16204b68d9))
+* un changement borné sans effet observable laisse la spec muette ([23ae14d](https://github.com/charlouze/superpowers-by-charlouze/commit/23ae14d2e69029b8bdb0729c48031ebea63235c1))
+* un lot peut s'ouvrir sans aucun bloc ([bff2c1a](https://github.com/charlouze/superpowers-by-charlouze/commit/bff2c1a4613c1cee437a7fab936906caeb16d9db))
+* un travail qui ne déplace aucune règle se livre en story technique ([a0703cd](https://github.com/charlouze/superpowers-by-charlouze/commit/a0703cd0e3d4ca775cf1bacbb540f12babc48181))
+* une story peut livrer du code sans modification de spec ([6e7a1cb](https://github.com/charlouze/superpowers-by-charlouze/commit/6e7a1cb91ccdbb76721ac3f2b873d0b551f1ea13))
+
 ## [0.6.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.5.0...v0.6.0) (2026-09-21)
 
 
