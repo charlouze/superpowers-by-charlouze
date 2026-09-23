@@ -453,4 +453,26 @@ shared "both skills name the blockless story that still changes the spec" \
     "teardown story removes from the spec what no block announced" \
     using-batches writing-a-user-story
 
+# The unconditional claim the spec change removed: a bounded change used to be
+# said never to leave the spec silent. The positive assertion above would stay
+# green on a file carrying both phrasings, and the two contradict each other —
+# one says the spec is always updated, the other says it depends.
+absent "no skill says a bounded change never leaves the spec silent" \
+       "never leaves the spec silent" \
+       using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+# The old declaration named only the sections. Left standing beside the new one,
+# it would tell a bounded change that naming its sections is enough — and a
+# reader comparing sections against the wrong spec finds conflicts that are not
+# there, or misses the one that is.
+#
+# The needle carries "therefore" on purpose. Step 1 of writing-a-user-story
+# tells a *reader* where a bounded change keeps its declaration, in words that
+# overlap this one; that sentence belongs to the concurrency detection rule and
+# is not what this guard hunts. "therefore declares its sections" appears only
+# where the duty is laid on the bounded change itself.
+absent "no skill says a bounded change declares only its sections" \
+       "therefore declares its sections" \
+       using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
 exit $((FAILURES > 0))
