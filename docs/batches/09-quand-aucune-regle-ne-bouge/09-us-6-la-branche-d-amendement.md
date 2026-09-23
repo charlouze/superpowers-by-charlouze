@@ -168,4 +168,8 @@ EOF
 
 ## Rulings log
 
+- Ruling: la phrase « `story/*` and `fix/*` claim sections » est gardée malgré le constat de la revue finale, qui lui opposait que le nom d'une branche `fix/<slug>` ne déclare rien — elle reprend le filtre de D10 (« seules `story/*` et `fix/*` revendiquent des sections »), livré par 09-us-5 (PR #58), et une pull request d'amendement sur `fix/*` y serait lue comme un changement borné sans déclaration, donc un arrêt sur inconnu chez chaque sœur — si 09-us-5 n'est pas fusionnée, la phrase anticipe d'une story sur `main`.
+- Ruling: l'antécédent de « a branch named after one of them » est restreint aux patrons qui revendiquent (« one of the claiming patterns ») — lu sur les six patrons, il prêtait une revendication à `adopt/*` et à `chore/supercharlouze-init` — si la reformulation est jugée lourde, elle se reprend à la revue.
+- Ruling: le plan est corrigé dans son propre commit — « deux gardes » devient « trois gardes », et l'attente du grep de citation exclut les renvois de `writing-a-batch` à ses propres sections `##`, qui ne sont pas des citations de la spec — coût nul si faux, c'est le document de story.
+
 ## Observed drift
