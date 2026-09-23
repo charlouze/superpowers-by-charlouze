@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 09 — Quand aucune règle ne bouge
