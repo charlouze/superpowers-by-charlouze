@@ -575,8 +575,8 @@ sur son document existant. C'est par lui qu'un lot exempté de flag en déclare 
 qu'un flag reçoit une portée étendue, et qu'un lot réduit ou abandonne son
 périmètre.
 
-Sa branche est distincte de `batch/NN-<slug>`, et son nom est sans signification :
-elle ne revendique ni numéro ni section.
+Sa branche ne suit aucun des patrons que ce document définit : elle ne revendique
+ni numéro ni section.
 
 **Requalification d'un lot correctif.** Quand sa condition d'arrêt propre se
 déclenche (`Departures from superpowers`), la story en cours est abandonnée
