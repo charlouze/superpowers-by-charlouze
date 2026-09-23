@@ -438,11 +438,6 @@ n'ont pas de conception dont partir.
 dans la spec et `## The Technical Reread` dans writing-a-batch, le fichier
 `skills/writing-a-batch/references/technical-reader-prompt.md`.
 
-**Le lot 11, conçu en même temps, vise lui aussi `Story > Delivering a story`.** Une
-story de ce lot qui transcrit `D12` cite ce passage tel que `main` le porte à ce
-moment-là, et s'arrête sur la détection de concurrence tant qu'une story du lot 11
-tient cette section.
-
 **`bash tests/run-all.sh` passe à la fin de chaque story.**
 
 ## Feature flag
