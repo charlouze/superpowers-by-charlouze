@@ -62,7 +62,7 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   *violation* : la spec y a tort et le code y a raison, si bien qu'un lot
   correctif qui la prendrait buterait aussitôt sur la cinquième condition
   d'arrêt — la résorber veut dire corriger une spec, ce qu'un agent ne peut pas
-  faire.
+  faire. `reserved by batch-11`
 
 - **Installing on a project** — « ce qui subsiste n'appartient pas au plugin : il n'est ni
   déplacé, ni supprimé » n'est vrai qu'**en dehors de `specs/` et `plans/`**. Le
@@ -88,7 +88,7 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   quelle : le texte avait été validé au gate d'ouverture du lot 06, il est depuis la
   spec, et corriger une spec est un acte humain. Résorber veut dire reformuler la
   clause en termes de ce que la levée doit pouvoir faire, et c'est cette décision
-  qui est humaine — d'où le classement en *gap*.
+  qui est humaine — d'où le classement en *gap*. `reserved by batch-11`
 
 - **Code under a feature flag / The user story document** — les quatre règles sont
   écrites en entier à un seul endroit, `writing-a-user-story`, et trois
@@ -147,7 +147,7 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   `05-us-3-une-entree-se-lit-seule`. **Gap et non violation :** le code respecte
   la règle générale, c'est la phrase qui ne dit pas si sa liste illustre ou
   délimite ; trancher veut dire décider ce que la spec doit dire, et cette
-  décision est humaine.
+  décision est humaine. `reserved by batch-11`
 
 - **The batch document / Opening a batch** — deux phrases écrites comme des
   totalités, « le spec delta est le texte exact que ce lot écrit dans les
@@ -176,7 +176,7 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** le code traite les
   trois cas de la même façon, c'est la phrase qui n'en énumère que deux ;
   trancher veut dire décider ce que la spec doit dire, et cette décision est
-  humaine.
+  humaine. `reserved by batch-11`
 
 - **The model / The user story document** — `The model` définit la dérive comme
   une divergence entre la spec de `main` et son code, et c'est cette définition
@@ -222,4 +222,4 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   lot 09. **Gap et non violation :** la skill suit fidèlement le glossaire de la
   spec, c'est la spec qui porte deux formulations que seule une distinction non
   écrite réconcilie ; trancher veut dire corriger une spec, ce qu'un agent ne
-  peut pas faire.
+  peut pas faire. `reserved by batch-11`
