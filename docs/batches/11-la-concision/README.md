@@ -8,13 +8,18 @@ status: open
 
 Ce lot rend précis et concis la spec du plugin et les documents qu'il produit :
 
-- une section `Concision` fixe la règle pour tout document du flux, et la relecture
-  de cohérence comme les `Global Constraints` d'une story la reprennent ;
-- le document de lot ne dit plus pourquoi le lot a lieu maintenant, et un bloc
-  montre ce qu'il change dans le paragraphe qui le contient ;
+- une section `Concision` fixe la règle pour tout texte du flux, conversation avec
+  l'humain comprise, et la relecture de cohérence comme les `Global Constraints`
+  d'une story la reprennent ;
+- le document de lot ne dit plus pourquoi le lot a lieu maintenant, un bloc montre
+  ce qu'il change dans le paragraphe qui le contient, et un lot correctif range dans
+  `Scope` les entrées qu'il prend en charge ;
 - les specs n'ont plus de table `Changelog` ;
-- la spec du plugin est réécrite selon cette règle, et ses règles regroupées là où
-  elles vivent. Aucun autre comportement ne change ;
+- le prompt de l'étape suivante se donne quand l'humain annonce la fusion ;
+- dans un lot, seule la pull request de clôture ajoute des entrées au gaps register ;
+- la spec du plugin est réécrite selon cette règle : une règle par paragraphe,
+  chacune là où elle agit, et les formats des documents laissés aux skills. Aucun
+  autre comportement ne change ;
 - les skills reprennent ce que la spec perd : la méthode, les raisons qui aident à
   trancher, et des exemples ; le `CLAUDE.md` du dépôt porte la manière d'écrire une
   skill ;
@@ -899,7 +904,10 @@ Insère cette section après `Language` :
 ## Concision
 
 Ces règles valent pour tout texte que le flux écrit : ses documents, les corps de
-ses pull requests et ses messages de commit.
+ses pull requests, ses messages de commit, et ce que l'agent dit à l'humain.
+
+Face à l'humain, un bloc, une story ou une entrée du gaps register se désigne par
+la section qu'il vise et ce qu'il y change, jamais par son seul identifiant.
 
 Chaque phrase dit une chose exacte, une seule fois, et se comprend seule.
 
