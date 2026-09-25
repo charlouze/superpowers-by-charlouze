@@ -8,9 +8,10 @@ status: open
 
 Ce lot rend précis et concis la spec du plugin et les documents qu'il produit :
 
-- une section `Concision` fixe la règle pour tout texte du flux, conversation avec
-  l'humain comprise, et la relecture de cohérence comme les `Global Constraints`
-  d'une story la reprennent ;
+- une section `Concision` fixe la règle pour tout texte du flux, et la relecture de
+  cohérence comme les `Global Constraints` d'une story la reprennent ;
+- une section `Conversation` l'étend à ce que l'agent dit à l'humain, qui ne se
+  voit plus désigner un bloc par son seul identifiant ;
 - le document de lot ne dit plus pourquoi le lot a lieu maintenant, un bloc montre
   ce qu'il change dans le paragraphe qui le contient, et un lot correctif range dans
   `Scope` les entrées qu'il prend en charge ;
@@ -904,10 +905,7 @@ Insère cette section après `Language` :
 ## Concision
 
 Ces règles valent pour tout texte que le flux écrit : ses documents, les corps de
-ses pull requests, ses messages de commit, et ce que l'agent dit à l'humain.
-
-Face à l'humain, un bloc, une story ou une entrée du gaps register se désigne par
-la section qu'il vise et ce qu'il y change, jamais par son seul identifiant.
+ses pull requests et ses messages de commit.
 
 Chaque phrase dit une chose exacte, une seule fois, et se comprend seule.
 
@@ -922,14 +920,27 @@ Un texte ne donne la raison d'un choix que là où ce flux la demande.
 Aucune phrase n'est mise en relief.
 ````
 
-### D29 — `Changelog`
+### D29 — `Conversation`
+
+Insère cette section après `Concision` :
+
+````markdown
+## Conversation
+
+Ce que l'agent dit à l'humain suit les règles de `Concision`.
+
+Face à l'humain, un bloc, une story ou une entrée du gaps register se désigne par
+la section qu'il vise et ce qu'il y change, jamais par son seul identifiant.
+````
+
+### D30 — `Changelog`
 
 Retire la section entière.
 
 ## Constraints
 
-- `D28` est transcrit au plus tard avec `D13` et avec `D18`.
-- `D16` et `D25` sont transcrits au plus tard avec `D29`, et `D29` au plus tard avec
+- `D28` est transcrit au plus tard avec `D13`, avec `D18` et avec `D29`.
+- `D16` et `D25` sont transcrits au plus tard avec `D30`, et `D30` au plus tard avec
   `D9`.
 - `D9` est transcrit au plus tard avec `D7`, et `D7` au plus tard avec `D3` et avec
   `D26`.
