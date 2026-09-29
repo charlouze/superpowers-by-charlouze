@@ -525,22 +525,24 @@ Un `README.md` avec un front matter `status: open | closed`, et :
 
 ### The coherence reread
 
-La relecture de cohérence lit les blocs d'un spec delta contre la totalité de
-chaque spec qu'ils touchent, sur l'état qu'ils produiront et sans qu'aucun soit
-écrit dans une spec. Quand le champ `Spec delta` ne porte aucun bloc, l'ouverture
-passe cette étape.
+La relecture de cohérence relit en entier chaque spec que touche le spec delta,
+blocs appliqués.
 
-**Elle pose trois questions à chaque spec touchée :**
+Un lot sans bloc s'en passe.
 
-- **Qu'est-ce que les blocs rendent faux ailleurs ?** Un passage qu'aucun d'eux
-  ne vise et qu'ils contredisent.
-- **Qu'est-ce qu'ils omettent ?** Un cas devant lequel ils passent, une
-  conséquence qu'ils ne tirent pas.
-- **Tiennent-ils ce qu'une spec doit tenir ?** (`The spec document`)
+Elle pose ces questions à chaque spec touchée :
 
-**Elle n'est jamais conduite dans le contexte qui a écrit les blocs**, et le
-corps de la pull request d'ouverture le déclare, avec ce qu'elle a trouvé ou
-qu'elle n'a rien trouvé.
+- Qu'est-ce que les blocs rendent faux ailleurs ? Un passage qu'aucun d'eux ne vise
+  et qu'ils contredisent.
+- Qu'est-ce qu'ils omettent ? Un cas devant lequel ils passent, une conséquence
+  qu'ils ne tirent pas.
+- Tiennent-ils ce qu'une spec doit tenir (`The spec document`) ?
+- Sont-ils précis et concis (`Concision`) ?
+
+Elle n'est jamais conduite dans le contexte qui a écrit les blocs.
+
+Le corps de la pull request d'ouverture dit ce qu'elle a trouvé, ou qu'elle n'a
+rien trouvé.
 
 ### Opening a batch
 
@@ -950,6 +952,29 @@ chaque document : ossature en anglais, prose dans la langue du projet.
   métier.
 - **Le plugin lui-même est intégralement anglais** — skills, commandes, README,
   bloc d'instructions, messages.
+
+## Concision
+
+Ces règles valent pour tout texte que le flux écrit : ses documents, les corps de
+ses pull requests et ses messages de commit.
+
+Chaque phrase dit une chose exacte, une seule fois, et se comprend seule.
+
+Chaque paragraphe porte une seule règle.
+
+Une règle dit jusqu'où elle vaut, et une exception se présente comme telle.
+
+Un texte dit ce qu'il livre ou décide, sans raconter comment on y est arrivé ni
+pourquoi. Exception : la raison que ce flux demande explicitement.
+
+Aucune phrase n'est mise en relief.
+
+## Conversation
+
+Ce que l'agent dit à l'humain suit les règles de `Concision`.
+
+Face à l'humain, un bloc, une story ou une entrée du gaps register se désigne par
+la section qu'il vise et ce qu'il y change, jamais par son seul identifiant.
 
 ## Changelog
 
