@@ -207,87 +207,61 @@ jamais à la conversation.
 ## Module
 
 Un module a une spec et un gaps register, qui naissent ensemble à son adoption.
+
 Aucun lot ne touche un module qui n'est pas adopté.
 
-**Une règle appartient à une seule spec.** Une règle qui contraindrait un
-comportement observable à la frontière de plus d'un module signale un découpage
-de modules à revoir, et le découpage est une décision humaine : l'agent s'arrête
-et soumet le cas à l'humain, plutôt que de recopier la règle d'une spec à l'autre
-ou de lui chercher un domicile commun. L'emprunt réduit d'un terme
-(`The spec document`) n'est pas concerné : il redéfinit un terme, il ne partage
-pas une règle.
+L'humain délimite les modules. Un agent n'en propose aucun découpage de lui-même.
 
 ### Module adoption
 
-L'adoption produit une pull request portant deux documents et aucun code : la spec
-et le gaps register du module.
+L'adoption produit une pull request portant la spec et le gaps register du module,
+et aucun code.
 
-**Ordre d'autorité des sources :**
+Ordre d'autorité des sources :
 
-1. **Les documents validés** sont normatifs sur les **intentions qu'ils
-   énoncent**, jamais sur les **mécanismes qu'ils décrivent**. Un mécanisme lu
-   dans un document validé n'entre pas dans la spec : il devient un gap nommant
-   son document, et seul l'humain peut l'en promouvoir. Dans cette limite, eux
-   seuls créent du texte normatif.
-2. **Le code** ne corrige jamais un document. Il comble les *silences* des
-   documents — les comportements qu'aucun document n'a jamais décrits — et ce qu'il
-   y révèle n'entre pas dans la spec de sa propre autorité : c'est un gap, que seul
-   l'humain peut promouvoir en spécification.
-3. **L'humain** tranche les contradictions.
+1. Les documents validés sont normatifs sur les intentions qu'ils énoncent, jamais
+   sur les mécanismes qu'ils décrivent. Hors ce que l'humain promeut, eux seuls
+   créent du texte normatif.
+2. Le code ne corrige jamais un document. Ce qu'il révèle là où les documents se
+   taisent est un gap.
+3. L'humain tranche les contradictions.
 
-**Reconstruire une spec depuis le code est exclu.**
+Une intention ne se déduit pas d'un mécanisme, qu'il soit lu dans le code ou dans
+un document validé : elle vient d'un document validé ou de l'humain.
 
-**On ne lit pas « à travers » un mécanisme pour en déduire l'intention qu'il
-servait.** La clause *On ne reformule pas un mécanisme en règle* de
-`The spec document` vaut ici. Ce qu'un document énonce comme intention est
-normatif et entre ; ce qu'il énonce comme mécanisme devient un gap. Déduire une
-intention d'un mécanisme est la reconstruction depuis le code par un autre
-chemin, que ce mécanisme soit lu dans le code ou dans un document validé.
+Étapes :
 
-**Étapes :**
+1. Délimiter le module avec l'humain. Rien n'est écrit avant sa décision.
+2. Inventorier les documents validés qui couvrent le module, et soumettre la liste
+   à l'humain avant d'écrire. Le corps de la pull request porte l'inventaire
+   retenu.
+3. Créer la branche `adopt/<module>`.
+4. Écrire la spec depuis ces seuls documents. Ce qui n'y est pas une règle devient
+   un gap nommant son document.
 
-1. **Délimiter le module** — l'humain le nomme et en trace les contours. Un agent
-   ne propose pas de découpage de lui-même : il demande d'abord à l'humain le sien.
-   S'il le souhaite, l'agent y réfléchit avec lui — il montre ce qui existe comme
-   matière, pose des questions, confronte des options — mais la décision reste
-   celle de l'humain, et rien n'est écrit tant qu'il ne l'a pas prise.
-2. **Inventorier les documents validés** qui le couvrent — anciens documents de
-   conception superpowers, README, docs métier, ADR. Présenter la liste à l'humain
-   **avant** d'écrire quoi que ce soit, pour qu'il puisse ajouter une source
-   manquante ou en écarter une qui n'a jamais été validée. L'inventaire retenu est
-   consigné dans le corps de la pull request d'adoption ; la spec ne liste pas ses
-   sources.
-3. **Créer la branche `adopt/<module>`.**
-4. **Écrire la spec depuis ces documents seuls.** Fusion, déduplication, mise en
-   cohérence. Chaque phrase écrite passe le test de l'autre implémentation, et ce
-   qu'il éjecte devient un gap nommant le document dont il vient. Quand deux
-   documents validés se contredisent, le plus récent l'emporte par défaut, et
-   cet arbitrage est consigné — jamais résolu en silence. L'adoption n'ayant pas de
-   document de story, ces arbitrages vivent dans **le corps de la pull
-   request d'adoption**.
-5. **Auditer le code contre la spec** et compléter le gaps register de ce que
-   l'audit révèle, dans ses deux catégories et avec sa couverture déclarée. Ne
-   rien corriger dans le code au passage : résorber une violation est un lot à
-   part entière.
-6. **Proposer à l'humain de promouvoir les gaps.** Pour chaque gap qui décrit un
-   comportement observable à la frontière du module, l'adoption demande à
-   l'humain, gap par gap, si ce comportement porte une intention voulue. Ce qu'il
-   valide entre dans la spec, dans la section que ce comportement contraint, et
-   sort du gaps register ; le reste y demeure. L'intention est formulée ou validée
-   par l'humain, jamais déduite, et un mécanisme ne lui est pas soumis.
-7. **Ouvrir la pull request d'adoption.** Sa revue est la seule de l'adoption.
+   Quand deux documents validés se contredisent, le plus récent l'emporte par
+   défaut, et cet arbitrage figure dans le corps de la pull request.
+5. Auditer le code contre la spec, et consigner au gaps register ce que l'audit
+   révèle. Le code n'est pas corrigé.
+6. Soumettre à l'humain, un par un, les gaps qui décrivent un comportement
+   observable à la frontière du module. Celui qu'il valide comme intention entre
+   dans la spec et sort du gaps register.
 
-**Conclue par** la fusion de sa pull request : le module est adopté.
+   Un mécanisme ne lui est pas soumis.
+7. Faire relire la spec en entier, hors du contexte qui l'a écrite : tient-elle ce
+   qu'une spec doit tenir (`The spec document`), et est-elle précise et concise
+   (`Concision`) ?
+8. Ouvrir la pull request d'adoption. Sa revue est la seule de l'adoption.
 
-**Cas dégradé — un module sans aucun document validé.** L'adoption bascule en
-dialogue : elle énumère les comportements **observables à la frontière du module**,
-groupés en sections candidates, et demande à l'humain **section par section**,
-« est-ce voulu ? » — une question posée sur l'intention, jamais sur le mécanisme.
-**Un mécanisme ne se soumet pas à validation humaine.** Ce que l'humain valide
-devient la spec ; le reste part en gaps. Le corps de la pull request d'adoption
-consigne alors qu'aucun document validé n'existait, plutôt que de rester muet. Le même
-traitement s'applique à un inventaire partiel : la partie couverte suit les étapes
-2 à 6, la partie non couverte suit ce dialogue.
+Sans aucun document validé, l'adoption énumère les comportements observables à la
+frontière du module, groupés en sections candidates, et demande à l'humain,
+section par section, s'ils sont voulus. Ce qu'il valide devient la spec ; le reste
+part en gaps.
+
+Le corps de la pull request dit alors qu'aucun document validé n'existait.
+
+Quand les documents validés ne couvrent qu'une partie du module, l'adoption suit
+les étapes 2 à 6 pour cette partie, et ce dialogue pour le reste.
 
 ### The spec document
 
@@ -324,55 +298,34 @@ Un aparté ne porte aucune règle.
 
 ### The gaps register
 
-`docs/specs/<module>.gaps.md` est un document vivant. Il range ses entrées en deux
-catégories, chacune sous son propre titre :
+`docs/specs/<module>.gaps.md` range ses entrées dans ces catégories :
 
-- **Violations** — le code contredit la spec. Alimente un lot correctif.
-- **Gaps** — un comportement ou une exigence réels qu'aucune spec ne décrit.
-  Alimente un lot ordinaire qui les spécifie enfin.
+- **Violations** — le code contredit la spec ;
+- **Gaps** — ce qu'aucune spec ne décrit.
 
-**La catégorie ne dépend pas du contexte, ses sources oui.** Une adoption trouve
-ses gaps en auditant le code et dans ce que l'écriture de la spec éjecte des
-documents validés ; une story, dans le code qu'elle traverse ; un changement borné,
-dans ce qu'il rencontre. **Une entrée nomme le document dont elle vient** quand
-elle vient d'un document.
+Chaque entrée désigne une section de la spec.
 
-Chaque entrée désigne une section de la spec et est **un élément de liste, jamais
-un paragraphe de prose courante.**
+Une entrée qui vient d'un document nomme ce document.
 
-**Ce qui qualifie une entrée vit dans l'entrée.** Outre sa couverture, le register
-ne porte que des entrées : aucune prose n'y qualifie un *groupe* d'entrées — leur
-provenance commune, leur classement commun, leur nombre. Les entrées s'ajoutent et
-se suppriment une par une, et rien ne fait suivre une telle prose : elle devient
-fausse sans que personne ne l'ait touchée. Ce qu'elle dirait de plusieurs entrées
-se répète dans chacune, et d'où vient une entrée se lit dans l'histoire du fichier.
+Tout ce qui qualifie une entrée est écrit dans l'entrée, jamais dans un texte
+commun à plusieurs entrées.
 
-**Une entrée ne renvoie à aucune autre entrée.**
+Une entrée ne renvoie à aucune autre entrée.
 
-**Ajouter une entrée** — une entrée s'ajoute à la fin de sa catégorie. Un seul
-écrivain par lot.
+Dans un lot, seule la pull request de clôture ajoute des entrées au gaps register.
 
-**On lit l'histoire du fichier avant d'ajouter une entrée**
-(`git log -p docs/specs/<module>.gaps.md`) : ce qui a déjà été écarté l'a été
-pour une raison, écrite dans le commit qui l'a supprimé. Réinscrire un constat
-déjà écarté sans dire ce qui a changé depuis, c'est rouvrir une décision que
-personne n'a revue.
+Le gaps register ne porte que ce qui reste à régler.
 
-**Supprimer une entrée** — une entrée se **supprime du fichier**, et **le commit
-qui la supprime dit pourquoi** : l'entrée est résorbée, promue, sans objet, fausse,
-ou écartée par l'humain. Le register ne porte que ce qui reste à régler ; ce qu'une
-entrée a été, et pourquoi elle est partie, se lisent dans l'histoire du fichier
-(`git log -p docs/specs/<module>.gaps.md`).
+Une entrée réglée est supprimée, et le commit qui la supprime dit pourquoi.
 
-**Réservation, consommation, libération :**
+Un constat déjà supprimé ne se réinscrit que si l'entrée dit ce qui a changé
+depuis.
 
-- **Réservée** — l'entrée porte l'annotation `reserved by batch-NN` du lot qui la
-  prend en charge.
-- **Supprimée** — sa réservation part avec elle.
-- **Libérée** — son annotation de réservation retirée, l'entrée restant.
+Un lot réserve les entrées qu'il prend en charge. Deux lots ne réservent jamais la
+même entrée.
 
-Le gaps register déclare aussi **sa propre couverture** : quelles parties du module ont
-été auditées, lesquelles ne l'ont pas été, et pourquoi.
+Le gaps register dit quelles parties du module ont été auditées contre la spec, et
+pourquoi les autres ne l'ont pas été.
 
 ## Batch
 
