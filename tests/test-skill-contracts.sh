@@ -582,7 +582,7 @@ absent "no skill rereads with fresh eyes" \
 # reread invoke it rather than carrying readers of their own.
 shared "the skills that have a spec reread invoke the shared reread" \
     "invoke \`supercharlouze:rereading-a-spec\`" \
-    writing-a-batch
+    adopting-a-module writing-a-batch
 absent "no calling skill carries readings of its own" \
     "Does this specification hold what a specification must hold|precise and concise\\?|Where does this sit in the model|Every reader returns before anything goes up|stop the rounds" \
     adopting-a-module writing-a-batch
@@ -608,6 +608,36 @@ absent "no skill bounds an amendment to scope and flag" \
 absent "no skill requires continuous deployment" \
     "[Cc]ontinuous" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# Within a batch, one pull request adds to a gaps register: the closing one.
+# Every skill on the batch path says so in the same words.
+shared "only the closing pull request adds entries within a batch" \
+    "Within a batch, only the closing pull request adds entries to the gaps register" \
+    closing-a-batch using-batches writing-a-user-story
+
+# A finding the register already let go comes back only with what changed.
+# The writers that add an entry say so alike.
+shared "a deleted finding is re-entered only with what changed" \
+    "A finding already deleted from the register is re-entered only if the entry says what has changed since" \
+    closing-a-batch using-batches
+
+# The spec no longer carries the register's format; the writers that append
+# to it keep it.
+shared "the writers that append keep the entry format" \
+    "An entry is one list item, added at the end of its category" \
+    closing-a-batch using-batches
+
+# The former wording left the batch's adding writer unnamed, and placed an
+# entry at the end of a section.
+absent "no skill leaves the batch's adding writer unnamed" \
+    "one writer per batch|single writer per batch|at the end of a section" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# The gesture table of the adoption lists every writer, the closing that adds
+# included.
+shared "the adoption's gesture table names the closing that adds" \
+    "| Add | \`supercharlouze:closing-a-batch\`, in the batch's closing pull request |" \
+    adopting-a-module
 
 # The specs carry no changelog any more. No shipped skill file names one:
 # frontmatter and references included, which `body_flat` would skip.

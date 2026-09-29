@@ -107,6 +107,23 @@ require adopting-a-module "names the one late signal on a boundary" "One late si
 require adopting-a-module "the register's gestures include removal"  "the commit that removes it says why"
 require adopting-a-module "promoting a gap removes its entry"        "an adoption that promotes a gap into the spec"
 
+# --- adopting-a-module: the reread before the pull request ---
+require adopting-a-module "the spec goes to the shared reread"            "invoke \`supercharlouze:rereading-a-spec\` on the spec"
+require adopting-a-module "a returned mechanism goes to the register"     "File each sentence it returns as a mechanism in the gaps register"
+require adopting-a-module "a rule past the boundary stops the adoption"   "A rule it returns as reaching past this module's boundary stops the adoption"
+require adopting-a-module "the reread is step 7"                         "### 7. Have the spec reread"
+require adopting-a-module "the pull request opens at step 8"             "### 8. Open the adoption pull request"
+require adopting-a-module "the rulings go to the pull request body"      "next to its rulings, at the step \`Open the adoption pull request\`"
+require adopting-a-module "the red flag names the reread step"          "at the step \`Have the spec reread\`"
+# The adoption reread counts neither its readings nor its readers, and names
+# the steps it points at rather than giving their rank.
+case "$(body_flat "$REPO_ROOT/skills/adopting-a-module/SKILL.md")" in
+    *[Tt]"wo readings"*|*[Tt]"wo readers"*|*[Bb]"oth readers"*|*"(step 8)"*|*"readers of step 7"*)
+        fail "adopting-a-module: the reread counts no reading and ranks no step" ;;
+    *)  pass "adopting-a-module: the reread counts no reading and ranks no step" ;;
+esac
+require adopting-a-module "an intention comes from a document or the human" "An intention comes from a validated document or from your human partner"
+
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "an unadopted module stops the design"   "the design stops"
 # The preconditions are checked before any branch, and not counted: the count

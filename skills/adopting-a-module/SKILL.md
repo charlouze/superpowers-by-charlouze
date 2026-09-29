@@ -64,7 +64,8 @@ implemented the same intention differently, read this sentence as true of their
 code?* What a document states as an intention is normative and goes in; what it
 states as a mechanism becomes a gap. Deducing an intention from a mechanism is
 reconstruction from the code by another road, whether you read that mechanism in
-the code or in a validated document.
+the code or in a validated document. An intention comes from a validated document
+or from your human partner.
 
 ## Steps
 
@@ -127,9 +128,10 @@ assume a document is validated because it exists, looks official, or is the only
 one you found. "Close enough to validated" is not validated: ask.
 
 Record the retained inventory in the **body of the adoption pull request**, by
-archive path, next to its rulings (step 7): it is what the reviewer checks the spec
-against. The spec itself lists no sources — it is a living document, and archived
-documents stop evolving the day they are archived.
+archive path, next to its rulings, at the step `Open the adoption pull request`:
+it is what the reviewer checks the spec against. The spec itself lists no
+sources — it is a living document, and archived documents stop evolving the day
+they are archived.
 
 ### 3. Create the branch
 
@@ -183,8 +185,9 @@ rule's reach, not what already exists next door.
   `Ruling: <decision> — <why> — <what it costs if it is wrong>`. Never resolve a
   contradiction in silence; the ruling is what lets a reviewer disagree with you.
   Adoption has no story document and therefore no Rulings log, so these lines go
-  in the **body of the adoption pull request** (step 7), where the reviewer who
-  might disagree will read them.
+  in the **body of the adoption pull request**, at the step
+  `Open the adoption pull request`, where the reviewer who might disagree will
+  read them.
 - No date, no status, no work-in-progress marker, except a flag's gating sentence.
   On `main`, spec and code always travel in the same pull request, so no other
   state exists that would need one.
@@ -238,6 +241,7 @@ take it out whole:
 | Remove | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | deletes it from the file, atomically with the code, and the commit that removes it says why |
 | Remove | you, at the step `Offer to promote the gaps`, when your human partner promotes one | deletes it from the file, in the same pull request that writes the rule it became |
 | Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed, and leaves the entry |
+| Add | `supercharlouze:closing-a-batch`, in the batch's closing pull request | appends it at the end of its category; within a batch, no other pull request adds one |
 | Add or remove | a bounded change, from its own pull request | belonging to no batch, it writes an entry or deletes one directly, contending only with another bounded change |
 
 A register written as flowing paragraphs satisfies every other word of this step
@@ -313,7 +317,18 @@ asking for a yes is reconstruction from the code with extra steps. A gap that
 names a mechanism is not put to them at all — validating a mechanism would not
 make it a rule, only an approved drift.
 
-### 7. Open the adoption pull request
+### 7. Have the spec reread
+
+Before the pull request opens, invoke `supercharlouze:rereading-a-spec` on the
+spec.
+
+File each sentence it returns as a mechanism in the gaps register, as a gap
+naming the document the sentence came from when it came from one.
+
+A rule it returns as reaching past this module's boundary stops the adoption: the
+breakdown goes back to your human partner.
+
+### 8. Open the adoption pull request
 
 The branch already exists — you created it at step 3. Commit both documents on
 it, push, and open the pull request.
@@ -429,3 +444,4 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |
 | "I ejected those mechanisms at step 4, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit, and step 4's set-aside list is its only route into the register. |
 | "This rule concerns the neighbouring module too, I'll write it in both specs" | A rule belongs to exactly one spec, and a rule that reaches past one boundary signals the breakdown — your human partner's decision. Stop. |
+| "I wrote the spec, I can reread it myself" | This context rereads its own intentions. Invoke `supercharlouze:rereading-a-spec` at the step `Have the spec reread`. |

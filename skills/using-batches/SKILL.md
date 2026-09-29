@@ -208,7 +208,19 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
   Before its pull request opens, a bounded change's branch carries no declaration, since the declaration lives in the pull request body. Once pushed, it is read like any branch that has not declared yet, by the sections it has already changed. Unpushed, it is invisible, like any branch the remote does not carry.
 
 - **(c) It carries no feature flag.** A bounded change is complete in its own pull request, so it satisfies the exemption criterion by construction.
-- **(d) It writes to a gaps register directly.** Belonging to no batch, it may both add an entry and delete one in `docs/specs/<module>.gaps.md`, from its own pull request, contending only with another bounded change. When it deletes one, the commit that removes it says why. Read the file's history before adding an entry (`git log -p docs/specs/<module>.gaps.md`): what was set aside was set aside for a reason, written in the commit that removed it. What qualifies an entry lives in the entry: no prose qualifies a *group* of them, and what an entry's neighbours have in common is repeated in each of them. An entry designates no other entry: a settled entry leaves the file whole, and takes with it anything that pointed at it. The batch path is stricter — stories only record their findings in their own document, and only `supercharlouze:closing-a-batch` consolidates them — because that contention is per batch, not per pull request.
+- **(d) It writes to a gaps register directly.** Belonging to no batch, it may both add an entry and delete one in `docs/specs/<module>.gaps.md`, from its own pull request, contending only with another bounded change.
+
+  An entry is one list item, added at the end of its category.
+
+  When it deletes one, the commit that removes it says why.
+
+  A finding already deleted from the register is re-entered only if the entry says what has changed since. Read the file's history before adding an entry (`git log -p docs/specs/<module>.gaps.md`): what was set aside was set aside for a reason, written in the commit that removed it.
+
+  What qualifies an entry lives in the entry: no prose qualifies a *group* of them, and what an entry's neighbours have in common is repeated in each of them.
+
+  An entry designates no other entry: a settled entry leaves the file whole, and takes with it anything that pointed at it.
+
+  Within a batch, only the closing pull request adds entries to the gaps register: stories record their findings in their own document, and `supercharlouze:closing-a-batch` consolidates them.
 
 No batch, no user story: a bounded change is already a single pull request, and whether it carries a spec update is what rule (a) decides. Its branch is `bounded/<slug>`.
 

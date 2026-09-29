@@ -573,11 +573,7 @@ exist:
 - Record under **Observed drift** every divergence between spec and code you
   noticed *outside* this story's scope.
 
-Do **not** add those observations to the gaps register yourself. An addition
-happens at the end of a section and contends with every other addition on the
-same module — the exact contention this system avoids everywhere else, resolved
-the same way: one writer per batch. `supercharlouze:closing-a-batch`
-consolidates them in a single pull request.
+Do not add those observations to the gaps register yourself. Within a batch, only the closing pull request adds entries to the gaps register, and `supercharlouze:closing-a-batch` consolidates them there.
 
 Commit both on the branch and push, so they merge with it.
 
@@ -730,7 +726,7 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "Keeping the branch is harmless" | Without a pull request the story has no observable state and is never delivered. |
 | "Inline execution is simpler for a small story" | It keeps no ledger, so the rulings never reach your human partner. SDD is required. |
 | "I'll copy the rulings after the merge" | The workspace is already gone and the merge may be days later, in another session. |
-| "This drift is small, I'll just add it to the gaps register" | Every story adding to the same section collides there. Record it under Observed drift; closing consolidates. |
+| "This drift is small, I'll just add it to the gaps register" | Within a batch, only the closing pull request adds entries. Record it under Observed drift. |
 | "Every ruling is recorded, the log is done" | An open ruling also needs a destination. A violation or a gap goes to the register through closing; anything else is settled at the review, before the merge. |
 | "The flag is an implementation detail, the spec need not mention it" | Then the spec is false for users. The spec change states the flag, its default, and its lifting condition if the scope is extended. |
 | "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |

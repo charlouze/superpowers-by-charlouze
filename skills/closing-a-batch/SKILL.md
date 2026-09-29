@@ -61,11 +61,15 @@ Collect from every story document in the batch what it left for you, and write i
 
 **An open ruling that names no category should not reach you.** A story does not merge leaving one without a destination — the delivery review settles those, and it is the last moment that can: here the story is merged and its branch is gone, so you can note that a ruling was never taken up and no longer take it up. If you find one, report it with the rest of your findings and let your human partner rule; do not classify it yourself.
 
-Stories deliberately do not write into the register. Adding an entry appends at the end of its category and competes with every other addition to the same module, and a single writer per batch removes that contention. Their findings wait in their own document until now, which is why they are recorded there and why you are the one who moves them.
+Within a batch, only the closing pull request adds entries to the gaps register. Every addition contends with every other on the same module, which is why a batch adds through one pull request.
+
+An entry is one list item, added at the end of its category.
 
 "Out of scope for this batch" is never a reason to drop an observation. It is precisely why the observation belongs in the register: the register is what a later corrective batch draws its scope from. Dropped here, the finding dies with the session that made it.
 
-**Read the file's history before adding an entry** (`git log -p docs/specs/<module>.gaps.md`). An entry that once left this file left for a reason, and that reason is in the commit that removed it — resolved, promoted, moot, false, or set aside by your human partner. Re-filing an observation that was already set aside, without saying what has changed since, reopens a decision nobody has reviewed.
+A finding already deleted from the register is re-entered only if the entry says what has changed since.
+
+Read the file's history before adding an entry (`git log -p docs/specs/<module>.gaps.md`). An entry that left this file left for a reason, written in the commit that removed it: resolved, promoted, moot, false, or set aside by your human partner.
 
 **What qualifies an entry lives in the entry.** Besides its coverage, the register carries nothing but entries: no prose qualifies a *group* of them — where they came from, how they were classified, how many there are. Entries are added and removed one at a time, and nothing keeps such a paragraph honest: it goes false without anyone touching it. What it would say of several entries is repeated in each, and where an entry came from is read in the history of the file. You arrive with a batch's worth of findings at once, so the temptation is yours more than anyone's: write "consolidated by batch NN" into each entry that needs it, never above them.
 
