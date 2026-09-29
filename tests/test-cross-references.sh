@@ -10,13 +10,13 @@ fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 
 echo "test-cross-references"
 
-KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch"
+KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec"
 # Commands share the plugin namespace with the skills: /supercharlouze:init is a
 # command, not a skill, so it resolves against commands/<name>.md instead.
 KNOWN_COMMANDS="init"
 
 # 1. Every supercharlouze:<name> reference names a skill or a command that exists.
-#    README.md and CONTRIBUTING.md are scanned too — they name the five skills
+#    README.md and CONTRIBUTING.md are scanned too — they name the skills
 #    and the init command.
 #    begin/end are the CLAUDE.md block markers, not references.
 BAD=0
@@ -95,6 +95,19 @@ if grep -q "no change leaves the spec silent" "$REPO_ROOT/README.md"; then
 else
     pass "the README does not assert the unconditional spec update"
 fi
+
+# The README row of rereading-a-spec says it is not for direct use, and names
+# none of the skills that invoke it.
+RROW="$(grep -F '`supercharlouze:rereading-a-spec`' "$REPO_ROOT/README.md" || true)"
+case "$RROW" in
+    *"adopting-a-module"*|*"writing-a-batch"*|*"invoked by"*)
+        fail "the README row of rereading-a-spec names no caller" ;;
+    *)  pass "the README row of rereading-a-spec names no caller" ;;
+esac
+case "$RROW" in
+    *"Never directly"*) pass "the README row of rereading-a-spec rules out direct use" ;;
+    *)                  fail "the README row of rereading-a-spec rules out direct use" ;;
+esac
 
 # The specs carry no changelog any more, and the README says nothing of one.
 if grep -qi "changelog" "$REPO_ROOT/README.md"; then

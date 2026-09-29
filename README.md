@@ -212,6 +212,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:writing-a-batch` | Opening, amending or requalifying a batch |
 | `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
+| `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |
 
 ## Requirements
 

@@ -18,7 +18,7 @@ echo "test-skill-content"
 # red on text that is correct. No needle in this suite contains two consecutive
 # spaces, so squeezing changes nothing else.
 # The `sed` drops a leading blockquote marker for the same reason: a norm written
-# as a block quote — the readings of `## The Coherence Reread` are — would
+# as a block quote — the readings of `rereading-a-spec` are — would
 # otherwise flatten with a stray `>` at every line break, and a needle spanning
 # two of its lines could never match. No needle in this suite contains `>`.
 body_flat() {
@@ -228,79 +228,120 @@ require writing-a-batch "no block reaches a spec before a story"      "no block 
 require writing-a-batch "building the copy checks every block"     "Building that copy checks every block: it carries its \`D<n>\`, it names the spec and section it targets"
 require writing-a-batch "a block matches main or the block before it" "its unchanged and removed lines match \`main\`, or the text the block ordered before it leaves"
 require writing-a-batch "a stale block will not apply"                "A block that fails this check does not apply"
-require writing-a-batch "the reread is conducted outside this context" "Conduct it outside the context that wrote the blocks"
+# The readers, their readings and the rounds live in `supercharlouze:rereading-a-spec`.
+# The coherence reread hands over each applied copy, and carries back what the
+# reread returns. What a reader gets is the reread's business, not this skill's.
+require writing-a-batch "each applied copy goes to the shared reread" "invoke \`supercharlouze:rereading-a-spec\` on each applied copy, with the path of the spec it applies to"
+require writing-a-batch "revisions go back into the blocks"        "Carry every revision it returns back into the blocks"
+require writing-a-batch "a boundary rule stops the opening"        "A rule it returns as reaching past its module's boundary stops the opening"
 require writing-a-batch "the pull request body says what the reread found" "The pull request body says what the reread found, or that it found nothing"
+
+# --- rereading-a-spec (spec sections "Module adoption" and "The coherence reread") ---
+# Outside the context that wrote the text, whichever state the spec is in.
+require rereading-a-spec "the reread runs outside the writing context" "outside the context that wrote it, by readers dispatched as subagents"
+# It is a building block: it knows none of the skills that invoke it, and its
+# input and its output say everything they need.
+require rereading-a-spec "it is invoked by a skill"                    "It is invoked by another skill, never on a request of your human partner"
+require rereading-a-spec "input: the spec and its path"                "the spec to read, and the path it has or will have under \`docs/specs/\`"
+require rereading-a-spec "the state is read from main"                 "The spec is new when \`main\` carries no file at that path, and changed otherwise"
+require rereading-a-spec "output: the spec revised"                    "the spec, revised: every finding worked through, and every ruling of your human partner applied"
+require rereading-a-spec "output: mechanisms come back as gaps"        "the sentences taken out because they describe a mechanism, each with the section it came from"
+require rereading-a-spec "output: boundary rules come back unrevised"  "the rules left as they are because they would constrain behaviour observable at the boundary of more than one module"
+require rereading-a-spec "output: what the reread found"               "what the reread found, or that it found nothing"
+# How a finding is worked through lives here, not in whoever invoked the reread.
+require rereading-a-spec "a mechanism leaves the spec"                 "A sentence that describes a mechanism leaves the spec"
+require rereading-a-spec "a boundary rule is not revised"              "the module breakdown is your human partner's decision, not a wording"
+require rereading-a-spec "any other finding is fixed or put up"        "Any other finding is fixed without changing what its sentence rules, or put to your human partner when fixing it would"
 
 # The reader roles. The second assertion is what keeps the count from being
 # trimmed: alone, the first reads as a description of a typical reader rather
 # than the rule the number of readers follows from.
-require writing-a-batch "a reader takes one reading"            "A reader takes one reading, on one touched spec"
-require writing-a-batch "the readers follow from the delta"     "one per reading, per touched spec"
-require writing-a-batch "never two readings to one reader"      "never hand a reader two"
-require writing-a-batch "the dispatch is composed from a template" "references/reader-prompt.md"
+require rereading-a-spec "a reader takes one reading"            "A reader takes one reading, on one spec"
+require rereading-a-spec "the readers follow from the state"     "one per reading that applies to its state, per spec"
+require rereading-a-spec "never two readings to one reader"      "never hand a reader two"
+require rereading-a-spec "the dispatch is composed from a template" "skills/rereading-a-spec/references/reader-prompt.md"
+# A reader runs on the conductor's model, named in the dispatch: a harness may
+# give subagents a lighter default, and a lighter reader misses findings.
+require rereading-a-spec "a reader gets where the other specs live" "the directory where the project's other specifications live"
+require rereading-a-spec "a reader runs on the conductor's model" "Dispatch every reader on the model you run on, and name that model in the dispatch"
+# Which readings a state gets: a new spec keeps the questions the adoption asked.
+require rereading-a-spec "a changed spec gets every reading"     "A changed spec gets every reading"
+# A new spec gets the readings that bear on a specification rather than on a
+# change, the model reading among them, and they are named one by one.
+require rereading-a-spec "a new spec gets the rule, concision and model readings" "A new spec gets *Does this specification hold what a specification must hold?*, *Is this specification precise and concise?* and *Where does this sit in the model?*"
 # The readings, in English, in the shipped skill. Nothing else ships them:
 # the living spec is this project's own, it is French prose, and a skill running
 # on another project cannot reach it — a conductor sent there to fetch a reading
 # would find nothing. Each is the text pasted into a reader's prompt, so each is
 # guarded on the opening sentence a reader is handed, and the two that follow are
 # what stop that text being paraphrased for a human reader of the skill instead.
-require writing-a-batch "the readings"                      "**The readings.**"
-require writing-a-batch "reading: what the change makes false" "What does this change make false elsewhere?"
-require writing-a-batch "reading: what the change leaves out"  "What does this change leave out?"
-require writing-a-batch "reading: what a spec must hold"       "Does this specification hold what a specification must hold?"
-require writing-a-batch "reading: precise and concise"         "Is this change precise and concise?"
-require writing-a-batch "the concision reading carries its rules" "Every paragraph carries one rule"
-require writing-a-batch "reading: where this sits in the model" "Where does this sit in the model?"
+require rereading-a-spec "reading: what the change makes false" "**What does this change make false elsewhere?**"
+require rereading-a-spec "reading: what the change leaves out"  "**What does this change leave out?**"
+require rereading-a-spec "reading: what a spec must hold"       "**Does this specification hold what a specification must hold?**"
+require rereading-a-spec "reading: precise and concise"         "**Is this specification precise and concise?**"
+require rereading-a-spec "reading: where this sits in the model" "**Where does this sit in the model?**"
+require rereading-a-spec "the concision reading carries its rules" "Every paragraph carries one rule"
+require rereading-a-spec "the concision reading reads what is under review" "every sentence of a new specification, every sentence the change brings to a changed one"
+# The rule reading carries the tempering clauses of the spec document, so a reader
+# does not report a correct sentence.
+require rereading-a-spec "a rule may name the section it rules"  "A rule that constrains several behaviours lives in a section named after what it rules"
+require rereading-a-spec "a glossary entry can state a rule"     "A glossary that binds a domain concept, and only a domain concept, to the name the code and the interface carry states a rule"
+require rereading-a-spec "a declared aside is not normative"     "A passage marked by the project's declared aside convention is not normative"
+require rereading-a-spec "the rule reading's last own sentence"  "names that specification"
+require rereading-a-spec "the concision reading's last own sentence" "so does a vague word where a concrete rule belongs"
 # No sentence counts the readings: a count says nothing the list does not, and
 # goes false the day a reading is added or removed.
-case "$(body_flat "$REPO_ROOT/skills/writing-a-batch/SKILL.md")" in
-    *[Tt]"wo readings"*|*[Tt]"hree readings"*|*[Ff]"our readings"*|*[Ff]"ive readings"*|*[Ss]"ix readings"*|*"different motions"*|*"answers none of the first"*)
-        fail "writing-a-batch: no sentence counts the readings" ;;
-    *)  pass "writing-a-batch: no sentence counts the readings" ;;
+case "$(body_flat "$REPO_ROOT/skills/rereading-a-spec/SKILL.md" 2>/dev/null || true)" in
+    *[Tt]"wo readings"*|*[Tt]"hree readings"*|*[Ff]"our readings"*|*[Ff]"ive readings"*|*[Ss]"ix readings"*|*[Tt]"wo readers"*|*[Bb]"oth readers"*|*[Ff]"our things"*|*"different motions"*|*"answers none of the first"*)
+        fail "rereading-a-spec: no sentence counts the readings" ;;
+    *)  pass "rereading-a-spec: no sentence counts the readings" ;;
 esac
-require writing-a-batch "a reading is pasted word for word"      "pasted word for word into the slot the template leaves for it"
-require writing-a-batch "a reading is written for a bare reader" "written for a reader that has nothing else"
+require rereading-a-spec "a reading is pasted word for word"      "pasted word for word into the slot the template leaves for it"
+require rereading-a-spec "a reading is written for a bare reader" "written for a reader that has nothing else"
 # The model reading names its own skill, conditionally: a reader on a machine
 # without it must still read. Guarded on the reading's text, not on prose about
 # it, because the reading is what actually reaches that reader.
-require writing-a-batch "the model reading names its skill"     "Use the \`domain-driven-design\` skill if it is available to you"
-require writing-a-batch "the model reading survives its absence" "read without it if it is not"
-require writing-a-batch "the skill is invoked only if present"  "its skill is invoked only if present"
-require writing-a-batch "the model reading comes last"      "The model reading comes last"
+require rereading-a-spec "the model reading names its skill"     "Use the \`domain-driven-design\` skill if it is available to you"
+require rereading-a-spec "the model reading survives its absence" "read without it if it is not"
+require rereading-a-spec "the skill is invoked only if present"  "its skill is invoked only if present"
+# A reading done without its skill is a weaker reading: the reader says so, and
+# the human hears it, since installing the skill is theirs to do.
+require rereading-a-spec "the model reader reports a missing skill" "read without it if it is not, and say so at the top of your report"
+require rereading-a-spec "the human hears of a missing skill"    "tell your human partner that \`domain-driven-design\` is not available, so they can install it"
+require rereading-a-spec "the model reading comes last"          "The model reading comes last"
 # The order itself: no other reading's opening sentence follows the model reading.
-case "$(body_flat "$REPO_ROOT/skills/writing-a-batch/SKILL.md")" in
+# Read on the readings alone, the quoted lines that open on a bold question: the
+# prose that names the readings a new spec gets cites them in its own order.
+READINGS="$(grep -E '^> \*\*' "$REPO_ROOT/skills/rereading-a-spec/SKILL.md" 2>/dev/null | tr '\n' ' ' || true)"
+case "$READINGS" in
     *"Where does this sit in the model?"*"make false elsewhere?"*|\
     *"Where does this sit in the model?"*"leave out?"*|\
     *"Where does this sit in the model?"*"hold what a specification must hold?"*|\
     *"Where does this sit in the model?"*"precise and concise?"*)
-        fail "writing-a-batch: the model reading is the last one" ;;
-    *)  pass "writing-a-batch: the model reading is the last one" ;;
+        fail "rereading-a-spec: the model reading is the last one" ;;
+    *)  pass "rereading-a-spec: the model reading is the last one" ;;
 esac
 # Both states, and which one is read. The second assertion is the one that holds:
-# a reader handed a diff drifts into reviewing the change block by block, which is
-# the batch-document reread, and the passage no block aims at is what goes unseen.
-require writing-a-batch "a reader gets both states of the spec" "A reader gets both states, and reads the later one"
-require writing-a-batch "the reading stays on the applied state" "The reading itself stays on the applied state, read whole"
-require writing-a-batch "a reader is handed no blocks"          "which is also why it is handed no blocks"
+# a reader handed a diff drifts into reviewing the change piece by piece, and the
+# passage no change aims at is what goes unseen.
+require rereading-a-spec "a reader of a changed spec gets both states" "A reader of a changed spec gets both states, and reads the later one"
+require rereading-a-spec "the reading stays on the applied state" "The reading itself stays on the applied state, read whole"
 # Waiting for every reader, then who revises between two rounds. Without the last
 # two, the stop conditions turn on text nobody is said to revise, and the skill
 # reads as forwarding raw findings while its conditions presuppose the opposite.
-require writing-a-batch "every reader returns before anything goes up" "Every reader returns before anything goes up"
-require writing-a-batch "no running report"                     "never a running report"
-require writing-a-batch "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
-require writing-a-batch "a round runs on the revised text"       "A round runs on the revised text"
-# The four stop conditions: one assertion per condition, one more for the rider
-# that decides condition 1's common case, one for the removal half of the same
-# condition, and one for the framing sentence. Each condition turns its own
-# assertion red when it goes, so the framing sentence is guarded for the other
-# end — the prose cannot keep announcing four while the list below it is shorter.
-require writing-a-batch "four things stop the rounds"           "Four things stop the rounds"
-require writing-a-batch "only an unread state reopens a round"  "A fresh round only on a state the reread has not read"
-require writing-a-batch "moving a sentence is an addition"      "moving a sentence is an addition"
-require writing-a-batch "a removal reopens what leaned on it"   "a removal reopens what depended on it and nothing else"
-require writing-a-batch "two stuck rounds close the wording"    "Two rounds stuck on the same clause close the question of its wording"
-require writing-a-batch "a round of declined findings is one too many" "already examined and declined is one round too many"
-require writing-a-batch "the reread does not replace the gate"  "prepares the gate, it does not replace it"
+require rereading-a-spec "every reader returns before anything goes up" "Every reader returns before anything goes up"
+require rereading-a-spec "no running report"                     "never a running report"
+require rereading-a-spec "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
+require rereading-a-spec "a round runs on the revised text"       "A round runs on the revised text"
+# The stop conditions: one assertion per condition, one more for the rider that
+# decides the first condition's common case, and one for its removal half.
+require rereading-a-spec "the rounds have stop conditions"        "These stop the rounds"
+require rereading-a-spec "only an unread state reopens a round"   "A fresh round only on a state the reread has not read"
+require rereading-a-spec "moving a sentence is an addition"       "moving a sentence is an addition"
+require rereading-a-spec "a removal reopens what leaned on it"    "a removal reopens what depended on it and nothing else"
+require rereading-a-spec "two stuck rounds close the wording"     "Two rounds stuck on the same clause close the question of its wording"
+require rereading-a-spec "a round of declined findings is one too many" "already examined and declined is one round too many"
+require rereading-a-spec "the reread does not replace the review"  "prepares the review of the pull request that carries the spec, it does not replace it"
 
 # --- writing-a-batch: ending the opening and amendment reviews ---
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"

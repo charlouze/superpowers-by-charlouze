@@ -576,7 +576,25 @@ absent "the batch-document reread leaves the blocks to the coherence reread" \
 # can reach.
 absent "no skill rereads with fresh eyes" \
     "fresh eyes" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module rereading-a-spec
+
+# One skill rereads a spec, new or changed, and the skills that need a spec
+# reread invoke it rather than carrying readers of their own.
+shared "the skills that have a spec reread invoke the shared reread" \
+    "invoke \`supercharlouze:rereading-a-spec\`" \
+    writing-a-batch
+absent "no calling skill carries readings of its own" \
+    "Does this specification hold what a specification must hold|precise and concise\\?|Where does this sit in the model|Every reader returns before anything goes up|stop the rounds" \
+    adopting-a-module writing-a-batch
+# The dependency runs one way: the reread knows none of the skills that invoke
+# it, and says nothing a calling skill would have to keep in step with. What a
+# reader gets is its own business.
+absent "the reread names no skill that invokes it" \
+    "supercharlouze:|adopting-a-module|writing-a-batch|calling skill" \
+    rereading-a-spec
+absent "no calling skill says what a reader gets" \
+    "as a new spec|as a changed spec|never the blocks|the spec as \`main\` carries it" \
+    adopting-a-module writing-a-batch
 
 # An amendment changes the scope, the spec delta or the flag of an open batch.
 # A leftover naming only scope and flag would send a spec delta change nowhere.

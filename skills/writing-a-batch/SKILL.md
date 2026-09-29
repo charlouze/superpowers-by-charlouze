@@ -372,88 +372,14 @@ and section it targets, and its unchanged and removed lines match `main`, or the
 text the block ordered before it leaves. A block that fails this check does not
 apply, which is how a delta gone stale since the batch was drafted is caught.
 
-**Conduct it outside the context that wrote the blocks**, by dispatching readers
-as subagents. This context argued every block into existence; asked to reread
-them, it rereads its own intentions — and the passage no block aims at, which is
-what this reread exists to find, is precisely what it cannot see.
+Then invoke `supercharlouze:rereading-a-spec` on each applied copy, with the path
+of the spec it applies to.
 
-**A reader takes one reading, on one touched spec.** Each reading below asks
-for its own motion, a sweep of the whole document, a reasoning about cases, a
-test applied sentence by sentence, a check of the wording or a look at the
-model, and one reader holding several does the cheapest of them and returns.
-So the readers follow from the delta: one per reading, per touched spec.
+Carry every revision it returns back into the blocks: into the block whose text
+it changes, or into a new block when it changes a passage no block targets.
 
-**The readings.** Each block below is the text a reader's prompt carries,
-pasted word for word into the slot the template leaves for it. It is written for
-a reader that has nothing else: never abbreviate it, and never hand a reader two.
-
-> **What does this change make false elsewhere?** Find a passage of this
-> specification that the change does not aim at and that it now contradicts.
-
-> **What does this change leave out?** Find a case it walks past, or a
-> consequence it does not draw.
-
-> **Does this specification hold what a specification must hold?** Every
-> sentence states a business rule or an intention, and passes the
-> other-implementation test: a developer who implemented the same intention
-> differently would read that sentence as true of their code. A sentence that
-> describes a mechanism does not pass it. Report the sentences that fail.
-
-> **Is this change precise and concise?** Read every sentence the change
-> brings. Each says one exact thing, once, and stands on its own. Every
-> paragraph carries one rule. A rule says how far it holds, and an exception
-> presents itself as one. A text says what it delivers or decides, without
-> telling how it got there or why. No sentence is set in relief. A sentence
-> whose removal would cost a reader nothing fails; so does a vague word where a
-> concrete rule belongs. Report the sentences that fail, and what each breaks.
-
-> **Where does this sit in the model?** Use the `domain-driven-design` skill if
-> it is available to you, and read without it if it is not. Report what this
-> specification names inconsistently, places where it does not belong, or splits
-> across a boundary it should not cross.
-
-The model reading comes last: it answers none of the others and feeds them
-all, and **its skill is invoked only if present** — this plugin recommends
-`domain-driven-design` and depends on it nowhere, so its absence changes how
-that reader reads, never whether the reading happens.
-
-Compose each dispatch from `skills/writing-a-batch/references/reader-prompt.md`,
-which carries what a reader gets — both states of the spec, its one reading, and
-what it must return.
-
-**A reader gets both states, and reads the later one.** Handing it the spec as
-`main` carries it, alongside the applied copy, turns "what changed" into a diff
-it can run rather than a delta it has to rebuild — which is also why it is handed
-no blocks. The reading itself stays on the applied state, read whole: a reader
-that works through the change block by block is doing the batch-document reread
-over again, and the passage no block aims at goes unseen.
-
-**Every reader returns before anything goes up.** Wait for all of them, gather
-their findings, then put them to your human partner — never a running report. A
-partial report gets findings ruled on that the next reader displaces, and asks
-for the same ruling twice.
-
-**You instruct the findings; you do not forward them.** The batch document is
-still your draft at this point, so work every finding through and revise the
-blocks it lands on, then put to your human partner what you changed and what you
-could not settle. A round runs on the revised text, and the conditions below say
-when the rounds end. Forwarding raw findings makes your human partner arbitrate a
-draft, which is the work the opening gate exists to spare them.
-
-**Four things stop the rounds**, and without them they chain indefinitely.
-
-1. **A fresh round only on a state the reread has not read.** A revision that
-   adds a sentence produces one — and **moving a sentence is an addition**, its
-   reach changing with its place. A revision that takes a sentence out produces
-   one too, but only where something leaned on what left: coherence is a
-   property of the state, not of the text that remains, so a removal reopens
-   what depended on it and nothing else.
-2. **Two rounds stuck on the same clause close the question of its wording.**
-   Take the clause out, or put it to your human partner.
-3. **A round returning only findings already examined and declined is one round
-   too many.** What is left is a disagreement of judgment, and judgment is
-   settled at the gate.
-4. **The reread prepares the gate, it does not replace it.**
+A rule it returns as reaching past its module's boundary stops the opening: put
+the breakdown to your human partner.
 
 The pull request body says what the reread found, or that it found nothing. A
 reread nobody can see from the pull request is a practice again, not a rule.
@@ -664,5 +590,4 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "I'll call the amendment branch `batch/NN-<slug>-amend`, it says what it is" | A name under one of this plugin's branch patterns claims what that pattern claims — a number, sections — and an amendment holds neither. Its branch follows none of them. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
-| "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Dispatch readers outside it. |
-| "One more round, the wording can still improve" | Four conditions close the rounds. Two rounds on the same clause end the question of its wording: take it out or put it to your human partner. |
+| "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-spec`. |
