@@ -146,73 +146,63 @@ flux ajoute à un plan ne sont pas des écarts : superpowers les laisse au proje
 
 ## Authority and conflict rules
 
-Le flux suppose deux contraintes du projet : **`main` est protégée**, tout y passe
-par une pull request, et **`main` est déployée en continu**, chaque fusion part en
-production. Il n'existe ni branche de lot ni branche d'intégration : une story se
-fusionne dans `main`, et c'est un flag, pas une branche, qui garde un lot incomplet
-hors de portée des utilisateurs.
+Tout ce qui atteint `main` peut partir en production.
 
-**Toute branche du flux part de `main` telle que le remote la porte**, jamais d'une
-autre branche, et **porte le nom que son étape lui assigne** avant que le travail
-commence, y compris quand l'outil qui l'a créée en a choisi un autre ou a laissé un
-HEAD détaché : le nom est alors rétabli. Une branche nommée autrement ne suffit pas.
+Rien n'atteint `main` sans pull request.
 
-**La spec est l'autorité contraignante de toute revue et de toute relecture.** Le
-lot ne porte que ce qu'une spec ne peut pas porter : le périmètre de livraison,
-l'ordre des stories, les contraintes de migration et de compatibilité, et la raison
-pour laquelle ce travail a lieu maintenant.
+Toute branche du flux part de `main` tel que le remote le porte, et se fusionne
+dans `main`.
 
-**La pull request d'une story ne porte jamais sa modification de spec sans le code
-qui la réalise.** **La spec de `main` décrit toujours exactement ce que son code
-fait.** Toute dérive est du travail correctif, sans exception.
+Une branche porte le nom que son étape lui assigne avant que le travail commence.
+Exception : la branche d'un amendement n'a pas de nom assigné.
 
-**Quand un lot et une spec se contredisent, la spec gagne — sans exception et sans
-délibération.** L'agent implémente ce que dit la spec, consigne un arbitrage, et
-poursuit. **Corriger une spec en cours de lot est un acte humain, jamais un acte
-d'agent.**
+La spec est l'autorité contraignante de toute revue et de toute relecture.
 
-**Le gel du fichier de spec, avec un début et une fin :**
+Hors son spec delta, un lot ne porte que ce qu'une spec ne peut pas porter : son
+périmètre, ses flags, l'ordre de ses stories et de ses blocs, et ses contraintes de
+migration et de compatibilité.
 
-> Entre le premier commit de la branche et l'ouverture de la pull request, aucune
-> tâche ne modifie le fichier de spec. Une story qui découvre que la spec doit
-> changer s'arrête.
+La spec de `main` décrit toujours exactement ce que son code fait.
 
-Le gel est levé à l'ouverture de la pull request : les demandes de la revue sont des
-décisions humaines, y compris sur la formulation de sa modification de spec.
+Toute dérive est du travail correctif.
 
-**Tout conflit est consigné pour l'humain**, comme arbitrage. Les arbitrages d'une
-story sont recopiés dans son document, sur sa branche, avant la fusion.
+Quand un lot et une spec se contredisent, la spec gagne : l'agent implémente ce
+qu'elle dit, consigne un arbitrage, et poursuit.
 
-**Les revues :**
+Seul un humain corrige une spec en cours de lot.
+
+Après le premier commit de sa branche et jusqu'à l'ouverture de sa pull request,
+une story ne modifie plus le fichier de spec ; une story qui découvre que la spec
+doit changer s'arrête.
+
+À l'ouverture de la pull request, la revue peut faire modifier la spec.
 
 | Revue | Pull request examinée | Sa fusion |
 |---|---|---|
 | Adoption | la spec et le gaps register du module | le module est adopté |
 | Ouverture | le document de lot | le lot est ouvert |
 | Livraison | le code d'une story, et sa modification de spec s'il y en a une | la story est livrée |
-| Amendement | la décision de changer le périmètre ou le flag d'un lot | le lot est amendé |
-| Clôture | le changelog, la consolidation et `status: closed` | le lot est clos |
+| Amendement | la décision de changer le périmètre, le spec delta ou le flag d'un lot | le lot est amendé |
+| Clôture | la consolidation et `status: closed` | le lot est clos |
 
-**L'agent n'approuve ni ne fusionne jamais une pull request de revue.**
-L'approbation et la fusion sont des gestes humains.
+L'agent n'approuve ni ne fusionne jamais une pull request de revue.
 
-**Pendant une revue, la branche n'est pas réécrite.** Chaque correction demandée
-est poussée en commit `fixup!` du commit qu'elle corrige, ou en commit à part
-quand elle porte une décision nouvelle, pour que l'humain voie sur la pull request
-ce qui a changé depuis sa dernière lecture. **L'humain donne son accord dans la
-conversation avec l'agent.** L'agent fond alors les `fixup!` dans les commits
-qu'ils corrigent, pousse la branche réécrite, et annonce que la pull request est
-prête à être approuvée et fusionnée.
+Pendant une revue, l'humain voit sur la pull request ce que chaque correction
+demandée a changé depuis sa dernière lecture.
 
-**La fusion d'une revue est un moment de vider le contexte** : le document fusionné
-porte alors tout ce dont la suite a besoin, et la conversation n'est plus qu'un
-brouillon qui peut le contredire.
+L'humain donne son accord dans la conversation ; l'agent annonce alors la pull
+request prête.
 
-L'agent ne peut pas vider son propre contexte : en annonçant la pull request
-prête, il dit que sa fusion sera ce moment. Quand une étape suivante existe, il la
-nomme et donne dans un bloc à copier-coller le prompt qui la lance après le clear.
-**Ce prompt se suffit à lui-même** : il nomme la skill à invoquer et le document
-d'où repartir, et ne renvoie jamais à la conversation.
+Sur `main`, une correction de revue est fondue dans le commit qu'elle corrige, sauf
+si elle porte une décision nouvelle.
+
+La fusion d'une revue est le moment de vider le contexte.
+
+Quand l'humain annonce une fusion et qu'une étape suivante existe, l'agent la nomme
+et donne le prompt qui la lance dans un contexte vide.
+
+Ce prompt nomme la skill à invoquer et le document d'où repartir, et ne renvoie
+jamais à la conversation.
 
 ## Module
 
@@ -414,38 +404,28 @@ revue comme les autres.
 
 ### The batch document
 
-Un `README.md` avec un front matter `status: open | closed`, et :
+Le document de lot est un `README.md` qui porte un statut, `open` ou `closed`, et
+ces champs :
 
-- **Scope** — ce que ce lot livre, et pourquoi maintenant.
-- **Spec delta** — le texte exact que ce lot écrit dans les specs, en **blocs**.
-  Chaque bloc porte un identifiant `D<n>`, unique dans le lot, et nomme la spec et
-  la section qu'il vise. Pour modifier un passage, il cite le passage actuel puis
-  le texte qui le remplace ; pour en retirer un, il le cite ; pour ajouter du
-  texte, il donne ce texte et l'endroit où il s'insère. **Aucun bloc n'est rattaché à une story** : c'est la story qui
-  choisit, en s'écrivant, les blocs qu'elle transcrit. Une section qui change deux
-  fois au cours du lot porte deux blocs, et `Constraints` donne leur ordre. Aucun
-  bloc n'est transcrit dans une spec à l'ouverture : chacun l'est par une story,
-  dans sa propre pull request. Un lot qui lève un flag déclaré par un autre lot le
-  fait par un bloc qui retire sa mention : c'est une modification de spec comme une
-  autre. **Ce champ n'est jamais laissé blanc** : il porte les blocs du spec delta ;
-  ou, quand le lot n'en a aucun, les entrées du gaps register qu'il réserve, ou
-  `none` suivi de la raison.
-- **Constraints** — les contraintes de migration et de compatibilité, et l'ordre
-  requis des stories ; `none` s'il n'y en a pas. **Rien de normatif n'y figure** :
-  la spec reste seule autorité sur le comportement. Chaque story la recopie
-  **verbatim** dans ses `Global Constraints` ; elle s'écrit donc comme des
-  contraintes qu'un implémenteur peut respecter, et non comme du contexte.
-- **Feature flag** — les flags que ce lot déclare : pour chacun son nom, son défaut
-  et sa portée ; ou `none` avec la raison de l'exemption. Ce champ est
-  **obligatoire et jamais vide**. Une portée
-  qui dépasse le lot **nomme sa condition de levée**. Il prend, pour chaque flag,
-  l'une de ces formes :
+- **Scope** — ce que ce lot livre, dont les entrées du gaps register qu'il prend en
+  charge ;
+- **Spec delta** — le texte exact que ce lot écrit dans les specs, en blocs ; ou
+  `none` suivi de sa raison ;
+- **Constraints** — seulement les contraintes de migration et de compatibilité, et
+  l'ordre requis des stories et des blocs ; ou `none` ;
+- **Feature flag** — les flags que ce lot déclare, chacun avec son nom, son défaut,
+  sa portée et, si elle dépasse le lot, sa condition de levée ; ou `none` suivi de
+  la raison de l'exemption.
 
-  ```markdown
-  Feature flag: `<flag>`, <on|off> by default — scope: this batch
-  Feature flag: `<flag>`, <on|off> by default — scope: beyond this batch, lifted when <condition de levée>
-  Feature flag: none — <raison de l'exemption>
-  ```
+Chaque bloc porte un identifiant unique dans le lot, et nomme la spec et la section
+qu'il vise.
+
+Un bloc montre ce qu'il change dans le paragraphe qui le contient.
+
+Aucun bloc n'est rattaché à une story.
+
+Un lot qui lève un flag déclaré par un autre lot le fait par un bloc qui retire sa
+mention.
 
 ### The coherence reread
 
@@ -556,19 +536,24 @@ La pull request de clôture porte :
 
 ## Story
 
-Une story appartient à exactement un lot et vise exactement **un** module, donc une
-seule spec. C'est l'unité de livraison technique : **une story, une branche, une
-pull request**, et cette pull request ne porte jamais sa modification de spec sans
-le code qui la réalise.
+Une story appartient à exactement un lot et vise exactement un module.
 
-**Une story est identifiée par `us-N` dans son lot**, attribué selon la règle qui
+Une story se livre sur une branche, par une pull request.
+
+Cette pull request ne porte jamais sa modification de spec sans le code qui la
+réalise.
+
+Une story est identifiée par `us-N` dans son lot, attribué selon la règle qui
 identifie un lot (`Batch`).
 
-Les stories d'un lot sont écrites **une par une** — la story N+1 en connaissant ce
-qu'a produit la story N — et plusieurs peuvent être en vol simultanément. **Chaque
-story choisit, en s'écrivant, les blocs du spec delta qu'elle transcrit**, et les
-transcrit en entier : un bloc n'est jamais partagé entre deux stories. L'état d'une
-story *est* l'état de sa pull request : il n'y a rien à cocher ni à réconcilier.
+Sa branche `story/NN-us-N-<slug>` revendique `NN` et `us-N`.
+
+Une story s'écrit en connaissant les stories de son lot déjà écrites.
+
+Plusieurs stories d'un lot peuvent être en cours de livraison à la fois.
+
+Chaque story choisit, en s'écrivant, les blocs qu'elle transcrit, et les transcrit
+en entier.
 
 ### The user story document
 
