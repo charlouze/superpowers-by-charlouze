@@ -203,6 +203,9 @@ require writing-a-batch "the document reread is step 6"         "Reread the batc
 require writing-a-batch "the document reread is named where it runs" "**The batch-document reread**, step 6, comes after the coherence reread"
 require writing-a-batch "two rereads, two objects"              "The two rereads are steps 5 and 6, and they have different objects"
 require writing-a-batch "the document reread takes the whole document" "bears on the whole document"
+# The context that wrote the document rereads its own intentions, exactly as it
+# would the blocks, so the batch-document reread leaves it too.
+require writing-a-batch "the document reread is conducted outside this context" "Conduct it outside the context that wrote the document, by dispatching a subagent"
 require writing-a-batch "merging them strands a corrective batch" "which has no blocks, with no reread at all"
 
 # --- writing-a-batch: the coherence reread (spec section "The coherence reread") ---

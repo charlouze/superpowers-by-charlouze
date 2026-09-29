@@ -461,13 +461,14 @@ reread nobody can see from the pull request is a practice again, not a rule.
 ## Opening the Pull Request
 
 **The batch-document reread**, step 6, comes after the coherence reread and
-bears on the whole document. Reread it against the specs with fresh eyes:
-`Scope` stating what the batch delivers, with every gaps register entry it
-takes on, each one reserved, corrective or ordinary; `Spec delta` filled, with
-blocks or with `none` and the reason; `Constraints` carrying only migration and
+bears on the whole document. Conduct it outside the context that wrote the
+document, by dispatching a subagent that checks it against the specs: `Scope`
+stating what the batch delivers, with every gaps register entry it takes on,
+each one reserved, corrective or ordinary; `Spec delta` filled, with blocks or
+with `none` and the reason; `Constraints` carrying only migration and
 compatibility constraints and the required order of stories and blocks, or
 `none`; `Feature flag` filled; and the lifting of any earlier flag this batch
-takes on stated as a block.
+takes on stated as a block. Revise the document on what it reports.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
 reviewer has to rule on: the exact text of every block, or the reason for the

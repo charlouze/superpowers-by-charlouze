@@ -572,6 +572,12 @@ absent "the batch-document reread leaves the blocks to the coherence reread" \
     "every block's paragraph|every block's unchanged and removed lines matching" \
     writing-a-batch
 
+# A reread says in which context it runs. "Fresh eyes" names no context an agent
+# can reach.
+absent "no skill rereads with fresh eyes" \
+    "fresh eyes" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
 # An amendment changes the scope, the spec delta or the flag of an open batch.
 # A leftover naming only scope and flag would send a spec delta change nowhere.
 absent "no skill bounds an amendment to scope and flag" \
