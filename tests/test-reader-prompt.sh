@@ -36,7 +36,7 @@ has() {
 }
 
 has "one reader carries one reading"        "One reader, one reading, one touched spec"
-has "the reading comes from the skill"      "one of the four that \`## The Coherence Reread\` states, pasted **word for word** from there"
+has "the reading comes from the skill"      "one of the readings that \`## The Coherence Reread\` states, pasted **word for word** from there"
 # Which of the two states the finding is about. Both assertions: the applied copy
 # is named as the object, and the earlier state is fenced off from being reviewed
 # as a diff — a reader handed two files drifts to the diff without the second.
@@ -45,7 +45,7 @@ has "the reader gets the spec as it stands" "The same specification as it stands
 has "the earlier state locates the change"  "for locating what changed"
 has "the change is not reviewed as a diff"  "Do not review the change as a diff"
 # One generic rule rather than a list of things not to read: a reader that loads
-# no skill its reading does not name cannot reach the other three readings, and
+# no skill its reading does not name cannot reach the other readings, and
 # cannot pull in anything else either.
 has "a reader loads no unnamed skill"       "Load no skill your reading does not name"
 has "everything needed is in the prompt"    "Everything you need is in this prompt"
@@ -72,6 +72,7 @@ make false elsewhere
 does this change leave out
 what a specification must hold
 Where does this sit in the model
+precise and concise
 the blocks, verbatim
 NEEDLES
 

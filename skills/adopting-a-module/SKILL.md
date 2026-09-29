@@ -413,6 +413,8 @@ bodies, descriptions, rationale and the slugs naming business objects follow the
 project's language. The spec and the gaps register you write obey this rule; this
 plugin itself is entirely English, because it carries no business prose.
 
+Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+
 ## Red Flags
 
 | Thought | Reality |

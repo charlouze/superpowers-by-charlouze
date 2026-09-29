@@ -709,6 +709,8 @@ documents.
   `Global Constraints`, `Files`, `Interfaces` — are that same rule already at
   work, not an exception you tolerate.
 
+Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+
 ## Red Flags
 
 | Thought | Reality |

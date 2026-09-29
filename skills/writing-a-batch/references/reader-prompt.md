@@ -3,7 +3,7 @@
 One reader, one reading, one touched spec. Fill every `<…>` slot before
 dispatching: a slot left as written is a reader with nothing to read.
 
-The reading is one of the four that `## The Coherence Reread` states, pasted
+The reading is one of the readings that `## The Coherence Reread` states, pasted
 **word for word** from there. This file restates none of them: they belong to
 that section, and a second copy here would drift from it.
 

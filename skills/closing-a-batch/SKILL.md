@@ -116,6 +116,8 @@ Then push and open the pull request. The **review of the closing pull request** 
 
 **English skeleton, project-language prose.** Section titles, field names, table headers, front matter values (`status: closed`), path patterns and branch patterns are English, everywhere and always. The prose you write — the `change` cell of a changelog line, the body of a gaps register entry, an amended scope paragraph — follows the project's language, as do the slugs, which name business objects. This skill and every message it produces are English; the documents it writes carry both.
 
+Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+
 ## Red Flags
 
 | Thought | Reality |

@@ -269,6 +269,48 @@ The boundary does not run between documents; it runs **inside** each document: E
 
 That is the superpowers feeling kept: a document of this system reads like a superpowers document, with content in the project's language. The English skeleton that `superpowers:writing-plans` imposes on a story is then no longer an exception you put up with — it is the general rule, already applied.
 
+## Concision
+
+These rules hold for every text this flow writes: its documents, its pull request bodies and its commit messages. A text nobody manages to reread is no longer an authority, and the rules are what keeps it readable.
+
+Every sentence says one exact thing, once, and stands on its own.
+
+Every paragraph carries one rule.
+
+A rule says how far it holds, and an exception presents itself as one.
+
+A text says what it delivers or decides, without telling how it got there or why. Exception: the reason this flow explicitly asks for, such as the why of a ruling or of the commit that deletes a gaps register entry.
+
+No sentence is set in relief. Bold that ranks one sentence above its neighbours tells the reader the others bind less.
+
+### How to apply them
+
+The cut test, asked of every sentence before you commit it: would a reader who never saw the previous version lose anything if this sentence went? If not, cut it. Two kinds of sentence fail it every time. The refutation of a version that no longer exists ("X is no exception") answers a text the reader will never see. And the particular case the general rule already covers ("every review merge" already includes the closing one) makes the reader doubt the cases that are not spelled out.
+
+Too little is as wrong as too much. A bound ("only", "and nothing else") is a rule; cut it and the rule widens. A vague word ("nature", "handled appropriately") is replaced by the concrete rule it hides. When you strip a mechanism from a sentence, check that the intention it served is still written somewhere.
+
+Examples:
+
+- One rule per paragraph. Not: "Every branch starts from `main` and merges into `main`. Except an amendment's, it bears the name its step assigns." The exception reads as if it held for both rules. Good: each rule in its own paragraph, the exception attached to the one rule it touches.
+- Write what you mean. Not: "no prose qualifies a group of entries". Good: "everything that qualifies an entry is written in the entry".
+- Write the positive case. Not: "reaches `main` as a separate commit only if it carries a fresh decision". Good: "is squashed into the commit it corrects, unless it carries a fresh decision".
+- Say what to do rather than listing cases. Not: "a divergence has only two legitimate causes: …". Good: "when `main` moved under a block, the story fits it; when a block's text is a problem, the agent puts it to the human".
+- Two rules that paraphrase each other become one. Two phrasings reassure an agent and confuse a human, who looks for the difference between them.
+- A list does not announce how many items it holds. Not: "The five readings." Good: "The readings." The count tells the reader nothing the list does not, and goes false the day an item is added or removed.
+- A field carries what its name says. Reserved gaps register entries go under `Scope`, not under `Spec delta`.
+- No dash in place of a comma or of "that is".
+- An option the human decides is taken out of the text when it reads as an obligation.
+- "Word for word" applies only to what really is copied word for word.
+- A means is not the intention. Not: "each task runs in a subagent". Good: "each task is reviewed".
+
+## Conversation
+
+What the agent says to the human follows `Concision` above.
+
+Facing the human, a delta block, a story or a gaps register entry is named by the section it targets and what it changes there, never by its identifier alone. Identifiers serve the documents and the agents; a human who hears "D12 conflicts with D6" does not know what either says, and naming the section alone still leaves them guessing what moves. Not: "D12 is ready". Good: "the block on `The batch document`, which moves the reserved entries into `Scope`, is ready".
+
+The identifier may follow in parentheses when the human has to find it in the document.
+
 ## Red Flags
 
 | Thought | Reality |
@@ -291,3 +333,5 @@ That is the superpowers feeling kept: a document of this system reads like a sup
 | "The delta names a mechanism — I'll reword it into a business rule" | That is the laundering this rule exists to stop: what you would write describes the observed behaviour, so it canonises the drift. The spec wins, record a `Ruling:` for the clause you left out, and carry on. |
 | "I can't say where this number came from, I'll write 'a few minutes'" | Vagueness is not prudence — it is a rule no code can contradict. A number you cannot answer for is a gap, not a guarantee. |
 | "This rule holds for every module, so it lives above them all" | There is no spec above the specs. A rule belongs to exactly one spec; a rule that seems to belong to several signals a module breakdown to revisit, and that is your human partner's decision. |
+| "This sentence is safer in, even if it repeats the rule above" | A text that says what goes without saying makes the reader doubt what does not, and ends up unread. Apply the cut test. |
+| "The human has the batch document, `D12` is enough" | They do not keep the identifiers in mind. Name the section the block targets and what it changes there. |

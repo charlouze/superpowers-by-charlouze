@@ -18,7 +18,7 @@ echo "test-skill-content"
 # red on text that is correct. No needle in this suite contains two consecutive
 # spaces, so squeezing changes nothing else.
 # The `sed` drops a leading blockquote marker for the same reason: a norm written
-# as a block quote — the four readings of `## The Coherence Reread` are — would
+# as a block quote — the readings of `## The Coherence Reread` are — would
 # otherwise flatten with a stray `>` at every line break, and a needle spanning
 # two of its lines could never match. No needle in this suite contains `>`.
 body_flat() {
@@ -41,6 +41,28 @@ require() {
 for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch; do
     require "$s" "states the language rule" "English skeleton"
 done
+
+# Every document-producing skill sends its writer to the concision rules.
+for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch; do
+    require "$s" "points at the concision rules" "follows \`Concision\` in \`supercharlouze:using-batches\`"
+done
+
+# --- using-batches: concision ---
+require using-batches "concision covers every text the flow writes" "hold for every text this flow writes: its documents, its pull request bodies and its commit messages"
+require using-batches "one exact thing, once"              "Every sentence says one exact thing, once, and stands on its own"
+require using-batches "one rule per paragraph"             "Every paragraph carries one rule"
+require using-batches "a rule states its reach"            "A rule says how far it holds, and an exception presents itself as one"
+require using-batches "what, not how or why"               "A text says what it delivers or decides, without telling how it got there or why"
+require using-batches "the requested reason is the exception" "Exception: the reason this flow explicitly asks for"
+require using-batches "nothing set in relief"              "No sentence is set in relief"
+require using-batches "the cut test"                       "would a reader who never saw the previous version lose anything if this sentence went?"
+require using-batches "too little is as wrong as too much" "Too little is as wrong as too much"
+require using-batches "a list does not announce its count" "A list does not announce how many items it holds"
+
+# --- using-batches: conversation ---
+require using-batches "conversation follows concision"     "What the agent says to the human follows \`Concision\`"
+require using-batches "named by section and change"        "is named by the section it targets and what it changes there, never by its identifier alone"
+require using-batches "the identifier may follow"          "The identifier may follow in parentheses"
 
 # --- adopting-a-module (spec 6) ---
 require adopting-a-module "asks for the human's breakdown first" "Their breakdown comes before any of yours"
@@ -192,7 +214,7 @@ require writing-a-batch "the applied state is built outside the repository" "**o
 require writing-a-batch "no block reaches a spec before a story"      "no block is written into a spec before a story transcribes it"
 require writing-a-batch "a stale block will not apply"                "A block whose quoted passage is no longer in \`main\` will not apply"
 require writing-a-batch "the reread is conducted outside this context" "Conduct it outside the context that wrote the blocks"
-require writing-a-batch "the pull request body declares the reread"   "The pull request body declares the reread"
+require writing-a-batch "the pull request body says what the reread found" "The pull request body says what the reread found, or that it found nothing"
 
 # The reader roles. The second assertion is what keeps the count from being
 # trimmed: alone, the first reads as a description of a typical reader rather
@@ -201,16 +223,26 @@ require writing-a-batch "a reader takes one reading"            "A reader takes 
 require writing-a-batch "the readers follow from the delta"     "one per reading, per touched spec"
 require writing-a-batch "never two readings to one reader"      "never hand a reader two"
 require writing-a-batch "the dispatch is composed from a template" "references/reader-prompt.md"
-# The four readings, in English, in the shipped skill. Nothing else ships them:
+# The readings, in English, in the shipped skill. Nothing else ships them:
 # the living spec is this project's own, it is French prose, and a skill running
 # on another project cannot reach it — a conductor sent there to fetch a reading
 # would find nothing. Each is the text pasted into a reader's prompt, so each is
 # guarded on the opening sentence a reader is handed, and the two that follow are
 # what stop that text being paraphrased for a human reader of the skill instead.
-require writing-a-batch "reading 1: what the change makes false" "What does this change make false elsewhere?"
-require writing-a-batch "reading 2: what the change leaves out"  "What does this change leave out?"
-require writing-a-batch "reading 3: what a spec must hold"       "Does this specification hold what a specification must hold?"
-require writing-a-batch "reading 4: where this sits in the model" "Where does this sit in the model?"
+require writing-a-batch "the readings"                      "**The readings.**"
+require writing-a-batch "reading: what the change makes false" "What does this change make false elsewhere?"
+require writing-a-batch "reading: what the change leaves out"  "What does this change leave out?"
+require writing-a-batch "reading: what a spec must hold"       "Does this specification hold what a specification must hold?"
+require writing-a-batch "reading: precise and concise"         "Is this change precise and concise?"
+require writing-a-batch "the concision reading carries its rules" "Every paragraph carries one rule"
+require writing-a-batch "reading: where this sits in the model" "Where does this sit in the model?"
+# No sentence counts the readings: a count says nothing the list does not, and
+# goes false the day a reading is added or removed.
+case "$(body_flat "$REPO_ROOT/skills/writing-a-batch/SKILL.md")" in
+    *[Tt]"wo readings"*|*[Tt]"hree readings"*|*[Ff]"our readings"*|*[Ff]"ive readings"*|*[Ss]"ix readings"*|*"different motions"*|*"answers none of the first"*)
+        fail "writing-a-batch: no sentence counts the readings" ;;
+    *)  pass "writing-a-batch: no sentence counts the readings" ;;
+esac
 require writing-a-batch "a reading is pasted word for word"      "pasted word for word into the slot the template leaves for it"
 require writing-a-batch "a reading is written for a bare reader" "written for a reader that has nothing else"
 # The model reading names its own skill, conditionally: a reader on a machine
@@ -219,6 +251,16 @@ require writing-a-batch "a reading is written for a bare reader" "written for a 
 require writing-a-batch "the model reading names its skill"     "Use the \`domain-driven-design\` skill if it is available to you"
 require writing-a-batch "the model reading survives its absence" "read without it if it is not"
 require writing-a-batch "the skill is invoked only if present"  "its skill is invoked only if present"
+require writing-a-batch "the model reading comes last"      "The model reading comes last"
+# The order itself: no other reading's opening sentence follows the model reading.
+case "$(body_flat "$REPO_ROOT/skills/writing-a-batch/SKILL.md")" in
+    *"Where does this sit in the model?"*"make false elsewhere?"*|\
+    *"Where does this sit in the model?"*"leave out?"*|\
+    *"Where does this sit in the model?"*"hold what a specification must hold?"*|\
+    *"Where does this sit in the model?"*"precise and concise?"*)
+        fail "writing-a-batch: the model reading is the last one" ;;
+    *)  pass "writing-a-batch: the model reading is the last one" ;;
+esac
 # Both states, and which one is read. The second assertion is the one that holds:
 # a reader handed a diff drifts into reviewing the change block by block, which is
 # the batch-document reread, and the passage no block aims at is what goes unseen.

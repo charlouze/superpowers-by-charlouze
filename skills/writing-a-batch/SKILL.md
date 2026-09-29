@@ -362,13 +362,13 @@ as subagents. This context argued every block into existence; asked to reread
 them, it rereads its own intentions — and the passage no block aims at, which is
 what this reread exists to find, is precisely what it cannot see.
 
-**A reader takes one reading, on one touched spec.** The readings below ask for
-four different motions — a sweep of the whole document, a reasoning about cases,
-a test applied sentence by sentence, a look at the model — and one reader holding
-several does the cheapest of them and returns. So the readers follow from the
-delta: one per reading, per touched spec.
+**A reader takes one reading, on one touched spec.** Each reading below asks
+for its own motion, a sweep of the whole document, a reasoning about cases, a
+test applied sentence by sentence, a check of the wording or a look at the
+model, and one reader holding several does the cheapest of them and returns.
+So the readers follow from the delta: one per reading, per touched spec.
 
-**The four readings.** Each block below is the text a reader's prompt carries,
+**The readings.** Each block below is the text a reader's prompt carries,
 pasted word for word into the slot the template leaves for it. It is written for
 a reader that has nothing else: never abbreviate it, and never hand a reader two.
 
@@ -384,15 +384,23 @@ a reader that has nothing else: never abbreviate it, and never hand a reader two
 > differently would read that sentence as true of their code. A sentence that
 > describes a mechanism does not pass it. Report the sentences that fail.
 
+> **Is this change precise and concise?** Read every sentence the change
+> brings. Each says one exact thing, once, and stands on its own. Every
+> paragraph carries one rule. A rule says how far it holds, and an exception
+> presents itself as one. A text says what it delivers or decides, without
+> telling how it got there or why. No sentence is set in relief. A sentence
+> whose removal would cost a reader nothing fails; so does a vague word where a
+> concrete rule belongs. Report the sentences that fail, and what each breaks.
+
 > **Where does this sit in the model?** Use the `domain-driven-design` skill if
 > it is available to you, and read without it if it is not. Report what this
 > specification names inconsistently, places where it does not belong, or splits
 > across a boundary it should not cross.
 
-The fourth answers none of the first three and feeds all three, and **its skill
-is invoked only if present** — this plugin recommends `domain-driven-design` and
-depends on it nowhere, so its absence changes how that reader reads, never
-whether the reading happens.
+The model reading comes last: it answers none of the others and feeds them
+all, and **its skill is invoked only if present** — this plugin recommends
+`domain-driven-design` and depends on it nowhere, so its absence changes how
+that reader reads, never whether the reading happens.
 
 Compose each dispatch from `skills/writing-a-batch/references/reader-prompt.md`,
 which carries what a reader gets — both states of the spec, its one reading, and
@@ -432,9 +440,8 @@ draft, which is the work the opening gate exists to spare them.
    settled at the gate.
 4. **The reread prepares the gate, it does not replace it.**
 
-**The pull request body declares the reread**: that it was conducted outside this
-context, and what it found — or that it found nothing. A reread nobody can see
-from the pull request is a practice again, not a rule.
+The pull request body says what the reread found, or that it found nothing. A
+reread nobody can see from the pull request is a practice again, not a rule.
 
 ## Opening the Pull Request
 
@@ -617,6 +624,8 @@ objects, so they follow the project's language too.
 
 This plugin's own files are entirely English — it has no business prose, only
 skeleton.
+
+Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
 
 ## Red Flags
 
