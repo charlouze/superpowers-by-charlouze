@@ -145,7 +145,7 @@ name and the starting point before going on: `adopt/<module>`, from
 `origin/main`. **A named branch is not enough** — and here that is a matter
 of convention rather than mechanism, which is worth saying plainly: nothing
 scans `adopt/*`. Number allocation reads `batch/*` and `story/*`, the
-concurrency scan reads `story/*`, and an adoption branch claims no number and
+concurrency scan reads `story/*` and `bounded/*`, and an adoption branch claims no number and
 holds no sections, so it is equally unseen under either name. The convention
 is uniform anyway: a rule honoured only where a scan would catch you is not a
 rule. And it is on `batch/*` and `story/*` that it bites — there, a branch
@@ -185,15 +185,11 @@ rule's reach, not what already exists next door.
   Adoption has no story document and therefore no Rulings log, so these lines go
   in the **body of the adoption pull request** (step 7), where the reviewer who
   might disagree will read them.
-- **No date, no status, no in-progress marker.** A spec carries none, ever. On
-  `main`, spec and code always travel in the same pull request, so no state exists
-  that would need one.
+- No date, no status, no work-in-progress marker, except a flag's gating sentence.
+  On `main`, spec and code always travel in the same pull request, so no other
+  state exists that would need one.
 - **Titled sections are the unit of the whole system** — concurrency detection and
   gaps entries both designate a section. Title them so they can be pointed at.
-- Add the empty `Changelog` table (`batch | date | change`) in the footer.
-  `supercharlouze:closing-a-batch` writes into it, one line per batch. It is not
-  the only writer: a bounded change belongs to no batch and writes its own
-  `out-of-batch` line, from its own pull request.
 
 **The shape of the spec.** Minimal, and every part of it load-bearing:
 
@@ -208,11 +204,6 @@ rule's reach, not what already exists next door.
 
 <Normative prose: what the code must do. Titled so a gaps entry, a story's
 `Sections:` field and a concurrency check can all point at it.>
-
-## Changelog
-
-| batch | date | change |
-|---|---|---|
 ```
 
 No front matter, no date, no status. The section titles are English skeleton;

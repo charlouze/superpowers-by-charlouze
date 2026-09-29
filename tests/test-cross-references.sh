@@ -76,7 +76,7 @@ fi
 # 4. The bounded path is spelled out (spec 8.2) — it has no skill of its own.
 UB="$(awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$REPO_ROOT/skills/using-batches/SKILL.md" | tr '\n' ' ')"
 has() { case "$2" in *"$1"*) return 0 ;; *) return 1 ;; esac }
-for needle in "out-of-batch" "if and only if nothing observable" "fix/" "no feature flag"; do
+for needle in "if and only if nothing observable" "bounded/" "no feature flag"; do
     if has "$needle" "$UB"; then
         pass "bounded path states: $needle"
     else
@@ -94,6 +94,20 @@ if grep -q "no change leaves the spec silent" "$REPO_ROOT/README.md"; then
     fail "the README does not assert the unconditional spec update"
 else
     pass "the README does not assert the unconditional spec update"
+fi
+
+# The specs carry no changelog any more, and the README says nothing of one.
+if grep -qi "changelog" "$REPO_ROOT/README.md"; then
+    fail "the README names no changelog"
+else
+    pass "the README names no changelog"
+fi
+
+# A bounded change lives on `bounded/<slug>`; the former name survives nowhere.
+if grep -q "fix/" "$REPO_ROOT/README.md"; then
+    fail "the README names no fix/ branch"
+else
+    pass "the README names no fix/ branch"
 fi
 
 # 5. No shipped artifact cites a numbered section of the archived design

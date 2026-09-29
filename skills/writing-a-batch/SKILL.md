@@ -513,17 +513,17 @@ decided at opening, and closing checks it against reality.
 
 Do it on a branch whose name **follows none of this plugin's branch patterns** —
 `adopt/<module>`, `batch/NN-<slug>`, `batch/NN-<slug>-close`,
-`story/NN-us-N-<slug>`, `fix/<slug>`, `chore/supercharlouze-init`. Some of those
+`story/NN-us-N-<slug>`, `bounded/<slug>`, `chore/supercharlouze-init`. Some of those
 names are read as claims: `batch/*` and `story/*` claim a number, `story/*` and
-`fix/*` claim sections. An amendment claims neither a number nor any section, so a
+`bounded/*` claim sections. An amendment claims neither a number nor any section, so a
 branch named after one of the claiming patterns would claim what it does not hold,
 and a name that follows none has nothing to carry: that is what makes it the one
 exception to
 restoring a conventional name, and the exception holds for that reason alone.
-Edit the batch document **in place** — no
-changelog inside it, no history of its own scope — and say in the pull request
-body what changed and why. An amendment is not mutable state
-flowing along: it is an explicit human decision that goes through a review.
+Edit the batch document in place, with no history of its own scope inside it,
+and say in the pull request body what changed and why. An amendment is not
+mutable state flowing along: it is an explicit human decision that goes through
+a review.
 
 **An amendment merges into the same clear moment as an opening**, and ends its
 review the same way: fixups during the review, agreement in the conversation,

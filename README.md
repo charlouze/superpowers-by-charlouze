@@ -77,7 +77,7 @@ gitGraph
    checkout main
    merge story/04-us-2 tag: "delivery gate"
    branch batch/04-slug-close
-   commit id: "changelog, consolidation, closed"
+   commit id: "consolidation, closed"
    checkout main
    merge batch/04-slug-close tag: "closing gate"
 ```
@@ -91,7 +91,7 @@ own; it puts its checkpoints where your flow already has them.
 | Batch opening | the exact text each spec will receive, before a line of code is written against it |
 | Story delivery | a story's code, and its spec change if it has one, in one diff |
 | Batch amendment | a change of scope or of flag on an open batch |
-| Batch closing | the changelog, the consolidation, `status: closed` |
+| Batch closing | the consolidation, `status: closed` |
 
 The opening gate is the one that pays. You read the wording of a spec at the
 moment changing it still costs nothing — and no story may be written until it
@@ -138,8 +138,8 @@ every merge ships. Feature flags exist because of the second one.
 
 The two natural alternatives are ruled out, and the reasons are worth stating:
 
-- a **batch branch** creates a blind spot. Concurrency detection has exactly two
-  sources — the open pull requests and the pushed `story/*` branches — and a
+- a **batch branch** creates a blind spot. Concurrency detection reads only the
+  open pull requests and the pushed `story/*` and `bounded/*` branches, and a
   story merged into a batch branch leaves both at once. The sections it holds
   become invisible to its siblings for the rest of the batch, which is precisely
   the stretch a batch branch is supposed to protect.
@@ -158,15 +158,14 @@ Several stories are in flight simultaneously — the normal regime of a pull
 request flow, not an edge case. A conflict is two stories touching **the same
 section of the same spec**; the section is the unit everything is counted in.
 
-Detection is by **declaration**, never by diff. Each story document lists the
-spec it targets and the sections it touches, and a starting story reads those
-declarations from the open pull requests whose branch is `story/*` or `fix/*`
-*and* from every pushed `story/*` branch that carries no pull request yet.
-**The branch name is the filter**: those two patterns are the only branches that
-claim sections, so a pull request that touches no spec at all is seen like any
-other. Both sources are needed: a story's pull request opens only at the very
-end, so for the whole length of an implementation its pushed branch is the only
-thing showing what it holds.
+A conflict is also a story and a bounded change touching the same section.
+Detection is by declaration. Each story document lists the spec it targets and
+the sections it touches, and a bounded change lists them in its pull request
+body. A starting story reads those declarations from the open pull requests
+whose branch is `story/*` or `bounded/*`, and from every pushed `story/*` or
+`bounded/*` branch that carries no pull request yet. A pushed branch that has
+not declared yet is read by the sections it has already changed. The branch
+name is the filter: only those branches claim sections, so a pull request that touches no spec at all is seen like any other.
 
 Git is a partial net here, not the net. It conflicts on lines, not on sections,
 so two edits far apart inside one section merge cleanly — exactly the case worth
@@ -177,7 +176,7 @@ catching.
 The spike / bounded / architectural classification of superpowers is kept as it
 is. A spike is an answer, and leaves no artifact. A **bounded change** — a
 well-scoped change to code that already exists — keeps its own ceremony and its
-`fix/<slug>` branch, under four rules: it updates the spec in the same pull
+`bounded/<slug>` branch, under these rules: it updates the spec in the same pull
 request whenever something observable at the module's boundary changes, and says
 nothing there only when nothing does; it declares the spec it targets and the
 sections it touches, like a story; it carries no flag, being complete on its own;

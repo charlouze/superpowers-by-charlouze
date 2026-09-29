@@ -128,7 +128,7 @@ require writing-a-batch "the specs are the registry of flags"     "The specs are
 require writing-a-batch "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
 require writing-a-batch "amendment pull request exists"           "amendment pull request"
 require writing-a-batch "an amendment branch follows no pattern"  "follows none of this plugin's branch patterns"
-require writing-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`fix/<slug>\`, \`chore/supercharlouze-init\`"
+require writing-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`bounded/<slug>\`, \`chore/supercharlouze-init\`"
 require writing-a-batch "a pattern name claims what it does not hold" "would claim what it does not hold"
 require writing-a-batch "carries the requalification procedure"   "requalification"
 require writing-a-batch "requalifies a technical story" \
@@ -386,7 +386,8 @@ require writing-a-user-story "hands over to the next story"         "names the n
 require writing-a-user-story "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
-require closing-a-batch "one changelog line per batch"           "one line per batch"
+require closing-a-batch "every duty lands in one pull request"  "Every duty lands in one pull request"
+require closing-a-batch "the flag check precedes the writers"  "it comes before the duties that write"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
 require closing-a-batch "reads both sections of a story"         "Two sections carry it"
 require closing-a-batch "names the Rulings log as a source"      "The **Rulings log** holds its \`Open ruling:\` lines"
@@ -398,8 +399,11 @@ require closing-a-batch "releasing keeps the entry"  "removes the reservation an
 require closing-a-batch "sorts story findings, defines nothing"  "whatever a story reported as"
 require closing-a-batch "releases unconsumed reservations"       "unconsumed reservations"
 require closing-a-batch "records undelivered blocks"             "announced but never delivered"
-require closing-a-batch "duty 5 reads the Blocks declarations"   "Read the \`Blocks:\` field of every story document in the batch directory"
+require closing-a-batch "the withdrawal reads the Blocks declarations" "Read the \`Blocks:\` field of every story document in the batch directory"
 require closing-a-batch "a block nobody declared is undelivered" "no collected declaration names is a block announced but never delivered"
+require closing-a-batch "the duty withdraws undelivered blocks"  "### Withdraw the blocks no story delivered"
+require closing-a-batch "a withdrawn block leaves the batch document" "Remove it from the batch document, its \`Spec delta\` entry and any constraint that names it"
+require closing-a-batch "the human decides whether each joins the register" "Ask your human partner whether it joins the gaps register"
 require closing-a-batch "the directory holds the merged stories" "holds exactly the batch's merged stories"
 require closing-a-batch "reads the declarations, not the specs"  "Read the declarations, not the specs"
 require closing-a-batch "refuses to close on an undeclared flag" "no declared scope"
@@ -418,13 +422,26 @@ require closing-a-batch "names the merge a clear moment"      "is a moment to cl
 require closing-a-batch "has no next step to name"            "no next step to name"
 require closing-a-batch "therefore hands over no prompt"      "hands over no prompt"
 
-# --- closing-a-batch: the three duty precisions (spec section "Closing a batch") ---
-require closing-a-batch "the flag check is duty 1"               "### 1. Refuse to close on a flag"
-require closing-a-batch "duty 1 checks before the writing duties" "it comes before any other duty writes anything"
+# --- closing-a-batch: the duty precisions (spec section "Closing a batch") ---
+require closing-a-batch "the flag check is a duty"               "### Refuse to close on a flag"
+require closing-a-batch "the flag check precedes the writing duties" "it comes before any other duty writes anything"
 require closing-a-batch "a refusal must cost nothing"            "makes a refusal free"
-require closing-a-batch "duty 1 checks the flags it declared"   "Check every feature flag **this batch declared**"
-require closing-a-batch "an earlier batch's flag goes to duty 5" "A flag declared by an earlier batch is not this duty's business"
-require closing-a-batch "duty 5 is empty for a corrective batch" "A corrective batch has nothing to compare here"
+require closing-a-batch "the flag check covers the flags it declared" "Check every feature flag **this batch declared**"
+require closing-a-batch "an earlier batch's flag goes to the withdrawal" "A flag declared by an earlier batch is not this duty's business"
+require closing-a-batch "the withdrawal is empty for a corrective batch" "A corrective batch has nothing to compare here"
+# The duties are neither counted nor numbered: a duty is named by its title, and
+# their order is the order of their headings. A number went false in every
+# reference the day a duty was added or removed.
+case "$(body_flat "$REPO_ROOT/skills/closing-a-batch/SKILL.md")" in
+    *"### "[0-9]". "*|*[Dd]"uty "[0-9]*|*[Tt]"wo duties"*|*[Tt]"hree duties"*|*[Ff]"our duties"*|*[Ff]"ive duties"*|*[Ss]"ix duties"*)
+        fail "closing-a-batch: no duty is counted or numbered" ;;
+    *)  pass "closing-a-batch: no duty is counted or numbered" ;;
+esac
+case "$(body_flat "$REPO_ROOT/skills/closing-a-batch/SKILL.md")" in
+    *"### Refuse to close on a flag"*"### Consolidate what the story documents left"*"### Release unconsumed reservations"*"### Withdraw the blocks no story delivered"*"### Set status: closed"*)
+        pass "closing-a-batch: the duties keep their order" ;;
+    *)  fail "closing-a-batch: the duties keep their order" ;;
+esac
 require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
 
 # --- using-batches: preconditions for every pull request of this system ---
@@ -444,7 +461,6 @@ require using-batches "a boundary concept may gather rules"      "A section carr
 require using-batches "a glossary is a rule, not a leak"        "Naming is not mechanising"
 require using-batches "one normative level, no ranking"         "normative, at the same level"
 require using-batches "a module redefines what it borrows"      "redefines what it borrows"
-require using-batches "the rule covers the changelog cell"      "including the changelog's \`change\` cell"
 require using-batches "the gaps register is out of scope"       "\`docs/specs/<module>.gaps.md\`, which is not a spec"
 require using-batches "states the content rule itself"          "business rules and intentions; the mechanism stays in the code"
 require using-batches "corollary: a rule outlives a mechanism"  "A rule does not move when a mechanism moves"
@@ -501,8 +517,8 @@ done
 # --- using-batches: the bounded change (spec `Bounded change`) ---
 require using-batches "a bounded change may leave the spec silent" \
         "if and only if nothing observable at the module's boundary changes"
-require using-batches "a silent bounded change writes no changelog line" \
-        "the spec stays silent and no changelog line is written"
+require using-batches "a silent bounded change leaves the spec untouched" \
+        "the spec stays silent. That silence is not a tolerance"
 require using-batches "a bounded change names the spec it targets" \
         "the spec it targets and the sections it touches"
 require using-batches "a bounded change touching no section declares none" \

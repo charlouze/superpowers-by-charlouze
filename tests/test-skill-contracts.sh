@@ -132,19 +132,34 @@ absent "no skill filters the concurrency scan by the spec file a diff touches" \
 # A pushed branch that carries no declaration yet has only its diff to say so,
 # and both ends must state it the same way: the one that scans and the one that
 # states the rule.
-shared "a branch with no declaration yet is scoped by what it changed" \
-    "concerns the spec it has already changed" \
+shared "a branch with no declaration yet is read by what it changed" \
+    "A pushed branch that carries no declaration yet is read by the sections it has already changed" \
+    using-batches writing-a-user-story
+
+# Pushed branches with no pull request are read under both patterns that claim
+# sections. A scan of `story/*` alone misses a pushed bounded change.
+shared "both claiming patterns are read before their pull request" \
+    "every remote \`story/*\` or \`bounded/*\` branch that carries no pull request yet" \
+    using-batches writing-a-user-story
+
+# A branch that has not declared yet used to stop a story as soon as it had
+# changed the story's spec file. The sections it changed now stand in for its
+# declaration, so that stop must survive nowhere.
+absent "a branch with no declaration yet is not an unknown" \
+    "concerns the spec it has already changed|it is an unknown and stops you|stop on an unknown" \
     using-batches writing-a-user-story
 
 # The content rule lives in one place, `using-batches`. A skill that writes into a
 # spec file names it and reuses its question verbatim rather than restating it —
 # a second formulation of the same rule is exactly what drifts. One assertion over
-# the four files: separate ones would all stay green while one end reworded.
+# the files: separate ones would all stay green while one end reworded.
 # `adopting-a-module` is in the list because it does not merely write into a spec,
 # it creates one: every sentence of a spec's first version passes through it.
+# `closing-a-batch` is not: since it dropped the changelog line, it no longer
+# writes into a spec file at all.
 shared "whoever writes into a spec spells the other-implementation test identically" \
     "read this sentence as true of their code" \
-    using-batches writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-user-story adopting-a-module
 
 # The corrective batch's stop condition is copied "in full" into a story's
 # Global Constraints. `using-batches` states it and `writing-a-user-story` has it
@@ -220,15 +235,16 @@ shared "both ends spell the Blocks field alike" \
     "\`Blocks:\`" \
     writing-a-user-story closing-a-batch
 
-# Duty 5 reads the `Blocks:` declarations, not the specs: a block fitted to a
-# `main` that moved since the batch opened is delivered even though its text no
+# The withdrawal duty reads the `Blocks:` declarations, not the specs: a block
+# fitted to a `main` that moved since the batch opened is delivered even though
+# its text no
 # longer matches the delta word for word, and diffing the specs against that
 # delta would wrongly report it missing. A positive assertion cannot lock this
-# out — the Red Flags table and the duty 5 precondition can both carry the new
+# out — the Red Flags table and the withdrawal duty can both carry the new
 # wording while an old cell or clause still points a reader at the specs, and a
 # `require` on the new text would stay green regardless. The regex targets the
 # two forms that phrase found: "check the specs on main" and "against what
-# actually shipped". It must not match duty 5's own contrast at line 91 —
+# actually shipped". It must not match that duty's own contrast —
 # "Diffing the specs against the delta would report it missing" — which pairs
 # "specs" with "the delta", never with "main" or "shipped".
 absent "no skill finds undelivered blocks by reading or diffing the specs" \
@@ -498,5 +514,36 @@ absent "no skill says a bounded change never leaves the spec silent" \
 absent "no skill says a bounded change declares only its sections" \
        "therefore declares its sections" \
        using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+# Closing used to file every undelivered block as a gap on its own. The human
+# now decides, block by block; a leftover of the old duty would file them all.
+absent "no skill files an undelivered block as a gap on its own" \
+    "Write the shortfall into the gaps register|inscribed in the gaps register as" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# A bounded change's branch is `bounded/<slug>`. A skill still naming the former
+# pattern would scan, or create, a branch nobody else reads as a claim.
+absent "no skill names the former bounded branch" \
+    "\`fix/" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# A spec carries no date, no status and no work-in-progress marker, except the
+# gating sentence of a flag. Both skills that describe a spec say it alike.
+shared "a flag's gating sentence is the one marker a spec admits" \
+    "no work-in-progress marker, except a flag's gating sentence" \
+    using-batches adopting-a-module
+
+absent "no skill denies a spec every marker" \
+    "A spec carries none, ever" \
+    using-batches adopting-a-module
+
+# The specs carry no changelog any more. No shipped skill file names one:
+# frontmatter and references included, which `body_flat` would skip.
+CHANGELOG_HITS="$(grep -rli 'changelog' "$REPO_ROOT/skills" || true)"
+if [ -z "$CHANGELOG_HITS" ]; then
+    pass "no skill file names a changelog"
+else
+    fail "no skill file names a changelog (present in: $(echo $CHANGELOG_HITS))"
+fi
 
 exit $((FAILURES > 0))
