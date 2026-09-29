@@ -51,7 +51,7 @@ all.
 
 ## Preconditions
 
-Check all four **before creating any branch**. Each one, skipped, produces a
+Check them all **before creating any branch**. Each one, skipped, produces a
 pull request that has to be thrown away.
 
 1. **Every module this batch touches has an adopted spec** in

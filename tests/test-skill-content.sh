@@ -109,6 +109,9 @@ require adopting-a-module "promoting a gap removes its entry"        "an adoptio
 
 # --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
 require writing-a-batch "an unadopted module stops the design"   "the design stops"
+# The preconditions are checked before any branch, and not counted: the count
+# once said four over a list of three.
+require writing-a-batch "preconditions come before any branch"   "Check them all **before creating any branch**"
 require writing-a-batch "the human abandons or sets the design aside" "abandon the design or set it aside"
 require writing-a-batch "the design resumes in a fresh context"   "resumes in a fresh context"
 require writing-a-batch "NN accounts for open pull requests"      "open pull request"
