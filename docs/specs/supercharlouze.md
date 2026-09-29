@@ -301,112 +301,36 @@ traitement s'applique à un inventaire partiel : la partie couverte suit les ét
 
 ### The spec document
 
-La spec vit dans `docs/specs/<module>.md`. Elle est **normative** — ce que le code
-doit faire — et non descriptive. Elle ne porte **ni date, ni statut, ni marqueur de
-travail en cours.**
+La spec vit dans `docs/specs/<module>.md`.
 
-**Ce dont une spec parle.** Une spec porte des règles et des intentions métier ; le
-mécanisme reste dans le code. C'est une propriété de contenu distincte de la
-normativité : une spec normative peut encore imposer un mécanisme. Les clauses qui
-suivent s'appliquent ensemble.
+Elle ne porte ni date, ni statut, ni marqueur de travail en cours. Exception : la
+mention d'un flag.
 
-**Le test de l'autre implémentation.** Le critère n'est pas un vocabulaire interdit,
-mais une question posée à chaque phrase qu'on s'apprête à écrire :
+Une spec porte des règles métier, jamais le mécanisme qui les réalise. Une règle
+énonce une intention que toute implémentation qui la réalise rend vraie : ce
+qu'elle dit s'observe hors du module, que ses mots soient techniques ou métier.
 
-> Un autre développeur, ayant implémenté la même intention autrement, lirait-il
-> cette phrase comme vraie de son code ?
+Une décision métier chiffrée s'écrit avec sa valeur.
 
-Oui : c'est une règle, elle entre. Non : c'est cette implémentation-ci, elle reste
-dans le code.
+Une règle vit dans la section du comportement qu'elle contraint. Une règle qui en
+contraint plusieurs vit dans une section qui nomme ce qu'elle règle.
 
-Le test porte sur la **frontière du module**, jamais sur les mots. Un module dont le
-domaine est l'infrastructure — un pipeline de déploiement, ou ce plugin-ci — énonce
-des noms de branches et des pull requests comme règles, dès lors qu'ils sont
-observables à sa frontière.
+Une règle appartient à une seule spec. Une règle qui contraindrait un comportement
+observable à la frontière de plus d'un module signale un découpage à revoir :
+l'agent s'arrête et soumet le cas à l'humain.
 
-Deux corollaires :
+Le glossaire d'une spec définit les concepts du domaine, et eux seuls, avec le nom
+que chacun porte dans le code et dans l'interface, quand il en a un. Le code et
+l'interface emploient ce nom.
 
-- **une règle ne bouge pas quand un mécanisme bouge.** Une phrase qu'un changement
-  d'avis purement technique obligerait à réécrire décrit la technique ;
-- **la spec ne légifère pas sur la qualité du code.** Une implémentation maladroite
-  qui produit le comportement promis est conforme.
+Une spec redéfinit chaque terme qu'elle emprunte à la spec d'un autre module,
+réduit à ce qu'elle en utilise, et nomme cette spec. Un terme emprunté n'est pas
+une règle partagée.
 
-**On ne reformule pas un mécanisme en règle.** L'intention derrière un mécanisme ne
-se déduit pas : elle vient d'un document validé ou de l'humain. Une intention
-paraphrasée depuis le code est de la reconstruction depuis le code.
+Tout ce qu'une spec contient est normatif et au même niveau. Exception : l'aparté,
+qu'un projet admet en déclarant la convention qui le distingue d'une règle.
 
-Quatre signes la reconnaissent sans rien connaître du domaine :
-
-- la section a **la forme du code** — une phrase par branche, un paragraphe par
-  module technique ;
-- elle est **vague là où le code est précis** — « quelques minutes » est un nombre
-  effacé ;
-- elle **nomme un acteur interne** — ce qui surveille, ce qui calcule, ce que ce
-  module ne compte pas ;
-- **personne hors du module ne pourrait dire si elle est tenue.**
-
-La question qui les tranche tous : *qu'est-ce qu'un utilisateur ou un module voisin
-perd si cette phrase est fausse ?* Si la réponse est « rien d'observable », ce n'est
-pas une règle — c'est un gap, et il part au gaps register.
-
-**Un choix métier porte son chiffre.** Une durée, un pas, une fenêtre, un plafond,
-un délai de garantie sont des décisions métier, et une décision métier s'écrit avec
-sa valeur. Si la valeur change, c'est la spec qui change. **Le flou est proscrit.**
-
-Tout chiffre écrit dans une spec répond à cette question :
-
-> Celui-là, d'où vient-il — d'une décision, ou d'une lecture du code ?
-
-Un chiffre qui vient d'une lecture du code, ou dont on ne sait pas dire d'où il
-vient, est un gap, pas une garantie — y compris quand il a la forme d'une garantie
-que toute implémentation pourrait tenir.
-
-**La structure de la spec suit le métier.** Une règle vit là où vit le comportement
-qu'elle contraint. Une section qui reproduit la décomposition interne du code
-— « les ports », « les adapters », « ce qui écrit où » — ou qui range les règles
-par leur nature plutôt que par ce qu'elles contraignent — « les invariants », « les
-contraintes » — est **proscrite**. Une section qui porte un concept observable à la
-frontière du module — une convention de nommage, une règle d'autorité — suit le
-métier, même quand ce concept vaut pour plusieurs comportements.
-
-**Nommer n'est pas mécaniser.** Un glossaire qui lie un terme métier au nom porté
-par le code et par l'interface est une règle, pas une fuite : il énonce que ce
-concept s'appelle pareil partout, et renommer l'identifiant sans toucher au
-glossaire rend la spec fausse. Un glossaire ne porte pas les noms qui ne sont ceux
-de personne : un type de persistance, une classe d'adapter, un document de magasin.
-
-**Tout ce qu'une spec contient est normatif, au même niveau.** Une spec ne
-hiérarchise pas ses règles. Il n'y a ni règles principales, ni recommandations, ni
-bonnes pratiques dans une spec — ce qui n'est pas opposable n'y entre pas. Un projet
-qui veut un **aparté non normatif** — un exemple, une précision qui tempère une
-règle voisine — déclare la convention qui le rend reconnaissable et s'y tient ;
-aucun balisage n'est imposé, un aparté se distingue d'une règle et n'en porte
-jamais une.
-
-**Un module redéfinit ce qu'il emprunte.** Une spec se lit seule. Un terme dont un
-module voisin fait autorité est redéfini ici, **réduit à ce dont ce module se
-sert**, en nommant la spec qui en est propriétaire. L'emprunt réduit est un contrat,
-pas une duplication.
-
-**Périmètre de ces clauses.** Elles portent sur le fichier de spec, **toutes ses
-lignes**, y compris la cellule `change` du changelog, et valent pour quiconque y
-écrit. Elles ne portent pas sur `docs/specs/<module>.gaps.md`, qui n'est pas une
-spec : une entrée de gaps register nomme un mécanisme, et c'est là que part tout ce que
-le test éjecte.
-
-Un élément de structure est fixe : une table **Changelog** en pied de document
-porte l'historique `batch | date | change`. **Une ligne par lot, écrite par sa
-pull request de clôture**, jamais une ligne par story. Les modifications faites
-hors de tout lot portent `out-of-batch` et sont écrites par leur propre pull
-request.
-
-Une spec ne liste pas les documents qui l'ont nourrie à son adoption.
-
-Aucune règle ne repose sur le changelog. L'historique qui fait autorité est celui du
-fichier lui-même (`git log docs/specs/<module>.md`).
-
-Une section décrivant un comportement encore gardé porte la mention de son flag
-(`Feature flags`).
+Un aparté ne porte aucune règle.
 
 ### The gaps register
 
@@ -609,39 +533,26 @@ Quand toutes les stories du lot sont fusionnées ou abandonnées et que l'humain
 considère le lot terminé, sa clôture passe par une pull request, sur la branche
 `batch/NN-<slug>-close`.
 
-**Un lot ne peut pas être clos tant qu'un flag qu'il a déclaré subsiste par
-accident.** Un flag de son champ `Feature flag` encore présent — dans le code ou
-par sa mention dans une spec — n'est acceptable que si sa portée étendue et sa
-condition de levée sont déclarées ; sinon, sa story de levée n'a pas été écrite. Un
-flag déclaré par un autre lot n'entre pas dans ce contrôle : sa levée, si le spec
-delta l'annonce, est un bloc comme un autre.
+Un lot ne se clôt pas tant qu'un flag qu'il a déclaré subsiste, dans le code ou par
+sa mention dans une spec, sans que sa portée étendue et sa condition de levée
+soient déclarées.
 
-**Trois sorties, pas une impasse.** Un lot dont on renonce au périmètre alors que
-des stories gardées sont déjà sur `main` ne reste pas ouvert indéfiniment. L'humain
-choisit : écrire la story de levée et livrer ce qui existe ; déclarer au flag une
-portée étendue par un amendement, ce qui reporte la décision à un lot ultérieur ;
-ou écrire une **story de démontage** qui retire le code gardé et ce
-qu'il avait ajouté à la spec.
+Un flag déclaré par un autre lot n'entre pas dans ce contrôle.
 
-**La pull request de clôture porte :**
+Quand l'humain renonce au périmètre d'un lot dont des stories gardées sont sur
+`main`, il choisit : écrire la story de levée et livrer ce qui existe ; déclarer au
+flag une portée étendue par un amendement ; ou écrire une story de démontage, qui
+retire le code gardé et ce qu'il avait ajouté à la spec.
 
-- **la ligne de changelog** de chaque spec touchée — un lot, une ligne ;
-- **la consolidation dans le gaps register** de ce que les documents des stories
-  du lot ont laissé : leurs sections `Observed drift`, et les arbitrages ouverts
-  que leur `Rulings log` classe en violation ou en gap ;
-- **la libération des réservations non consommées** ;
-- **le constat des blocs non livrés** : un bloc du spec delta qu'aucune story
-  fusionnée ne déclare dans son champ `Blocks:` est inscrit au gaps register comme
-  *gap*, et le texte du lot est amendé pour ne plus promettre ce qu'il n'a pas
-  livré ;
-- **`status: closed`** dans le document de lot.
+La pull request de clôture porte :
 
-**Un lot correctif n'a pas de bloc non livré à constater** : son spec delta est
-vide. Une entrée réservée et jamais résorbée est une réservation non consommée,
-libérée comme les autres ; elle n'est pas reclassée en gap neuf.
-
-**Conclue par** la fusion de sa pull request : le lot est clos. Cette revue acte une
-décision humaine, comme les autres.
+- la consolidation dans le gaps register de ce que les documents des stories ont
+  laissé : leurs dérives observées, et les arbitrages ouverts qu'ils classent en
+  violation ou en gap ;
+- la libération des réservations non consommées ;
+- le retrait du document de lot des blocs qu'aucune story fusionnée n'a livrés.
+  L'humain décide si chacun rejoint le gaps register ;
+- le statut `closed` du document de lot.
 
 ## Story
 
@@ -714,33 +625,21 @@ catégorie du gaps register qui l'accueille quand il en rejoint une.
 
 ### Concurrency detection
 
-Deux stories qui touchent la même section d'une même spec sont un conflit. La
-détection est **par déclaration**, et lit **deux sources distantes** :
+Deux stories, ou une story et un changement borné, qui touchent la même section
+d'une même spec sont un conflit.
 
-- les **pull requests ouvertes dont la branche est `story/*` ou `fix/*`**, dont on
-  lit le champ `Sections:` ;
-- les **branches `story/*` poussées qui ne portent pas encore de pull request**,
-  dont on lit le même champ sur leur tête.
+Seules les branches `story/*` et `bounded/*` revendiquent des sections.
 
-**Le filtre est le nom de la branche** : seules `story/*` et `fix/*` revendiquent
-des sections.
+Chacune déclare sa spec et ses sections : une story dans son document de story, un
+changement borné dans le corps de sa pull request.
 
-**La déclaration se lit là où la pull request la tient** : dans le document de story
-pour une story, où `Spec:` nomme la spec et `Sections:` les sections ; dans le corps
-de la pull request pour un changement borné, qui n'a pas de document de story et y
-nomme les deux. Une branche poussée qui ne porte pas encore de déclaration concerne
-la spec qu'elle a déjà modifiée.
+La détection lit les déclarations des pull requests ouvertes. Pour une branche
+poussée qui ne porte pas encore de déclaration, elle prend les sections que la
+branche a déjà modifiées.
 
-**Il faut s'arrêter** si l'intersection avec les sections visées n'est pas vide, et
-**s'arrêter aussi si un champ `Sections:` n'a pas pu être lu** — lecture en échec,
-document absent, champ manquant. Une branche poussée dont le document de story
-n'existe pas encore arrête pareillement quand la spec qu'elle a déjà modifiée est
-celle des sections visées.
+Le travail qui démarre s'arrête si l'une de ses sections est ainsi revendiquée.
 
-**La détection ne voit que ce qui est sur le remote** : une branche créée mais non
-poussée lui est invisible.
-
-**Le conflit de fusion git ne remplace pas cette détection.**
+Il s'arrête aussi si une déclaration n'a pas pu être lue.
 
 ### Delivering a story
 
@@ -881,22 +780,19 @@ Seule une story change le défaut déclaré.
 ## Bounded change
 
 Un changement borné n'a ni lot ni story : c'est une pull request unique, sur une
-branche `fix/<slug>`. Quatre règles :
+branche `bounded/<slug>`.
 
-- **(a) Il laisse la spec muette si et seulement si rien d'observable à la frontière
-  du module ne change.** Qu'il *altère* un comportement déjà décrit ou qu'il en
-  *ajoute* un que nulle spec ne décrit, sa pull request met la spec à jour en même
-  temps que le code, avec une ligne de changelog `out-of-batch` ; s'il ne change
-  rien d'observable, la spec reste muette et aucune ligne n'est écrite.
-- **(b) Il subit la même détection de concurrence qu'une story**, et déclare donc
-  **dans le corps de sa pull request** la spec qu'il vise et les sections qu'il
-  touche, `none` s'il n'en touche aucune ; une déclaration qui change avant
-  l'ouverture refait la détection. Son angle mort est accepté : entre son premier
-  commit et l'ouverture de sa pull request, rien ne porte sa déclaration.
-- **(c) Il ne porte aucun flag** : il est complet dans sa propre pull request.
-- **(d) Il écrit directement dans un gaps register** : n'appartenant à aucun lot,
-  il peut y ajouter une entrée comme en supprimer une, depuis sa propre pull
-  request.
+Quand il change quelque chose d'observable à la frontière du module, sa pull
+request met la spec à jour avec le code. Sinon, la spec reste muette.
+
+Il déclare dans le corps de sa pull request la spec qu'il vise et les sections
+qu'il touche, ou `none`.
+
+Il subit la même détection de concurrence qu'une story.
+
+Il ne porte aucun flag.
+
+Il peut ajouter et supprimer des entrées du gaps register.
 
 ## Installing on a project
 
@@ -975,18 +871,3 @@ Ce que l'agent dit à l'humain suit les règles de `Concision`.
 
 Face à l'humain, un bloc, une story ou une entrée du gaps register se désigne par
 la section qu'il vise et ce qu'il y change, jamais par son seul identifiant.
-
-## Changelog
-
-| batch | date | change |
-|---|---|---|
-| 01 | 2026-09-05 | Lot correctif : les renvois des artefacts livrés nomment leur section de cette spec au lieu de citer un numéro du document de conception archivé, et deux gardes structurelles empêchent la réapparition du défaut — l'une contre les renvois numérotés, l'autre contre un renvoi dont la section n'existe plus. |
-| 02 | 2026-09-17 | Douze silences comblés : le document de lot déclare ses sections `Constraints` et `Live flags`, dont les deux chaînes littérales par lesquelles une décision de gate atteint le contrôle de clôture ; `Global Constraints` porte quatre éléments et non deux, parce que c'est le seul canal que lisent les sous-agents de SDD ; les devoirs de clôture énoncent l'antériorité du contrôle des flags, les flags hérités et le cas du lot correctif ; le nom conventionnel de branche doit être **rétabli** et non simplement exister, la table gagne sa ligne d'amendement, et l'affirmation contraire est retirée ; les refus du script d'init deviennent normatifs et l'arborescence est déclarée non survivante à un clone ; la liste de vérification devient un plancher de dix catégories et dit ce que « structurel » veut dire. La suite passe de 90 à 187 assertions, dont une garde neuve sur l'intégrité de la suite elle-même. |
-| 03 | 2026-09-19 | Une spec dit le métier et jamais le mécanisme : le test de l'autre implémentation, l'interdiction de reformuler un mécanisme en règle, un choix métier écrit avec sa valeur et dont on sait d'où elle vient, une structure qui suit le métier, un glossaire qui reste, tout au même niveau normatif, et un terme emprunté redéfini par le module qui s'en sert. L'adoption ne tient un document validé pour normatif que sur ses intentions, énumère à la frontière du module quand aucun document n'existe, demande son découpage à l'humain et lui propose de promouvoir les gaps un par un ; une entrée du gaps register nomme le document dont elle vient. La spec du plugin s'y conforme : elle est rangée par objet et par étape du flux, ne liste plus ses sources, fait de ses mentions de flag le seul registre des flags et n'impose plus d'ordre à la clôture. |
-| 04 | 2026-09-20 | Le texte exact d'une spec est lu par l'humain avant qu'aucun code ne se construise dessus : le spec delta d'un lot n'énonce plus une intention mais des **blocs** — un identifiant, la section visée, et le texte exact qu'elle recevra —, et c'est sur ce texte que porte la revue d'ouverture. Aucun bloc n'est rattaché d'avance à une story : chacune choisit en s'écrivant ceux qu'elle transcrit, les déclare dans son champ `Blocks:`, les transcrit mot pour mot et en entier, et nomme dans sa pull request tout écart — qui n'a que deux causes légitimes, un `main` qui a bougé sous le bloc, ou un texte qui pose problème et remonte à l'humain avant d'être transcrit. La clôture constate les blocs non livrés à partir de ces déclarations, et la levée d'un flag déclaré par un autre lot y est un bloc comme un autre. Chaque revue reçoit une fin : les corrections demandées se poussent en `fixup!` lisibles sur la pull request, l'humain donne son accord dans la conversation, l'approbation et la fusion restent des gestes humains, et toute fusion de revue est un moment de vider le contexte — l'agent, qui ne peut pas vider le sien, annonce que la fusion sera ce moment, nomme l'étape suivante quand il y en a une et donne le prompt qui la lance ; la clôture n'en a aucune et ne donne aucun prompt. Une adoption ne partage plus jamais le contexte de la conception d'un lot : une ouverture qui découvre un module non adopté s'arrête au lieu d'enchaîner, et ne reprend qu'une fois l'adoption fusionnée. Enfin la spec cesse de nier ce que sa propre clôture décrit : le document de lot ne porte aucun état mutable **jusqu'à sa clôture**, qui l'amende et le déclare clos. |
-| 05 | 2026-09-21 | Une règle appartient à une seule spec : celle qui contraindrait un comportement observable à la frontière de plus d'un module signale un découpage de modules à revoir, et l'agent s'arrête pour soumettre le cas à l'humain au lieu de recopier la règle d'une spec à l'autre ou de lui chercher un domicile commun. Le gaps register, lui, ne porte plus que ce qui reste à régler : une entrée réglée n'est plus barrée mais **supprimée du fichier**, et le commit qui la supprime dit pourquoi — résorbée, promue, sans objet, fausse, ou écartée par l'humain ; ce qu'une entrée a été se lit dans l'histoire du fichier, qu'on relit avant d'en ajouter une afin de ne pas réinscrire un constat déjà écarté sans dire ce qui a changé depuis. Et parce que la suppression emporte ce que le barré gardait à jamais, deux silences qu'elle rend systématiques sont comblés : ce qui qualifie une entrée vit dans l'entrée — aucune prose n'y qualifie un groupe d'entrées, ni leur provenance, ni leur classement, ni leur nombre —, et une entrée ne renvoie à aucune autre ; le mot qui rendait ce renvoi naturel quitte la spec, la règle qu'il justifiait reste. |
-| 06 | 2026-09-20 | Ce que le code gardé par un flag doit tenir entre sa déclaration et sa levée est désormais écrit : les deux états cohabitent sur les mêmes données, la désactivation reste toujours possible, rien d'autre ne change, chaque état est vérifié, et la levée ne fera que retirer. Ces règles atteignent celui qui écrit le code par les `Global Constraints` de toute story qui en écrit sous flag, que le flag soit déclaré par son lot ou par un autre. La frontière du module annonce pour la première fois ce que ce flux exige du code applicatif d'un projet. Et une période d'observation se fait en deux stories : le défaut que la mention de flag déclare cesse d'être confondu avec l'état effectif du flag, que le projet règle comme il veut sans que la spec en soit changée. |
-| 07 | 2026-09-21 | Le spec delta d'un lot est relu contre la totalité de chaque spec qu'il touche avant que sa pull request d'ouverture s'ouvre, et non plus seulement bloc par bloc : la relecture de cohérence lit l'état que les blocs produiront, sans qu'aucun soit écrit dans une spec, et pose trois questions — ce que les blocs rendent faux ailleurs, ce qu'ils omettent, et s'ils tiennent ce qu'une spec doit tenir. Elle n'est jamais conduite dans le contexte qui a écrit les blocs, qui en relirait les intentions plutôt que le texte, et le corps de la pull request d'ouverture déclare cette indépendance et ce qu'elle a trouvé — ou qu'elle n'a rien trouvé —, sans quoi rien n'en serait observable. La pratique existait et ne tenait qu'au fait que quelqu'un pense à la demander ; elle devient une étape de l'ouverture, avant celle qui ouvre la pull request. |
-| out-of-batch | 2026-09-21 | Le gaps register régit la tenue de son fichier et ne désigne plus ses écrivains : qui ajoute, supprime, réserve ou libère une entrée est déjà écrit chez chacun d'eux — l'adoption, l'ouverture d'un lot, la livraison d'une story, la clôture, le changement borné —, et une liste qui le redisait ici était un second texte à tenir synchrone d'un ensemble de sections qui bougent. Ne reste que ce qui vaut quelle que soit la pull request qui écrit : une entrée se supprime du fichier et le commit qui la supprime dit pourquoi, la réservation s'annote `reserved by batch-NN`, la libération retire l'annotation et laisse l'entrée. La phrase qui redonnait au changement borné le droit d'écrire ici, duplicata littéral de sa propre règle, disparaît avec elles. |
-| 08 | 2026-09-21 | Un arbitrage qu'un agent laisse en suspens cesse de mourir en silence. L'**arbitrage ouvert** — un arbitrage dont la décision laisse quelque chose à trancher — entre au glossaire et prend sa forme là où le `Rulings log` est défini : il s'écrit `Open ruling:`, sa ligne nomme ce qui reste à trancher, puis la catégorie du gaps register qui l'accueille quand il en rejoint une. Il lui faut désormais une destination pour que sa story fusionne — le gaps register par la consolidation de la clôture quand c'est une violation ou un gap, la revue de livraison pour tout autre, dernier moment où un arbitrage ouvert peut encore être tranché plutôt que seulement constaté —, et la clôture, symétriquement, apprend à lire le `Rulings log` autant que l'`Observed drift`. Toute branche du flux part de `main` telle que le remote la porte : c'est la seule chose que protégeait l'exigence d'un répertoire de travail particulier, que la moitié des sessions ne pouvaient pas satisfaire et qui a fait conduire une clôture hors de la voie décrite ; au passage, « un `main` à jour » ne disait pas à jour par rapport à quoi. Le gaps register, enfin, cesse de désigner qui ajoute une entrée, et donc de dire que les stories n'ajoutent pas : ne reste que la contrainte qui le leur interdit sans nommer personne — un seul écrivain par lot. |
-| 09 | 2026-09-23 | Le travail qui ne déplace aucune règle a désormais une forme. La **story technique** — une story qui ne change rien d'observable à la frontière de son module — entre au glossaire : elle se déclare dans son en-tête, ne touche aucune section, et une condition d'arrêt la rattrape si elle se révèle fausse ; la story est alors abandonnée, et un changement observable voulu repasse la revue d'ouverture par un amendement du lot. Un lot dont toutes les stories sont techniques est exempté de flag, à la place d'une famille « refactor et infrastructure » qu'aucun spec delta ne savait décrire. Le champ `Spec delta` n'est jamais laissé blanc — des blocs, ou les entrées du gaps register que le lot réserve, ou `none` suivi de sa raison —, et un lot sans bloc voit sa revue d'ouverture porter sur ce qui en tient lieu et se passe de la relecture de cohérence. La spec cesse de supposer que toute story livre une modification de spec : une story ne porte jamais sa modification de spec sans le code qui la réalise, le gel du fichier de spec court dès le premier commit de la branche, et une story sans bloc ouvre la sienne sur son en-tête. Le changement borné laisse la spec muette si et seulement si rien d'observable ne change, et déclare la spec qu'il vise autant que ses sections. La détection de concurrence retient les pull requests par le nom de leur branche plutôt que par la spec qu'elles modifient, si bien qu'une story dont la pull request ne touche aucune spec n'y est plus invisible ; la branche d'un amendement ne suit aucun des patrons que le flux définit, puisqu'elle ne revendique rien. |
