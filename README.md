@@ -90,7 +90,7 @@ own; it puts its checkpoints where your flow already has them.
 | Module adoption | the spec and the gaps register, before any batch touches that module |
 | Batch opening | the exact text each spec will receive, before a line of code is written against it |
 | Story delivery | a story's code, and its spec change if it has one, in one diff |
-| Batch amendment | a change of scope or of flag on an open batch |
+| Batch amendment | a change of scope, of spec delta or of flag on an open batch |
 | Batch closing | the consolidation, `status: closed` |
 
 The opening gate is the one that pays. You read the wording of a spec at the
@@ -133,8 +133,8 @@ an unbounded one would make answering a review impossible.
 ### Why everything lands on `main`
 
 Two project constraints, not choices of this plugin: `main` is protected, so
-everything goes through a pull request, and `main` is deployed continuously, so
-every merge ships. Feature flags exist because of the second one.
+everything goes through a pull request, and everything that reaches `main` may
+ship to production, which is why feature flags exist.
 
 The two natural alternatives are ruled out, and the reasons are worth stating:
 

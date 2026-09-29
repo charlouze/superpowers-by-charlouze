@@ -274,6 +274,18 @@ shared "every review-ending skill names the merge a clear moment" \
     "is a moment to clear the context" \
     using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
+# The next step is named, and its prompt given, when the human announces the
+# merge, not when the agent announces the pull request ready: given then, the
+# review that follows buries it. One assertion over the review-ending
+# skills, and the former timing hunted in all of them.
+shared "every review-ending skill acts on the merge announcement" \
+    "your human partner announces the merge" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+absent "no skill hands over the next step at the ready announcement" \
+    "[Tt]he announcement (says so|names|therefore names)|announcing it ready is where|an announcement that names|when it announces the pull request ready" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
 # The observation period was two stories "enable, then remove" before the
 # declared default and the effective state were told apart. Enabling is the
 # project's gesture and changes no spec; the first story moves the declared
@@ -536,6 +548,42 @@ shared "a flag's gating sentence is the one marker a spec admits" \
 absent "no skill denies a spec every marker" \
     "A spec carries none, ever" \
     using-batches adopting-a-module
+
+# A batch no longer says why it happens now, and its reserved entries go under
+# `Scope`, not under `Spec delta`. The positive assertions stay green beside a
+# leftover of the old wording, so the old wording is hunted too.
+absent "no skill asks a batch why it happens now" \
+    "why now|happens now" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+absent "no skill files reserved entries under the spec delta" \
+    "gaps register entries it reserves, or|gaps register entries this batch reserves|replacing the reserved gaps entries|delivery perimeter|required ordering of the user stories" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# A block shows its change in the paragraph that contains it. The former form,
+# a quoted passage then its replacement, must survive nowhere.
+absent "no skill has a block quote a passage" \
+    "quoted passage|quotes the current passage|passage a block quotes|Quote the passage|the passage it removes" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# The coherence reread checks every block against `main` as it builds the applied
+# copy. A block check left in the batch-document reread would run it twice.
+absent "the batch-document reread leaves the blocks to the coherence reread" \
+    "every block's paragraph|every block's unchanged and removed lines matching" \
+    writing-a-batch
+
+# An amendment changes the scope, the spec delta or the flag of an open batch.
+# A leftover naming only scope and flag would send a spec delta change nowhere.
+absent "no skill bounds an amendment to scope and flag" \
+    "scope or (its |the |of )?flag" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# Everything that reaches `main` may ship to production. The flow presumes no
+# more of the project: a skill still requiring continuous deployment asks more
+# than the flow does.
+absent "no skill requires continuous deployment" \
+    "[Cc]ontinuous" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
 # The specs carry no changelog any more. No shipped skill file names one:
 # frontmatter and references included, which `body_flat` would skip.

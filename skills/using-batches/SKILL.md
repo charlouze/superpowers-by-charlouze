@@ -18,7 +18,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
 | A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:writing-a-batch`, as an ordinary batch that finally specifies them |
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
-| A batch must change scope or flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
+| A batch must change its scope, its spec delta or its flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
 | Spike or bounded work | Nothing is rerouted except what `What Is Kept, What Is Rerouted` states below |
 
@@ -40,7 +40,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Delta block** — the unit of a batch's spec delta: one targeted section and the exact text it must receive, transcribed word for word by a story.
 
-**Feature flag** — what makes a story deliverable on its own without exposing a half-built batch. `main` is deployed continuously, so every merged story ships; a batch whose stories would expose incomplete behaviour declares a flag.
+**Feature flag** — what makes a story deliverable on its own without exposing a half-built batch. Everything that reaches `main` may ship to production, so every merged story may reach users; a batch whose stories would expose incomplete behaviour declares a flag.
 
 **The flag is a specified object, not an implementation detail.** The spec section concerned states its name and its default, as a gating sentence in the form the spec fixes — `` 🔒 `billing.recurring`, off by default ``. Without that declaration, a story merged behind a flag would make the spec false as far as users are concerned, and would reopen through the window exactly the gap the drift rule exists to close.
 
@@ -118,11 +118,11 @@ the gaps register. It would read as a norm and be none.
 Two project constraints, not choices of this plugin, and everything else follows from them:
 
 - **`main` is protected** — everything goes through a pull request.
-- **`main` is deployed continuously** — every merge ships to production.
+- **Everything that reaches `main` may ship to production**, whenever the project deploys.
 
 The second is why feature flags exist, and it rules out the two natural alternatives. A batch branch, or a gitflow `develop` branch, would protect production by holding work back — at the price of a blind spot. Concurrency detection reads only the open pull requests and the pushed `story/*` and `bounded/*` branches, and a story merged into a batch branch leaves **both at once**: its pull request closes, and its branch is gone with it. The sections it took are then held by nothing any sibling can see, for the whole life of the batch — and that is precisely the stretch during which the batch branch is supposed to be protecting things. A `develop` branch is worse: it creates **two baselines** for the drift rule — the reference spec on `develop`, the running code on `main` — and a corrective batch no longer knows what it is correcting against. A flag protects production without holding code back, so it creates neither blind spot nor second baseline.
 
-**One branch, one name.** `main` is that protected, continuously deployed branch, and this plugin calls it `main` everywhere — deliberately not an abstract "integration branch". The abstraction is what invites the `develop`-style branch the paragraph above rejects by name.
+**One branch, one name.** `main` is that protected branch, whose every merge may ship, and this plugin calls it `main` everywhere — deliberately not an abstract "integration branch". The abstraction is what invites the `develop`-style branch the paragraph above rejects by name.
 
 **A story's pull request never carries its spec change without the code that implements it.** It may carry code alone: a corrective batch's story does, and so may any story that transcribes no block. It may carry a spec change no block announced: a teardown story removes from the spec what no block announced. What never reaches `main` is a norm ahead of the code that honours it. That is what gives `main` its central property: **its spec always describes exactly what its code does.** There is no intermediate state to signal, therefore no marker, no semantics to explain to agents that know nothing about this plugin, and no exception to the drift rule.
 
@@ -138,7 +138,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 | Batch opening | the pull request carrying the batch document |
 | Story delivery | the pull request carrying a story's code, and its spec change if it has one |
 | Batch closing | the pull request carrying the consolidation and `status: closed` |
-| Batch amendment | the pull request carrying the decision to change its scope or its flag |
+| Batch amendment | the pull request carrying the decision to change its scope, its spec delta or its flag |
 
 **Preconditions for every pull request of this system**, checked before creating a branch: fetch, then start the branch from **`main` as the remote carries it**, never from another branch. That is what keeps a session chaining two pieces of work from stacking the second on the first one's branch, and what makes numbering and concurrency detection reason on the remote state. **Where you are standing does not matter**, and it must not: a session the harness launched inside a worktree cannot run git against the shared checkout at all, so a precondition on the directory would be unreachable exactly there. The starting point is reachable from anywhere — inside a reused workspace, `git fetch origin && git switch -c <branch> origin/main` satisfies it without leaving. `gh` is assumed available and authenticated; without it both degrade to a partial safety net and stop preventing anything.
 
@@ -161,11 +161,16 @@ comments come back attached to nothing.
 carries everything that follows needs, and the conversation is only a draft that
 can contradict it.
 
-The agent cannot clear its own context. So when it announces the pull request
-ready, it says that merging it will be that moment. Where a next step exists, it
-names that step and gives — in a block to copy and paste — the prompt that starts
-it after the clear. **That prompt stands on its own:** it names the skill to
-invoke and the document to start from, and never refers back to the conversation.
+The agent cannot clear its own context. So when your human partner announces the
+merge, the agent asks them to clear the context. Where a next step exists, it names
+that step and gives, in a block to copy and paste, the prompt that starts it in a
+fresh context. **That prompt stands on its own:** it names the skill to invoke and
+the document to start from, and never refers back to the conversation.
+
+The prompt waits for the merge announcement, not for the announcement that the
+pull request is ready. Between the two the review may go on, and a prompt given
+earlier ends up buried under it, or names a document the review has since
+changed.
 
 "Never refers back to the conversation" is the whole point. A prompt saying
 "continue what we discussed" is worthless after a clear, and it is worthless in a
@@ -173,7 +178,7 @@ way nobody notices until the context is already gone.
 
 ## Authority and Conflict Rules
 
-**The spec is the binding authority.** The batch carries only what a spec cannot carry: delivery scope, story order, migration and compatibility constraints, and why this work happens now.
+**The spec is the binding authority.** Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, the order of its stories and of its blocks, and its migration and compatibility constraints.
 
 **When a batch and a spec contradict each other, the spec wins — no exception, no deliberation.** Implement what the spec says, record a `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an agent's.** An agent that "fixes" the spec silently inverts the authority: the batch's intent wins, and the document reviewers rely on becomes a record of what an agent preferred.
 

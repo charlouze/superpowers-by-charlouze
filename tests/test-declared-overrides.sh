@@ -103,7 +103,7 @@ else
 fi
 
 # The git model lives here and nowhere else (spec 5.1).
-for needle in "same pull request" "continuous" "feature flag" "drift"; do
+for needle in "same pull request" "may ship to production" "feature flag" "drift"; do
     if has "$needle" "$SKILL_FLAT"; then
         pass "using-batches states: $needle"
     else

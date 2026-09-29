@@ -97,7 +97,7 @@ require adopting-a-module "branch naming convention"             "adopt/"
 require adopting-a-module "ends the review as every gate does"   "never approves and never merges a pull request"
 require adopting-a-module "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
 require adopting-a-module "names the merge a clear moment"       "a moment to clear the context"
-require adopting-a-module "names the next step after the clear"  "names \`supercharlouze:writing-a-batch\` as the next step"
+require adopting-a-module "names the next step after the clear"  "name \`supercharlouze:writing-a-batch\` as the next step"
 require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
 require adopting-a-module "arrives in a context of its own"      "in a context of its own"
 require adopting-a-module "the design that follows starts fresh" "from the adopted spec, not from a conversation"
@@ -127,6 +127,8 @@ require writing-a-batch "extended scope names its lifting condition" "lifting co
 require writing-a-batch "the specs are the registry of flags"     "The specs are the registry of flags"
 require writing-a-batch "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
 require writing-a-batch "amendment pull request exists"           "amendment pull request"
+require writing-a-batch "an amendment covers the spec delta"     "An amendment changes the scope, the spec delta or the flag of an open batch"
+require writing-a-batch "the entry point names the spec delta"   "Changing the scope, the spec delta or the flag of an existing batch"
 require writing-a-batch "an amendment branch follows no pattern"  "follows none of this plugin's branch patterns"
 require writing-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`bounded/<slug>\`, \`chore/supercharlouze-init\`"
 require writing-a-batch "a pattern name claims what it does not hold" "would claim what it does not hold"
@@ -142,11 +144,13 @@ require writing-a-batch "branch naming convention"                "batch/NN"
 # --- writing-a-batch: the batch document contract (spec section "The batch document") ---
 require writing-a-batch "template declares the Constraints section" "## Constraints"
 require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
-require writing-a-batch "Constraints carry nothing normative"       "and nothing normative"
+require writing-a-batch "Constraints carry nothing normative"       "Nothing normative goes in \`Constraints\`"
 
 require writing-a-batch "the delta is exact text, in blocks"        "written here as **exact text, in blocks**"
 require writing-a-batch "a block carries a unique D<n>"             "Each one carries an identifier \`D<n>\`, unique within the batch"
-require writing-a-batch "a block quotes what it replaces"           "quotes the current passage, then the text that replaces it"
+require writing-a-batch "a block shows its change in its paragraph" "A block shows what it changes in the paragraph that contains it"
+require writing-a-batch "the paragraph is given as a diff"           "Give the paragraph in a \`diff\` fence"
+require writing-a-batch "the paragraph is taken from main"           "take the paragraph from \`main\` as it stands"
 require writing-a-batch "no block is attached to a story"           "No block is attached to a story"
 require writing-a-batch "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
 require writing-a-batch "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
@@ -158,28 +162,29 @@ require writing-a-batch "twin blocks are not a delta"        "two blocks writing
 # transcribed and it was declared, but its text no longer matches the delta.
 require writing-a-batch "undelivered means nobody declared it"      "the delta announced and no story declared"
 
-# The `Spec delta` field is never blank — it carries blocks, or what stands in
-# their place (spec section "The batch document"). A blank is an omission nobody
-# can review, exactly as an omitted `Feature flag` would be; the three forms are
-# what makes "no block" a statable decision rather than a silence.
+# The `Spec delta` field is never blank: it carries blocks, or `none` and the
+# reason (spec section "The batch document"). A blank is an omission nobody
+# can review, exactly as an omitted `Feature flag` would be; the `none` and
+# its reason make "no block" a statable decision rather than a silence.
 require writing-a-batch "the delta field is never left blank"       "The \`Spec delta\` field is never left blank"
-require writing-a-batch "the field's three forms are named"         "It carries the blocks; or, when the batch has none, the gaps register entries it reserves, or \`none\` and the reason"
-require writing-a-batch "a corrective batch takes the second form"  "A corrective batch takes the second form by definition"
-require writing-a-batch "the template forbids a blank delta"        "Never left blank: with no block, the gaps register entries this batch reserves, or \`none\` and the reason"
+require writing-a-batch "the field carries blocks or none"          "It carries the blocks, or \`none\` and the reason"
+require writing-a-batch "a corrective batch lists its entries in Scope" "Its \`Spec delta\` reads \`none\` with that reason, and its \`Scope\` lists the *Violations* entries it takes on"
+require writing-a-batch "the template forbids a blank delta"        "Never left blank: with no block, \`none\` and the reason"
+require writing-a-batch "the template's Scope names the entries"    "<What this batch delivers, including every gaps register entry it takes on.>"
+require writing-a-batch "the template's Constraints are bounded"    "<Only the migration and compatibility constraints, and the required order of the stories and of the blocks."
 require writing-a-batch "the document reread checks the field"      "\`Spec delta\` filled"
 
 # --- writing-a-batch: the opening review (spec section "Opening a batch") ---
 require writing-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
 require writing-a-batch "the text is read in the batch document"     "block by block, in the batch document"
 require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
-require writing-a-batch "the reread checks quotes against main"          "every quoted passage matching \`main\`"
 # With no block there is no block text to read, and the gate is the same gate
-# (spec section "Opening a batch"). What it reads instead is what the field
-# carries in their place, so a blockless batch passes the opening review rather
-# than passing it by.
+# (spec section "Opening a batch"). What it reads instead is the reason for
+# the `none` and the entries `Scope` takes on, so a blockless batch passes
+# the opening review rather than passing it by.
 require writing-a-batch "a blockless delta still faces the gate" "the review bears on what stands in their place"
-require writing-a-batch "what the gate reads in the blocks' place" "the reserved entries, or the reason for the \`none\`"
-require writing-a-batch "the PR body carries it to the reviewer" "or, with no block, what stands in their place"
+require writing-a-batch "what the gate reads in the blocks' place" "the reason for the \`none\`, and the entries \`Scope\` takes on"
+require writing-a-batch "the PR body carries it to the reviewer" "the exact text of every block, or the reason for the \`none\`"
 
 # --- writing-a-batch: the ordered opening, and the two rereads it places ---
 # The distinction lives here and not under `## The Coherence Reread`, which speaks
@@ -215,7 +220,11 @@ require writing-a-batch "the skip is not a dispensation"         "it has nothing
 require writing-a-batch "step 5 states the skip where it is ordered" "skipped when the delta carries no block"
 require writing-a-batch "the applied state is built outside the repository" "**outside the repository**"
 require writing-a-batch "no block reaches a spec before a story"      "no block is written into a spec before a story transcribes it"
-require writing-a-batch "a stale block will not apply"                "A block whose quoted passage is no longer in \`main\` will not apply"
+# Building the applied copy checks every block, so that check belongs to the
+# coherence reread; the batch-document reread bears on the fields.
+require writing-a-batch "building the copy checks every block"     "Building that copy checks every block: it carries its \`D<n>\`, it names the spec and section it targets"
+require writing-a-batch "a block matches main or the block before it" "its unchanged and removed lines match \`main\`, or the text the block ordered before it leaves"
+require writing-a-batch "a stale block will not apply"                "A block that fails this check does not apply"
 require writing-a-batch "the reread is conducted outside this context" "Conduct it outside the context that wrote the blocks"
 require writing-a-batch "the pull request body says what the reread found" "The pull request body says what the reread found, or that it found nothing"
 
@@ -294,7 +303,7 @@ require writing-a-batch "the reread does not replace the gate"  "prepares the ga
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
 require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"
 require writing-a-batch "names the merge a clear moment"          "a moment to clear the context"
-require writing-a-batch "opening hands over to the first story"   "names \`supercharlouze:writing-a-user-story\` as the next step"
+require writing-a-batch "opening hands over to the first story"   "name \`supercharlouze:writing-a-user-story\` as the next step"
 require writing-a-batch "an amendment is a clear moment too"      "An amendment merges into the same clear moment"
 require writing-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
@@ -367,6 +376,7 @@ require writing-a-user-story "only a story changes the declared default" "Only a
 
 # --- writing-a-user-story: the story's blocks (spec sections "Story",
 # "The user story document", "Delivering a story") ---
+require writing-a-user-story "a story knows its batch's stories"   "each knowing the stories of its batch already written"
 require writing-a-user-story "each story chooses its own blocks"  "chooses, as it is written, the blocks of the spec delta it transcribes"
 require writing-a-user-story "a block is never shared"            "a block is never shared between two stories"
 require writing-a-user-story "the header carries four extra fields" "extend the standard header with four fields"
@@ -375,6 +385,8 @@ require writing-a-user-story "Blocks is what closing reads"         "reads to fi
 require writing-a-user-story "Blocks is none when none is taken"    "\`none\` for a story that transcribes none"
 require writing-a-user-story "three properties are load-bearing"    "Three properties are load-bearing"
 require writing-a-user-story "transcription is word for word"       "exactly as the opening review read it"
+require writing-a-user-story "a diff block yields its paragraph"    "is transcribed as the paragraph it produces"
+require writing-a-user-story "main moved under a block's paragraph" "The paragraph a block changes no longer reads in \`main\` as the block shows it"
 require writing-a-user-story "a divergence is named in the PR"      "Every divergence from a block is named in the body of the pull request"
 require writing-a-user-story "a divergence has two legitimate causes" "only two legitimate causes"
 require writing-a-user-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
@@ -382,7 +394,7 @@ require writing-a-user-story "no divergence amends the batch document" "Neither 
 require writing-a-user-story "ends the review as every gate does"   "never approves and never merges a pull request"
 require writing-a-user-story "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
 require writing-a-user-story "names the merge a clear moment"       "a moment to clear the context"
-require writing-a-user-story "hands over to the next story"         "names the next story as the next step"
+require writing-a-user-story "hands over to the next story"         "name the next story as the next step"
 require writing-a-user-story "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
@@ -446,6 +458,7 @@ require closing-a-batch "released entries are not re-filed"      "do not re-file
 
 # --- using-batches: preconditions for every pull request of this system ---
 require using-batches "the directory it runs in does not matter"    "Where you are standing does not matter"
+require using-batches "a batch carries only what a spec cannot" "Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, the order of its stories and of its blocks, and its migration and compatibility constraints."
 
 # --- using-batches: what a spec says (spec section "The spec document") ---
 require using-batches "the test bears on the module boundary"   "bears on the module's boundary"
@@ -488,6 +501,8 @@ require using-batches "a ruling replaces neither condition" \
     "A ruling replaces neither of them"
 
 # --- using-batches: the shape of a review's end ---
+require using-batches "the amendment gate covers the spec delta" "the decision to change its scope, its spec delta or its flag"
+require using-batches "routing names the spec delta"             "A batch must change its scope, its spec delta or its flag"
 require using-batches "forbids the agent approving or merging" "never approves and never merges a pull request"
 require using-batches "pushes corrections as fixups"           "pushed as a \`fixup!\` commit"
 require using-batches "the agreement is given in conversation" "The human gives their agreement in the conversation"
@@ -498,6 +513,7 @@ require using-batches "the handover prompt stands alone"    "That prompt stands 
 require using-batches "an unadopted module stops the design"     "the design stops"
 require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers steps 6 to 9 and nothing else"
 require using-batches "a bounded change adds and removes entries"  "add an entry and delete one"
+require using-batches "the prompt waits for the merge"      "The prompt waits for the merge announcement, not for the announcement that the pull request is ready"
 
 # --- using-batches: guarded code rules (referencing writing-a-user-story) ---
 require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"

@@ -21,7 +21,7 @@ Three entry points, all landing in a pull request:
 | Entry point | Section |
 |---|---|
 | Opening a new batch | Preconditions through Opening the Pull Request |
-| Changing the scope or the flag of an existing batch | Amending a Batch |
+| Changing the scope, the spec delta or the flag of an existing batch | Amending a Batch |
 | A corrective batch that turned out not to be corrective | Requalifying a Corrective Batch |
 
 ## Opening, in Order
@@ -44,8 +44,8 @@ that carries it.
 
 **The two rereads are steps 5 and 6, and they have different objects.** The
 coherence reread bears on the blocks and on the state they produce, read whole.
-The batch-document reread bears on the whole document — scope, `Constraints`,
-the flag field, every quoted passage. Merge them and the second is the one that
+The batch-document reread bears on the whole document: `Scope`, `Spec delta`,
+`Constraints`, `Feature flag`. Merge them and the second is the one that
 disappears, leaving a corrective batch, which has no blocks, with no reread at
 all.
 
@@ -146,22 +146,20 @@ status: open
 
 ## Scope
 
-<What this batch delivers, and why now.>
+<What this batch delivers, including every gaps register entry it takes on.>
 
 ## Spec delta
 
 <The exact text this batch writes into the specs, in blocks. Per block: its
-`D<n>` identifier, the spec and the section it targets, then the current passage
-and the text that replaces it, the passage it removes, or the text it inserts and
-where. Including the removal of the gating sentence of any flag an earlier batch
-declared and this batch takes on. Never left blank: with no block, the gaps
-register entries this batch reserves, or `none` and the reason.>
+`D<n>` identifier, the spec and the section it targets, then its change shown in
+the paragraph that contains it. Including the removal of the gating sentence of
+any flag an earlier batch declared and this batch takes on. Never left blank:
+with no block, `none` and the reason.>
 
 ## Constraints
 
-<Migration and compatibility constraints, the required ordering of the user
-stories, and the order of any two blocks that change the same section. `none`
-if there are none.>
+<Only the migration and compatibility constraints, and the required order of
+the stories and of the blocks. `none` if there are none.>
 
 ## Feature flag
 
@@ -171,15 +169,13 @@ if there are none.>
 `status: open | closed` is a front matter value, so it is English even in a
 French project.
 
-**`Constraints` is where the batch says what a spec cannot.** The spec is the
-binding authority on behaviour; what belongs to the batch and only to it is the
-delivery perimeter, the ordering of the user stories, and the migration and
-compatibility constraints — so that is what goes here, and nothing normative.
-`supercharlouze:writing-a-user-story` copies this section **verbatim** into
-every story's `Global Constraints`, where `superpowers:writing-plans` makes it
-implicitly part of every task's requirements. Write it as constraints an
-implementer can obey, not as background. Left out, each story would silently
-invent its own migration rule and its own order.
+Nothing normative goes in `Constraints`: the spec is the binding authority on
+behaviour. `supercharlouze:writing-a-user-story` copies this section
+**verbatim** into every story's `Global Constraints`, where
+`superpowers:writing-plans` makes it implicitly part of every task's
+requirements. Write it as constraints an implementer can obey, not as
+background. Left out, each story would silently invent its own migration rule
+and its own order.
 
 This pull request does **no writing into the specs**. The delta is
 written here as **exact text, in blocks**, and no block is transcribed at
@@ -190,10 +186,29 @@ definition, and the reviewers of a story would then report as missing what is
 merely not built yet.
 
 **A block is the unit of the delta.** Each one carries an identifier `D<n>`,
-unique within the batch, and names the spec and the section it targets. To modify
-a passage, it quotes the current passage, then the text that replaces it; to
-remove one, it quotes it; to add text, it gives that text and where it goes.
-Quote the passage as `main` carries it now: the story transcribes against it.
+unique within the batch, and names the spec and the section it targets.
+
+A block shows what it changes in the paragraph that contains it. A fragment and
+its replacement, quoted apart, leave the reviewer to rebuild the paragraph, and
+the sentence the change contradicts two lines further on goes unseen. Give the
+paragraph in a `diff` fence: its lines as `main` carries them, each removed line
+prefixed `-`, each added line `+`, each unchanged line a space. The story
+transcribes against those lines, so take the paragraph from `main` as it stands.
+
+A block that changes a whole section is the exception: one that rewrites it
+gives the section as it will read, one that inserts it gives it and names the
+section it follows, one that removes it names it.
+
+````markdown
+### D4 — `docs/specs/facturation.md`, `Subscription > Renewal`
+
+```diff
+ A subscription renews on its anniversary date, for the same length.
+-The customer is notified seven days before.
++The customer is notified fourteen days before, and may decline the renewal
++until the day before.
+```
+````
 
 **No block is attached to a story.** The story chooses, as it is written, the
 blocks it transcribes; the batch document names no story and carries no list of
@@ -235,15 +250,13 @@ drawing from *Gaps* reserves exactly like a corrective one. Skip it, and two
 batches set out to specify the same undocumented behaviour in parallel, which is
 the collision the annotation exists to prevent.
 
-**The `Spec delta` field is never left blank.** It carries the blocks; or, when
-the batch has none, the gaps register entries it reserves, or `none` and the
-reason. "No block" is a decision, and a decision is stated — the same reason the
-`Feature flag` field is mandatory.
+**The `Spec delta` field is never left blank.** It carries the blocks, or `none`
+and the reason. "No block" is a decision, and a decision is stated.
 
-A corrective batch takes the second form by definition: it restores behaviour a
-spec already promises, so what it announces are the *Violations* entries it takes
-on, reserved in `docs/specs/<module>.gaps.md` as above, and no block. A batch that
-reserves nothing either takes the third.
+A corrective batch has no block by definition: it restores behaviour a spec
+already promises. Its `Spec delta` reads `none` with that reason, and its
+`Scope` lists the *Violations* entries it takes on, reserved in
+`docs/specs/<module>.gaps.md` as above.
 
 **The batch document carries no mutable state.** It is written once, by this
 opening pull request, and nothing in the normal course of the batch modifies it
@@ -265,9 +278,8 @@ The `Feature flag` field is **mandatory and never left empty**. "No flag" must b
 a stated and reviewed decision, not an omission. It is examined at this gate
 because this is the moment when the batch's scope is still ahead of everyone.
 
-The batch is delivered onto a continuously deployed `main`: every
-merged story ships. The flag is what makes a story deliverable alone without
-exposing a half-built batch.
+Every merged story may reach users. The flag is what makes a story deliverable
+alone without exposing a half-built batch.
 
 **The exemption criterion is one question:** *would one story of this batch,
 merged alone, leave a user facing something incomplete?* If no, no flag. Three
@@ -353,9 +365,12 @@ whatever stands in the blocks' place.
 Build that state — a copy of each touched spec with its blocks applied —
 **outside the repository**, in a scratch directory: no block is written into a
 spec before a story transcribes it, and that rule is not suspended to make a
-reread convenient. **A block whose quoted passage is no longer in `main` will not
-apply**, so building this copy is also the first thing that catches a delta that
-has gone stale since the batch was drafted.
+reread convenient.
+
+Building that copy checks every block: it carries its `D<n>`, it names the spec
+and section it targets, and its unchanged and removed lines match `main`, or the
+text the block ordered before it leaves. A block that fails this check does not
+apply, which is how a delta gone stale since the batch was drafted is caught.
 
 **Conduct it outside the context that wrote the blocks**, by dispatching readers
 as subagents. This context argued every block into existence; asked to reread
@@ -447,18 +462,17 @@ reread nobody can see from the pull request is a practice again, not a rule.
 
 **The batch-document reread**, step 6, comes after the coherence reread and
 bears on the whole document. Reread it against the specs with fresh eyes:
-scope stated with its "why now", `Spec delta` filled — its blocks each with its
-`D<n>`, the spec and section it targets, and its exact text, every quoted passage
-matching `main`, or, with no block, what stands in their
-place —, `Constraints` stated or `none` — including the order of any
-section that carries two blocks —, `Feature flag` filled, reservations made for
-every gaps register entry this batch takes on — corrective or ordinary — and the
-lifting of any earlier flag this batch takes on stated as a block.
+`Scope` stating what the batch delivers, with every gaps register entry it
+takes on, each one reserved, corrective or ordinary; `Spec delta` filled, with
+blocks or with `none` and the reason; `Constraints` carrying only migration and
+compatibility constraints and the required order of stories and blocks, or
+`none`; `Feature flag` filled; and the lifting of any earlier flag this batch
+takes on stated as a block.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
-reviewer has to rule on: the exact text of every block — or, with no block, what
-stands in their place —, the flag decision, the scope, and any flag lifting the
-delta announces.
+reviewer has to rule on: the exact text of every block, or the reason for the
+`none`; the flag decision; the scope, with the entries it takes on; and any
+flag lifting the delta announces.
 
 **The review of the batch pull request is the human gate.** Until it merges, no
 story is written and no spec is touched. It bears on the exact text of every
@@ -467,9 +481,9 @@ written on it — block by block, in the batch document, and not later as a diff
 the spec.
 
 **Where the delta carries no block, the review bears on what stands in their
-place**: the reserved entries, or the reason for the `none`. The gate does not
-move and nothing is waived — a batch with no block is read at the same review, on
-the only text its `Spec delta` holds.
+place**: the reason for the `none`, and the entries `Scope` takes on. The gate
+does not move and nothing is waived: a batch with no block is read at the same
+review.
 
 This review replaces the tail of the architectural path of
 `superpowers:brainstorming` — the dated design doc becomes this batch document,
@@ -490,16 +504,17 @@ document now carries the exact text of every block, which is what the design
 conversation was for — and that conversation also carries every option you
 discarded on the way, which the first story must not inherit.
 
-The announcement therefore names `supercharlouze:writing-a-user-story` as the
-next step and gives its prompt in a block to copy and paste. **That prompt stands
-on its own:** it names the skill to invoke, the batch document by path, and says
-to choose the blocks from those the document still carries, and it never refers
-back to this conversation.
+When your human partner announces the merge, name
+`supercharlouze:writing-a-user-story` as the next step and give its prompt in a
+block to copy and paste. **That prompt stands on its own:** it names the skill to
+invoke, the batch document by path, and says to choose the blocks from those the
+document still carries, and it never refers back to this conversation.
 
 ## Amending a Batch
 
 The batch document carries no mutable state, but it stays amendable by an
-**amendment pull request**, reviewed like the others. That is the exit from two
+**amendment pull request**, reviewed like the others. An amendment changes the
+scope, the spec delta or the flag of an open batch. That is the exit from these
 real dead ends:
 
 - **An exempted batch that discovers it needed a flag** — a batch whose stories
@@ -507,9 +522,11 @@ real dead ends:
   that splits in two.
 - **A batch whose scope is reduced or abandoned**, including reducing it after a
   requalification, or giving a flag an extended scope so a later batch can decide.
+- **A batch whose spec delta must change**: a corrective batch rewritten as an
+  ordinary one, or a technical story whose observable change needs a block.
 
-Without this path neither situation has an issue: the `Feature flag` field was
-decided at opening, and closing checks it against reality.
+Without this path none of them has an issue: the batch document is written
+at opening, and nothing else changes it before closing.
 
 Do it on a branch whose name **follows none of this plugin's branch patterns** —
 `adopt/<module>`, `batch/NN-<slug>`, `batch/NN-<slug>-close`,
@@ -527,10 +544,10 @@ a review.
 
 **An amendment merges into the same clear moment as an opening**, and ends its
 review the same way: fixups during the review, agreement in the conversation,
-squash, and an announcement that names the next step. What differs is which step
-that is — an amendment hands back to whatever the batch was doing when it stopped,
-so the announcement names that, and its prompt names the amended batch document
-by path.
+squash, the pull request announced ready, then the next step named when your
+human partner announces the merge. What differs is which step that is: an
+amendment hands back to whatever the batch was doing when it stopped, so name
+that, and give a prompt that names the amended batch document by path.
 
 ## Requalifying a Corrective Batch
 
@@ -568,7 +585,7 @@ may correct a spec.
    The rewrite keeps `NN` and its directory: the number identifies a delivery
    unit, and any story already merged lives under it — a new number would strand
    them. Hence an amendment pull request on the existing document, replacing
-   the reserved gaps entries with a `Spec delta`, reviewed at the gate like an
+   the `none` of its `Spec delta` with blocks, reviewed at the gate like an
    opening. Allocate a fresh `NN` only when the human rules that the remaining
    work is a *different* batch, and then close this one with
    `supercharlouze:closing-a-batch` rather than leaving it open.
@@ -618,8 +635,8 @@ amend: the story is abandoned and the batch carries on as it was.
 **English skeleton, project-language prose**, inside every document you write
 here. Section headings, field names, front matter values (`status: open`), table
 headers, path patterns and branch patterns are English, always, whatever the
-project speaks. The prose is in the project's language: the scope, the "why now",
-the spec delta, the justification of the flag decision. Slugs name business
+project speaks. The prose is in the project's language: the scope, the
+spec delta, the justification of the flag decision. Slugs name business
 objects, so they follow the project's language too.
 
 This plugin's own files are entirely English — it has no business prose, only

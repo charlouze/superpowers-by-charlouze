@@ -23,9 +23,9 @@ detection, branch, spec change, plan, execution, records, review — because the
 pull request carries the story's state. There is nothing to repatriate
 afterwards and nothing to reconcile.
 
-Stories are written **one at a time**: story N+1 is written knowing what story
-N produced. Several may be *in flight* simultaneously — that is the normal
-regime of a pull-request flow, not an edge case.
+Stories are written **one at a time**, each knowing the stories of its batch
+already written. Several may be *in flight* simultaneously — that is the
+normal regime of a pull-request flow, not an edge case.
 
 **Each story chooses, as it is written, the blocks of the spec delta it
 transcribes**, and transcribes them entirely: a block is never shared between two
@@ -234,6 +234,9 @@ spec would describe, while story 1 is still executing, the behaviour of the
 stories that follow — and the SDD reviewers would flag as missing what is not yet
 meant to be delivered.
 
+A block shown as a `diff` fence is transcribed as the paragraph it produces: its
+unchanged lines and its added lines, without their prefix.
+
 **First.** Not for visibility — the file would be readable in the worktree even
 uncommitted — but because this is what makes the norm **prior and binding** on
 the code. It is already in the branch's history when implementation starts, it
@@ -244,10 +247,11 @@ starting point.
 of the pull request Step 5 opens, and ruled on at the delivery review. A
 divergence has only two legitimate causes:
 
-- **`main` moved.** The passage a block quotes is no longer there as written,
-  because another story or a bounded change landed on that section since the
-  batch opened. Fit the block to what `main` now carries, without changing its
-  meaning, and say in the pull request what you fitted and why.
+- **`main` moved.** The paragraph a block changes no longer reads in `main` as
+  the block shows it, because another story or a bounded change landed on that
+  section since the batch opened. Fit the block to what `main` now carries,
+  without changing its meaning, and say in the pull request what you fitted
+  and why.
 - **The block's text is a problem.** Stop, and put it to your human partner
   before transcribing it. Do not transcribe a text you believe is wrong, and do
   not repair it on your own: the opening gate is where that text was ruled on,
@@ -616,19 +620,17 @@ something, not fixing a slip. Your human partner gives their agreement in the
 conversation; then you squash the fixups, push the rewritten branch, and announce
 the pull request ready to be approved and merged.
 
-**Merging it is a moment to clear the context**, and the announcement says so. On
-this path the conversation is the heaviest of any gate — it carries a plan, an
-SDD ledger, and every file the implementers touched — while `main` now carries
-this story's code, and its spec change if it had one, which is all the next story
-needs.
+**Merging it is a moment to clear the context.** On this path the conversation is
+the heaviest of any gate — it carries a plan, an SDD ledger, and every file the
+implementers touched — while `main` now carries this story's code, and its spec
+change if it had one, which is all the next story needs.
 
-So the announcement names the next story as the next step — unless this story
-took the batch's last undelivered blocks, in which case it names
-`supercharlouze:closing-a-batch` instead, matching how an amendment hands back
-to whatever the batch was doing when it stopped — and gives its prompt in a
-block to copy and paste. **That prompt stands on its own:** it names the skill
-to invoke, the batch document by path, and says to choose from the blocks no
-merged story has declared, and never refers back to this conversation.
+So when your human partner announces the merge, name the next story as the next
+step, or `supercharlouze:closing-a-batch` if this story took the batch's last
+undelivered blocks, and give its prompt in a block to copy and paste. **That
+prompt stands on its own:** it names the skill to invoke, the batch document by
+path, and says to choose from the blocks no merged story has declared, and
+never refers back to this conversation.
 Everything perishable is already in the story document — that is what
 `Step 6 — Record Before the Merge` was for.
 

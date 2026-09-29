@@ -110,6 +110,20 @@ else
     pass "the README names no fix/ branch"
 fi
 
+# The amendment gate covers the spec delta, in the README's gate table too.
+if grep -q "a change of scope, of spec delta or of flag on an open batch" "$REPO_ROOT/README.md"; then
+    pass "the README's amendment gate covers the spec delta"
+else
+    fail "the README's amendment gate covers the spec delta"
+fi
+
+# The README presumes no continuous deployment either.
+if grep -qi "continuous" "$REPO_ROOT/README.md"; then
+    fail "the README requires no continuous deployment"
+else
+    pass "the README requires no continuous deployment"
+fi
+
 # 5. No shipped artifact cites a numbered section of the archived design
 #    document. The living spec is the binding authority and its sections are
 #    titled, not numbered: a numbered pointer names a document that adoption

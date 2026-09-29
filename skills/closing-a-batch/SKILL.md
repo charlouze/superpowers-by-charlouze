@@ -102,7 +102,7 @@ Then push and open the pull request. The **review of the closing pull request** 
 
 **Ending the review.** The agent never approves and never merges a pull request. Each correction is pushed as a `fixup!` commit of the commit it corrects, or as a commit of its own when it carries a fresh decision; your human partner gives their agreement in the conversation, and only then do you squash the fixups, push, and announce the pull request ready.
 
-**Merging a closing review is a moment to clear the context.** It is the one gate with **no next step to name**, so it **hands over no prompt** — what comes after a closed batch is chosen outside this model.
+**Merging a closing review is a moment to clear the context.** When your human partner announces the merge, ask them to clear the context. It is the one gate with **no next step to name**, so it **hands over no prompt**: what comes after a closed batch is chosen outside this model.
 
 ## Language
 
