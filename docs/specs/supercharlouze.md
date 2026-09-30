@@ -582,86 +582,46 @@ register, et les blocs jamais livrés.
 
 ## Feature flags
 
-Un flag rend une story livrable seule sans exposer un lot à moitié fait. Un lot dont
-les stories exposeraient du comportement incomplet en déclare un.
+Un lot dont une story, fusionnée seule, laisserait un utilisateur devant quelque
+chose d'incomplet déclare un flag par module qu'il garde.
 
-**Le flag est un objet spécifié.** La section de spec concernée énonce son nom et
-son défaut, par sa mention.
+Par défaut, un flag ne survit pas à son lot.
 
-**Le flag est par couple (lot, module).** Pas par story, et pas par lot : un lot
-transverse qui garde du comportement dans deux modules déclare deux flags, un par
-module.
+Un flag qui survit à son lot déclare sa portée et la condition qui le lève.
 
-**Par défaut, un flag ne survit pas à son lot.** Un flag qui lui survit déclare sa
-portée et la condition qui le lève.
+La section de spec qui décrit un comportement gardé porte la mention de son flag :
+son nom, son défaut et, si sa portée dépasse le lot, sa condition de levée.
 
-**Le critère d'exemption tient en une question :** une story de ce lot, fusionnée
-seule, laisserait-elle un utilisateur devant quelque chose d'incomplet ? Si non,
-pas de flag. Trois familles répondent non par construction :
+La spec est le seul registre des flags.
 
-- **Un lot dont toutes les stories sont techniques** — aucune ne change ce qui est
-  observable à la frontière de son module.
-- **Lot correctif** — il rétablit un comportement que la spec promet déjà.
-- **Lot à story unique** — rien n'est jamais à moitié livré.
-
-**La mention d'un flag** énonce son nom et son défaut, et — si la portée dépasse le
-lot — sa condition de levée, sous l'une de ces deux formes :
-
-```markdown
-🔒 `<flag>`, <on|off> by default
-🔒 `<flag>`, <on|off> by default — lifted when <condition de levée>
-```
-
-Elle disparaît quand le flag est retiré, et c'est un changement de spec comme un
-autre. La condition de levée est écrite dans la spec, et pas seulement dans le
-document de lot. **La spec est le seul registre des flags** : un flag existe tant
-que sa mention y figure, dans la section qu'il couvre.
+Chaque flag s'active, se désactive et se lève indépendamment des autres.
 
 ### Code under a feature flag
 
-Le code gardé par un flag tient l'activation pour une partie des utilisateurs
-seulement, l'activation pour tous et la désactivation, quelle que soit la manière
-dont le projet active ses flags. Il tient quatre règles :
+Le code gardé par un flag supporte l'activation pour une partie des utilisateurs,
+l'activation pour tous et la désactivation :
 
-- **Les deux états cohabitent.** Un utilisateur au flag activé et un utilisateur
-  au flag désactivé travaillent côte à côte sur les mêmes données. Ce que l'un
-  produit, l'autre peut le lire et s'en servir.
-- **La désactivation reste toujours possible.** Désactiver le flag, pour un
-  utilisateur ou pour tous, laisse lisible et utilisable ce que l'état activé a
-  produit, sans erreur ni perte de donnée.
-- **Rien d'autre ne change.** Flag désactivé, l'utilisateur retrouve le
-  comportement d'avant le lot, aux données produites sous flag activé près.
-- **Chaque état est vérifié.** La pull request de la story porte des tests du
-  comportement flag activé, du comportement flag désactivé et de leur
-  cohabitation.
-
-**La levée ne fera que retirer.** Le code gardé est écrit de sorte que lever le
-flag se réduise à supprimer le branchement et le comportement d'avant le lot, sans
-rien écrire de neuf.
+- Les deux états travaillent sur les mêmes données : ce que l'un produit, l'autre
+  le lit et s'en sert, sans erreur ni perte de donnée.
+- Flag désactivé, l'utilisateur retrouve le comportement d'avant le lot.
+- La pull request de la story teste le comportement flag activé, flag désactivé,
+  et leur cohabitation.
+- Lever le flag se réduit à supprimer le branchement et le comportement d'avant le
+  lot, sans rien écrire de neuf.
 
 ### Lifting a feature flag
 
 La story de levée supprime le branchement dans le code et la mention du flag dans
-la spec. C'est une story ordinaire — du code et une modification de spec, dans une
-pull request — et c'est elle qui met la fonctionnalité en production.
+la spec.
 
-**Une story de levée par flag, donc par module.** Un lot transverse gardant deux
-modules en écrit deux, et chacune respecte l'invariant « une story, un module ».
+Chaque flag a sa story de levée.
 
-Elle est la dernière story du lot quand le flag est à portée de lot. Quand la
-portée est étendue, elle appartient au lot dont le spec delta annonce la levée, et
-que l'humain valide à la revue d'ouverture comme le reste de ce delta.
+Elle est la dernière story du lot quand le flag est à portée de lot.
 
-La levée est **une story, jamais une part de la clôture.** Une période
-d'observation se fait en deux stories : la première fait passer le défaut déclaré
-par la mention de `off` à `on`, la seconde supprime le branchement et la mention.
+Quand la portée est étendue, elle appartient au lot dont le spec delta annonce la
+levée.
 
-**Le défaut déclaré et l'état effectif sont deux choses distinctes.** La spec
-déclare un défaut ; activer le flag pour une partie des utilisateurs, ou le
-désactiver, est un geste du projet, qui ne change rien à ce que la spec déclare.
-Seule une story change le défaut déclaré.
-
-**Conclue par** la fusion de sa pull request : le flag est levé.
+Seule une story change le défaut qu'une mention de flag déclare.
 
 ## Bounded change
 
