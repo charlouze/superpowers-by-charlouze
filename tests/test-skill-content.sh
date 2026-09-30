@@ -422,8 +422,6 @@ require writing-a-user-story "a technical story touches no section" \
     "its \`Sections:\` is \`none\`"
 require writing-a-user-story "no other story carries that field" \
     "No other story carries that field"
-require writing-a-user-story "Blocks none covers the technical story" \
-    "a corrective batch's story, a technical story, a teardown story"
 require writing-a-user-story "the technical condition hands off to writing-a-batch" \
     "**the story is abandoned**, and the decision goes to \`supercharlouze:writing-a-batch\`"
 # A corrective story is abandoned once the requalification is ruled, not when it
@@ -655,5 +653,19 @@ require writing-a-user-story "the gating sentence names its variable parts" \
         "The flag's name, its default and its lifting condition vary; the rest of each form is fixed."
 require using-batches "the form of the gating sentence comes from the story skill" \
         "in one of the forms \`supercharlouze:writing-a-user-story\` fixes"
+
+require using-batches "a corrective batch's delta carries no block" \
+        "**Corrective batch** — a batch that brings existing code back into conformance with a spec that is already true. Its spec delta carries no block."
+
+# --- using-batches: the glossary terms of the review (spec section "The model") ---
+require using-batches "defines the pull request" \
+        "**Pull request** — a change proposed for \`main\`, which the human reviews before it reaches \`main\`."
+require using-batches "defines the gate" \
+        "**Gate** — the human's review of a pull request, whose merge moves a module, a batch or a story forward."
+require using-batches "defines the reread" \
+        "**Reread** — an agent's check of a piece of work. A reread is not a gate."
+
+require writing-a-user-story "the cases of Blocks: none are examples" \
+        "\`none\` for a story that transcribes none, such as a corrective batch's story, a technical story or a teardown story."
 
 exit $((FAILURES > 0))

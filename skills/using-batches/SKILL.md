@@ -36,9 +36,15 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Technical story** — a story that changes nothing observable at its module's boundary. A dependency bump, an internal rename, a preparatory refactor are technical: no rule moves, so no block is transcribed. It is a declared qualification, caught by its stop condition if it turns out to be false.
 
-**Corrective batch** — a batch whose spec delta is empty. It brings existing code back into conformance with a spec that is already true. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
+**Corrective batch** — a batch that brings existing code back into conformance with a spec that is already true. Its spec delta carries no block. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
 
 **Delta block** — the unit of a batch's spec delta: one targeted section and the exact text it must receive, transcribed word for word by a story.
+
+**Pull request** — a change proposed for `main`, which the human reviews before it reaches `main`.
+
+**Gate** — the human's review of a pull request, whose merge moves a module, a batch or a story forward.
+
+**Reread** — an agent's check of a piece of work. A reread is not a gate.
 
 **Feature flag** — what makes a story deliverable on its own without exposing a half-built batch. Everything that reaches `main` may ship to production, so every merged story may reach users; a batch whose stories would expose incomplete behaviour declares a flag.
 
@@ -130,7 +136,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 
 **The spec change is the first commit of every story branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts. A story that transcribes no block is the exception in form and not in purpose: no block dictates its first commit, so that commit carries the header of the story document and its empty `Rulings log` and `Observed drift` sections, plus what that story removes, if it removes anything — a corrective batch's story deletes the gaps register entry it resolves, a teardown story removes from the spec what no block announced, a technical story removes nothing — which fixes its scope in the branch's history exactly the same way. Batch-opening and batch-closing branches carry no spec change at all — they carry no code either.
 
-**The drift rule therefore has no exception:** any divergence between the spec on `main` and the code on `main` is drift, hence corrective work. There is no "not delivered yet" case to exempt, because that case does not exist. Behaviour still gated states its flag, its default and — when the scope outlives the batch — its lifting condition in the spec itself, so the spec stays exactly true: it describes not only what the code does but what it exposes and under what condition.
+**The drift rule therefore has no exception:** any code on `main` that contradicts the spec on `main`, and any behaviour on `main` that no spec describes, is drift, hence corrective work. There is no "not delivered yet" case to exempt, because that case does not exist. Behaviour still gated states its flag, its default and — when the scope outlives the batch — its lifting condition in the spec itself, so the spec stays exactly true: it describes not only what the code does but what it exposes and under what condition.
 
 **Human gates are pull request reviews.** The plugin adds no ceremony; it puts its checkpoints where your flow already has them.
 
@@ -244,7 +250,7 @@ The architectural checklist of `superpowers:brainstorming` ends with four steps:
 
 **The substitute stops rather than chaining.** When a module the work touches has no spec, `supercharlouze:writing-a-batch` does not run `supercharlouze:adopting-a-module` and come back: **the design stops**, your human partner abandons it or sets it aside, and it resumes in a fresh context once the adoption pull request is merged. That skill's `Preconditions` carry the full rule and the reason it rests on — **adoption is never conducted in the same context as a design**. Said here because a post-brainstorming path that ends anywhere other than `supercharlouze:writing-a-batch` is exactly what an unnamed exception looks like, and this one ends nowhere at all — it stops. It widens nothing: the override still covers steps 6 to 9 and nothing else, and the resumed design re-enters the checklist at the same step.
 
-Justification: `supercharlouze:writing-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its re-read before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
+Justification: `supercharlouze:writing-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its reread before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
 
 ### Override 2 — the stop conditions the flow adds
 
@@ -286,9 +292,8 @@ This override removes one choice that cannot succeed, and one that leads nowhere
 
 The boundary does not run between documents; it runs **inside** each document: English skeleton, prose in the project's language.
 
-- **The skeleton is English, everywhere** — section titles, field names, template labels, front matter values (`status: open | closed`), table headers, path and branch patterns, skill and command names. This holds for the plugin and for the documents it produces.
+- **The skeleton is English, everywhere** — section titles, field names, template labels, front matter values (`status: open | closed`), table headers, path and branch patterns, skill and command names.
 - **Prose is in the project's language** — requirement bodies, descriptions, justifications, and the file and directory slugs, which name business objects.
-- **The plugin itself is entirely English** — skills, commands, README, CLAUDE.md block, messages. It has no business prose; it has only skeleton.
 
 That is the superpowers feeling kept: a document of this system reads like a superpowers document, with content in the project's language. The English skeleton that `superpowers:writing-plans` imposes on a story is then no longer an exception you put up with — it is the general rule, already applied.
 

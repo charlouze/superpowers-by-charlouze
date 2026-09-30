@@ -58,9 +58,8 @@ fi
 # cross-reference is written: the position words (above/below, previous/next
 # entry), plus the bare words for "the entry" and "entries", however they are
 # used — not only when they point at a named entry. An entry that refers to
-# itself, or that quotes the spec's own sentence "Les entrées s'ajoutent et se
-# suppriment une par une", turns this guard red without containing any
-# cross-reference at all.
+# itself, or that quotes a spec sentence naming entries, turns this guard red
+# without containing any cross-reference at all.
 BAD=""
 for f in "$REPO_ROOT"/docs/specs/*.gaps.md; do
     [ -f "$f" ] || continue

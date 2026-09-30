@@ -137,12 +137,21 @@ else
     pass "the README requires no continuous deployment"
 fi
 
+# The README defines drift as the spec does: code that contradicts the spec, or
+# behaviour no spec describes.
+README_FLAT="$(tr '\n' ' ' < "$REPO_ROOT/README.md" | tr -s ' ')"
+case "$README_FLAT" in
+    *"any code on \`main\` that contradicts the spec on \`main\`, and any behaviour on \`main\` that no spec describes, is drift"*)
+        pass "the README defines drift as the spec does" ;;
+    *)
+        fail "the README defines drift as the spec does" ;;
+esac
+
 # 5. No shipped artifact cites a numbered section of the archived design
 #    document. The living spec is the binding authority and its sections are
 #    titled, not numbered: a numbered pointer names a document that adoption
 #    stripped of authority, and it rots further at every reshuffle of the spec.
-#    tests/ is deliberately out of range — it is not shipped to users, and the
-#    gaps register entry this guard answers to names only the shipped artifacts.
+#    tests/ is out of range.
 BAD=0
 while read -r hit; do
     [ -n "$hit" ] || continue

@@ -743,4 +743,36 @@ shared "each flag is independent of the others" \
     "Each flag is switched on, switched off and lifted independently of the others: one flag's lifting story waits for no other flag's." \
     using-batches writing-a-batch
 
+# A corrective batch's spec delta carries no block; the field itself is never
+# left blank.
+absent "no skill says a corrective batch's spec delta is empty" \
+    "spec delta is empty" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+# Drift is code that contradicts the spec, or behaviour no spec describes. A
+# divergence from a block is another matter and keeps its word.
+absent "no skill calls a divergence between spec and code drift" \
+    "divergence between (the )?spec" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+absent "no skill narrows drift to a contradiction" \
+    "contradiction between (the )?spec" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+shared "drift covers code that contradicts the spec and behaviour no spec describes" \
+    "any code on \`main\` that contradicts the spec on \`main\`, and any behaviour on \`main\` that no spec describes, is drift" \
+    using-batches
+shared "observed drift takes both kinds of drift" \
+    "Record under **Observed drift** the drift you noticed *outside* this story's scope: code that contradicts the spec, and behaviour no spec describes." \
+    writing-a-user-story
+
+# The spec names what a ruling carries; the skills keep the form of its line.
+shared "the skills keep the form of a ruling line" \
+    "\`Ruling: <decision> — <why> — <what it costs if it is wrong>\`" \
+    using-batches adopting-a-module
+
+# The plugin's own language is a rule of the plugin's repository, not of the
+# projects the skills work on.
+absent "no skill states the plugin's own language" \
+    "entirely English" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec
+
 exit $((FAILURES > 0))

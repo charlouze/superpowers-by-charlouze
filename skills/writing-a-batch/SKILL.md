@@ -584,9 +584,6 @@ project speaks. The prose is in the project's language: the scope, the
 spec delta, the justification of the flag decision. Slugs name business
 objects, so they follow the project's language too.
 
-This plugin's own files are entirely English — it has no business prose, only
-skeleton.
-
 Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
 
 ## Red Flags

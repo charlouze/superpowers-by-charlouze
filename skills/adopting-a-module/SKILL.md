@@ -418,8 +418,7 @@ branch of step 3 is created before anything is written.
 English skeleton, project-language prose: section titles, field names, table
 headers, front matter values and path patterns are English, while requirement
 bodies, descriptions, rationale and the slugs naming business objects follow the
-project's language. The spec and the gaps register you write obey this rule; this
-plugin itself is entirely English, because it carries no business prose.
+project's language. The spec and the gaps register you write obey this rule.
 
 Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
 

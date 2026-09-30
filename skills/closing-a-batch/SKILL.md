@@ -96,7 +96,7 @@ Whether an undelivered block is still wanted is your human partner's call. A blo
 
 **Read the declarations, not the specs.** A block fitted to a `main` that had moved is a block that was delivered, and its text in the spec no longer matches the batch document word for word. Diffing the specs against the delta would report it missing; the declaration reports it delivered, which is what it is. Judging a transcription is the delivery review's job, and it is already done.
 
-**A corrective batch has nothing to compare here**, and that is not a gap in the duty. Its spec delta is empty by definition — it restores behaviour a spec already promises — so it announced no block a spec could fall short of. What it announced instead were the gaps register entries it reserved, and an entry it never resolved is an unconsumed reservation: *Release unconsumed reservations* is the whole of this duty for a corrective batch. Do not invent a comparison, and do not re-file the released entries as fresh gaps — they are still in the register where they always were.
+**A corrective batch has nothing to compare here**, and that is not a gap in the duty. Its spec delta carries no block, so it announced none a spec could fall short of. What it announced instead were the gaps register entries it reserved, and an entry it never resolved is an unconsumed reservation: *Release unconsumed reservations* is the whole of this duty for a corrective batch. Do not invent a comparison, and do not re-file the released entries as fresh gaps — they are still in the register where they always were.
 
 ### Set status: closed
 

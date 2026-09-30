@@ -350,8 +350,8 @@ story's Step 1 reads.
 `Blocks:` declares the blocks of the spec delta this story transcribes — the
 `D<n>` identifiers the batch document defines — and it is what
 `supercharlouze:closing-a-batch` reads to find the blocks nobody delivered. It is
-`none` for a story that transcribes none: a corrective batch's story, a technical
-story, a teardown story. Write it even though the blocks are already committed by
+`none` for a story that transcribes none, such as a corrective batch's story, a
+technical story or a teardown story. Write it even though the blocks are already committed by
 now, because Step 3's commit says what the spec received, and this field says
 which blocks this story answered for — which is the question closing asks.
 
@@ -590,8 +590,8 @@ exist:
 
 - Copy every `Ruling:` line from SDD's closing "Rulings I made" message into
   the **Rulings log** of the story document. The list is exhaustive.
-- Record under **Observed drift** every divergence between spec and code you
-  noticed *outside* this story's scope.
+- Record under **Observed drift** the drift you noticed *outside* this story's
+  scope: code that contradicts the spec, and behaviour no spec describes.
 
 Do not add those observations to the gaps register yourself. Within a batch, only the closing pull request adds entries to the gaps register, and `supercharlouze:closing-a-batch` consolidates them there.
 

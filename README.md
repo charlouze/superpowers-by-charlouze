@@ -122,8 +122,9 @@ and fixes its scope the same way.
 **The pull request never carries the spec change without the code.** That is
 what gives `main` its central property: its spec always describes exactly
 what its code does. There is no intermediate state, therefore no marker to
-invent and no exception to the drift rule — any divergence between the spec
-on `main` and the code on `main` is drift, and drift is corrective work.
+invent and no exception to the drift rule — any code on `main` that contradicts
+the spec on `main`, and any behaviour on `main` that no spec describes, is drift,
+and drift is corrective work.
 
 Between that first commit and the opening of the pull request, the spec file is
 **frozen**: a task discovering that the spec must change stops instead, because
