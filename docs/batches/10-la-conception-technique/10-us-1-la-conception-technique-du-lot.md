@@ -684,4 +684,8 @@ EOF
 
 ## Rulings log
 
+- Ruling: les tâches sont confiées à deux implémenteurs, les tâches 1 à 3 puis 4 et 5, avec un commit par tâche et une relecture par groupe — ce sont des transcriptions de texte complet dont les surfaces de relecture vont par paires — un défaut propre à une tâche peut échapper à une relecture de groupe.
+- Ruling: toutes les remarques de la relecture finale sont corrigées en une vague, mineures comprises — chacune tient en une ligne avec sa garde — un correctif faux alourdit la relecture ciblée.
+- Ruling: les commits de la branche sont regroupés en un seul `feat:` au-dessus du document de story, au lieu de fondre les `fixup!` un à un — ils se chevauchaient, et la story livre une seule idée au changelog — le détail par tâche ne se lit plus que dans le corps du commit.
+
 ## Observed drift
