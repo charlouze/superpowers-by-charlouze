@@ -31,24 +31,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Gaps
 
-- **Installing on a project** — le second membre de la phrase sur les répertoires
-  que l'installation crée, également falsifiable : « Rien dans ce flux ne lit ces
-  répertoires avant qu'un document y soit écrit ». `writing-a-batch` lit
-  `docs/batches/` pour attribuer `NN`, et `writing-a-user-story` lit le répertoire
-  du lot, tous deux exactement quand le répertoire peut être absent. Aucune
-  décision n'en dépend : les deux passent par un `git ls-tree` sur `origin/main`,
-  qui rend une liste vide au lieu d'échouer. Mais la phrase ne promet pas
-  qu'aucune décision n'en dépend — elle promet que rien ne les lit, et le flux
-  les lit. Formulation tenable : « aucune **décision** de ce flux ne dépend de
-  leur existence ». Consolidée par la clôture du lot 02, depuis
-  l'`Observed drift` d'une de ses stories ; sa démonstration d'origine reposait
-  sur un `ls docs/batches/` qui échouait, que le lot 08 a remplacé, et la clôture
-  du lot 08 l'a réécrite sur le code actuel. Classée en *gap* et non en
-  *violation* : la spec y a tort et le code y a raison, si bien qu'un lot
-  correctif qui la prendrait buterait aussitôt sur la cinquième condition
-  d'arrêt — la résorber veut dire corriger une spec, ce qu'un agent ne peut pas
-  faire. `reserved by batch-11`
-
 - **Installing on a project** — « ce qui subsiste n'appartient pas au plugin : il n'est ni
   déplacé, ni supprimé » n'est vrai qu'**en dehors de `specs/` et `plans/`**. Le
   balayage `find "$from" -depth -type d -exec rmdir {} +` supprime un répertoire
