@@ -29,13 +29,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Violations
 
-- **Installing on a project** — la spec énonce que les refus laissent le fichier
-  **intact**, et `scripts/init.sh` exécute `touch "$CLAUDE_MD"` avant les comptages
-  de marqueurs : sur un chemin de refus le contenu est bien intact, mais la `mtime`
-  a changé. Écart mineur et sans conséquence connue, **résoluble en déplaçant le
-  `touch` après les contrôles**, donc en ne touchant que le code.
-  `reserved by batch-11`
-
 ## Gaps
 
 - **Installing on a project** — le second membre de la phrase sur les répertoires
