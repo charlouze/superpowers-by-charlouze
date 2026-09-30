@@ -36,6 +36,10 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Technical story** — a story that changes nothing observable at its module's boundary. A dependency bump, an internal rename, a preparatory refactor are technical: no rule moves, so no block is transcribed. It is a declared qualification, caught by its stop condition if it turns out to be false.
 
+**Technical design** — the mechanism a batch plans for its stories, each of which may depart from it. It lives in the batch document's `Technical design` field, and a story's plan starts from it: the spec binds a story, the technical design only guides it.
+
+**Technical design ruling** — a ruling by which a story departs from its batch's technical design.
+
 **Corrective batch** — a batch that brings existing code back into conformance with a spec that is already true. Its spec delta carries no block. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
 
 **Delta block** — the unit of a batch's spec delta: one targeted section and the exact text it must receive, transcribed word for word by a story.
@@ -186,7 +190,7 @@ way nobody notices until the context is already gone.
 
 ## Authority and Conflict Rules
 
-**The spec is the binding authority.** Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, the order of its stories and of its blocks, and its migration and compatibility constraints.
+**The spec is the binding authority.** Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, its constraints and its technical design.
 
 **When a batch and a spec contradict each other, the spec wins — no exception, no deliberation.** Implement what the spec says, record a `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an agent's.** An agent that "fixes" the spec silently inverts the authority: the batch's intent wins, and the document reviewers rely on becomes a record of what an agent preferred.
 

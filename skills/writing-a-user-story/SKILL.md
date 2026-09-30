@@ -394,6 +394,12 @@ whose decision leaves something to settle; written in the common form, nothing
 says that something is still open, nor what — and whoever reads the log would
 have to recognise a category in prose.
 
+**The plan starts from the batch's `Technical design`**, and its `Architecture:`
+line derives from it. Exception: where the code on `main` has departed from the
+design, as an earlier story of the batch may have, the plan starts from the code.
+
+A batch whose `Technical design` is `none` gives the plan nothing to start from.
+
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
 part of every task's requirements — carries:
 
@@ -590,6 +596,11 @@ exist:
 
 - Copy every `Ruling:` line from SDD's closing "Rulings I made" message into
   the **Rulings log** of the story document. The list is exhaustive.
+- Write as a `Technical design ruling:`, with the three parts of a `Ruling:`,
+  every departure from the batch's `Technical design` that the plan or the
+  execution took, except where the plan follows the code on `main`. The
+  design was approved at the opening gate, and a departure nobody recorded
+  reaches the delivery review as a surprise.
 - Record under **Observed drift** the drift you noticed *outside* this story's
   scope: code that contradicts the spec, and behaviour no spec describes.
 
@@ -753,3 +764,5 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |
 | "The batch says otherwise, and the batch is more recent" | The spec wins, without deliberation. Implement the spec, record a Ruling, continue. |
 | "The block's rule spills onto the next module — the spec wins, I record a Ruling" | No ruling puts a rule in two places. A rule belongs to exactly one spec, and a rule that reaches further signals the breakdown. Stop and put it to your human partner. |
+| "My plan departs only slightly from the design, no ruling needed" | Every departure is a `Technical design ruling:`. One left out leaves the batch's design describing a mechanism nobody built. |
+| "`main`'s code contradicts the design, so the design wins" | The design only guides. Where `main`'s code departed from it, the plan starts from the code. |
