@@ -156,16 +156,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   phrases qui ont tort ; résorber veut dire corriger une spec, ce qu'un agent
   ne peut pas faire.
 
-- **The user story document** — l'énumération qui illustre `Blocks: none` cite
-  la story de lot correctif et la story de démontage, et omet la story de levée
-  d'un flag à portée de lot, qui n'en transcrit pas davantage. Rien ne dit si
-  la liste illustre ou délimite : lue comme délimitante, elle oblige une story
-  de levée à déclarer un bloc qui n'existe pas. Constatée par la story
-  `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** le code traite les
-  trois cas de la même façon, c'est la phrase qui n'en énumère que deux ;
-  trancher veut dire décider ce que la spec doit dire, et cette décision est
-  humaine. `reserved by batch-11`
-
 - **The model / The user story document** — `The model` définit la dérive comme
   une divergence entre la spec de `main` et son code, et c'est cette définition
   qui nomme la section `Observed drift` d'une story ; or cette section reçoit
