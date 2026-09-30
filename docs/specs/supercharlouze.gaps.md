@@ -29,6 +29,14 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Violations
 
+- **The gaps register** — la spec veut qu'un lot réserve tout ce qu'il prend en
+  charge dans le gaps register, sans limiter la réservation à l'ouverture.
+  `writing-a-batch` ne fait poser l'annotation `reserved by batch-NN` que par la
+  pull request d'ouverture, et ne dit rien d'une entrée qu'un amendement ajoute à
+  `Scope`. Un lot qui prend une entrée en charge par amendement ne la réserve donc
+  pas, et un autre lot peut alors la réserver aussi. Constatée par la story
+  `11-us-5-le-lot`, consolidée par la clôture du lot 11.
+
 ## Gaps
 
 - **Code under a feature flag / The user story document** — les quatre règles sont
@@ -123,3 +131,15 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   `08-us-3-le-point-de-depart-d-une-branche`, laissé hors de son périmètre.
   **Gap et non violation :** aucune règle de spec n'est contredite — la spec ne
   dit pas d'où cette lecture se fait ; l'écrire est un acte humain.
+
+- **Module adoption** — l'étape 7 fait relire une spec neuve sur ce qu'une spec
+  doit tenir et sur sa concision. `rereading-a-spec` lui pose aussi la question
+  « Where does this sit in the model? », que l'étape 7 ne cite pas. Constatée par
+  la story `11-us-4-le-module`, consolidée par la clôture du lot 11.
+
+- **Amending a batch** — la spec dit « Quand la condition d'arrêt d'une story
+  technique se déclenche, la story est abandonnée », donc dès l'arrêt. Abandonner
+  une story est pourtant une décision humaine : `writing-a-batch` et
+  `writing-a-user-story` gardent la branche et le worktree jusqu'à ce que l'humain
+  tranche. C'est la spec qui a tort, et la corriger est un acte humain. Constatée
+  par la story `11-us-5-le-lot`, consolidée par la clôture du lot 11.
