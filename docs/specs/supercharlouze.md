@@ -4,80 +4,72 @@
 
 Ce module couvre une extension de superpowers qui définit un flux de
 développement : une spec vivante par module, des lots de stories qui font grandir
-ces specs, des revues humaines tenues en pull request, les documents que ce flux produit —
-spec, gaps register, document de lot, document de story — les conventions qu'il
-laisse dans le dépôt — arborescence, branches, numéros, langue —, ce qu'il exige du
-code applicatif tant qu'un flag le garde, et son installation sur un projet.
+ces specs, des revues humaines tenues en pull request, les documents que ce flux
+produit, les conventions qu'il laisse dans le dépôt, ce qu'il exige du code
+applicatif tant qu'un flag le garde, et son installation sur un projet.
 
 Il ne couvre ni superpowers lui-même, ni l'outil qui exécute les agents.
 
 Le plugin entier constitue un seul module.
 
-## Purpose
-
-Le plugin étend superpowers d'un flux de développement : le document de conception
-daté et le plan par fonctionnalité y sont remplacés par une spec vivante par module
-fonctionnel, et les plans isolés par des lots de stories qui font grandir ces specs.
-
-La spec de `main` décrit exactement ce que fait le code de `main`, et toute
-divergence entre les deux est une dérive.
-
 ## The model
 
-Chaque concept porte **un seul terme** dans la prose, lié ici au nom anglais que
-portent les chemins, les branches et l'ossature des documents. Aucun synonyme n'est
-employé.
+Chaque concept porte un seul terme, lié ici au nom anglais qu'il porte dans les
+chemins, les branches et l'ossature des documents.
 
-**Module** (`module`) — un domaine fonctionnel grossier, vu de l'extérieur. Les
-modules sont délimités par l'humain, jamais déduits par un agent.
+Aucun synonyme n'est employé.
+
+**Module** (`module`) — un domaine fonctionnel grossier, vu de l'extérieur.
 
 **Spec** (`spec`) — le document vivant d'un module, qui dit ce que son code doit
 faire.
 
-**Section** (`section`) — la plus petite unité titrée d'une spec, et l'unité de
-tout ce qui se compte dans ce flux : un conflit de concurrence se juge sur une
-section, une entrée de gaps register désigne une section. « Exigence » n'est pas
-une unité de ce flux.
+**Section** (`section`) — la plus petite unité titrée d'une spec, et l'unité sur
+laquelle se jugent les conflits de concurrence et que désigne une entrée du gaps
+register.
 
 **Gaps register** (`gaps register`) — le document vivant qui consigne, pour un
 module, ce que sa spec ne tient pas : les violations de son code et les gaps
 qu'elle ne décrit pas.
 
-**Dérive** (`drift`) — toute divergence entre la spec de `main` et le code de
-`main`.
+**Dérive** (`drift`) — un code de `main` qui contredit la spec de `main`, ou un
+comportement de `main` qu'aucune spec ne décrit.
 
 **Lot** (`batch`) — l'unité de livraison : un ensemble de stories qui vise un ou
-plusieurs modules, donc une ou plusieurs specs.
+plusieurs modules.
 
-**Lot correctif** (`corrective batch`) — un lot dont le spec delta est vide, et qui
-remet du code en conformité avec une spec déjà vraie.
+**Lot correctif** (`corrective batch`) — un lot qui remet du code en conformité
+avec une spec déjà vraie. Son spec delta ne porte aucun bloc.
 
 **Bloc** (`delta block`) — l'unité du spec delta d'un lot : une section visée et
-le texte exact qu'elle doit recevoir, transcrit mot pour mot par une story.
+le texte exact qu'elle doit recevoir.
 
-**Story** (`user story`) — le plan d'implémentation d'une part d'un lot, qui vise un
-seul module et se livre en une pull request.
+**Story** (`user story`) — le plan d'implémentation d'une part d'un lot, qui vise
+un seul module et se livre en une pull request.
 
-**Story technique** (`technical story`) — une story qui ne change rien d'observable
-à la frontière de son module. C'est une qualification déclarée, que sa condition
-d'arrêt rattrape si elle se révèle fausse.
+**Story technique** (`technical story`) — une story qui ne change rien
+d'observable à la frontière de son module.
 
 **Flag** (`feature flag`) — ce qui garde un comportement incomplet hors de portée
 des utilisateurs jusqu'à sa levée.
 
-**Mention de flag** (`gating sentence`) — la ligne `🔒 …` par laquelle une spec
-déclare qu'un comportement est gardé par un flag, avec son défaut et, s'il survit à
-son lot, la condition qui le lève. Sa forme est fixée dans `Feature flags`.
+**Mention de flag** (`gating sentence`) — la ligne par laquelle une spec déclare
+qu'un comportement est gardé par un flag.
 
-**Revue** (`gate`) — l'examen par l'humain d'une pull request, dont la fusion
-fait avancer un module, un lot ou une story. La vérification d'un travail par un agent
-est une relecture, pas une revue.
+**Pull request** (`pull request`) — un changement proposé pour `main`, que
+l'humain revoit avant qu'il l'atteigne.
 
-**Arbitrage** (`ruling`) — une décision prise par un agent sans l'humain, consignée
-pour lui.
+**Revue** (`gate`) — l'examen par l'humain d'une pull request, dont la fusion fait
+avancer un module, un lot ou une story.
 
-**Arbitrage ouvert** (`open ruling`) — un arbitrage dont la décision laisse quelque
-chose à trancher.
+**Relecture** (`reread`) — la vérification d'un travail par un agent. Une
+relecture n'est pas une revue.
+
+**Arbitrage** (`ruling`) — une décision prise par un agent sans l'humain,
+consignée pour lui.
+
+**Arbitrage ouvert** (`open ruling`) — un arbitrage dont la décision laisse
+quelque chose à trancher.
 
 **Changement borné** (`bounded`) — un changement complet en une pull request, hors
 de tout lot.
@@ -89,8 +81,8 @@ conception avant d'être découpé en stories.
 
 ## Built on superpowers
 
-Le flux reprend de superpowers les termes suivants, redéfinis ici réduits à ce dont
-il se sert. superpowers en est le propriétaire.
+Termes empruntés à superpowers, qui en est propriétaire, réduits à ce dont le flux
+se sert :
 
 - **Brainstorming** (`superpowers:brainstorming`) — le dialogue qui précède tout
   travail. Il classe ce travail en exploration, changement borné ou conception
@@ -102,46 +94,48 @@ il se sert. superpowers en est le propriétaire.
   tâches.
 - **Exécution par sous-agents** (`superpowers:subagent-driven-development`) —
   l'exécution d'un plan tâche par tâche, chaque tâche confiée à un agent neuf puis
-  relue. Les arbitrages pris en cours de route, de la forme
-  `Ruling: <décision> — <pourquoi> — <ce que ça coûte si c'est faux>`, sont
-  présentés à l'humain en fin d'exécution.
+  relue. Les arbitrages pris en cours de route, chacun avec sa décision, sa raison
+  et ce qu'il coûte s'il est faux, sont présentés à l'humain en fin d'exécution.
 - **Conclusion d'une branche** (`superpowers:finishing-a-development-branch`) — le
   choix de ce que devient une branche terminée : fusion locale, pull request, ou
   branche gardée.
 
 ## Departures from superpowers
 
-Le flux s'écarte de superpowers en quatre points, et en aucun autre. Partout
-ailleurs, superpowers s'applique inchangé. L'emplacement des documents et ce que le
-flux ajoute à un plan ne sont pas des écarts : superpowers les laisse au projet.
+Le flux s'écarte de superpowers en ces points, et en aucun autre.
 
-- **Aucun document de conception daté.** Une conception architecturale se conclut
-  par l'ouverture d'un lot : le document de lot remplace le document de conception,
-  sa relecture avant ouverture en remplace l'auto-relecture, et la revue d'ouverture
-  en remplace la revue humaine. Le plan n'est écrit qu'avec chaque story. Quand un
-  module touché n'a pas de spec, son adoption précède la conception du lot, **et ne
-  se conduit jamais dans le même contexte qu'elle** : une conception qui découvre un
-  module non adopté s'arrête, l'humain choisit de l'abandonner ou de la mettre de
-  côté, et elle ne reprend qu'une fois l'adoption fusionnée, dans un nouveau
-  contexte.
-- **Le flux ajoute des conditions d'arrêt.** L'exécution par sous-agents s'arrête
-  aussi sur celles-ci. Dans un lot correctif seulement :
+L'emplacement des documents et ce que le flux ajoute à un plan ne sont pas des
+écarts.
+
+- Aucun document de conception daté. Une conception architecturale se conclut par
+  l'ouverture d'un lot : le document de lot remplace le document de conception,
+  sa relecture avant ouverture en remplace l'auto-relecture, et la revue
+  d'ouverture en remplace la revue humaine.
+
+  Le plan n'est écrit qu'avec chaque story.
+
+  Une conception qui touche un module non adopté s'arrête, et l'humain
+  l'abandonne ou la met de côté.
+
+  Le module est adopté hors du contexte de la conception. Celle-ci ne reprend
+  qu'une fois l'adoption fusionnée, dans un nouveau contexte.
+- Le flux ajoute des conditions d'arrêt à l'exécution par sous-agents. Dans un lot
+  correctif seulement :
 
   > Si, en mettant du code en conformité avec une spec, tu découvres que c'est la
-  > **spec** qui a tort et le code qui a raison, arrête-toi. Le lot n'est plus
+  > spec qui a tort et le code qui a raison, arrête-toi. Le lot n'est plus
   > correctif et doit être requalifié.
 
   Dans une story technique seulement :
 
-  > Si, en conduisant une story technique, tu découvres qu'elle change quelque chose
-  > d'observable à la frontière du module, arrête-toi. La story n'est plus
+  > Si, en conduisant une story technique, tu découvres qu'elle change quelque
+  > chose d'observable à la frontière du module, arrête-toi. La story n'est plus
   > technique.
 
   Un arbitrage ne remplace ni l'une ni l'autre.
-
-- **Le mode d'exécution est imposé.** Une story s'exécute par sous-agents, et le
-  choix d'un autre mode n'est pas proposé.
-- **Une story se conclut par une pull request.** La conclusion de sa branche n'offre
+- Une story s'exécute par sous-agents, et le choix d'un autre mode n'est pas
+  proposé.
+- Une story se conclut par une pull request. La conclusion de sa branche n'offre
   ni la fusion locale, ni la branche gardée.
 
 ## Authority and conflict rules
@@ -682,18 +676,15 @@ soit écrit.
 
 ## Language
 
-La frontière ne passe pas entre les documents, elle passe **à l'intérieur** de
-chaque document : ossature en anglais, prose dans la langue du projet.
+L'ossature d'un document est anglaise : titres de sections, noms de champs,
+libellés de gabarits, valeurs de statut, en-têtes de tableaux, patrons de chemins
+et de branches, noms de skills et de commandes.
 
-- **L'ossature est anglaise, partout** — titres de sections, noms de champs,
-  libellés de gabarits, valeurs de front matter (`status: open | closed`),
-  en-têtes de tableaux, patrons de chemins et de branches, noms de skills et de
-  commandes. Cela vaut pour le plugin comme pour les documents qu'il produit.
-- **La prose est dans la langue du projet** — corps des exigences, descriptions,
-  justifications, et les slugs de fichiers et de répertoires, qui nomment des objets
-  métier.
-- **Le plugin lui-même est intégralement anglais** — skills, commandes, README,
-  bloc d'instructions, messages.
+Sa prose est dans la langue du projet, comme les slugs de fichiers et de
+répertoires.
+
+Exception : ce que le plugin livre — skills, commandes, scripts, tests, README,
+bloc d'instructions, messages — est intégralement anglais.
 
 ## Concision
 
