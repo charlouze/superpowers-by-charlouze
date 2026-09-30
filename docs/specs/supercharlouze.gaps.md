@@ -31,18 +31,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Gaps
 
-- **Installing on a project** — « ce qui subsiste n'appartient pas au plugin : il n'est ni
-  déplacé, ni supprimé » n'est vrai qu'**en dehors de `specs/` et `plans/`**. Le
-  balayage `find "$from" -depth -type d -exec rmdir {} +` supprime un répertoire
-  étranger vide placé sous `docs/superpowers/specs/`, et un fichier étranger déposé
-  là est déplacé vers `docs/archive/specs/`. Borner la phrase suffirait ; changer le
-  code serait l'autre sortie, et c'est ce choix qui rend la décision humaine.
-  Consolidée par la clôture du lot 02, depuis l'`Observed drift` d'une de ses
-  stories. Classée en *gap* et non en *violation* : la spec y a tort et le code y
-  a raison, si bien qu'un lot correctif qui la prendrait buterait aussitôt sur la
-  cinquième condition d'arrêt — la résorber veut dire corriger une spec, ce qu'un
-  agent ne peut pas faire.
-
 - **Code under a feature flag / The user story document** — les quatre règles sont
   écrites en entier à un seul endroit, `writing-a-user-story`, et trois
   reformulations partielles en circulent ailleurs sans que rien ne les y rattache :
