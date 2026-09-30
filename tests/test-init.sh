@@ -305,4 +305,20 @@ else
     fail "end-only marker: CLAUDE.md left untouched"
 fi
 
+# --- Case 21: specs/ and plans/ move whole, empty directories included ---
+P20="$TEST_ROOT/emptydirs"
+mkdir -p "$P20/docs/superpowers/specs/empty" "$P20/docs/superpowers/plans/2025/empty"
+touch "$P20/docs/superpowers/plans/2025/old.md"
+bash "$INIT" "$P20" >/dev/null
+if [ -d "$P20/docs/archive/specs/empty" ] && [ -d "$P20/docs/archive/plans/2025/empty" ]; then
+    pass "empty directories: they move with their tree"
+else
+    fail "empty directories: they move with their tree"
+fi
+if [ ! -d "$P20/docs/superpowers" ]; then
+    pass "empty directories: docs/superpowers is gone once emptied"
+else
+    fail "empty directories: docs/superpowers is gone once emptied"
+fi
+
 exit $((FAILURES > 0))
