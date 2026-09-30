@@ -636,43 +636,26 @@ Il peut ajouter et supprimer des entrées du gaps register.
 
 ## Installing on a project
 
-L'installation est **idempotente** et **n'adopte jamais rien**. Elle produit une
-pull request, sur la branche `chore/supercharlouze-init`, qui :
+L'installation est idempotente.
 
-1. crée `docs/specs/`, `docs/batches/`, `docs/archive/` ;
+Elle n'adopte jamais rien.
+
+Elle produit une pull request, sur la branche `chore/supercharlouze-init`, qui :
+
+1. crée `docs/specs/`, `docs/batches/` et `docs/archive/` ;
 2. déplace `docs/superpowers/specs/` vers `docs/archive/specs/` et
    `docs/superpowers/plans/` vers `docs/archive/plans/`, en conservant les noms de
-   fichiers ;
-3. insère dans le fichier d'instructions que l'agent lit au démarrage un bloc qui
-   fait entrer toute conception et toute exécution de plan dans ce flux, ou le met
-   à jour sur place s'il est déjà présent, **sans jamais le dupliquer**, que le
-   projet ait déjà ce fichier ou non ;
-4. rend l'état des lieux : quels modules sont adoptés — une spec existe dans
+   fichiers. Si un document occupe déjà une destination, elle énumère toutes les
+   destinations occupées et s'arrête avant tout déplacement ;
+3. insère dans le fichier d'instructions que l'agent lit au démarrage, en le créant
+   s'il n'existe pas, un bloc qui fait entrer toute conception et toute exécution
+   de plan dans ce flux. Si ce bloc est déjà présent, elle le met à jour sur place,
+   sans jamais le dupliquer ;
+4. liste les modules déjà adoptés, c'est-à-dire ceux dont une spec existe dans
    `docs/specs/`.
 
-**Ses refus sont normatifs au même titre que ce qu'elle fait :**
-
-- **Collision d'archivage — refus de toute l'exécution, avant le moindre
-  déplacement.** Si un document occupe déjà l'un des chemins de destination,
-  l'installation les énumère tous et s'arrête sans rien déplacer.
-- **Marqueurs du bloc cassés — refus, et fichier laissé intact.** Un marqueur
-  d'ouverture sans fermeture, une fermeture sans ouverture, l'un ou l'autre en
-  double, ou une fermeture placée avant son ouverture : l'installation nomme le
-  défaut et sort sans réécrire. Elle ne devine pas où le bloc s'arrête.
-- **Les marqueurs sont des lignes entières, jamais des sous-chaînes.** Une prose
-  qui cite un marqueur n'est pas un bloc.
-- **Le mode du fichier est préservé.**
-- **L'arborescence `docs/superpowers` est supprimée une fois vidée, et seulement
-  une fois vidée.** Ce qui y subsiste n'appartient pas au plugin : il n'est ni
-  déplacé, ni supprimé, et sa présence laisse le répertoire en place.
-
-**Elle ne propose aucun découpage en modules** : le découpage appartient à l'humain.
-
-**Les répertoires qu'elle crée sont une destination, pas un état que le dépôt
-maintient.** Un répertoire n'est sur `main` qu'à partir du premier document qu'il
-reçoit : un clone frais peut donc ne pas le porter, et l'installation le recrée à
-chaque exécution. Rien dans ce flux ne lit ces répertoires avant qu'un document y
-soit écrit.
+Une fois ses documents déplacés, `docs/superpowers` est supprimé s'il est vide. S'il
+contient autre chose, l'installation le laisse en place sans y toucher.
 
 ## Language
 
