@@ -352,8 +352,8 @@ ces champs :
 - **Technical design** — la conception technique du lot ; ou `none` suivi de sa
   raison ;
 - **Constraints** — seulement les contraintes de migration et de compatibilité,
-  les décisions techniques dont une story ne peut pas s'écarter sans casser une
-  autre story, et l'ordre requis des stories et des blocs ; ou `none` ;
+  les décisions techniques sur lesquelles repose le reste de la conception
+  technique, et l'ordre requis des stories et des blocs ; ou `none` ;
 - **Feature flag** — les flags que ce lot déclare, chacun avec son nom, son défaut,
   sa portée et, si elle dépasse le lot, sa condition de levée ; ou `none` suivi de
   la raison de l'exemption.
