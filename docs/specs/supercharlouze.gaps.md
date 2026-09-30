@@ -29,15 +29,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Violations
 
-- **Installing on a project** — la spec énonce sans réserve que « le mode du fichier est
-  préservé », et `scripts/init.sh` ne l'offre qu'au mieux : `chmod --reference` est
-  une extension GNU que le `chmod` BSD ne connaît pas, l'échec est avalé par
-  `2>/dev/null || true`, et `CLAUDE.md` repart alors sous le mode du fichier
-  temporaire, `0600`, sans un mot. **Résoluble en ne touchant que le code** — un
-  repli portable derrière l'appel GNU — d'où le classement en violation plutôt
-  qu'en gap. La garde comportementale livrée par le lot 02 attrape ce cas là où
-  elle tourne, mais ne le prévient pas. `reserved by batch-11`
-
 - **Installing on a project** — la spec énonce que les refus laissent le fichier
   **intact**, et `scripts/init.sh` exécute `touch "$CLAUDE_MD"` avant les comptages
   de marqueurs : sur un chemin de refus le contenu est bien intact, mais la `mtime`
