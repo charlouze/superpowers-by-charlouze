@@ -639,6 +639,17 @@ shared "the adoption's gesture table names the closing that adds" \
     "| Add | \`supercharlouze:closing-a-batch\`, in the batch's closing pull request |" \
     adopting-a-module
 
+# The batch-document reread is a step of its own, before the pull request opens.
+absent "no skill folds the document reread into opening the pull request" \
+    "Reread the batch document, then open the pull request|these six steps" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# The batch rules neither count their steps and choices nor designate one by its
+# rank: the list carries the count, and a rank goes false when a step is added.
+absent "the batch rules neither count nor rank their steps and choices" \
+    "runs these [a-z]+ steps|Step 7 opens|step 3 releases|among three choices" \
+    using-batches writing-a-batch
+
 # The specs carry no changelog any more. No shipped skill file names one:
 # frontmatter and references included, which `body_flat` would skip.
 CHANGELOG_HITS="$(grep -rli 'changelog' "$REPO_ROOT/skills" || true)"
@@ -647,5 +658,29 @@ if [ -z "$CHANGELOG_HITS" ]; then
 else
     fail "no skill file names a changelog (present in: $(echo $CHANGELOG_HITS))"
 fi
+
+# Entries a batch no longer takes on are released, not merely revised, and an
+# amendment releases them before closing does.
+absent "no skill merely revises reservations" \
+    "reservations are revised|Revise the gaps register reservations|a scope revised mid-flight|and \`supercharlouze:closing-a-batch\` releases it\.|No other skill picks them up|A fresh \`NN\` only if|out of the scope releases it" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# A corrective story is abandoned once the requalification is ruled: no skill has
+# its pull request closed at the stop.
+absent "no skill closes a corrective story's pull request at the stop" \
+    "Therefore: \*\*close the story's pull request|So: \*\*close the story's pull request|Abandon the story, closing its pull request|exactly as a requalified corrective story is abandoned" \
+    using-batches writing-a-batch writing-a-user-story
+
+# using-batches routes a requalification to writing-a-batch: it neither opens on
+# what the requalification does not do nor copies its procedure.
+absent "using-batches copies no requalification procedure" \
+    "does not start by closing a pull request|abandon the story|close its pull request|no longer takes on are released|a fresh \`NN\`|settled elsewhere" \
+    using-batches
+
+# A requalified technical story brings the flag its block requires, if any, not a
+# flag by default.
+absent "no skill makes a lost technical exemption declare a flag" \
+    "declares one by that same amendment|a flag if the batch was exempted because all of its stories were technical" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
 exit $((FAILURES > 0))

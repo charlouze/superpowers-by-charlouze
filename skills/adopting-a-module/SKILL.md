@@ -241,6 +241,7 @@ take it out whole:
 | Remove | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | deletes it from the file, atomically with the code, and the commit that removes it says why |
 | Remove | you, at the step `Offer to promote the gaps`, when your human partner promotes one | deletes it from the file, in the same pull request that writes the rule it became |
 | Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed, and leaves the entry |
+| Release | `supercharlouze:writing-a-batch`, in an amendment pull request | removes the `reserved by batch-NN` of an entry the amendment takes out of the batch's `Scope`, and leaves the entry |
 | Add | `supercharlouze:closing-a-batch`, in the batch's closing pull request | appends it at the end of its category; within a batch, no other pull request adds one |
 | Add or remove | a bounded change, from its own pull request | belonging to no batch, it writes an entry or deletes one directly, contending only with another bounded change |
 

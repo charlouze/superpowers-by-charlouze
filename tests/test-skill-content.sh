@@ -134,6 +134,7 @@ require writing-a-batch "the design resumes in a fresh context"   "resumes in a 
 require writing-a-batch "NN accounts for open pull requests"      "open pull request"
 require writing-a-batch "batch document carries no mutable state" "no mutable state"
 require writing-a-batch "no story list in the batch document"     "list of stories"
+require writing-a-batch "the story list counts pushed branches" "completed by the open pull requests and by the pushed \`story/*\` branches that carry no pull request yet"
 require writing-a-batch "writes no spec at opening"               "no writing into the specs"
 require writing-a-batch "PR review is the human gate"             "review of the batch pull request"
 require writing-a-batch "corrective batch reserves entries"       "reserved by batch"
@@ -147,6 +148,24 @@ require writing-a-batch "amendment pull request exists"           "amendment pul
 require writing-a-batch "an amendment covers the spec delta"     "An amendment changes the scope, the spec delta or the flag of an open batch"
 require writing-a-batch "the entry point names the spec delta"   "Changing the scope, the spec delta or the flag of an existing batch"
 require writing-a-batch "an amendment branch follows no pattern"  "follows none of this plugin's branch patterns"
+require writing-a-batch "a delta amendment is reviewed as an opening" "By exception, an amendment that changes the spec delta is reviewed as an opening"
+require writing-a-batch "its blocks are applied with every pending block" "apply its new or changed blocks together with every block no merged story has declared yet"
+require writing-a-batch "its applied copies go to the shared reread" "invoke \`supercharlouze:rereading-a-spec\` on each applied copy, with the path of the spec it applies to, as \`The Coherence Reread\` does"
+require writing-a-batch "its whole document goes through the document reread" "Then the whole document goes through the batch-document reread"
+require writing-a-batch "its body carries what an opening body carries" "the exact text of every new or changed block, and what the coherence reread found"
+require writing-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
+require writing-a-batch "requalification offers a different batch" "**Rule the remaining work a different batch**"
+require writing-a-batch "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
+require closing-a-batch "an amendment already released what it dropped" "An entry an amendment took out of \`Scope\` is not among them: that amendment released it."
+require adopting-a-module "an amendment releases a reservation" "| Release | \`supercharlouze:writing-a-batch\`, in an amendment pull request |"
+require writing-a-user-story "abandoning leaves the reservation to the amendment or closing" "the amendment that takes its entry out of \`Scope\` releases it, or \`supercharlouze:closing-a-batch\` does"
+require writing-a-user-story "an abandonment leaves closing the reservation no amendment released" "unless an amendment took its entry out of \`Scope\` and released it"
+require closing-a-batch "an amendment's release is the one exception" "except an amendment that takes a reserved entry out of \`Scope\` and releases it"
+require writing-a-batch "a corrective story is abandoned once ruled" "1. **Leave the story as it stands until the choice below is ruled, then abandon it.**"
+require writing-a-batch "an open pull request waits for the ruling" "A pull request already open stays open until then."
+require writing-a-batch "a corrective story's remote branch is a live claim" "a branch left on the remote is read as a live claim on its sections by every sibling's concurrency scan"
+# Both requalifications live in writing-a-batch; using-batches only routes to it.
+require using-batches "either stop condition routes to writing-a-batch" "When either condition fires, you stop, and \`supercharlouze:writing-a-batch\` conducts the requalification"
 require writing-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`bounded/<slug>\`, \`chore/supercharlouze-init\`"
 require writing-a-batch "a pattern name claims what it does not hold" "would claim what it does not hold"
 require writing-a-batch "carries the requalification procedure"   "requalification"
@@ -154,8 +173,12 @@ require writing-a-batch "requalifies a technical story" \
     "## Requalifying a Technical Story"
 require writing-a-batch "an observable change needs a block" \
     "it needs a block, and a block is acquired by an amendment that goes back through the opening review"
-require writing-a-batch "the lost qualification takes the exemption with it" \
-    "declares one by that same amendment"
+require writing-a-batch "the amendment declares the flag the block requires" \
+    "The same amendment declares the flag the block requires, if it requires one."
+require writing-a-batch "the exemption question is asked again" \
+    "Ask the exemption criterion again of the batch with its new block"
+require writing-a-user-story "the human rules the block and its flag" \
+    "a block for the observable change, and the flag that block requires, if it requires one"
 require writing-a-batch "branch naming convention"                "batch/NN"
 
 # --- writing-a-batch: the batch document contract (spec section "The batch document") ---
@@ -209,14 +232,15 @@ require writing-a-batch "the PR body carries it to the reviewer" "the exact text
 # cannot carry. The last assertion is the reason the distinction is not cosmetic:
 # merged, the batch-document reread is the one that disappears, and a corrective
 # batch loses its only reread.
-require writing-a-batch "the opening is stated in order"        "Opening a new batch runs these six steps, in this order"
+require writing-a-batch "the opening is stated in order"        "Opening a new batch runs these steps, in this order"
 # Step 3 names every field the opening writes (spec section "Opening a batch").
 # `Constraints` was the one missing: a step that lists three fields out of four
 # reads as exhaustive, and the field it leaves out is the one each story copies
 # verbatim into its `Global Constraints`.
 require writing-a-batch "step 3 names every field it writes"    "\`Scope\`, \`Spec delta\`, \`Constraints\`, \`Feature flag\`"
 require writing-a-batch "the coherence reread is step 5"        "Put the whole spec delta through the coherence reread"
-require writing-a-batch "the document reread is step 6"         "Reread the batch document, then open the pull request"
+require writing-a-batch "the document reread is step 6"         "6. **Reread the whole batch document**"
+require writing-a-batch "the pull request is step 7"            "7. **Open the pull request** from \`batch/NN-<slug>\`"
 require writing-a-batch "the document reread is named where it runs" "**The batch-document reread**, step 6, comes after the coherence reread"
 require writing-a-batch "two rereads, two objects"              "The two rereads are steps 5 and 6, and they have different objects"
 require writing-a-batch "the document reread takes the whole document" "bears on the whole document"
@@ -400,7 +424,11 @@ require writing-a-user-story "no other story carries that field" \
 require writing-a-user-story "Blocks none covers the technical story" \
     "a corrective batch's story, a technical story, a teardown story"
 require writing-a-user-story "the technical condition hands off to writing-a-batch" \
-    "**abandon the story**, then hand the decision to \`supercharlouze:writing-a-batch\`"
+    "**the story is abandoned**, and the decision goes to \`supercharlouze:writing-a-batch\`"
+# A corrective story is abandoned once the requalification is ruled, not when it
+# stops: an open pull request stays open until then.
+require writing-a-user-story "a corrective story is abandoned once ruled" \
+    "In a corrective batch, the story is abandoned once the requalification is ruled: a pull request already open is closed without merging then, not when you stop."
 require writing-a-user-story "a rule belongs to exactly one spec" "A rule belongs to exactly one spec."
 require writing-a-user-story "no ruling houses a rule twice"      "no ruling puts a rule in two places"
 

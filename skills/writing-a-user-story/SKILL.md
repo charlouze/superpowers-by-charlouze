@@ -524,7 +524,7 @@ nowhere.
 
 **Override 2 — the stop conditions the flow adds.** SDD states that four things
 stop you and only these. This plugin adds two, and each one ends the same way:
-**abandon the story**, then hand the decision to
+**the story is abandoned**, and the decision goes to
 `supercharlouze:writing-a-batch`.
 
 In a corrective batch: if, while bringing code into conformity with the spec, you
@@ -537,22 +537,27 @@ In a technical story, whatever its batch: if, while conducting it, you discover
 that it changes something observable at the module's boundary, stop. The story is
 no longer technical. The four native conditions also assume the story is the story
 it says it is; here the qualification it was written under is what is in question,
-and only your human partner may rule what follows — a block for the observable
-change, and a flag if the batch was exempted because all of its stories were
-technical.
+and only your human partner may rule what follows: a block for the observable
+change, and the flag that block requires, if it requires one.
 
 **Abandoning here does not start by closing a pull request, because there is
 normally no pull request yet.** This condition fires *inside*
 `superpowers:subagent-driven-development`, mid-implementation, and the story's
 pull request only opens at the very end of this step, through
 `superpowers:finishing-a-development-branch`. What exists when it triggers is a
-branch and a worktree. So: **close the story's pull request without merging it
-if one is already open; the branch and its worktree stay until the
-requalification is ruled.**
+branch and a worktree, and they stay until the requalification is ruled.
+
+In a corrective batch, the story is abandoned once the requalification is ruled:
+a pull request already open is closed without merging then, not when you stop.
+
+In a technical story, close the story's pull request without merging it if one
+is already open.
+
 Nothing on `main` changes either way — the spec change, or the deleted
 gaps-register entry, travels with the code and dies with the branch. The
-reservation posted on `main` by the batch's opening pull request is untouched,
-and `supercharlouze:closing-a-batch` releases it. Once the requalification is
+reservation posted on `main` by the batch's opening pull request is untouched:
+the amendment that takes its entry out of `Scope` releases it, or
+`supercharlouze:closing-a-batch` does. Once the requalification is
 ruled, delete the abandoned branch, locally and on the remote, and remove its
 worktree — the branch left on the remote would read as a live claim on its
 sections, and the worktree left behind is where a later session resumes work
@@ -635,10 +640,11 @@ the transcription away with the code — nothing to revoke, no spec to put back
 straight. If the abandonment happens before the pull request exists — a
 requalification under Override 2, a story dropped mid-run — there is nothing to
 close, only a branch and a worktree to discard. What remains on `main` belongs
-to `supercharlouze:closing-a-batch`: the gaps register reservation posted by
-the batch's opening pull request, and the blocks the batch announced and no
-story delivered. Do not count them — a story that transcribed no block
-announced nothing in the spec delta and leaves the reservation alone.
+to `supercharlouze:closing-a-batch`: the blocks the batch announced and no
+story delivered, and the gaps register reservation posted by the batch's
+opening pull request, unless an amendment took its entry out of `Scope` and
+released it. Do not count them — a story that transcribed no block announced
+nothing in the spec delta and leaves the reservation alone.
 
 **Clean up after an abandoned or requalified story: remove its worktree and
 delete its branch, locally and on the remote.** This is not tidiness. A pushed

@@ -26,7 +26,7 @@ Three entry points, all landing in a pull request:
 
 ## Opening, in Order
 
-Opening a new batch runs these six steps, in this order. Each names the section
+Opening a new batch runs these steps, in this order. Each names the section
 that carries it.
 
 1. **Check that every module this batch touches has an adopted spec** — the
@@ -39,8 +39,8 @@ that carries it.
    the specs at this stage (`The Batch Document`).
 5. **Put the whole spec delta through the coherence reread** — skipped when the
    delta carries no block (`The Coherence Reread`).
-6. **Reread the batch document, then open the pull request**
-   (`Opening the Pull Request`).
+6. **Reread the whole batch document** (`Opening the Pull Request`).
+7. **Open the pull request** from `batch/NN-<slug>`, in the same section.
 
 **The two rereads are steps 5 and 6, and they have different objects.** The
 coherence reread bears on the blocks and on the state they produce, read whole.
@@ -265,7 +265,8 @@ its front matter to `status: closed`, in a reviewed pull request of its own, and
 the batch is over. Two consequences follow, and both are deliberate:
 
 - **The list of stories does not appear in it.** The list of stories is the
-  content of the batch directory, completed by the open pull requests. A
+  content of the batch directory, completed by the open pull requests and by
+  the pushed `story/*` branches that carry no pull request yet. A
   hand-maintained one would be edited by every story, conflicting on the same
   file every time, for information the system already holds.
 - **Story state does not appear either.** A story's state *is* the state of its
@@ -469,6 +470,18 @@ and say in the pull request body what changed and why. An amendment is not
 mutable state flowing along: it is an explicit human decision that goes through
 a review.
 
+By exception, an amendment that changes the spec delta is reviewed as an
+opening. Before its pull request opens, apply its new or changed blocks together
+with every block no merged story has declared yet, and invoke
+`supercharlouze:rereading-a-spec` on each applied copy, with the path of the
+spec it applies to, as `The Coherence Reread` does. Then the whole document
+goes through the batch-document reread. Its body states the exact text of every
+new or changed block, and what the coherence reread found.
+
+An amendment that takes a gaps register entry out of `Scope` releases its
+reservation in the same pull request: it removes the entry's
+`reserved by batch-NN` annotation and leaves the entry.
+
 **An amendment merges into the same clear moment as an opening**, and ends its
 review the same way: fixups during the review, agreement in the conversation,
 squash, the pull request announced ready, then the next step named when your
@@ -489,36 +502,38 @@ may correct a spec.
 
 **Procedure.**
 
-1. **Abandon the story — and do not assume it has a pull request.** Override 2
-   fires *inside* `superpowers:subagent-driven-development`, mid-implementation,
-   and a story's pull request is opened only at the very end of its Step 5, by
-   `superpowers:finishing-a-development-branch`. So the usual situation when
-   this triggers is a branch and a worktree and **no pull request at all**.
-   Therefore: **close the story's pull request without merging it if one is
-   already open.** Nothing has to be revoked either way, because nothing reached
-   `main`: the spec change, or the deleted gaps-register entry, travels with the
-   code and dies with the branch. The branch and its worktree go once the choice
-   below is ruled: delete the story branch locally and on the remote and remove
-   its worktree — whether a pull request existed or not — so no later session
-   resumes work under a qualification the batch no longer has. The gaps-register
-   reservation is untouched by all of this — it lives on `main`, posted by the
-   opening pull request, and `supercharlouze:closing-a-batch` releases it.
+1. **Leave the story as it stands until the choice below is ruled, then abandon
+   it.** A pull request already open stays open until then. Override 2 fires *inside*
+   `superpowers:subagent-driven-development`, mid-implementation, and a story's
+   pull request is opened only at the very end of its Step 5, by
+   `superpowers:finishing-a-development-branch`, so the usual situation is a
+   branch and a worktree and **no pull request at all**. Once the choice is
+   ruled, close the story's pull request without merging it if one is open,
+   delete the story branch locally and on the remote and remove its worktree, so
+   no later session resumes work under a qualification the batch no longer has:
+   a branch left on the remote is read as a live claim on its sections by every
+   sibling's concurrency scan.
+   Nothing has to be revoked, because nothing reached `main`: the spec change, or
+   the deleted gaps-register entry, travels with the code and dies with the
+   branch. Abandoning the story leaves the gaps-register reservations untouched:
+   they live on `main`, posted by the opening pull request.
 2. **Put the choice to the human**, who alone may rule:
-   - **Correct the spec** — then the batch stays corrective, on a reduced scope,
-     and the corrected spec ships through its own pull request; or
+   - **Correct the spec**: the batch stays corrective, on a reduced scope,
+     and the corrected spec ships through its own pull request;
    - **Rewrite the batch as an ordinary batch**, with a real spec delta, through
-     an **amendment pull request** that goes back through the gate above.
+     an **amendment pull request** reviewed as an opening;
+   - **Rule the remaining work a different batch**: it gets a fresh `NN`, and
+     this batch is closed with `supercharlouze:closing-a-batch` rather than left
+     open.
 
    The rewrite keeps `NN` and its directory: the number identifies a delivery
-   unit, and any story already merged lives under it — a new number would strand
-   them. Hence an amendment pull request on the existing document, replacing
-   the `none` of its `Spec delta` with blocks, reviewed at the gate like an
-   opening. Allocate a fresh `NN` only when the human rules that the remaining
-   work is a *different* batch, and then close this one with
-   `supercharlouze:closing-a-batch` rather than leaving it open.
-3. **Revise the gaps register reservations** in either case: entries annotated
-   `reserved by batch-NN` that are no longer in scope must be released, and
-   `supercharlouze:closing-a-batch` releases whatever is left unconsumed.
+   unit, and any story already merged lives under it, so a new number would
+   strand them.
+3. **Release the reservations of the entries the batch no longer takes on.** A
+   reduced or rewritten scope releases them in the amendment pull request that
+   changes `Scope`. A batch closed in favour of a fresh one releases them at its
+   closing, before the fresh batch reserves them at its own opening: two batches
+   never reserve the same entry.
 
 Never carry out a requalification by deciding the substance yourself. Correcting
 a spec is a human act, never an agent act. Your job is to present the choice with
@@ -534,22 +549,22 @@ you already stopped, from inside `superpowers:subagent-driven-development`.
 
 **Procedure.**
 
-1. **Abandon the story**, exactly as a requalified corrective story is abandoned:
-   this fires mid-implementation, so the usual situation is a branch and a
-   worktree and **no pull request at all**. Close one without merging it only if
-   it is already open; the branch and its worktree stay until the choice below is
-   ruled, and go once it is — deleted locally and on the remote, worktree removed.
+1. **Abandon the story.** This fires mid-implementation, so the usual situation
+   is a branch and a worktree and **no pull request at all**. Close one without
+   merging it only if it is already open; the branch and its worktree stay until
+   the choice below is ruled, and go once it is — deleted locally and on the
+   remote, worktree removed.
    Nothing reached `main`, so nothing has to be revoked, and a branch left on the
    remote reads as a live claim on its sections.
 2. **Put the choice to the human**, who alone may rule. If they judge the
    observable change wanted, it needs a block, and a block is acquired by an
    amendment that goes back through the opening review — the exact text of a block
    is what that review reads, and a story that transcribes none never passes it.
-3. **A batch exempted from a flag because all of its stories were technical
-   declares one by that same amendment.** The exemption rested on the
-   qualification the story has just lost; leaving it standing would ship
-   observable behaviour with nothing guarding it, which is the whole of what the
-   criterion prevents.
+3. **The same amendment declares the flag the block requires, if it requires
+   one.** Ask the exemption criterion again of the batch with its new block:
+   would one story, merged alone, leave a user facing something incomplete?
+   The exemption drawn from all stories being technical no longer holds, so
+   the answer alone decides.
 
 **Concluded by** the merge of the amendment pull request: the work is rewritten as
 an ordinary story of the amended batch, with `supercharlouze:writing-a-user-story`.
