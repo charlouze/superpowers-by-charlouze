@@ -154,6 +154,7 @@ require writing-a-batch "its applied copies go to the shared reread" "invoke \`s
 require writing-a-batch "its whole document goes through the document reread" "Then the whole document goes through the batch-document reread"
 require writing-a-batch "its body carries what an opening body carries" "the exact text of every new or changed block, and what the coherence reread found"
 require writing-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
+require writing-a-batch "an obvious design is still written" "An obvious design is still a design: write it."
 require writing-a-batch "requalification offers a different batch" "**Rule the remaining work a different batch**"
 require writing-a-batch "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
 require closing-a-batch "an amendment already released what it dropped" "An entry an amendment took out of \`Scope\` is not among them: that amendment released it."
@@ -185,6 +186,8 @@ require writing-a-batch "branch naming convention"                "batch/NN"
 require writing-a-batch "template declares the Constraints section" "## Constraints"
 require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
 require writing-a-batch "Constraints carry nothing normative"       "Nothing normative goes in \`Constraints\`"
+require writing-a-batch "Constraints keep shared decisions from being reinvented" \
+    "and its own version of a decision the rest of the design relies on"
 
 require writing-a-batch "the delta is exact text, in blocks"        "written here as **exact text, in blocks**"
 require writing-a-batch "a block carries a unique D<n>"             "Each one carries an identifier \`D<n>\`, unique within the batch"
@@ -211,8 +214,36 @@ require writing-a-batch "the field carries blocks or none"          "It carries 
 require writing-a-batch "a corrective batch lists its entries in Scope" "Its \`Spec delta\` reads \`none\` with that reason, and its \`Scope\` lists the *Violations* entries it takes on"
 require writing-a-batch "the template forbids a blank delta"        "Never left blank: with no block, \`none\` and the reason"
 require writing-a-batch "the template's Scope names the entries"    "<What this batch delivers, including every gaps register entry it takes on.>"
-require writing-a-batch "the template's Constraints are bounded"    "<Only the migration and compatibility constraints, and the required order of the stories and of the blocks."
+require writing-a-batch "the template's Constraints are bounded"    "<Only the migration and compatibility constraints, the technical decisions the rest of the technical design relies on, and the required order of the stories and of the blocks."
+# A technical decision is a constraint only when the rest of the technical design
+# relies on it (spec section "The batch document"); every other one is design.
+require writing-a-batch "a decision is a constraint only if the design relies on it" \
+    "A technical decision goes in \`Constraints\` only if the rest of the technical design relies on it"
+require writing-a-batch "every other decision is design" \
+    "Every other technical decision goes in \`Technical design\`, where a story may depart from it."
+require writing-a-batch "the document reread checks the widened Constraints" \
+    "\`Constraints\` carrying only migration and compatibility constraints, the technical decisions the rest of the technical design relies on, and the required order of stories and blocks, or \`none\`"
+require writing-a-batch "the PR body puts the constraints to the reviewer" \
+    "the technical design, or the reason for its \`none\`; the constraints; the flag decision;"
 require writing-a-batch "the document reread checks the field"      "\`Spec delta\` filled"
+# The batch document carries the technical design of its stories (spec section
+# "The batch document"): between the delta and the constraints, never blank.
+require writing-a-batch "the template places the design after the delta" \
+    "with no block, \`none\` and the reason.> ## Technical design <The design your human partner approved during the brainstorming"
+require writing-a-batch "the template places the design before the constraints" \
+    "with no design, \`none\` and the reason.> ## Constraints"
+require writing-a-batch "the design field is never left blank" \
+    "Never left blank: with no design, \`none\` and the reason"
+require writing-a-batch "the design comes from the brainstorming" \
+    "\`Technical design\` carries the design your human partner approved during \`superpowers:brainstorming\`"
+require writing-a-batch "a story may depart from the design" \
+    "a story may depart from it by recording a \`Technical design ruling:\`"
+require writing-a-batch "an observable behaviour is a block, not design" \
+    "What a user or a neighbouring module would observe goes in a block, never in \`Technical design\`."
+require writing-a-batch "the document reread checks the design field" \
+    "\`Technical design\` filled, with the design or with \`none\` and the reason"
+require writing-a-batch "the PR body puts the design to the reviewer" \
+    "the technical design, or the reason for its \`none\`;"
 
 # --- writing-a-batch: the opening review (spec section "Opening a batch") ---
 require writing-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
@@ -237,7 +268,8 @@ require writing-a-batch "the opening is stated in order"        "Opening a new b
 # `Constraints` was the one missing: a step that lists three fields out of four
 # reads as exhaustive, and the field it leaves out is the one each story copies
 # verbatim into its `Global Constraints`.
-require writing-a-batch "step 3 names every field it writes"    "\`Scope\`, \`Spec delta\`, \`Constraints\`, \`Feature flag\`"
+require writing-a-batch "step 3 names every field it writes"    "3. **Write the batch document**: \`Scope\`, \`Spec delta\`, \`Technical design\`, \`Constraints\`, \`Feature flag\`"
+require writing-a-batch "the document reread names every field" "The batch-document reread bears on the whole document: \`Scope\`, \`Spec delta\`, \`Technical design\`, \`Constraints\`, \`Feature flag\`."
 require writing-a-batch "the coherence reread is step 5"        "Put the whole spec delta through the coherence reread"
 require writing-a-batch "the document reread is step 6"         "6. **Reread the whole batch document**"
 require writing-a-batch "the pull request is step 7"            "7. **Open the pull request** from \`batch/NN-<slug>\`"
@@ -388,6 +420,8 @@ require rereading-a-spec "the reread does not replace the review"  "prepares the
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
 require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"
 require writing-a-batch "names the merge a clear moment"          "a moment to clear the context"
+require writing-a-batch "the merged document carries the design too" \
+    "the exact text of every block and the technical design, which is what the design conversation was for"
 require writing-a-batch "opening hands over to the first story"   "name \`supercharlouze:writing-a-user-story\` as the next step"
 require writing-a-batch "an amendment is a clear moment too"      "An amendment merges into the same clear moment"
 require writing-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
@@ -408,6 +442,17 @@ require writing-a-user-story "records rulings before the merge"   "Rulings log"
 require writing-a-user-story "records observed drift"             "Observed drift"
 require writing-a-user-story "an open ruling has its own form"    "An open ruling is written \`Open ruling:\`"
 require writing-a-user-story "an open ruling says what is left"   "ends with what is left to settle, then with the gaps register category"
+# The plan starts from the batch's technical design, and every departure is a
+# technical design ruling (spec section "Delivering a story").
+require writing-a-user-story "the plan starts from the technical design" \
+    "**The plan starts from the batch's \`Technical design\`**, and its \`Architecture:\` line derives from it."
+require writing-a-user-story "main's code wins where it departed" \
+    "Exception: where the code on \`main\` has departed from the design, as an earlier story of the batch may have, the plan starts from the code."
+require writing-a-user-story "no design, nothing to start from" \
+    "A batch whose \`Technical design\` is \`none\` gives the plan nothing to start from."
+# Every departure, the plan's as well as the execution's, is recorded at Step 6.
+require writing-a-user-story "step 6 records every departure from the design" \
+    "Write as a \`Technical design ruling:\`, with the three parts of a \`Ruling:\`, every departure from the batch's \`Technical design\` that the plan or the execution took, except where the plan follows the code on \`main\`."
 require writing-a-user-story "answers review feedback"            "review feedback"
 require writing-a-user-story "an open ruling needs a destination"  "A story does not merge leaving an open ruling without a destination"
 require writing-a-user-story "the review is the last place to act" "do not announce the pull request ready while an open ruling without a destination stands"
@@ -503,12 +548,16 @@ require writing-a-user-story "the merge delivers the story"         "The story i
 require writing-a-user-story "abandoning removes the worktree too"  "remove its worktree and delete its branch, locally and on the remote"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
+require closing-a-batch "the preconditions read the design and its rulings" \
+    "the technical design rulings the rewrite starts from"
 require closing-a-batch "every duty lands in one pull request"  "Every duty lands in one pull request"
 require closing-a-batch "the flag check precedes the writers"  "it comes before the duties that write"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
 require closing-a-batch "reads both sections of a story"         "Two sections carry it"
 require closing-a-batch "names the Rulings log as a source"      "The **Rulings log** holds its \`Open ruling:\` lines"
 require closing-a-batch "consolidates the open rulings too"      "the ones classified as a violation or a gap are yours"
+require closing-a-batch "the Rulings log feeds the rewrite too" \
+    "its \`Technical design ruling:\` lines are what *Rewrite the technical design* starts from"
 require closing-a-batch "releasing keeps the entry"  "removes the reservation annotation and leaves the entry"
 # This duty sorts what the stories brought back; it must not read as a definition
 # of either category. A fourth wording of "what a gap is" would sit outside the
@@ -555,15 +604,33 @@ case "$(body_flat "$REPO_ROOT/skills/closing-a-batch/SKILL.md")" in
     *)  pass "closing-a-batch: no duty is counted or numbered" ;;
 esac
 case "$(body_flat "$REPO_ROOT/skills/closing-a-batch/SKILL.md")" in
-    *"### Refuse to close on a flag"*"### Consolidate what the story documents left"*"### Release unconsumed reservations"*"### Withdraw the blocks no story delivered"*"### Set status: closed"*)
+    *"### Refuse to close on a flag"*"### Consolidate what the story documents left"*"### Release unconsumed reservations"*"### Withdraw the blocks no story delivered"*"### Rewrite the technical design"*"### Set status: closed"*)
         pass "closing-a-batch: the duties keep their order" ;;
     *)  fail "closing-a-batch: the duties keep their order" ;;
 esac
 require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
+# Closing rewrites the technical design into the mechanism delivered (spec
+# section "Closing a batch"), from the stories' departures and the code.
+require closing-a-batch "the design is rewritten into what was delivered" \
+    "When the batch document's \`Technical design\` is not \`none\`, rewrite it to describe the mechanism the batch delivered."
+require closing-a-batch "the rewrite starts from the stories' departures" \
+    "Start from the \`Technical design ruling:\` lines in the \`Rulings log\` of every merged story, and check them against the code on \`main\`."
+require closing-a-batch "the rewrite drops what served withdrawn blocks" \
+    "Drop what served only the blocks you just withdrew."
+require closing-a-batch "the code is the authority after closing" \
+    "The rewritten text is true at closing. After closing, the code is the authority"
+require closing-a-batch "the overview names the rewrite" \
+    "*Rewrite the technical design* brings its design in line with what was delivered"
 
 # --- using-batches: preconditions for every pull request of this system ---
 require using-batches "the directory it runs in does not matter"    "Where you are standing does not matter"
-require using-batches "a batch carries only what a spec cannot" "Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, the order of its stories and of its blocks, and its migration and compatibility constraints."
+require using-batches "a batch carries only what a spec cannot" "Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, its constraints and its technical design."
+require using-batches "defines the technical design" \
+        "**Technical design** — the mechanism a batch plans for its stories, each of which may depart from it."
+require using-batches "the spec binds, the design guides" \
+        "the spec binds a story, the technical design only guides it"
+require using-batches "defines the technical design ruling" \
+        "**Technical design ruling** — a ruling by which a story departs from its batch's technical design."
 
 # --- using-batches: what a spec says (spec section "The spec document") ---
 require using-batches "the test bears on the module boundary"   "bears on the module's boundary"

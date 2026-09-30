@@ -775,4 +775,28 @@ absent "no skill states the plugin's own language" \
     "entirely English" \
     using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec
 
+# A batch's constraints now include its shared technical decisions, so the old
+# enumeration of what a batch carries must not survive beside the new one.
+absent "a batch no longer lists only migration constraints" \
+    "its flags, the order of its stories and of its blocks, and its migration" \
+    using-batches
+
+# Constraints now carry shared technical decisions as well, so the old bound —
+# migration and compatibility, then the order — must not survive anywhere.
+absent "Constraints are no longer bounded to migration and order" \
+    "migration and compatibility constraints,? and the required order" \
+    writing-a-batch using-batches writing-a-user-story closing-a-batch
+
+# A constraint is judged against the technical design, known at opening, never
+# against the stories, which do not exist yet.
+absent "no constraint is judged against the stories" \
+    "without breaking another" \
+    writing-a-batch using-batches writing-a-user-story closing-a-batch
+
+# A story writes its departures from the design in a form closing reads back,
+# and the batch document spells the same form.
+shared "the batch, the story and closing spell a technical design ruling alike" \
+    "\`Technical design ruling:\`" \
+    writing-a-batch writing-a-user-story closing-a-batch
+
 exit $((FAILURES > 0))

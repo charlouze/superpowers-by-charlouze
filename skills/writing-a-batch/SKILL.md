@@ -32,9 +32,9 @@ that carries it.
 1. **Check that every module this batch touches has an adopted spec** — the
    design stops here if one does not (`Preconditions`).
 2. **Allocate `NN`** and create the branch (`Allocating NN`).
-3. **Write the batch document**: `Scope`, `Spec delta`, `Constraints`,
-   `Feature flag` (`The Batch Document`, `The Feature Flag Field`,
-   `Flags Declared by Earlier Batches`).
+3. **Write the batch document**: `Scope`, `Spec delta`, `Technical design`,
+   `Constraints`, `Feature flag` (`The Batch Document`,
+   `The Feature Flag Field`, `Flags Declared by Earlier Batches`).
 4. **Reserve every gaps register entry this batch takes on.** No writing into
    the specs at this stage (`The Batch Document`).
 5. **Put the whole spec delta through the coherence reread** — skipped when the
@@ -45,9 +45,9 @@ that carries it.
 **The two rereads are steps 5 and 6, and they have different objects.** The
 coherence reread bears on the blocks and on the state they produce, read whole.
 The batch-document reread bears on the whole document: `Scope`, `Spec delta`,
-`Constraints`, `Feature flag`. Merge them and the second is the one that
-disappears, leaving a corrective batch, which has no blocks, with no reread at
-all.
+`Technical design`, `Constraints`, `Feature flag`. Merge them and the second is
+the one that disappears, leaving a corrective batch, which has no blocks, with
+no reread at all.
 
 ## Preconditions
 
@@ -156,10 +156,17 @@ the paragraph that contains it. Including the removal of the gating sentence of
 any flag an earlier batch declared and this batch takes on. Never left blank:
 with no block, `none` and the reason.>
 
+## Technical design
+
+<The design your human partner approved during the brainstorming: the mechanism
+the stories are planned from. Never left blank: with no design, `none` and the
+reason.>
+
 ## Constraints
 
-<Only the migration and compatibility constraints, and the required order of
-the stories and of the blocks. `none` if there are none.>
+<Only the migration and compatibility constraints, the technical decisions the
+rest of the technical design relies on, and the required order of the stories
+and of the blocks. `none` if there are none.>
 
 ## Feature flag
 
@@ -174,8 +181,22 @@ behaviour. `supercharlouze:writing-a-user-story` copies this section
 **verbatim** into every story's `Global Constraints`, where
 `superpowers:writing-plans` makes it implicitly part of every task's
 requirements. Write it as constraints an implementer can obey, not as
-background. Left out, each story would silently invent its own migration rule
-and its own order.
+background. Left out, each story would silently invent its own migration rule,
+its own order, and its own version of a decision the rest of the design relies
+on.
+
+A technical decision goes in `Constraints` only if the rest of the technical
+design relies on it, such as a name or a format several parts of the design use.
+Every other technical decision goes in `Technical design`, where a story may
+depart from it.
+
+`Technical design` carries the design your human partner approved during
+`superpowers:brainstorming`, which this document replaces as the design doc.
+Each story's plan starts from it, and a story may depart from it by recording
+a `Technical design ruling:`.
+
+What a user or a neighbouring module would observe goes in a block, never in
+`Technical design`.
 
 This pull request does **no writing into the specs**. The delta is
 written here as **exact text, in blocks**, and no block is transcribed at
@@ -395,15 +416,17 @@ bears on the whole document. Conduct it outside the context that wrote the
 document, by dispatching a subagent that checks it against the specs: `Scope`
 stating what the batch delivers, with every gaps register entry it takes on,
 each one reserved, corrective or ordinary; `Spec delta` filled, with blocks or
-with `none` and the reason; `Constraints` carrying only migration and
-compatibility constraints and the required order of stories and blocks, or
-`none`; `Feature flag` filled; and the lifting of any earlier flag this batch
+with `none` and the reason; `Technical design` filled, with the design or with
+`none` and the reason; `Constraints` carrying only migration and
+compatibility constraints, the technical decisions the rest of the technical
+design relies on, and the required order of stories and blocks, or `none`; `Feature flag` filled; and the lifting of any earlier flag this batch
 takes on stated as a block. Revise the document on what it reports.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
 reviewer has to rule on: the exact text of every block, or the reason for the
-`none`; the flag decision; the scope, with the entries it takes on; and any
-flag lifting the delta announces.
+`none`; the technical design, or the reason for its `none`; the constraints;
+the flag decision; the scope, with the entries it takes on; and any flag
+lifting the delta announces.
 
 **The review of the batch pull request is the human gate.** Until it merges, no
 story is written and no spec is touched. It bears on the exact text of every
@@ -431,9 +454,10 @@ in the conversation; then you squash the fixups, push, and announce the pull
 request ready.
 
 **Merging this pull request is a moment to clear the context.** The batch
-document now carries the exact text of every block, which is what the design
-conversation was for — and that conversation also carries every option you
-discarded on the way, which the first story must not inherit.
+document now carries the exact text of every block and the technical design,
+which is what the design conversation was for — and that conversation also
+carries every option you discarded on the way, which the first story must not
+inherit.
 
 When your human partner announces the merge, name
 `supercharlouze:writing-a-user-story` as the next step and give its prompt in a
@@ -606,3 +630,5 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
 | "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-spec`. |
+| "The design is obvious from the delta, `Technical design` can say `none`" | An obvious design is still a design: write it. `none` is for a batch with no design to plan from, and it carries its reason; written `none`, it leaves each story to invent its own mechanism. |
+| "This technical decision matters, so it goes in `Constraints`" | Only if the rest of the technical design relies on it. Otherwise it goes in `Technical design`, where a story may depart from it by a ruling. |
