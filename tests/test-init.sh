@@ -287,7 +287,7 @@ else
 fi
 
 # --- Case 19: a closing marker with no opening one must abort ---
-# The fourth broken-marker form the spec names, and the only one no fixture
+# Of the broken-marker forms the script refuses, the only one no fixture
 # reached. Its branch in the script looks like a near-duplicate of the one
 # above it, which is exactly the kind of line a later simplification deletes.
 P18="$TEST_ROOT/endonly"
@@ -303,6 +303,32 @@ if [ "$(cat "$P18/CLAUDE.md")" = "$BEFORE18" ]; then
     pass "end-only marker: CLAUDE.md left untouched"
 else
     fail "end-only marker: CLAUDE.md left untouched"
+fi
+
+# --- Case 20: every occupied destination is named before anything moves ---
+P19="$TEST_ROOT/collisions"
+mkdir -p "$P19/docs/superpowers/specs" "$P19/docs/superpowers/plans" \
+         "$P19/docs/archive/specs" "$P19/docs/archive/plans"
+printf 'INCOMING\n' > "$P19/docs/superpowers/specs/a.md"
+printf 'INCOMING\n' > "$P19/docs/superpowers/plans/b.md"
+printf 'FREE\n' > "$P19/docs/superpowers/specs/c.md"
+printf 'EXISTING\n' > "$P19/docs/archive/specs/a.md"
+printf 'EXISTING\n' > "$P19/docs/archive/plans/b.md"
+ERR19="$TEST_ROOT/collisions.err"
+if bash "$INIT" "$P19" >/dev/null 2>"$ERR19"; then
+    fail "collisions: init exits non-zero"
+else
+    pass "collisions: init exits non-zero"
+fi
+if grep -qF "docs/archive/specs/a.md" "$ERR19" && grep -qF "docs/archive/plans/b.md" "$ERR19"; then
+    pass "collisions: every occupied destination is named"
+else
+    fail "collisions: every occupied destination is named"
+fi
+if [ -f "$P19/docs/superpowers/specs/c.md" ] && [ ! -e "$P19/docs/archive/specs/c.md" ]; then
+    pass "collisions: nothing moves, not even a free document"
+else
+    fail "collisions: nothing moves, not even a free document"
 fi
 
 # --- Case 21: specs/ and plans/ move whole, empty directories included ---

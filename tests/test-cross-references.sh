@@ -182,4 +182,23 @@ for h in "Installing on a project" "The spec document" "Authority and conflict r
     fi
 done
 
+# 7. A section a skill names in parentheses is a heading of that skill, never a
+#    section of the living spec: the spec is French, and it is not among what
+#    the plugin ships.
+BAD=0
+for f in "$REPO_ROOT"/skills/*/SKILL.md; do
+    while IFS= read -r title; do
+        [ -n "$title" ] || continue
+        if ! grep -qxE "#{1,4} $title" "$f"; then
+            echo "    $(basename "$(dirname "$f")"): ($title) is no section of this skill"
+            BAD=$((BAD + 1))
+        fi
+    done < <(grep -oE '\(`[A-Z][A-Za-z ]+`\)' "$f" | sed 's/^(`//; s/`)$//' | sort -u || true)
+done
+if [ "$BAD" = "0" ]; then
+    pass "a section a skill names in parentheses is one of its own"
+else
+    fail "a section a skill names in parentheses is one of its own ($BAD found)"
+fi
+
 exit $((FAILURES > 0))
