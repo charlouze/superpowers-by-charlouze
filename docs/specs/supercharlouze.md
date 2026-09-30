@@ -477,56 +477,40 @@ en entier.
 
 ### The user story document
 
-Un plan, enregistré dans `docs/batches/NN-<slug>/NN-us-N-<slug>.md`. **Son basename
-est unique parmi les documents de story du dépôt**, ce que garantit le préfixe
-`NN-`. Il porte un en-tête étendu :
+Le document de story est un plan, enregistré dans
+`docs/batches/NN-<slug>/NN-us-N-<slug>.md`.
 
-```markdown
-**Spec:** docs/specs/<module>.md
-**Batch:** docs/batches/NN-<slug>/README.md
-**Sections:** <section> > <sous-section>, <section>
-**Blocks:** D<n>, D<n>
-**Technical:** yes
-```
+Son en-tête déclare :
 
-`Spec:` désigne la spec vivante du module visé, autorité contraignante de toute
-revue et de toute relecture de la story.
+- `Spec:` — la spec du module visé ;
+- `Batch:` — le document de son lot ;
+- `Sections:` — les sections de la spec que la story va modifier ;
+- `Blocks:` — les blocs qu'elle transcrit, ou `none` ;
+- `Technical:` — `yes` pour une story technique, dont `Sections:` vaut alors
+  `none`. Aucune autre story ne porte ce champ.
 
-`Sections:` déclare les sections que la story touche, et c'est ce que lit la
-détection de concurrence. Il est déclaré par l'auteur de la story, jamais déduit
-d'un diff.
+Le document porte aussi un `Rulings log` et une section `Observed drift`, créés
+vides avec l'en-tête.
 
-`Blocks:` déclare les blocs du spec delta que la story transcrit, et c'est ce que
-lit la clôture pour constater les blocs non livrés. Il vaut `none` pour une story
-qui n'en transcrit aucun — une story de lot correctif, une story technique, une
-story de démontage.
+Ils sont complétés avant la fusion s'il y a lieu. Vides, ils signifient « examiné,
+rien trouvé ».
 
-**Une story technique porte `Technical: yes` dans son en-tête**, et ne touche aucune
-section : son `Sections:` vaut `none`. Aucune autre story ne porte ce champ.
-
-Le document porte en outre un **Rulings log** et une section **Observed drift**,
-remplis avant la fusion. Les deux sont **créées vides en même temps que l'en-tête**,
-et laissées vides si rien n'est venu : une section vide signifie « examiné, rien
-trouvé ».
-
-**Un arbitrage ouvert s'écrit `Open ruling:`** là où les autres s'écrivent
-`Ruling:`, et sa ligne se termine par ce qui reste à trancher, puis par la
-catégorie du gaps register qui l'accueille quand il en rejoint une.
+Un arbitrage ouvert dit ce qui reste à trancher, et la catégorie du gaps register
+qui l'accueille quand il en rejoint une.
 
 `Global Constraints` porte :
 
-1. les contraintes que le lot impose, sa section `Constraints` recopiée mot pour
-   mot ;
+1. la section `Constraints` du lot, recopiée mot pour mot ;
 2. le gel du fichier de spec ;
-3. la règle d'autorité — la spec gagne sans délibération, et corriger une spec est
-   un acte humain, jamais un acte d'agent ;
-4. **dans un lot correctif seulement**, la condition d'arrêt propre au lot
-   correctif (`Departures from superpowers`), recopiée intégralement ;
-5. **dans une story qui écrit du code gardé par un flag seulement**, les règles du
-   code gardé (`Code under a feature flag`), recopiées intégralement — que le flag
-   soit déclaré par le lot de la story ou par un autre ;
-6. **dans une story technique seulement**, la condition d'arrêt propre à la story
-   technique (`Departures from superpowers`), recopiée intégralement.
+3. la primauté de la spec sur le lot, et la correction d'une spec réservée à
+   l'humain ;
+4. les règles de `Concision` ;
+5. dans un lot correctif seulement, sa condition d'arrêt
+   (`Departures from superpowers`) ;
+6. dans une story qui écrit du code gardé par un flag seulement, les règles de
+   `Code under a feature flag`, quel que soit le lot qui déclare le flag ;
+7. dans une story technique seulement, sa condition d'arrêt
+   (`Departures from superpowers`).
 
 ### Concurrency detection
 
@@ -548,56 +532,53 @@ Il s'arrête aussi si une déclaration n'a pas pu être lue.
 
 ### Delivering a story
 
-**Précondition**, vérifiée avant de créer la branche : le lot existe et est
-ouvert — sa pull request d'ouverture est fusionnée et son document porte
-`status: open`.
+Précondition, vérifiée avant de créer la branche : le lot est ouvert.
 
-1. **Détecter la concurrence** sur les deux sources.
-2. **Attribuer `us-N`** et **créer la branche** `story/NN-us-N-<slug>`.
-3. **Commiter la transcription des blocs de cette story, puis pousser la branche
-   immédiatement.** La transcription obéit à trois conditions :
-   - **elle est mot pour mot** — le texte des blocs que déclare `Blocks:`, tel que
-     la revue d'ouverture l'a lu, et jamais le delta complet du lot ;
-   - **elle est le premier commit de la branche**, avant que le plan soit écrit et
-     que la moindre tâche s'exécute : la norme précède le code dans l'histoire de
-     la branche ;
-   - **tout écart avec un bloc est nommé dans la pull request**, et tranché à la
-     revue de livraison. Un écart n'a que deux causes légitimes. Soit `main` a
-     changé depuis l'ouverture et le passage que le bloc cite n'y figure plus tel
-     quel : la story ajuste le bloc à ce que porte `main`, sans en changer le sens.
-     Soit le texte du bloc pose problème : l'agent s'arrête et le soumet à l'humain
-     avant de le transcrire. Dans les deux cas, le document de lot n'est pas
-     amendé.
+1. Détecter la concurrence.
+2. Attribuer `us-N` et créer la branche `story/NN-us-N-<slug>`.
+3. Commiter en premier la transcription des blocs de la story, mot pour mot, puis
+   pousser la branche.
 
-   Si le lot déclare un flag, la modification de spec porte la mention du flag.
+   Si le lot déclare un flag pour ce module, la modification de spec porte sa
+   mention.
 
-   **Cas d'une story qui ne transcrit aucun bloc :** ce premier commit porte
-   l'en-tête du document de story et ses sections `Rulings log` et `Observed drift`
-   vides. Il y joint ce que cette story-là retire, s'il y a quelque chose :
-   l'entrée du gaps register qu'elle résorbe, ou la modification de spec qu'aucun
-   bloc n'annonce. Le plan est écrit ensuite dans ce document.
-4. **Écrire le plan** — le document de story, avec ses `Global Constraints`, puis
-   **le commiter et le pousser immédiatement**, avant que l'exécution démarre.
-5. **Exécuter par sous-agents**, puis conclure la branche par une pull request
-   (`Departures from superpowers`).
-6. **Avant la fusion**, recopier les arbitrages de l'exécution dans le Rulings log,
-   consigner sous **Observed drift** les dérives constatées hors périmètre, et
-   pousser les deux sur la branche.
-7. **Répondre à la revue** sur la branche de la story.
+   Quand `main` a changé sous un bloc, la story l'ajuste sans en changer le sens.
 
-**Une story ne fusionne pas en laissant un arbitrage ouvert sans destination.**
-Celui qui est une violation ou un gap rejoint le gaps register par la consolidation
-de la clôture. Tout autre est tranché avant la fusion, à la revue de livraison, et
-le `Rulings log` porte ce qui a été tranché.
+   Quand le texte d'un bloc pose problème, l'agent le soumet à l'humain avant de
+   le transcrire.
 
-**Conclue par** la fusion de sa pull request : la story est livrée.
+   Tout écart avec un bloc est nommé dans la pull request et tranché à la revue de
+   livraison. Le document de lot n'est pas amendé.
+
+   Une story qui ne transcrit aucun bloc commite en premier l'en-tête de son
+   document de story, avec son `Rulings log` et son `Observed drift` vides, et ce
+   qu'elle retire s'il y a lieu : l'entrée du gaps register qu'elle résorbe, ou la
+   modification de spec qu'aucun bloc n'annonce.
+4. Écrire le plan dans le document de story, le commiter et le pousser avant
+   l'exécution.
+5. Exécuter le plan par l'exécution par sous-agents de superpowers
+   (`Built on superpowers`), puis conclure la branche par une pull request.
+6. Avant la fusion, recopier les arbitrages de l'exécution dans le
+   `Rulings log`, et consigner sous `Observed drift` les dérives constatées hors du
+   périmètre de la story.
+7. Répondre à la revue sur la branche de la story.
+
+Une story ne fusionne pas avec un arbitrage ouvert sans destination.
+
+Un arbitrage ouvert qui est une violation ou un gap rejoint le gaps register à la
+clôture.
+
+Tout autre arbitrage ouvert est tranché à la revue de livraison, et le
+`Rulings log` porte ce qui a été tranché.
 
 ### Abandoning a story
 
-Sa pull request est fermée sans fusion s'il y en a une, et dans tous les cas sa
-branche est supprimée localement **et sur le remote**. Ce qui subsiste sur `main`,
-la clôture le constate : la réservation au gaps register posée par la pull request
-d'ouverture, et l'intention annoncée dans le spec delta et jamais livrée.
+La pull request d'une story abandonnée, s'il y en a une, est fermée sans fusion.
+
+Sa branche est supprimée, sur le remote compris.
+
+La clôture constate ce qui en subsiste sur `main` : la réservation au gaps
+register, et les blocs jamais livrés.
 
 ## Feature flags
 
