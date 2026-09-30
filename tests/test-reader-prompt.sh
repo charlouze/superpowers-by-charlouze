@@ -14,13 +14,27 @@ echo "test-reader-prompt"
 # instead of the skill, so nothing else guards it. `test-cross-references.sh`
 # proves the skill's citation of it resolves; these assertions are about what it
 # says once opened.
-PROMPT="$REPO_ROOT/skills/writing-a-batch/references/reader-prompt.md"
+PROMPT="$REPO_ROOT/skills/rereading-a-spec/references/reader-prompt.md"
 
 if [ -f "$PROMPT" ]; then
     pass "the reader prompt exists"
 else
     fail "the reader prompt exists"
     exit 1
+fi
+
+# One template for every spec reread: the skills that have a spec reread keep
+# no reader prompt of their own, which would drift from the shared one.
+STRAY=""
+for old in writing-a-batch adopting-a-module; do
+    if [ -e "$REPO_ROOT/skills/$old/references/reader-prompt.md" ]; then
+        STRAY="$STRAY $old"
+    fi
+done
+if [ -z "$STRAY" ]; then
+    pass "no calling skill keeps a reader prompt of its own"
+else
+    fail "no calling skill keeps a reader prompt of its own (found in:$STRAY)"
 fi
 
 # Flattened so a phrase matches regardless of how the prose is wrapped, and with
@@ -35,17 +49,24 @@ has() {
     esac
 }
 
-has "one reader carries one reading"        "One reader, one reading, one touched spec"
-has "the reading comes from the skill"      "one of the four that \`## The Coherence Reread\` states, pasted **word for word** from there"
+has "one reader carries one reading"        "One reader, one reading, one spec"
+has "the reading comes from the skill"      "one of the readings that \`## The Readings\` of the skill states, pasted word for word from there"
+# A new spec has no earlier state, so its reader gets no paragraph about one.
+has "a new spec's reader gets no earlier state" "For a new spec, leave out the paragraph on the earlier state"
 # Which of the two states the finding is about. Both assertions: the applied copy
 # is named as the object, and the earlier state is fenced off from being reviewed
 # as a diff — a reader handed two files drifts to the diff without the second.
-has "the applied copy is the object"        "**The document you are evaluating**"
+has "the evaluated document is the object"  "**The document you are evaluating:**"
 has "the reader gets the spec as it stands" "The same specification as it stands today"
 has "the earlier state locates the change"  "for locating what changed"
 has "the change is not reviewed as a diff"  "Do not review the change as a diff"
+has "the aside convention is handed over"   "The project's aside convention"
+# The other specs let a reader check a borrowed term or a rule that spills over
+# a boundary; they are consulted, never evaluated.
+has "the other specs are handed over"       "**The project's other specifications:**"
+has "the other specs are for reference"     "Consult them when your reading bears on another module. Report nothing about them"
 # One generic rule rather than a list of things not to read: a reader that loads
-# no skill its reading does not name cannot reach the other three readings, and
+# no skill its reading does not name cannot reach the other readings, and
 # cannot pull in anything else either.
 has "a reader loads no unnamed skill"       "Load no skill your reading does not name"
 has "everything needed is in the prompt"    "Everything you need is in this prompt"
@@ -55,7 +76,7 @@ has "a reader does not revise"              "Do not revise the specification"
 has "a reader dispatches nothing"           "Do not dispatch subagents"
 
 # --- the prompt restates no reading, and hands over no blocks ---
-# The readings live in `## The Coherence Reread` of the skill, which is where a
+# The readings live in `## The Readings` of the skill, which is where a
 # conductor reads them and where test-skill-content.sh guards them. A second copy
 # pasted in here would pass every assertion above while drifting the day that
 # section is amended, and the word-for-word slot would then be decoration. The
@@ -72,6 +93,7 @@ make false elsewhere
 does this change leave out
 what a specification must hold
 Where does this sit in the model
+precise and concise
 the blocks, verbatim
 NEEDLES
 
@@ -80,5 +102,11 @@ if [ -z "$BAD" ]; then
 else
     fail "the prompt restates no reading and hands over no blocks (found:$BAD)"
 fi
+
+case "$FLAT" in
+    *"one of the two"*|*"neither of them"*|*"step 7"*)
+        fail "the prompt neither counts the readings nor ranks a step" ;;
+    *)  pass "the prompt neither counts the readings nor ranks a step" ;;
+esac
 
 exit $((FAILURES > 0))

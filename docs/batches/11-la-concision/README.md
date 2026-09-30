@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 11 — La concision

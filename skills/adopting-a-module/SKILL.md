@@ -64,7 +64,8 @@ implemented the same intention differently, read this sentence as true of their
 code?* What a document states as an intention is normative and goes in; what it
 states as a mechanism becomes a gap. Deducing an intention from a mechanism is
 reconstruction from the code by another road, whether you read that mechanism in
-the code or in a validated document.
+the code or in a validated document. An intention comes from a validated document
+or from your human partner.
 
 ## Steps
 
@@ -127,9 +128,10 @@ assume a document is validated because it exists, looks official, or is the only
 one you found. "Close enough to validated" is not validated: ask.
 
 Record the retained inventory in the **body of the adoption pull request**, by
-archive path, next to its rulings (step 7): it is what the reviewer checks the spec
-against. The spec itself lists no sources — it is a living document, and archived
-documents stop evolving the day they are archived.
+archive path, next to its rulings, at the step `Open the adoption pull request`:
+it is what the reviewer checks the spec against. The spec itself lists no
+sources — it is a living document, and archived documents stop evolving the day
+they are archived.
 
 ### 3. Create the branch
 
@@ -145,7 +147,7 @@ name and the starting point before going on: `adopt/<module>`, from
 `origin/main`. **A named branch is not enough** — and here that is a matter
 of convention rather than mechanism, which is worth saying plainly: nothing
 scans `adopt/*`. Number allocation reads `batch/*` and `story/*`, the
-concurrency scan reads `story/*`, and an adoption branch claims no number and
+concurrency scan reads `story/*` and `bounded/*`, and an adoption branch claims no number and
 holds no sections, so it is equally unseen under either name. The convention
 is uniform anyway: a rule honoured only where a scan would catch you is not a
 rule. And it is on `batch/*` and `story/*` that it bites — there, a branch
@@ -183,17 +185,14 @@ rule's reach, not what already exists next door.
   `Ruling: <decision> — <why> — <what it costs if it is wrong>`. Never resolve a
   contradiction in silence; the ruling is what lets a reviewer disagree with you.
   Adoption has no story document and therefore no Rulings log, so these lines go
-  in the **body of the adoption pull request** (step 7), where the reviewer who
-  might disagree will read them.
-- **No date, no status, no in-progress marker.** A spec carries none, ever. On
-  `main`, spec and code always travel in the same pull request, so no state exists
-  that would need one.
+  in the **body of the adoption pull request**, at the step
+  `Open the adoption pull request`, where the reviewer who might disagree will
+  read them.
+- No date, no status, no work-in-progress marker, except a flag's gating sentence.
+  On `main`, spec and code always travel in the same pull request, so no other
+  state exists that would need one.
 - **Titled sections are the unit of the whole system** — concurrency detection and
   gaps entries both designate a section. Title them so they can be pointed at.
-- Add the empty `Changelog` table (`batch | date | change`) in the footer.
-  `supercharlouze:closing-a-batch` writes into it, one line per batch. It is not
-  the only writer: a bounded change belongs to no batch and writes its own
-  `out-of-batch` line, from its own pull request.
 
 **The shape of the spec.** Minimal, and every part of it load-bearing:
 
@@ -208,11 +207,6 @@ rule's reach, not what already exists next door.
 
 <Normative prose: what the code must do. Titled so a gaps entry, a story's
 `Sections:` field and a concurrency check can all point at it.>
-
-## Changelog
-
-| batch | date | change |
-|---|---|---|
 ```
 
 No front matter, no date, no status. The section titles are English skeleton;
@@ -247,6 +241,8 @@ take it out whole:
 | Remove | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | deletes it from the file, atomically with the code, and the commit that removes it says why |
 | Remove | you, at the step `Offer to promote the gaps`, when your human partner promotes one | deletes it from the file, in the same pull request that writes the rule it became |
 | Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed, and leaves the entry |
+| Release | `supercharlouze:writing-a-batch`, in an amendment pull request | removes the `reserved by batch-NN` of an entry the amendment takes out of the batch's `Scope`, and leaves the entry |
+| Add | `supercharlouze:closing-a-batch`, in the batch's closing pull request | appends it at the end of its category; within a batch, no other pull request adds one |
 | Add or remove | a bounded change, from its own pull request | belonging to no batch, it writes an entry or deletes one directly, contending only with another bounded change |
 
 A register written as flowing paragraphs satisfies every other word of this step
@@ -322,7 +318,18 @@ asking for a yes is reconstruction from the code with extra steps. A gap that
 names a mechanism is not put to them at all — validating a mechanism would not
 make it a rule, only an approved drift.
 
-### 7. Open the adoption pull request
+### 7. Have the spec reread
+
+Before the pull request opens, invoke `supercharlouze:rereading-a-spec` on the
+spec.
+
+File each sentence it returns as a mechanism in the gaps register, as a gap
+naming the document the sentence came from when it came from one.
+
+A rule it returns as reaching past this module's boundary stops the adoption: the
+breakdown goes back to your human partner.
+
+### 8. Open the adoption pull request
 
 The branch already exists — you created it at step 3. Commit both documents on
 it, push, and open the pull request.
@@ -352,17 +359,18 @@ carries a fresh decision; your human partner gives their agreement in the
 conversation, and only then do you squash the fixups, push, and announce the
 pull request ready.
 
-**Merging this pull request is a moment to clear the context**, and announcing it
-ready is where you say so. The adoption conversation carried an inventory,
-rulings and a boundary argument that the merged documents now carry better than
-it does — and worse, it carried every mechanism you read while auditing the code,
-which is exactly what must not leak into the batch that follows.
+**Merging this pull request is a moment to clear the context**, and your human
+partner's announcement of the merge is where you say so. The adoption
+conversation carried an inventory, rulings and a boundary argument that the
+merged documents now carry better than it does — and worse, it carried every
+mechanism you read while auditing the code, which is exactly what must not leak
+into the batch that follows.
 
-So the announcement names `supercharlouze:writing-a-batch` as the next step, and
-gives the prompt for it in a block to copy and paste after the clear. **That
-prompt stands on its own:** it names the skill to invoke, and the prompt names
-the adopted spec by path, and the gaps register beside it, and never refers
-back to this conversation.
+So when your human partner announces the merge, name
+`supercharlouze:writing-a-batch` as the next step, and give the prompt for it in
+a block to copy and paste. **That prompt stands on its own:** it names the skill
+to invoke, and the prompt names the adopted spec by path, and the gaps register
+beside it, and never refers back to this conversation.
 
 That next step is a **start, not a return**. A design that stopped on this
 module does not carry over: it begins again from the adopted spec, not from a
@@ -410,8 +418,9 @@ branch of step 3 is created before anything is written.
 English skeleton, project-language prose: section titles, field names, table
 headers, front matter values and path patterns are English, while requirement
 bodies, descriptions, rationale and the slugs naming business objects follow the
-project's language. The spec and the gaps register you write obey this rule; this
-plugin itself is entirely English, because it carries no business prose.
+project's language. The spec and the gaps register you write obey this rule.
+
+Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
 
 ## Red Flags
 
@@ -435,3 +444,4 @@ plugin itself is entirely English, because it carries no business prose.
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |
 | "I ejected those mechanisms at step 4, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit, and step 4's set-aside list is its only route into the register. |
 | "This rule concerns the neighbouring module too, I'll write it in both specs" | A rule belongs to exactly one spec, and a rule that reaches past one boundary signals the breakdown — your human partner's decision. Stop. |
+| "I wrote the spec, I can reread it myself" | This context rereads its own intentions. Invoke `supercharlouze:rereading-a-spec` at the step `Have the spec reread`. |

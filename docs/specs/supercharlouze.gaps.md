@@ -29,67 +29,15 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Violations
 
-- **Installing on a project** — la spec énonce sans réserve que « le mode du fichier est
-  préservé », et `scripts/init.sh` ne l'offre qu'au mieux : `chmod --reference` est
-  une extension GNU que le `chmod` BSD ne connaît pas, l'échec est avalé par
-  `2>/dev/null || true`, et `CLAUDE.md` repart alors sous le mode du fichier
-  temporaire, `0600`, sans un mot. **Résoluble en ne touchant que le code** — un
-  repli portable derrière l'appel GNU — d'où le classement en violation plutôt
-  qu'en gap. La garde comportementale livrée par le lot 02 attrape ce cas là où
-  elle tourne, mais ne le prévient pas. `reserved by batch-11`
-
-- **Installing on a project** — la spec énonce que les refus laissent le fichier
-  **intact**, et `scripts/init.sh` exécute `touch "$CLAUDE_MD"` avant les comptages
-  de marqueurs : sur un chemin de refus le contenu est bien intact, mais la `mtime`
-  a changé. Écart mineur et sans conséquence connue, **résoluble en déplaçant le
-  `touch` après les contrôles**, donc en ne touchant que le code.
-  `reserved by batch-11`
+- **The gaps register** — la spec veut qu'un lot réserve tout ce qu'il prend en
+  charge dans le gaps register, sans limiter la réservation à l'ouverture.
+  `writing-a-batch` ne fait poser l'annotation `reserved by batch-NN` que par la
+  pull request d'ouverture, et ne dit rien d'une entrée qu'un amendement ajoute à
+  `Scope`. Un lot qui prend une entrée en charge par amendement ne la réserve donc
+  pas, et un autre lot peut alors la réserver aussi. Constatée par la story
+  `11-us-5-le-lot`, consolidée par la clôture du lot 11.
 
 ## Gaps
-
-- **Installing on a project** — le second membre de la phrase sur les répertoires
-  que l'installation crée, également falsifiable : « Rien dans ce flux ne lit ces
-  répertoires avant qu'un document y soit écrit ». `writing-a-batch` lit
-  `docs/batches/` pour attribuer `NN`, et `writing-a-user-story` lit le répertoire
-  du lot, tous deux exactement quand le répertoire peut être absent. Aucune
-  décision n'en dépend : les deux passent par un `git ls-tree` sur `origin/main`,
-  qui rend une liste vide au lieu d'échouer. Mais la phrase ne promet pas
-  qu'aucune décision n'en dépend — elle promet que rien ne les lit, et le flux
-  les lit. Formulation tenable : « aucune **décision** de ce flux ne dépend de
-  leur existence ». Consolidée par la clôture du lot 02, depuis
-  l'`Observed drift` d'une de ses stories ; sa démonstration d'origine reposait
-  sur un `ls docs/batches/` qui échouait, que le lot 08 a remplacé, et la clôture
-  du lot 08 l'a réécrite sur le code actuel. Classée en *gap* et non en
-  *violation* : la spec y a tort et le code y a raison, si bien qu'un lot
-  correctif qui la prendrait buterait aussitôt sur la cinquième condition
-  d'arrêt — la résorber veut dire corriger une spec, ce qu'un agent ne peut pas
-  faire. `reserved by batch-11`
-
-- **Installing on a project** — « ce qui subsiste n'appartient pas au plugin : il n'est ni
-  déplacé, ni supprimé » n'est vrai qu'**en dehors de `specs/` et `plans/`**. Le
-  balayage `find "$from" -depth -type d -exec rmdir {} +` supprime un répertoire
-  étranger vide placé sous `docs/superpowers/specs/`, et un fichier étranger déposé
-  là est déplacé vers `docs/archive/specs/`. Borner la phrase suffirait ; changer le
-  code serait l'autre sortie, et c'est ce choix qui rend la décision humaine.
-  Consolidée par la clôture du lot 02, depuis l'`Observed drift` d'une de ses
-  stories. Classée en *gap* et non en *violation* : la spec y a tort et le code y
-  a raison, si bien qu'un lot correctif qui la prendrait buterait aussitôt sur la
-  cinquième condition d'arrêt — la résorber veut dire corriger une spec, ce qu'un
-  agent ne peut pas faire.
-
-- **Code under a feature flag** — la clause qui clôt la section, « Le code gardé
-  **est écrit de sorte que** lever le flag se réduise à supprimer le branchement et
-  le comportement d'avant le lot », prescrit une manière d'écrire le code, là où
-  `The spec document` pose qu'une spec dit le métier et jamais le mécanisme. Elle
-  échoue au test que la spec s'impose à elle-même : un développeur ayant implémenté
-  la même intention avec un branchement plus lourd ne lirait pas cette phrase comme
-  vraie de son code. Les quatre règles qui la précèdent y survivent — elles portent
-  sur ce que l'utilisateur observe —, c'est la cinquième qui porte sur la forme du
-  code. Relevée par la story `06-us-1-le-code-garde`, qui l'a transcrite telle
-  quelle : le texte avait été validé au gate d'ouverture du lot 06, il est depuis la
-  spec, et corriger une spec est un acte humain. Résorber veut dire reformuler la
-  clause en termes de ce que la levée doit pouvoir faire, et c'est cette décision
-  qui est humaine — d'où le classement en *gap*. `reserved by batch-11`
 
 - **Code under a feature flag / The user story document** — les quatre règles sont
   écrites en entier à un seul endroit, `writing-a-user-story`, et trois
@@ -137,19 +85,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   violation :** il n'y a pas de norme à faire respecter, il y a une norme à
   écrire, et l'écrire est un acte humain.
 
-- **Language** — la section énonce que « le plugin lui-même est intégralement
-  anglais — skills, commandes, README, bloc d'instructions, messages », et rien ne
-  dit si le tiret illustre ou délimite : ni `tests/` ni `scripts/` n'y figurent.
-  La convention réelle est pourtant sans exception — aucun fichier de ces deux
-  répertoires ne portait de commentaire en français —, mais la phrase ne la
-  garantit pas. Ce que ce silence coûte s'est vu : un plan de story a prescrit du
-  français dans `tests/`, une revue de tâche l'a laissé passer, et c'est la revue
-  de branche qui l'a relevé. Constatée par la story
-  `05-us-3-une-entree-se-lit-seule`. **Gap et non violation :** le code respecte
-  la règle générale, c'est la phrase qui ne dit pas si sa liste illustre ou
-  délimite ; trancher veut dire décider ce que la spec doit dire, et cette
-  décision est humaine. `reserved by batch-11`
-
 - **The batch document / Opening a batch** — deux phrases écrites comme des
   totalités, « le spec delta est le texte exact que ce lot écrit dans les
   specs » et « la revue d'ouverture porte sur le texte exact de chaque bloc :
@@ -168,16 +103,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   les autres règles disent, ce sont les deux
   phrases qui ont tort ; résorber veut dire corriger une spec, ce qu'un agent
   ne peut pas faire.
-
-- **The user story document** — l'énumération qui illustre `Blocks: none` cite
-  la story de lot correctif et la story de démontage, et omet la story de levée
-  d'un flag à portée de lot, qui n'en transcrit pas davantage. Rien ne dit si
-  la liste illustre ou délimite : lue comme délimitante, elle oblige une story
-  de levée à déclarer un bloc qui n'existe pas. Constatée par la story
-  `08-us-1-l-arbitrage-ouvert`. **Gap et non violation :** le code traite les
-  trois cas de la même façon, c'est la phrase qui n'en énumère que deux ;
-  trancher veut dire décider ce que la spec doit dire, et cette décision est
-  humaine. `reserved by batch-11`
 
 - **The model / The user story document** — `The model` définit la dérive comme
   une divergence entre la spec de `main` et son code, et c'est cette définition
@@ -207,20 +132,14 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   **Gap et non violation :** aucune règle de spec n'est contredite — la spec ne
   dit pas d'où cette lecture se fait ; l'écrire est un acte humain.
 
-- **The model / The batch document** — le glossaire définit le **lot correctif**
-  comme « un lot dont le spec delta est vide », là où `Batch > The batch document`
-  pose que le champ `Spec delta` **n'est jamais laissé blanc** et qu'un lot sans
-  bloc y porte ce qu'il réserve au gaps register. Les deux phrases
-  tiennent ensemble si « vide » veut dire *sans bloc*, mais rien ne le dit, et le
-  lecteur qui rencontre le glossaire d'abord en repart avec « un lot correctif
-  laisse ce champ vide », ce que l'autre section interdit. Le glossaire de
-  `using-batches` porte le même raccourci — « a batch whose spec delta is
-  empty » —, dans la skill qu'un lecteur du plugin rencontre en premier, alors
-  que `writing-a-batch` ouvre son paragraphe homologue par « The `Spec delta`
-  field is never left blank » ; reformuler la définition de la spec entraînerait
-  celle de la skill. Constatée par la story `09-us-3-l-ouverture-sans-bloc`, dont
-  aucun bloc du lot ne visait cette définition, et consolidée par la clôture du
-  lot 09. **Gap et non violation :** la skill suit fidèlement le glossaire de la
-  spec, c'est la spec qui porte deux formulations que seule une distinction non
-  écrite réconcilie ; trancher veut dire corriger une spec, ce qu'un agent ne
-  peut pas faire. `reserved by batch-11`
+- **Module adoption** — l'étape 7 fait relire une spec neuve sur ce qu'une spec
+  doit tenir et sur sa concision. `rereading-a-spec` lui pose aussi la question
+  « Where does this sit in the model? », que l'étape 7 ne cite pas. Constatée par
+  la story `11-us-4-le-module`, consolidée par la clôture du lot 11.
+
+- **Amending a batch** — la spec dit « Quand la condition d'arrêt d'une story
+  technique se déclenche, la story est abandonnée », donc dès l'arrêt. Abandonner
+  une story est pourtant une décision humaine : `writing-a-batch` et
+  `writing-a-user-story` gardent la branche et le worktree jusqu'à ce que l'humain
+  tranche. C'est la spec qui a tort, et la corriger est un acte humain. Constatée
+  par la story `11-us-5-le-lot`, consolidée par la clôture du lot 11.

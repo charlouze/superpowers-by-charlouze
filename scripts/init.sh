@@ -72,7 +72,11 @@ archive_dir() {
         # -n as a second line of defence; collisions were already refused above.
         mv -n "$from/$rel" "$to/$rel"
     done < <(archive_list "$sub")
-    # Drop the emptied source tree, deepest first. Anything left is not ours.
+    # The tree moves whole: an empty directory is recreated, never dropped.
+    find "$from" -mindepth 1 -type d -print | while IFS= read -r dir; do
+        mkdir -p "$to/${dir#"$from"/}"
+    done
+    # Drop the emptied source tree, deepest first.
     find "$from" -depth -type d -exec rmdir {} + 2>/dev/null || true
 }
 

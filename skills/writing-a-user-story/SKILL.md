@@ -23,9 +23,9 @@ detection, branch, spec change, plan, execution, records, review — because the
 pull request carries the story's state. There is nothing to repatriate
 afterwards and nothing to reconcile.
 
-Stories are written **one at a time**: story N+1 is written knowing what story
-N produced. Several may be *in flight* simultaneously — that is the normal
-regime of a pull-request flow, not an edge case.
+Stories are written **one at a time**, each knowing the stories of its batch
+already written. Several may be *in flight* simultaneously — that is the
+normal regime of a pull-request flow, not an edge case.
 
 **Each story chooses, as it is written, the blocks of the spec delta it
 transcribes**, and transcribes them entirely: a block is never shared between two
@@ -60,11 +60,12 @@ of this system, not only to stories.
 
 ## Step 1 — Detect Concurrency
 
-Two stories touching the same section of the same spec are a conflict. Decide
-which sections this story will touch, then check that nobody else holds them.
+Two stories, or a story and a bounded change, touching the same section of the
+same spec are a conflict. Decide which sections this story will touch, then
+check that nobody else holds them.
 
 1. **List the open pull requests together with their head ref**, and keep those
-   whose branch is `story/*` or `fix/*`. Bare `gh pr list` does not print the
+   whose branch is `story/*` or `bounded/*`. Bare `gh pr list` does not print the
    head ref, so ask for it explicitly:
 
    ```bash
@@ -73,7 +74,7 @@ which sections this story will touch, then check that nobody else holds them.
    ```
 
    **The filter is the branch name, not the files the pull request touches.**
-   Those two patterns are the only branches that claim sections, so the head ref
+   Only those branches claim sections, so the head ref
    answers on its own — nothing to fetch and no file to read. And a pull request
    that touches no spec at all still holds its sections: a corrective story's
    first commit deletes a gaps register entry, so a filter on the spec file made
@@ -83,7 +84,7 @@ which sections this story will touch, then check that nobody else holds them.
    keeps it.** A story keeps it in its story document, which lives on the
    *other* pull request's head branch and not in your worktree, so read it at
    the head ref: `Spec:` names the spec, `Sections:` the sections. A **bounded
-   change** (`fix/<slug>`) has no story document at all: it names both in the
+   change** (`bounded/<slug>`) has no story document at all: it names both in the
    body of its pull request, so read the body. Look in the place that kind of
    pull request actually uses — demanding a story document from a bounded
    change would find nothing, and "nothing found" is the unknown of point 6,
@@ -94,7 +95,7 @@ which sections this story will touch, then check that nobody else holds them.
    ```bash
    gh api "repos/{owner}/{repo}/contents/<path>?ref=<headRefName>" --jq .content | base64 -d
    git fetch origin <headRefName> && git show FETCH_HEAD:<path>   # local alternative
-   gh pr view <n> --json body --jq .body                          # bounded change: fix/<slug>
+   gh pr view <n> --json body --jq .body                          # bounded change: bounded/<slug>
    ```
 
    **A declaration naming a spec other than yours holds nothing against you.**
@@ -102,58 +103,55 @@ which sections this story will touch, then check that nobody else holds them.
    That is why the filter of point 1 can be as wide as it is — it lets in every
    claimant, and the declaration sorts them.
 
-3. **Read the same field on every remote `story/*` branch that carries no pull
-   request yet.** A story's pull request opens only at the end of Step 5, so a
-   sibling holds its sections for the whole length of an implementation without
-   appearing in point 1 above. Its branch, however, is on the remote from its
-   very first commit (Step 3), so the remote sees it:
+3. **Read the same declaration on every remote `story/*` or `bounded/*` branch
+   that carries no pull request yet.** A story's pull request opens only at the
+   end of Step 5, so a sibling holds its sections for the whole length of an
+   implementation without appearing in point 1 above. Its branch, however, is on
+   the remote from its very first commit (Step 3), so the remote sees it:
 
    ```bash
-   git ls-remote --heads origin 'story/*'
+   git ls-remote --heads origin 'story/*' 'bounded/*'
    git fetch origin
    git show origin/<branch>:docs/batches/NN-<slug>/NN-us-N-<slug>.md
-   git diff --name-only origin/main...origin/<branch>   # no document yet: which spec has it already changed?
+   git diff -U0 origin/main...origin/<branch> -- docs/specs/<module>.md   # no declaration yet
    ```
 
-   `story/*` is the whole filter here — the same one point 1 applies to pull
-   requests. Skip the branches already covered by a pull request there, and skip
+   Skip the branches already covered by a pull request in point 1, and skip
    your own.
 
-   **A branch whose story document does not exist yet concerns the spec it has
-   already changed.** It is a story between its spec commit and its plan commit:
-   it holds sections it has not declared. If that spec is yours, it is an unknown
-   and stops you exactly as point 6 does; if it is another module's, it holds
-   nothing against you. That window is one plan-writing step long, and only a
-   story that transcribes a block ever has it — a story whose first commit
-   carries its story document declares from its first commit.
+   A pushed branch that carries no declaration yet is read by the sections it
+   has already changed. That is a story branch between its spec commit and its
+   plan commit, or a bounded change before its pull request opens. Diff it
+   against `main` on your spec file, and take as claimed every section a hunk
+   touches, named by the heading path it falls under in the branch's version,
+   or in `main`'s for a removed section. A branch that changed nothing in your
+   spec file claims nothing against you.
 4. Intersect all of those with the sections this story will touch.
 5. **Stop if the intersection is not empty.** Report which pull request or
    branch holds the section, and let your human partner sequence the two.
-6. **Stop if you could not read a pull request's `Sections:` declaration** —
-   fetch failed, story document absent on a story's branch, pull request body
-   silent on a bounded change, field missing. An unread declaration is an
-   unknown, not a pass. Name the pull request and say why, and let your human
-   partner decide. Silently treating it as empty turns the one real net into
-   "found nothing". The same applies to a story branch kept at point 3 that
-   carries no declaration yet **and has already changed your spec file** — one
-   that has changed another module's is scoped away by point 3, not an unknown.
-   What is *not* an unknown: a bounded change having no story document. It
-   never has one, and its declaration is in its pull request body — read
-   there, per point 2. Only a declaration genuinely absent from the place its
-   kind of pull request keeps it stops you.
+6. **Stop if you could not read a declaration**: fetch failed, story document
+   without its `Sections:` field, pull request body silent on a bounded change.
+   An unread declaration is an unknown, not a pass. Name the pull request or the
+   branch and say why, and let your human partner decide. Silently treating it
+   as empty turns the one real net into "found nothing". A pushed branch that has
+   not declared yet is not an unknown: point 3 reads it by what it changed. Nor
+   is a bounded change having no story document: its declaration is in its pull
+   request body, read per point 2.
 
 **Name the blind spot rather than trusting the net.** What this check sees is
-what is on the remote: open pull requests, and pushed story branches. A story
-that has created its branch but not yet pushed it is invisible to every sibling,
-and no amount of care at this step finds it. That window runs from Step 2 to the
-push at the end of Step 3, which is precisely why the push happens there and not
-at the end of the run — it turns a window as long as an implementation into one
-as long as writing a single commit. Read this step as complete for work already
-on the remote, and as blind to everything else.
+what is on the remote: open pull requests, and pushed `story/*` and `bounded/*`
+branches. A story that has created its branch but not yet pushed it is
+invisible to every sibling, and no amount of care at this step finds it. That
+window runs from Step 2 to the push at the end of Step 3, which is precisely
+why the push happens there and not at the end of the run — it turns a window
+as long as an implementation into one as long as writing a single commit. Read
+this step as complete for work already on the remote, and as blind to
+everything else.
 
-Sections are **declared, not derived**: reading a diff to guess which sections
-a story touches is fragile, whereas the story's author knows them. That is the
-entire reason the story document carries the field.
+Sections are declared, not derived, wherever a declaration exists: reading a
+diff to guess which sections a story touches is fragile, whereas the story's
+author knows them. The diff stands in only for a pushed branch that has not
+declared yet, and it shows only what that branch has already changed.
 
 Do not fall back on git. A merge conflict is only a **partial safety net** —
 git conflicts on lines, not on sections, so two stories editing the same
@@ -172,9 +170,9 @@ gh pr list --state open --limit 100 --json number,headRefName
 git ls-remote --heads origin 'story/*'
 ```
 
-All three are necessary. The two remote ones are exactly the two scans Step 1
-runs — one idea applied twice, not two coincidences; the third is `main`
-itself, which Step 1 never reads, because concurrency is a question about work
+Each is necessary. The remote ones are the sources Step 1 reads, one idea
+applied twice and not a coincidence. The listing of `main` is the one Step 1
+never reads, because concurrency is a question about work
 in flight and allocation is also a question about work already landed. An
 artifact only reaches `main` when its pull request merges, so that listing
 knows nothing about what is in flight; and a story's pull request opens only
@@ -236,6 +234,9 @@ spec would describe, while story 1 is still executing, the behaviour of the
 stories that follow — and the SDD reviewers would flag as missing what is not yet
 meant to be delivered.
 
+A block shown as a `diff` fence is transcribed as the paragraph it produces: its
+unchanged lines and its added lines, without their prefix.
+
 **First.** Not for visibility — the file would be readable in the worktree even
 uncommitted — but because this is what makes the norm **prior and binding** on
 the code. It is already in the branch's history when implementation starts, it
@@ -243,30 +244,35 @@ travels in the pull request, and the freeze of Step 4 gets an identifiable
 starting point.
 
 **Named in the pull request.** Every divergence from a block is named in the body
-of the pull request Step 5 opens, and ruled on at the delivery review. A
-divergence has only two legitimate causes:
+of the pull request Step 5 opens, and ruled on at the delivery review.
 
-- **`main` moved.** The passage a block quotes is no longer there as written,
-  because another story or a bounded change landed on that section since the
-  batch opened. Fit the block to what `main` now carries, without changing its
-  meaning, and say in the pull request what you fitted and why.
-- **The block's text is a problem.** Stop, and put it to your human partner
-  before transcribing it. Do not transcribe a text you believe is wrong, and do
-  not repair it on your own: the opening gate is where that text was ruled on,
-  and reopening it is your human partner's act.
+When `main` moved under a block, fit the block to what `main` now carries, without
+changing its meaning, and say in the pull request what you fitted and why. `main`
+moved when the paragraph a block changes no longer reads in `main` as the block
+shows it, because another story or a bounded change landed on that section since
+the batch opened.
+
+When the block's text is a problem, stop and put it to your human partner before
+transcribing it. Do not transcribe a text you believe is wrong, and do not repair
+it on your own: the opening gate is where that text was ruled on, and reopening it
+is your human partner's act.
 
 **Neither case amends the batch document.** It records what the opening review
 read, and editing it would erase the very text a reviewer compares your
 transcription against. The divergence lives in the pull request, where it is
 visible and gets ruled on.
 
-If the batch declares a feature flag, the transcribed spec change **states the flag
-and its default**, and — when the declared scope reaches beyond the batch — its
-lifting condition:
+If the batch declares a feature flag for this story's module, the transcribed spec
+change states the flag and its default in a gating sentence, which adds its
+lifting condition when the declared scope reaches beyond the batch:
 
 ```markdown
+🔒 `billing.recurring`, off by default
 🔒 `billing.recurring`, off by default — lifted when the `facturation` module is fully delivered
 ```
+
+The flag's name, its default and its lifting condition vary; the rest of each form
+is fixed.
 
 The code you write next is guarded by that flag. Without this sentence a story
 merged behind a flag would make the spec false as users read it, and would
@@ -327,13 +333,12 @@ an implementation to the length of a single commit.
 ## Step 4 — Write the Plan
 
 Call `superpowers:writing-plans`. The plan **is** the story document: save it
-into the batch directory, and extend the standard header with four fields — five
-on a technical story.
+into the batch directory, and extend the standard header with the fields below.
 
 ```markdown
 **Spec:** docs/specs/facturation.md
 **Batch:** docs/batches/07-facturation-recurrente/README.md
-**Sections:** Abonnement > Renouvellement, Abonnement > Proration
+**Sections:** Subscription > Renewal, Subscription > Proration
 **Blocks:** D3, D7
 ```
 
@@ -345,8 +350,8 @@ story's Step 1 reads.
 `Blocks:` declares the blocks of the spec delta this story transcribes — the
 `D<n>` identifiers the batch document defines — and it is what
 `supercharlouze:closing-a-batch` reads to find the blocks nobody delivered. It is
-`none` for a story that transcribes none: a corrective batch's story, a technical
-story, a teardown story. Write it even though the blocks are already committed by
+`none` for a story that transcribes none, such as a corrective batch's story, a
+technical story or a teardown story. Write it even though the blocks are already committed by
 now, because Step 3's commit says what the spec received, and this field says
 which blocks this story answered for — which is the question closing asks.
 
@@ -392,15 +397,16 @@ have to recognise a category in prose.
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
 part of every task's requirements — carries:
 
-1. the constraints the batch imposes;
-2. the freeze of the spec file;
-3. the authority rule;
-4. **in a corrective batch only**, the stop condition proper to a corrective
-   batch;
-5. **in a story that writes code guarded by a flag only**, the rules for code
-   under a flag;
-6. **in a technical story only**, the stop condition proper to a technical
-   story.
+- the constraints the batch imposes;
+- the freeze of the spec file;
+- the authority rule;
+- the concision rules;
+- **in a corrective batch only**, the stop condition proper to a corrective
+  batch;
+- **in a story that writes code guarded by a flag only**, the rules for code
+  under a flag;
+- **in a technical story only**, the stop condition proper to a technical
+  story.
 
 The batch's constraints are its `Constraints` section copied verbatim. The
 freeze of the spec file reads:
@@ -422,10 +428,29 @@ conflict on the spec file.
 **When the batch and the spec contradict each other, the spec wins — without
 exception and without deliberation.** Implement what the spec says, record a
 `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an
-agent's.** That rule is the third thing `Global Constraints` carries.
+agent's.** That rule is the authority rule `Global Constraints` carries.
 
-**In a corrective batch, `Global Constraints` carries a fourth thing: the stop
-condition proper to a corrective batch, written out in full.** Copy it verbatim,
+In every story, `Global Constraints` carries the concision rules, written out in
+full. Copy the block below verbatim:
+
+> These rules hold for every document, pull request body and commit message
+> this story writes.
+>
+> Every sentence says one exact thing, once, and stands on its own.
+>
+> Every paragraph carries one rule.
+>
+> A rule says how far it holds, and an exception presents itself as one.
+>
+> A text says what it delivers or decides, without telling how it got there or
+> why. Exception: a reason that is explicitly asked for, such as the why of a
+> ruling.
+>
+> No sentence is set in relief: no bold that ranks one sentence above its
+> neighbours.
+
+**In a corrective batch, `Global Constraints` carries the stop condition proper
+to a corrective batch, written out in full.** Copy it verbatim,
 exactly as `supercharlouze:using-batches` states it:
 
 > If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
@@ -439,37 +464,29 @@ stop condition stated to you and not written here never reaches the agent who
 has to obey it.
 
 **In a story that writes code guarded by a feature flag, `Global Constraints`
-carries a fifth thing: the rules for code under a flag, written out in full.**
+carries the rules for code under a flag, written out in full.**
 This holds whether the flag was declared by this story's batch or by another one:
 what decides is that this story writes guarded code, not which batch owns the
 flag. Copy the block below verbatim:
 
-> Whatever way the project switches its flags, code guarded by a feature flag
-> holds up under activation for some users only, activation for everyone, and
-> deactivation. It holds four rules:
+> Code guarded by a feature flag holds up when the flag is on for some users
+> only, on for everyone, and off:
 >
-> - **Both states coexist.** A user with the flag on and a user with the flag
->   off work side by side on the same data. What one produces, the other can
->   read and use.
-> - **Switching off stays possible at all times.** Turning the flag off, for one
->   user or for everyone, leaves what the on state produced readable and usable,
->   with no error and no data loss.
-> - **Nothing else changes.** With the flag off, the user finds the behaviour
->   from before the batch, save for the data produced with the flag on.
-> - **Each state is verified.** The story's pull request carries tests of
->   the flag-on behaviour, of the flag-off behaviour, and of their coexistence.
->
-> **Lifting will only remove.** Guarded code is written so that lifting the flag
-> comes down to deleting the branching and the behaviour from before the batch,
-> without writing anything new.
+> - The two states work on the same data: what one produces, the other reads
+>   and uses, with no error and no data loss.
+> - With the flag off, the user finds the behaviour from before the batch.
+> - The story's pull request tests the flag-on behaviour, the flag-off
+>   behaviour, and their coexistence.
+> - Lifting the flag comes down to deleting the branching and the behaviour
+>   from before the batch, without writing anything new.
 
 This block is the only place those rules are written out, and copying it is what
 puts them in front of the implementer — a norm nobody reads while writing the
 code bites on nothing. They travel the way the freeze does, through the only
 channel SDD's subagents read.
 
-**In a technical story, `Global Constraints` carries a sixth thing: the stop
-condition proper to a technical story, written out in full.** Copy it verbatim,
+**In a technical story, `Global Constraints` carries the stop condition proper to
+a technical story, written out in full.** Copy it verbatim,
 exactly as `supercharlouze:using-batches` states it:
 
 > If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical.
@@ -485,10 +502,9 @@ obey it.
 
 **Commit the story document — header, the two empty sections and
 `Global Constraints` together — and push it immediately**, `git push`, before
-anything else in Step 5 starts. Until that push the branch is on the remote but
-declares no sections, and a sibling that finds it has to stop on an unknown.
-Pushing here closes that window and is what lets Step 1 answer for a story whose
-pull request will not exist for hours.
+anything else in Step 5 starts. Before this push, a sibling's Step 1 reads this
+branch only by the sections it has already changed; after it, by every section
+this story will touch.
 
 ## Step 5 — Execute
 
@@ -523,7 +539,7 @@ nowhere.
 
 **Override 2 — the stop conditions the flow adds.** SDD states that four things
 stop you and only these. This plugin adds two, and each one ends the same way:
-**abandon the story**, then hand the decision to
+**the story is abandoned**, and the decision goes to
 `supercharlouze:writing-a-batch`.
 
 In a corrective batch: if, while bringing code into conformity with the spec, you
@@ -536,22 +552,27 @@ In a technical story, whatever its batch: if, while conducting it, you discover
 that it changes something observable at the module's boundary, stop. The story is
 no longer technical. The four native conditions also assume the story is the story
 it says it is; here the qualification it was written under is what is in question,
-and only your human partner may rule what follows — a block for the observable
-change, and a flag if the batch was exempted because all of its stories were
-technical.
+and only your human partner may rule what follows: a block for the observable
+change, and the flag that block requires, if it requires one.
 
 **Abandoning here does not start by closing a pull request, because there is
 normally no pull request yet.** This condition fires *inside*
 `superpowers:subagent-driven-development`, mid-implementation, and the story's
 pull request only opens at the very end of this step, through
 `superpowers:finishing-a-development-branch`. What exists when it triggers is a
-branch and a worktree. So: **close the story's pull request without merging it
-if one is already open; the branch and its worktree stay until the
-requalification is ruled.**
+branch and a worktree, and they stay until the requalification is ruled.
+
+In a corrective batch, the story is abandoned once the requalification is ruled:
+a pull request already open is closed without merging then, not when you stop.
+
+In a technical story, close the story's pull request without merging it if one
+is already open.
+
 Nothing on `main` changes either way — the spec change, or the deleted
 gaps-register entry, travels with the code and dies with the branch. The
-reservation posted on `main` by the batch's opening pull request is untouched,
-and `supercharlouze:closing-a-batch` releases it. Once the requalification is
+reservation posted on `main` by the batch's opening pull request is untouched:
+the amendment that takes its entry out of `Scope` releases it, or
+`supercharlouze:closing-a-batch` does. Once the requalification is
 ruled, delete the abandoned branch, locally and on the remote, and remove its
 worktree — the branch left on the remote would read as a live claim on its
 sections, and the worktree left behind is where a later session resumes work
@@ -569,14 +590,10 @@ exist:
 
 - Copy every `Ruling:` line from SDD's closing "Rulings I made" message into
   the **Rulings log** of the story document. The list is exhaustive.
-- Record under **Observed drift** every divergence between spec and code you
-  noticed *outside* this story's scope.
+- Record under **Observed drift** the drift you noticed *outside* this story's
+  scope: code that contradicts the spec, and behaviour no spec describes.
 
-Do **not** add those observations to the gaps register yourself. An addition
-happens at the end of a section and contends with every other addition on the
-same module — the exact contention this system avoids everywhere else, resolved
-the same way: one writer per batch. `supercharlouze:closing-a-batch`
-consolidates them in a single pull request.
+Do not add those observations to the gaps register yourself. Within a batch, only the closing pull request adds entries to the gaps register, and `supercharlouze:closing-a-batch` consolidates them there.
 
 Commit both on the branch and push, so they merge with it.
 
@@ -619,19 +636,17 @@ something, not fixing a slip. Your human partner gives their agreement in the
 conversation; then you squash the fixups, push the rewritten branch, and announce
 the pull request ready to be approved and merged.
 
-**Merging it is a moment to clear the context**, and the announcement says so. On
-this path the conversation is the heaviest of any gate — it carries a plan, an
-SDD ledger, and every file the implementers touched — while `main` now carries
-this story's code, and its spec change if it had one, which is all the next story
-needs.
+**Merging it is a moment to clear the context.** On this path the conversation is
+the heaviest of any gate — it carries a plan, an SDD ledger, and every file the
+implementers touched — while `main` now carries this story's code, and its spec
+change if it had one, which is all the next story needs.
 
-So the announcement names the next story as the next step — unless this story
-took the batch's last undelivered blocks, in which case it names
-`supercharlouze:closing-a-batch` instead, matching how an amendment hands back
-to whatever the batch was doing when it stopped — and gives its prompt in a
-block to copy and paste. **That prompt stands on its own:** it names the skill
-to invoke, the batch document by path, and says to choose from the blocks no
-merged story has declared, and never refers back to this conversation.
+So when your human partner announces the merge, name the next story as the next
+step, or `supercharlouze:closing-a-batch` if this story took the batch's last
+undelivered blocks, and give its prompt in a block to copy and paste. **That
+prompt stands on its own:** it names the skill to invoke, the batch document by
+path, and says to choose from the blocks no merged story has declared, and
+never refers back to this conversation.
 Everything perishable is already in the story document — that is what
 `Step 6 — Record Before the Merge` was for.
 
@@ -640,10 +655,11 @@ the transcription away with the code — nothing to revoke, no spec to put back
 straight. If the abandonment happens before the pull request exists — a
 requalification under Override 2, a story dropped mid-run — there is nothing to
 close, only a branch and a worktree to discard. What remains on `main` belongs
-to `supercharlouze:closing-a-batch`: the gaps register reservation posted by
-the batch's opening pull request, and the blocks the batch announced and no
-story delivered. Do not count them — a story that transcribed no block
-announced nothing in the spec delta and leaves the reservation alone.
+to `supercharlouze:closing-a-batch`: the blocks the batch announced and no
+story delivered, and the gaps register reservation posted by the batch's
+opening pull request, unless an amendment took its entry out of `Scope` and
+released it. Do not count them — a story that transcribed no block announced
+nothing in the spec delta and leaves the reservation alone.
 
 **Clean up after an abandoned or requalified story: remove its worktree and
 delete its branch, locally and on the remote.** This is not tidiness. A pushed
@@ -709,6 +725,8 @@ documents.
   `Global Constraints`, `Files`, `Interfaces` — are that same rule already at
   work, not an exception you tolerate.
 
+Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+
 ## Red Flags
 
 | Thought | Reality |
@@ -718,9 +736,9 @@ documents.
 | "`main` moved, so I'll amend the batch document to match" | Fit the block to `main` without changing its meaning, and name the divergence in the pull request. The batch document records what the review read. |
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No merge conflict, so no one else is on this section" | Git conflicts on lines, not sections. Check the open pull requests. |
-| "No open pull request touches this spec, so the section is free" | The filter is the branch name, not the files: a pull request that touches no spec holds its sections all the same. And a story holds them from Step 1 until its pull request opens at the end of Step 5 — read the pushed `story/*` branches too. |
+| "No open pull request touches this spec, so the section is free" | The filter is the branch name, not the files: a pull request that touches no spec holds its sections all the same. And a story holds them from Step 1 until its pull request opens at the end of Step 5 — read the pushed `story/*` and `bounded/*` branches too. |
 | "No open pull request uses us-3, so us-3 is free" | A branch claims its number from its first commit until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too — same argument as the concurrency scan. |
-| "This pull request has no story document, so I must stop" | Not if it is a `fix/<slug>`: a bounded change declares its sections in its pull request body. Read it there. Stopping would halt every story for as long as one bounded pull request stays open. |
+| "This pull request has no story document, so I must stop" | Not if it is a `bounded/<slug>`: a bounded change declares its sections in its pull request body. Read it there. Stopping would halt every story for as long as one bounded pull request stays open. |
 | "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-change commit. |
 | "The story is abandoned, the branch can stay" | A pushed `story/*` branch with no pull request reads as a live claim on its sections. Delete it, locally and on the remote. |
 | "I'm already in a worktree, that's fine" | It is, as a place to work. A branch that starts there is not: this story's code would land on the previous story's branch. Branch from `origin/main`, wherever you stand. |
@@ -729,7 +747,7 @@ documents.
 | "Keeping the branch is harmless" | Without a pull request the story has no observable state and is never delivered. |
 | "Inline execution is simpler for a small story" | It keeps no ledger, so the rulings never reach your human partner. SDD is required. |
 | "I'll copy the rulings after the merge" | The workspace is already gone and the merge may be days later, in another session. |
-| "This drift is small, I'll just add it to the gaps register" | Every story adding to the same section collides there. Record it under Observed drift; closing consolidates. |
+| "This drift is small, I'll just add it to the gaps register" | Within a batch, only the closing pull request adds entries. Record it under Observed drift. |
 | "Every ruling is recorded, the log is done" | An open ruling also needs a destination. A violation or a gap goes to the register through closing; anything else is settled at the review, before the merge. |
 | "The flag is an implementation detail, the spec need not mention it" | Then the spec is false for users. The spec change states the flag, its default, and its lifting condition if the scope is extended. |
 | "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |

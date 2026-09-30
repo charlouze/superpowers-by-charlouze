@@ -18,7 +18,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
 | A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:writing-a-batch`, as an ordinary batch that finally specifies them |
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
-| A batch must change scope or flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
+| A batch must change its scope, its spec delta or its flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
 | Spike or bounded work | Nothing is rerouted except what `What Is Kept, What Is Rerouted` states below |
 
@@ -26,7 +26,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Module** — a coarse functional domain, seen from the outside. A human draws the boundaries; never infer them. Prefer few large modules to many small ones; how many a project needs depends on the size of the product, not on a fixed count.
 
-**Spec** — one living document per module, at `docs/specs/<module>.md`. It is **normative** (what the code must do), not descriptive (what the code happens to do), and it carries **business rules and intentions; the mechanism stays in the code** — see `What a Spec Says` below. It carries no date, no status, no work-in-progress marker. It is the binding authority of every review.
+**Spec** — one living document per module, at `docs/specs/<module>.md`. It is **normative** (what the code must do), not descriptive (what the code happens to do), and it carries **business rules and intentions; the mechanism stays in the code** — see `What a Spec Says` below. It carries no date, no status, no work-in-progress marker, except a flag's gating sentence. It is the binding authority of every review.
 
 **Section** — the smallest titled unit of a spec, and the unit everything is counted in: a concurrency conflict is judged on a section, a gaps register entry names a section. "Requirement" is not used as a unit — its granularity cannot be defined, so it cannot be checked.
 
@@ -36,19 +36,27 @@ This project replaces dated design docs and one-off plans with a **living spec p
 
 **Technical story** — a story that changes nothing observable at its module's boundary. A dependency bump, an internal rename, a preparatory refactor are technical: no rule moves, so no block is transcribed. It is a declared qualification, caught by its stop condition if it turns out to be false.
 
-**Corrective batch** — a batch whose spec delta is empty. It brings existing code back into conformance with a spec that is already true. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
+**Corrective batch** — a batch that brings existing code back into conformance with a spec that is already true. Its spec delta carries no block. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
 
 **Delta block** — the unit of a batch's spec delta: one targeted section and the exact text it must receive, transcribed word for word by a story.
 
-**Feature flag** — what makes a story deliverable on its own without exposing a half-built batch. `main` is deployed continuously, so every merged story ships; a batch whose stories would expose incomplete behaviour declares a flag.
+**Pull request** — a change proposed for `main`, which the human reviews before it reaches `main`.
 
-**The flag is a specified object, not an implementation detail.** The spec section concerned states its name and its default, as a gating sentence in the form the spec fixes — `` 🔒 `billing.recurring`, off by default ``. Without that declaration, a story merged behind a flag would make the spec false as far as users are concerned, and would reopen through the window exactly the gap the drift rule exists to close.
+**Gate** — the human's review of a pull request, whose merge moves a module, a batch or a story forward.
+
+**Reread** — an agent's check of a piece of work. A reread is not a gate.
+
+**Feature flag** — what makes a story deliverable on its own without exposing a half-built batch. Everything that reaches `main` may ship to production, so every merged story may reach users; a batch whose stories would expose incomplete behaviour declares a flag.
+
+**The flag is a specified object, not an implementation detail.** The spec section concerned states its name and its default, as a gating sentence in one of the forms `supercharlouze:writing-a-user-story` fixes — `` 🔒 `billing.recurring`, off by default ``. Without that declaration, a story merged behind a flag would make the spec false as far as users are concerned, and would reopen through the window exactly the gap the drift rule exists to close.
 
 **The flag is per (batch, module).** Not per story — the batch is the boundary past which nothing is incomplete. But not per batch either: a batch spanning two modules declares **two** flags, one per module. Otherwise its lifting story would have to remove the gating sentence from two specs, while a story targets exactly one module — it would be impossible to write.
 
+Each flag is switched on, switched off and lifted independently of the others: one flag's lifting story waits for no other flag's.
+
 **Its lifetime is short, and by default the batch bounds it.** A flag that lingers is dead code nobody dares remove — the classic failure mode, and it is silent. A flag may legitimately outlive its batch (a module built over several batches, opened only once complete), but then it declares **its scope and the condition that lifts it** — "lifted when the `facturation` module is fully delivered". That declaration is what tells a still-useful flag apart from a forgotten one; without it the two are identical.
 
-**Guarded code has rules of its own, and they travel into the plan.** What code under a flag must hold — the two states coexisting on the same data, deactivation always possible, nothing else changing, each state tested, and a lifting that only removes — is written out in full in `supercharlouze:writing-a-user-story`, which copies it into the `Global Constraints` of every story that writes guarded code. It is written there and not here because that is the skill that writes those constraints, and a second copy of a rule is exactly what drifts.
+**Guarded code has rules of its own, and they travel into the plan.** What code under a flag must hold — both states working on the same data, the behaviour from before the batch with the flag off, each state and their coexistence tested, and a lifting that only removes — is written out in full in `supercharlouze:writing-a-user-story`, which copies it into the `Global Constraints` of every story that writes guarded code. It is written there and not here because that is the skill that writes those constraints, and a second copy of a rule is exactly what drifts.
 
 **The exemption criterion is one question:** *would a single story of this batch, merged on its own, leave a user in front of something incomplete?* If no, no flag. Three families answer no by construction:
 
@@ -109,26 +117,26 @@ does not share a rule.
 There is no spec above the specs, and that is the point. A rule housed outside
 the module specs — in a CLAUDE.md, in an architecture note — sits beyond
 everything that makes a spec binding: the review held against it, the drift rule,
-the gaps register, the changelog. It would read as a norm and be none.
+the gaps register. It would read as a norm and be none.
 
-**Scope.** These clauses bear on the spec file, **all of its lines**, including the changelog's `change` cell: this is a property of the document, so it holds for whoever writes in it. They do not bear on `docs/specs/<module>.gaps.md`, which is not a spec — a register entry names a mechanism, that is its job, and that is where everything the test ejects goes. Saying both is necessary: a rule with no declared outlet leaves an agent who has understood it with nowhere to write down what they found.
+**Scope.** These clauses bear on the spec file, **all of its lines**: this is a property of the document, so it holds for whoever writes in it. They do not bear on `docs/specs/<module>.gaps.md`, which is not a spec — a register entry names a mechanism, that is its job, and that is where everything the test ejects goes. Saying both is necessary: a rule with no declared outlet leaves an agent who has understood it with nowhere to write down what they found.
 
 ## The Git Model
 
 Two project constraints, not choices of this plugin, and everything else follows from them:
 
 - **`main` is protected** — everything goes through a pull request.
-- **`main` is deployed continuously** — every merge ships to production.
+- **Everything that reaches `main` may ship to production**, whenever the project deploys.
 
-The second is why feature flags exist, and it rules out the two natural alternatives. A batch branch, or a gitflow `develop` branch, would protect production by holding work back — at the price of a blind spot. Concurrency detection has exactly two sources, the open pull requests and the pushed `story/*` branches, and a story merged into a batch branch leaves **both at once**: its pull request closes, and its branch is gone with it. The sections it took are then held by nothing any sibling can see, for the whole life of the batch — and that is precisely the stretch during which the batch branch is supposed to be protecting things. A `develop` branch is worse: it creates **two baselines** for the drift rule — the reference spec on `develop`, the running code on `main` — and a corrective batch no longer knows what it is correcting against. A flag protects production without holding code back, so it creates neither blind spot nor second baseline.
+The second is why feature flags exist, and it rules out the two natural alternatives. A batch branch, or a gitflow `develop` branch, would protect production by holding work back — at the price of a blind spot. Concurrency detection reads only the open pull requests and the pushed `story/*` and `bounded/*` branches, and a story merged into a batch branch leaves **both at once**: its pull request closes, and its branch is gone with it. The sections it took are then held by nothing any sibling can see, for the whole life of the batch — and that is precisely the stretch during which the batch branch is supposed to be protecting things. A `develop` branch is worse: it creates **two baselines** for the drift rule — the reference spec on `develop`, the running code on `main` — and a corrective batch no longer knows what it is correcting against. A flag protects production without holding code back, so it creates neither blind spot nor second baseline.
 
-**One branch, one name.** `main` is that protected, continuously deployed branch, and this plugin calls it `main` everywhere — deliberately not an abstract "integration branch". The abstraction is what invites the `develop`-style branch the paragraph above rejects by name.
+**One branch, one name.** `main` is that protected branch, whose every merge may ship, and this plugin calls it `main` everywhere — deliberately not an abstract "integration branch". The abstraction is what invites the `develop`-style branch the paragraph above rejects by name.
 
 **A story's pull request never carries its spec change without the code that implements it.** It may carry code alone: a corrective batch's story does, and so may any story that transcribes no block. It may carry a spec change no block announced: a teardown story removes from the spec what no block announced. What never reaches `main` is a norm ahead of the code that honours it. That is what gives `main` its central property: **its spec always describes exactly what its code does.** There is no intermediate state to signal, therefore no marker, no semantics to explain to agents that know nothing about this plugin, and no exception to the drift rule.
 
 **The spec change is the first commit of every story branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts. A story that transcribes no block is the exception in form and not in purpose: no block dictates its first commit, so that commit carries the header of the story document and its empty `Rulings log` and `Observed drift` sections, plus what that story removes, if it removes anything — a corrective batch's story deletes the gaps register entry it resolves, a teardown story removes from the spec what no block announced, a technical story removes nothing — which fixes its scope in the branch's history exactly the same way. Batch-opening and batch-closing branches carry no spec change at all — they carry no code either.
 
-**The drift rule therefore has no exception:** any divergence between the spec on `main` and the code on `main` is drift, hence corrective work. There is no "not delivered yet" case to exempt, because that case does not exist. Behaviour still gated states its flag, its default and — when the scope outlives the batch — its lifting condition in the spec itself, so the spec stays exactly true: it describes not only what the code does but what it exposes and under what condition.
+**The drift rule therefore has no exception:** any code on `main` that contradicts the spec on `main`, and any behaviour on `main` that no spec describes, is drift, hence corrective work. There is no "not delivered yet" case to exempt, because that case does not exist. Behaviour still gated states its flag, its default and — when the scope outlives the batch — its lifting condition in the spec itself, so the spec stays exactly true: it describes not only what the code does but what it exposes and under what condition.
 
 **Human gates are pull request reviews.** The plugin adds no ceremony; it puts its checkpoints where your flow already has them.
 
@@ -137,8 +145,8 @@ The second is why feature flags exist, and it rules out the two natural alternat
 | Module adoption | the pull request carrying the spec and the gaps register |
 | Batch opening | the pull request carrying the batch document |
 | Story delivery | the pull request carrying a story's code, and its spec change if it has one |
-| Batch closing | the pull request carrying the changelog, the consolidation and `status: closed` |
-| Batch amendment | the pull request carrying the decision to change its scope or its flag |
+| Batch closing | the pull request carrying the consolidation and `status: closed` |
+| Batch amendment | the pull request carrying the decision to change its scope, its spec delta or its flag |
 
 **Preconditions for every pull request of this system**, checked before creating a branch: fetch, then start the branch from **`main` as the remote carries it**, never from another branch. That is what keeps a session chaining two pieces of work from stacking the second on the first one's branch, and what makes numbering and concurrency detection reason on the remote state. **Where you are standing does not matter**, and it must not: a session the harness launched inside a worktree cannot run git against the shared checkout at all, so a precondition on the directory would be unreachable exactly there. The starting point is reachable from anywhere — inside a reused workspace, `git fetch origin && git switch -c <branch> origin/main` satisfies it without leaving. `gh` is assumed available and authenticated; without it both degrade to a partial safety net and stop preventing anything.
 
@@ -161,11 +169,16 @@ comments come back attached to nothing.
 carries everything that follows needs, and the conversation is only a draft that
 can contradict it.
 
-The agent cannot clear its own context. So when it announces the pull request
-ready, it says that merging it will be that moment. Where a next step exists, it
-names that step and gives — in a block to copy and paste — the prompt that starts
-it after the clear. **That prompt stands on its own:** it names the skill to
-invoke and the document to start from, and never refers back to the conversation.
+The agent cannot clear its own context. So when your human partner announces the
+merge, the agent asks them to clear the context. Where a next step exists, it names
+that step and gives, in a block to copy and paste, the prompt that starts it in a
+fresh context. **That prompt stands on its own:** it names the skill to invoke and
+the document to start from, and never refers back to the conversation.
+
+The prompt waits for the merge announcement, not for the announcement that the
+pull request is ready. Between the two the review may go on, and a prompt given
+earlier ends up buried under it, or names a document the review has since
+changed.
 
 "Never refers back to the conversation" is the whole point. A prompt saying
 "continue what we discussed" is worthless after a clear, and it is worthless in a
@@ -173,7 +186,7 @@ way nobody notices until the context is already gone.
 
 ## Authority and Conflict Rules
 
-**The spec is the binding authority.** The batch carries only what a spec cannot carry: delivery scope, story order, migration and compatibility constraints, and why this work happens now.
+**The spec is the binding authority.** Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, the order of its stories and of its blocks, and its migration and compatibility constraints.
 
 **When a batch and a spec contradict each other, the spec wins — no exception, no deliberation.** Implement what the spec says, record a `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an agent's.** An agent that "fixes" the spec silently inverts the authority: the batch's intent wins, and the document reviewers rely on becomes a record of what an agent preferred.
 
@@ -181,7 +194,11 @@ way nobody notices until the context is already gone.
 
 **Every conflict is recorded for the human.** Reuse the existing mechanism rather than inventing one: `superpowers:subagent-driven-development` keeps a ledger whose decisions take the form `Ruling: <decision> — <why> — <what it costs if it is wrong>`, presented under "Rulings I made" before it deletes its workspace. Copy those lines into the story document, on the story's branch, before the merge — they are perishable, and the workspace is already gone.
 
-**Concurrency.** Two stories touching the same section of the same spec are a conflict. Detection is by declaration: each story document lists the sections it touches, and a starting story compares them against the open pull requests **whose branch is `story/*` or `fix/*`**, and against every remote `story/*` branch that carries no pull request yet. **The filter is the branch name**, because those two patterns are the only branches that claim sections. Filtering instead on the spec file a pull request touches looked like the same thing and was not: a story whose pull request touches no spec at all — a corrective story deletes a gaps register entry and nothing else — held its sections while being invisible to every sibling. Both sources are needed: a story's pull request opens only at the very end of its implementation, so for that whole stretch its pushed branch is the only thing that shows it holds its sections. The git merge conflict is only a **partial** safety net — git conflicts on lines, not on sections, so two stories editing the same section far apart merge cleanly. Relying on it would let through exactly the case worth catching. The declaration is read where each kind of pull request keeps it — a story document for a story, where `Spec:` names the spec and `Sections:` the sections; the pull request body for a bounded change, which has no story document and names both there. A pushed branch that carries no declaration yet **concerns the spec it has already changed**, which is what keeps a wide filter from ordering a stop on every branch in the repository.
+**Concurrency.** Two stories, or a story and a bounded change, touching the same section of the same spec are a conflict. Only `story/*` and `bounded/*` branches claim sections, so the filter is the branch name. Filtering instead on the spec file a pull request touches would make a corrective story invisible, since its pull request touches no spec at all.
+
+Each claimant declares its spec and its sections: a story in its story document, where `Spec:` names the spec and `Sections:` the sections; a bounded change in its pull request body. A starting story reads the declarations of the open pull requests on those branches, and of every remote `story/*` or `bounded/*` branch that carries no pull request yet. A pushed branch that carries no declaration yet is read by the sections it has already changed. Both sources are needed: a story's pull request opens only at the very end of its implementation, and for that whole stretch its pushed branch is the only thing that shows it holds its sections.
+
+The git merge conflict is only a partial safety net. Git conflicts on lines, not on sections, so two stories editing the same section far apart merge cleanly.
 
 ## What Is Kept, What Is Rerouted
 
@@ -191,17 +208,29 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
 
 **Bounded** — ceremony unchanged, with four rules:
 
-- **(a) Its pull request leaves the spec silent if and only if nothing observable at the module's boundary changes.** Whether it *alters* a behaviour some spec already describes or *adds* one no spec describes, it updates the spec in the same pull request as the code, with an `out-of-batch` changelog line — handling only the "alters" case would reopen the same hole one notch over. Where nothing observable at that boundary changes — a dependency bump, an internal rename, a preparatory refactor — the spec stays silent and no changelog line is written. That third case is not a tolerance: a rule does not move when a mechanism moves, so there is nothing to write, and writing something anyway means inventing a sentence from the code, which canonises the drift it describes.
-- **(b) It undergoes the same concurrency detection as a story**, and therefore declares in the body of its pull request **the spec it targets and the sections it touches**, `none` when it touches none — otherwise it would hit a story in flight through a back door. The spec is named because nothing else in the declaration says which document those section titles belong to, and a bounded change that updates no spec file leaves a reader nothing to infer it from; two identically titled sections in two different specs are not a conflict. And `none` is a declaration, not a blank: it is what a bounded change that changes nothing observable has to say, where a blank body is indistinguishable from one nobody filled in — which is an unknown, and an unknown stops the reader. Run **Step 1 of `supercharlouze:writing-a-user-story`** before creating `fix/<slug>` — the same open pull requests and the same pushed `story/*` branches to scan, the same `gh` calls, the same declaration read wherever each pull request keeps it — and stop on the same conditions, including the one where a declaration cannot be read. Symmetrically, a bounded change's declaration is read in its pull request body, because that is where a bounded keeps it: it has no story document, and a reader that looked only for one would stop on every open bounded change and jam the nominal path for as long as one stays open.
+- **(a) Its pull request leaves the spec silent if and only if nothing observable at the module's boundary changes.** Whether it *alters* a behaviour some spec already describes or *adds* one no spec describes, it updates the spec in the same pull request as the code. Handling only the "alters" case would reopen the same hole one notch over. Where nothing observable at that boundary changes — a dependency bump, an internal rename, a preparatory refactor — the spec stays silent. That silence is not a tolerance: a rule does not move when a mechanism moves, so there is nothing to write, and writing something anyway means inventing a sentence from the code, which canonises the drift it describes.
+- **(b) It undergoes the same concurrency detection as a story**, and therefore declares in the body of its pull request **the spec it targets and the sections it touches**, `none` when it touches none — otherwise it would hit a story in flight through a back door. The spec is named because nothing else in the declaration says which document those section titles belong to, and a bounded change that updates no spec file leaves a reader nothing to infer it from; two identically titled sections in two different specs are not a conflict. And `none` is a declaration, not a blank: it is what a bounded change that changes nothing observable has to say, where a blank body is indistinguishable from one nobody filled in — which is an unknown, and an unknown stops the reader. Run **Step 1 of `supercharlouze:writing-a-user-story`** before creating `bounded/<slug>` — the same open pull requests and the same pushed `story/*` and `bounded/*` branches to scan, the same `gh` calls, the same declaration read wherever each pull request keeps it — and stop on the same conditions, including the one where a declaration cannot be read. Symmetrically, a bounded change's declaration is read in its pull request body, because that is where a bounded keeps it: it has no story document, and a reader that looked only for one would stop on every open bounded change and jam the nominal path for as long as one stays open.
 
   **A declaration that changes before the pull request opens redoes the detection.** Step 1 answered about the sections declared when it ran, so a section added afterwards was never intersected against anything — not found free, simply never looked at. Redoing it costs one scan, and the opening is the last point where the widening is still cheap to undo.
 
-  **A bounded change is in turn invisible until its own pull request opens, and that is accepted.** Its `fix/<slug>` branch declares nothing, since the declaration lives in the pull request body — so between its first commit and its pull request, nothing shows what it holds. The story path refused the same window and closed it by pushing the branch early; here it is not worth the same machinery, because a bounded change is one pull request with no long implementation phase behind it, where a story's window was as long as an implementation. Same blind spot, and the difference in size is the whole argument — so it is named as tolerated here, exactly as Step 1 names the story's, rather than left for someone to rediscover as a bug.
+  Before its pull request opens, a bounded change's branch carries no declaration, since the declaration lives in the pull request body. Once pushed, it is read like any branch that has not declared yet, by the sections it has already changed. Unpushed, it is invisible, like any branch the remote does not carry.
 
 - **(c) It carries no feature flag.** A bounded change is complete in its own pull request, so it satisfies the exemption criterion by construction.
-- **(d) It writes to a gaps register directly.** Belonging to no batch, it may both add an entry and delete one in `docs/specs/<module>.gaps.md`, from its own pull request, contending only with another bounded change. When it deletes one, the commit that removes it says why. Read the file's history before adding an entry (`git log -p docs/specs/<module>.gaps.md`): what was set aside was set aside for a reason, written in the commit that removed it. What qualifies an entry lives in the entry: no prose qualifies a *group* of them, and what an entry's neighbours have in common is repeated in each of them. An entry designates no other entry: a settled entry leaves the file whole, and takes with it anything that pointed at it. The batch path is stricter — stories only record their findings in their own document, and only `supercharlouze:closing-a-batch` consolidates them — because that contention is per batch, not per pull request.
+- **(d) It writes to a gaps register directly.** Belonging to no batch, it may both add an entry and delete one in `docs/specs/<module>.gaps.md`, from its own pull request, contending only with another bounded change.
 
-No batch, no user story: a bounded change is already a single pull request, and whether it carries a spec update is what rule (a) decides. Its branch is `fix/<slug>`.
+  An entry is one list item, added at the end of its category.
+
+  When it deletes one, the commit that removes it says why.
+
+  A finding already deleted from the register is re-entered only if the entry says what has changed since. Read the file's history before adding an entry (`git log -p docs/specs/<module>.gaps.md`): what was set aside was set aside for a reason, written in the commit that removed it.
+
+  What qualifies an entry lives in the entry: no prose qualifies a *group* of them, and what an entry's neighbours have in common is repeated in each of them.
+
+  An entry designates no other entry: a settled entry leaves the file whole, and takes with it anything that pointed at it.
+
+  Within a batch, only the closing pull request adds entries to the gaps register: stories record their findings in their own document, and `supercharlouze:closing-a-batch` consolidates them.
+
+No batch, no user story: a bounded change is already a single pull request, and whether it carries a spec update is what rule (a) decides. Its branch is `bounded/<slug>`.
 
 **Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`, which stops the design outright when a module it touches has no spec. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**: that is the design work itself, and it has no reason to change.
 
@@ -221,7 +250,7 @@ The architectural checklist of `superpowers:brainstorming` ends with four steps:
 
 **The substitute stops rather than chaining.** When a module the work touches has no spec, `supercharlouze:writing-a-batch` does not run `supercharlouze:adopting-a-module` and come back: **the design stops**, your human partner abandons it or sets it aside, and it resumes in a fresh context once the adoption pull request is merged. That skill's `Preconditions` carry the full rule and the reason it rests on — **adoption is never conducted in the same context as a design**. Said here because a post-brainstorming path that ends anywhere other than `supercharlouze:writing-a-batch` is exactly what an unnamed exception looks like, and this one ends nowhere at all — it stops. It widens nothing: the override still covers steps 6 to 9 and nothing else, and the resumed design re-enters the checklist at the same step.
 
-Justification: `supercharlouze:writing-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its re-read before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
+Justification: `supercharlouze:writing-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its reread before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
 
 ### Override 2 — the stop conditions the flow adds
 
@@ -237,7 +266,7 @@ A ruling replaces neither of them. A ruling is a decision an agent takes on its 
 
 Justification: the four native conditions assume a valid authority exists, and assume the story is the story it says it is. The first is what a corrective batch puts in question; the second is what a technical story puts in question — "purely technical" is otherwise the door through which behaviour enters with no gate behind it, since a story that transcribes no block passes no opening review.
 
-Requalification is carried by `supercharlouze:writing-a-batch` in both cases, and it **does not start by closing a pull request**: the corrective condition fires *inside* `superpowers:subagent-driven-development`, mid-implementation, while a story's pull request opens only at the very end of Step 5 through `superpowers:finishing-a-development-branch` — so normally there is no pull request at all, only a branch and a worktree. Abandon the story, closing its pull request without merging only if one is already open, and once the choice below is ruled discard the branch **locally and on the remote**, with its worktree — a branch left on the remote is re-read as a live claim on its sections by every sibling's concurrency scan. Nothing has to be revoked either way, because nothing reached `main`. Then the human decides — either they correct the spec, which only they can do, and the batch stays corrective on a reduced scope; or the batch is rewritten as an ordinary batch, with a spec delta, through an **amendment pull request** on the existing document, which keeps `NN` and its directory and still passes the opening review — any story already merged lives under that number, and a new one would strand it. A fresh `NN` only if the human rules the remaining work a *different* batch, and this one is then closed rather than left open. Either way the gaps register reservations are revised. The technical story's condition is routed the same way and settled elsewhere: `supercharlouze:writing-a-batch` carries it under `Requalifying a Technical Story`, where what the human rules is whether the observable change is wanted — and a wanted one needs a block, hence an amendment.
+When either condition fires, you stop, and `supercharlouze:writing-a-batch` conducts the requalification: under `Requalifying a Corrective Batch` for the first, under `Requalifying a Technical Story` for the second.
 
 ### Override 3 — imposed execution mode
 
@@ -263,11 +292,52 @@ This override removes one choice that cannot succeed, and one that leads nowhere
 
 The boundary does not run between documents; it runs **inside** each document: English skeleton, prose in the project's language.
 
-- **The skeleton is English, everywhere** — section titles, field names, template labels, front matter values (`status: open | closed`), table headers, path and branch patterns, skill and command names. This holds for the plugin and for the documents it produces.
+- **The skeleton is English, everywhere** — section titles, field names, template labels, front matter values (`status: open | closed`), table headers, path and branch patterns, skill and command names.
 - **Prose is in the project's language** — requirement bodies, descriptions, justifications, and the file and directory slugs, which name business objects.
-- **The plugin itself is entirely English** — skills, commands, README, CLAUDE.md block, messages. It has no business prose; it has only skeleton.
 
 That is the superpowers feeling kept: a document of this system reads like a superpowers document, with content in the project's language. The English skeleton that `superpowers:writing-plans` imposes on a story is then no longer an exception you put up with — it is the general rule, already applied.
+
+## Concision
+
+These rules hold for every text this flow writes: its documents, its pull request bodies and its commit messages. A text nobody manages to reread is no longer an authority, and the rules are what keeps it readable.
+
+Every sentence says one exact thing, once, and stands on its own.
+
+Every paragraph carries one rule.
+
+A rule says how far it holds, and an exception presents itself as one.
+
+A text says what it delivers or decides, without telling how it got there or why. Exception: the reason this flow explicitly asks for, such as the why of a ruling or of the commit that deletes a gaps register entry.
+
+No sentence is set in relief. Bold that ranks one sentence above its neighbours tells the reader the others bind less.
+
+### How to apply them
+
+The cut test, asked of every sentence before you commit it: would a reader who never saw the previous version lose anything if this sentence went? If not, cut it. Two kinds of sentence fail it every time. The refutation of a version that no longer exists ("X is no exception") answers a text the reader will never see. And the particular case the general rule already covers ("every review merge" already includes the closing one) makes the reader doubt the cases that are not spelled out.
+
+Too little is as wrong as too much. A bound ("only", "and nothing else") is a rule; cut it and the rule widens. A vague word ("nature", "handled appropriately") is replaced by the concrete rule it hides. When you strip a mechanism from a sentence, check that the intention it served is still written somewhere.
+
+Examples:
+
+- One rule per paragraph. Not: "Every branch starts from `main` and merges into `main`. Except an amendment's, it bears the name its step assigns." The exception reads as if it held for both rules. Good: each rule in its own paragraph, the exception attached to the one rule it touches.
+- Write what you mean. Not: "no prose qualifies a group of entries". Good: "everything that qualifies an entry is written in the entry".
+- Write the positive case. Not: "reaches `main` as a separate commit only if it carries a fresh decision". Good: "is squashed into the commit it corrects, unless it carries a fresh decision".
+- Say what to do rather than listing cases. Not: "a divergence has only two legitimate causes: …". Good: "when `main` moved under a block, the story fits it; when a block's text is a problem, the agent puts it to the human".
+- Two rules that paraphrase each other become one. Two phrasings reassure an agent and confuse a human, who looks for the difference between them.
+- A list does not announce how many items it holds. Not: "The five readings." Good: "The readings." The count tells the reader nothing the list does not, and goes false the day an item is added or removed.
+- A field carries what its name says. Reserved gaps register entries go under `Scope`, not under `Spec delta`.
+- No dash in place of a comma or of "that is".
+- An option the human decides is taken out of the text when it reads as an obligation.
+- "Word for word" applies only to what really is copied word for word.
+- A means is not the intention. Not: "each task runs in a subagent". Good: "each task is reviewed".
+
+## Conversation
+
+What the agent says to the human follows `Concision` above.
+
+Facing the human, a delta block, a story or a gaps register entry is named by the section it targets and what it changes there, never by its identifier alone. Identifiers serve the documents and the agents; a human who hears "D12 conflicts with D6" does not know what either says, and naming the section alone still leaves them guessing what moves. Not: "D12 is ready". Good: "the block on `The batch document`, which moves the reserved entries into `Scope`, is ready".
+
+The identifier may follow in parentheses when the human has to find it in the document.
 
 ## Red Flags
 
@@ -277,17 +347,19 @@ That is the superpowers feeling kept: a document of this system reads like a sup
 | "The batch is newer than the spec, so the batch wins" | The spec is the binding authority, without exception and without deliberation. The batch carries scope and order, never behaviour that contradicts a spec. |
 | "I'll transcribe the whole spec delta now, it's more efficient" | One spec change per story. A full delta makes the spec describe behaviour nobody delivered yet, and SDD's reviewers will report it as missing. |
 | "Only writing-plans may follow brainstorming, so I must write the design doc" | Override 1 is declared: steps 6 to 9 are replaced by `supercharlouze:writing-a-batch`. A dated design doc is precisely what this plugin removes. |
-| "Git will conflict if two stories touch the same section" | Git conflicts on lines, not sections; two edits far apart in one section merge cleanly. Compare the declared `Sections:` fields against the open pull requests whose branch is `story/*` or `fix/*`, and against every remote `story/*` branch that carries no pull request yet — the filter is the branch name, and a pull request that touches no spec holds its sections all the same. |
+| "Git will conflict if two stories touch the same section" | Git conflicts on lines, not sections; two edits far apart in one section merge cleanly. Compare the declared `Sections:` fields against the open pull requests whose branch is `story/*` or `bounded/*`, and against every remote `story/*` or `bounded/*` branch that carries no pull request yet. The filter is the branch name, and a pull request that touches no spec holds its sections all the same. |
 | "This batch is refactor-only, the Feature flag field can stay empty" | The field is never empty. "none" plus its reason is a decision the opening gate reviews; a blank is an omission nobody can review. |
 | "The flag is still there but the batch is done, I'll clean it up later" | A flag surviving without a declared scope and lifting condition is the classic silent failure. Write the lifting story, declare extended scope by amendment, or write a teardown story. |
-| "The flag is just an `if`, the guarded code can do as it likes" | Guarded code holds four rules: both states coexist on the same data, switching off is always possible, nothing else changes, and each state is tested. They go into the story's `Global Constraints`. |
+| "The flag is just an `if`, the guarded code can do as it likes" | Guarded code holds up when the flag is on for some users, on for everyone, and off: both states work on the same data, the flag off gives back the behaviour from before the batch, the pull request tests each state and their coexistence, and lifting only removes. These rules go into the story's `Global Constraints`. |
 | "The flag is on for everyone, so it is lifted" | The declared default and the effective state are two different things. A flag exists as long as its gating sentence stands in the spec, and only a story removes it. |
 | "A local merge is quicker than opening a pull request" | It deletes the worktree and the branch after merging into a `main` that can never be pushed. The work and the un-repatriated rulings go with them. |
 | "This case needs one more exception to a superpowers rule" | There is no undeclared fifth override. Stop and take it to the human. |
 | "The module has no spec but the change is small, I'll just code it" | Without an adopted spec there is no authority to review against, and the change becomes drift the moment it merges. The design stops until the module is adopted. |
 | "The module has no spec, I'll adopt it now and carry on designing" | Adoption is never conducted in the same context as a design. Stop, and resume in a fresh context once the adoption merges. |
 | "I'm already in the previous story's worktree, I'll start the next one here" | Working there is fine; branching from there is not. Fetch, and start `story/NN-us-N-<slug>` from `main` as the remote carries it, or the new story's code lands on the previous story's branch. |
-| "This is a small fix, the spec can stay silent about it" | Only if nothing observable at the module's boundary changes. The moment behaviour moves, the spec is updated in the same pull request, with an `out-of-batch` changelog line — and either way the change declares the spec it targets and the sections it touches. |
+| "This is a small fix, the spec can stay silent about it" | Only if nothing observable at the module's boundary changes. The moment behaviour moves, the spec is updated in the same pull request, and either way the change declares the spec it targets and the sections it touches. |
 | "The delta names a mechanism — I'll reword it into a business rule" | That is the laundering this rule exists to stop: what you would write describes the observed behaviour, so it canonises the drift. The spec wins, record a `Ruling:` for the clause you left out, and carry on. |
 | "I can't say where this number came from, I'll write 'a few minutes'" | Vagueness is not prudence — it is a rule no code can contradict. A number you cannot answer for is a gap, not a guarantee. |
 | "This rule holds for every module, so it lives above them all" | There is no spec above the specs. A rule belongs to exactly one spec; a rule that seems to belong to several signals a module breakdown to revisit, and that is your human partner's decision. |
+| "This sentence is safer in, even if it repeats the rule above" | A text that says what goes without saying makes the reader doubt what does not, and ends up unread. Apply the cut test. |
+| "The human has the batch document, `D12` is enough" | They do not keep the identifiers in mind. Name the section the block targets and what it changes there. |

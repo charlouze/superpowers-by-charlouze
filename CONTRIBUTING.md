@@ -72,7 +72,7 @@ It runs as the `charlouze-dev-agent` GitHub App, read from the
 
 | Path | What lives there |
 |---|---|
-| `skills/` | the five skills, one directory each |
+| `skills/` | the skills, one directory each |
 | `commands/` | `/supercharlouze:init` |
 | `scripts/` | what the command and the CI run |
 | `tests/` | the structural suite |

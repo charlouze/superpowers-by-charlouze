@@ -47,7 +47,7 @@ for needle in "scripts/init.sh" "supercharlouze:using-batches" "chore/supercharl
     fi
 done
 
-# Spec 9: init adopts nothing and proposes no module breakdown.
+# The command adopts nothing and proposes no module breakdown.
 if has "Do not adopt" "$BODY_FLAT" && has "module breakdown" "$BODY_FLAT"; then
     pass "command forbids adopting and proposing a breakdown"
 else

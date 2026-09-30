@@ -21,12 +21,12 @@ Three entry points, all landing in a pull request:
 | Entry point | Section |
 |---|---|
 | Opening a new batch | Preconditions through Opening the Pull Request |
-| Changing the scope or the flag of an existing batch | Amending a Batch |
+| Changing the scope, the spec delta or the flag of an existing batch | Amending a Batch |
 | A corrective batch that turned out not to be corrective | Requalifying a Corrective Batch |
 
 ## Opening, in Order
 
-Opening a new batch runs these six steps, in this order. Each names the section
+Opening a new batch runs these steps, in this order. Each names the section
 that carries it.
 
 1. **Check that every module this batch touches has an adopted spec** — the
@@ -39,19 +39,19 @@ that carries it.
    the specs at this stage (`The Batch Document`).
 5. **Put the whole spec delta through the coherence reread** — skipped when the
    delta carries no block (`The Coherence Reread`).
-6. **Reread the batch document, then open the pull request**
-   (`Opening the Pull Request`).
+6. **Reread the whole batch document** (`Opening the Pull Request`).
+7. **Open the pull request** from `batch/NN-<slug>`, in the same section.
 
 **The two rereads are steps 5 and 6, and they have different objects.** The
 coherence reread bears on the blocks and on the state they produce, read whole.
-The batch-document reread bears on the whole document — scope, `Constraints`,
-the flag field, every quoted passage. Merge them and the second is the one that
+The batch-document reread bears on the whole document: `Scope`, `Spec delta`,
+`Constraints`, `Feature flag`. Merge them and the second is the one that
 disappears, leaving a corrective batch, which has no blocks, with no reread at
 all.
 
 ## Preconditions
 
-Check all four **before creating any branch**. Each one, skipped, produces a
+Check them all **before creating any branch**. Each one, skipped, produces a
 pull request that has to be thrown away.
 
 1. **Every module this batch touches has an adopted spec** in
@@ -146,22 +146,20 @@ status: open
 
 ## Scope
 
-<What this batch delivers, and why now.>
+<What this batch delivers, including every gaps register entry it takes on.>
 
 ## Spec delta
 
 <The exact text this batch writes into the specs, in blocks. Per block: its
-`D<n>` identifier, the spec and the section it targets, then the current passage
-and the text that replaces it, the passage it removes, or the text it inserts and
-where. Including the removal of the gating sentence of any flag an earlier batch
-declared and this batch takes on. Never left blank: with no block, the gaps
-register entries this batch reserves, or `none` and the reason.>
+`D<n>` identifier, the spec and the section it targets, then its change shown in
+the paragraph that contains it. Including the removal of the gating sentence of
+any flag an earlier batch declared and this batch takes on. Never left blank:
+with no block, `none` and the reason.>
 
 ## Constraints
 
-<Migration and compatibility constraints, the required ordering of the user
-stories, and the order of any two blocks that change the same section. `none`
-if there are none.>
+<Only the migration and compatibility constraints, and the required order of
+the stories and of the blocks. `none` if there are none.>
 
 ## Feature flag
 
@@ -171,15 +169,13 @@ if there are none.>
 `status: open | closed` is a front matter value, so it is English even in a
 French project.
 
-**`Constraints` is where the batch says what a spec cannot.** The spec is the
-binding authority on behaviour; what belongs to the batch and only to it is the
-delivery perimeter, the ordering of the user stories, and the migration and
-compatibility constraints — so that is what goes here, and nothing normative.
-`supercharlouze:writing-a-user-story` copies this section **verbatim** into
-every story's `Global Constraints`, where `superpowers:writing-plans` makes it
-implicitly part of every task's requirements. Write it as constraints an
-implementer can obey, not as background. Left out, each story would silently
-invent its own migration rule and its own order.
+Nothing normative goes in `Constraints`: the spec is the binding authority on
+behaviour. `supercharlouze:writing-a-user-story` copies this section
+**verbatim** into every story's `Global Constraints`, where
+`superpowers:writing-plans` makes it implicitly part of every task's
+requirements. Write it as constraints an implementer can obey, not as
+background. Left out, each story would silently invent its own migration rule
+and its own order.
 
 This pull request does **no writing into the specs**. The delta is
 written here as **exact text, in blocks**, and no block is transcribed at
@@ -190,10 +186,29 @@ definition, and the reviewers of a story would then report as missing what is
 merely not built yet.
 
 **A block is the unit of the delta.** Each one carries an identifier `D<n>`,
-unique within the batch, and names the spec and the section it targets. To modify
-a passage, it quotes the current passage, then the text that replaces it; to
-remove one, it quotes it; to add text, it gives that text and where it goes.
-Quote the passage as `main` carries it now: the story transcribes against it.
+unique within the batch, and names the spec and the section it targets.
+
+A block shows what it changes in the paragraph that contains it. A fragment and
+its replacement, quoted apart, leave the reviewer to rebuild the paragraph, and
+the sentence the change contradicts two lines further on goes unseen. Give the
+paragraph in a `diff` fence: its lines as `main` carries them, each removed line
+prefixed `-`, each added line `+`, each unchanged line a space. The story
+transcribes against those lines, so take the paragraph from `main` as it stands.
+
+A block that changes a whole section is the exception: one that rewrites it
+gives the section as it will read, one that inserts it gives it and names the
+section it follows, one that removes it names it.
+
+````markdown
+### D4 — `docs/specs/facturation.md`, `Subscription > Renewal`
+
+```diff
+ A subscription renews on its anniversary date, for the same length.
+-The customer is notified seven days before.
++The customer is notified fourteen days before, and may decline the renewal
++until the day before.
+```
+````
 
 **No block is attached to a story.** The story chooses, as it is written, the
 blocks it transcribes; the batch document names no story and carries no list of
@@ -235,15 +250,13 @@ drawing from *Gaps* reserves exactly like a corrective one. Skip it, and two
 batches set out to specify the same undocumented behaviour in parallel, which is
 the collision the annotation exists to prevent.
 
-**The `Spec delta` field is never left blank.** It carries the blocks; or, when
-the batch has none, the gaps register entries it reserves, or `none` and the
-reason. "No block" is a decision, and a decision is stated — the same reason the
-`Feature flag` field is mandatory.
+**The `Spec delta` field is never left blank.** It carries the blocks, or `none`
+and the reason. "No block" is a decision, and a decision is stated.
 
-A corrective batch takes the second form by definition: it restores behaviour a
-spec already promises, so what it announces are the *Violations* entries it takes
-on, reserved in `docs/specs/<module>.gaps.md` as above, and no block. A batch that
-reserves nothing either takes the third.
+A corrective batch has no block by definition: it restores behaviour a spec
+already promises. Its `Spec delta` reads `none` with that reason, and its
+`Scope` lists the *Violations* entries it takes on, reserved in
+`docs/specs/<module>.gaps.md` as above.
 
 **The batch document carries no mutable state.** It is written once, by this
 opening pull request, and nothing in the normal course of the batch modifies it
@@ -252,7 +265,8 @@ its front matter to `status: closed`, in a reviewed pull request of its own, and
 the batch is over. Two consequences follow, and both are deliberate:
 
 - **The list of stories does not appear in it.** The list of stories is the
-  content of the batch directory, completed by the open pull requests. A
+  content of the batch directory, completed by the open pull requests and by
+  the pushed `story/*` branches that carry no pull request yet. A
   hand-maintained one would be edited by every story, conflicting on the same
   file every time, for information the system already holds.
 - **Story state does not appear either.** A story's state *is* the state of its
@@ -265,9 +279,8 @@ The `Feature flag` field is **mandatory and never left empty**. "No flag" must b
 a stated and reviewed decision, not an omission. It is examined at this gate
 because this is the moment when the batch's scope is still ahead of everyone.
 
-The batch is delivered onto a continuously deployed `main`: every
-merged story ships. The flag is what makes a story deliverable alone without
-exposing a half-built batch.
+Every merged story may reach users. The flag is what makes a story deliverable
+alone without exposing a half-built batch.
 
 **The exemption criterion is one question:** *would one story of this batch,
 merged alone, leave a user facing something incomplete?* If no, no flag. Three
@@ -286,6 +299,9 @@ leaves guarded behaviour in two modules declares **two** flags, one per module.
 Otherwise its lifting story would have to delete the gating sentence from two
 specs at once, and a story targets exactly one module — it would be impossible to
 write.
+
+Each flag is switched on, switched off and lifted independently of the others:
+one flag's lifting story waits for no other flag's.
 
 **A flag's life is short, and the batch bounds it by default.** A flag that
 lingers is dead code nobody dares remove, and that failure mode is silent.
@@ -353,105 +369,41 @@ whatever stands in the blocks' place.
 Build that state — a copy of each touched spec with its blocks applied —
 **outside the repository**, in a scratch directory: no block is written into a
 spec before a story transcribes it, and that rule is not suspended to make a
-reread convenient. **A block whose quoted passage is no longer in `main` will not
-apply**, so building this copy is also the first thing that catches a delta that
-has gone stale since the batch was drafted.
+reread convenient.
 
-**Conduct it outside the context that wrote the blocks**, by dispatching readers
-as subagents. This context argued every block into existence; asked to reread
-them, it rereads its own intentions — and the passage no block aims at, which is
-what this reread exists to find, is precisely what it cannot see.
+Building that copy checks every block: it carries its `D<n>`, it names the spec
+and section it targets, and its unchanged and removed lines match `main`, or the
+text the block ordered before it leaves. A block that fails this check does not
+apply, which is how a delta gone stale since the batch was drafted is caught.
 
-**A reader takes one reading, on one touched spec.** The readings below ask for
-four different motions — a sweep of the whole document, a reasoning about cases,
-a test applied sentence by sentence, a look at the model — and one reader holding
-several does the cheapest of them and returns. So the readers follow from the
-delta: one per reading, per touched spec.
+Then invoke `supercharlouze:rereading-a-spec` on each applied copy, with the path
+of the spec it applies to.
 
-**The four readings.** Each block below is the text a reader's prompt carries,
-pasted word for word into the slot the template leaves for it. It is written for
-a reader that has nothing else: never abbreviate it, and never hand a reader two.
+Carry every revision it returns back into the blocks: into the block whose text
+it changes, or into a new block when it changes a passage no block targets.
 
-> **What does this change make false elsewhere?** Find a passage of this
-> specification that the change does not aim at and that it now contradicts.
+A rule it returns as reaching past its module's boundary stops the opening: put
+the breakdown to your human partner.
 
-> **What does this change leave out?** Find a case it walks past, or a
-> consequence it does not draw.
-
-> **Does this specification hold what a specification must hold?** Every
-> sentence states a business rule or an intention, and passes the
-> other-implementation test: a developer who implemented the same intention
-> differently would read that sentence as true of their code. A sentence that
-> describes a mechanism does not pass it. Report the sentences that fail.
-
-> **Where does this sit in the model?** Use the `domain-driven-design` skill if
-> it is available to you, and read without it if it is not. Report what this
-> specification names inconsistently, places where it does not belong, or splits
-> across a boundary it should not cross.
-
-The fourth answers none of the first three and feeds all three, and **its skill
-is invoked only if present** — this plugin recommends `domain-driven-design` and
-depends on it nowhere, so its absence changes how that reader reads, never
-whether the reading happens.
-
-Compose each dispatch from `skills/writing-a-batch/references/reader-prompt.md`,
-which carries what a reader gets — both states of the spec, its one reading, and
-what it must return.
-
-**A reader gets both states, and reads the later one.** Handing it the spec as
-`main` carries it, alongside the applied copy, turns "what changed" into a diff
-it can run rather than a delta it has to rebuild — which is also why it is handed
-no blocks. The reading itself stays on the applied state, read whole: a reader
-that works through the change block by block is doing the batch-document reread
-over again, and the passage no block aims at goes unseen.
-
-**Every reader returns before anything goes up.** Wait for all of them, gather
-their findings, then put them to your human partner — never a running report. A
-partial report gets findings ruled on that the next reader displaces, and asks
-for the same ruling twice.
-
-**You instruct the findings; you do not forward them.** The batch document is
-still your draft at this point, so work every finding through and revise the
-blocks it lands on, then put to your human partner what you changed and what you
-could not settle. A round runs on the revised text, and the conditions below say
-when the rounds end. Forwarding raw findings makes your human partner arbitrate a
-draft, which is the work the opening gate exists to spare them.
-
-**Four things stop the rounds**, and without them they chain indefinitely.
-
-1. **A fresh round only on a state the reread has not read.** A revision that
-   adds a sentence produces one — and **moving a sentence is an addition**, its
-   reach changing with its place. A revision that takes a sentence out produces
-   one too, but only where something leaned on what left: coherence is a
-   property of the state, not of the text that remains, so a removal reopens
-   what depended on it and nothing else.
-2. **Two rounds stuck on the same clause close the question of its wording.**
-   Take the clause out, or put it to your human partner.
-3. **A round returning only findings already examined and declined is one round
-   too many.** What is left is a disagreement of judgment, and judgment is
-   settled at the gate.
-4. **The reread prepares the gate, it does not replace it.**
-
-**The pull request body declares the reread**: that it was conducted outside this
-context, and what it found — or that it found nothing. A reread nobody can see
-from the pull request is a practice again, not a rule.
+The pull request body says what the reread found, or that it found nothing. A
+reread nobody can see from the pull request is a practice again, not a rule.
 
 ## Opening the Pull Request
 
 **The batch-document reread**, step 6, comes after the coherence reread and
-bears on the whole document. Reread it against the specs with fresh eyes:
-scope stated with its "why now", `Spec delta` filled — its blocks each with its
-`D<n>`, the spec and section it targets, and its exact text, every quoted passage
-matching `main`, or, with no block, what stands in their
-place —, `Constraints` stated or `none` — including the order of any
-section that carries two blocks —, `Feature flag` filled, reservations made for
-every gaps register entry this batch takes on — corrective or ordinary — and the
-lifting of any earlier flag this batch takes on stated as a block.
+bears on the whole document. Conduct it outside the context that wrote the
+document, by dispatching a subagent that checks it against the specs: `Scope`
+stating what the batch delivers, with every gaps register entry it takes on,
+each one reserved, corrective or ordinary; `Spec delta` filled, with blocks or
+with `none` and the reason; `Constraints` carrying only migration and
+compatibility constraints and the required order of stories and blocks, or
+`none`; `Feature flag` filled; and the lifting of any earlier flag this batch
+takes on stated as a block. Revise the document on what it reports.
 
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
-reviewer has to rule on: the exact text of every block — or, with no block, what
-stands in their place —, the flag decision, the scope, and any flag lifting the
-delta announces.
+reviewer has to rule on: the exact text of every block, or the reason for the
+`none`; the flag decision; the scope, with the entries it takes on; and any
+flag lifting the delta announces.
 
 **The review of the batch pull request is the human gate.** Until it merges, no
 story is written and no spec is touched. It bears on the exact text of every
@@ -460,9 +412,9 @@ written on it — block by block, in the batch document, and not later as a diff
 the spec.
 
 **Where the delta carries no block, the review bears on what stands in their
-place**: the reserved entries, or the reason for the `none`. The gate does not
-move and nothing is waived — a batch with no block is read at the same review, on
-the only text its `Spec delta` holds.
+place**: the reason for the `none`, and the entries `Scope` takes on. The gate
+does not move and nothing is waived: a batch with no block is read at the same
+review.
 
 This review replaces the tail of the architectural path of
 `superpowers:brainstorming` — the dated design doc becomes this batch document,
@@ -483,16 +435,17 @@ document now carries the exact text of every block, which is what the design
 conversation was for — and that conversation also carries every option you
 discarded on the way, which the first story must not inherit.
 
-The announcement therefore names `supercharlouze:writing-a-user-story` as the
-next step and gives its prompt in a block to copy and paste. **That prompt stands
-on its own:** it names the skill to invoke, the batch document by path, and says
-to choose the blocks from those the document still carries, and it never refers
-back to this conversation.
+When your human partner announces the merge, name
+`supercharlouze:writing-a-user-story` as the next step and give its prompt in a
+block to copy and paste. **That prompt stands on its own:** it names the skill to
+invoke, the batch document by path, and says to choose the blocks from those the
+document still carries, and it never refers back to this conversation.
 
 ## Amending a Batch
 
 The batch document carries no mutable state, but it stays amendable by an
-**amendment pull request**, reviewed like the others. That is the exit from two
+**amendment pull request**, reviewed like the others. An amendment changes the
+scope, the spec delta or the flag of an open batch. That is the exit from these
 real dead ends:
 
 - **An exempted batch that discovers it needed a flag** — a batch whose stories
@@ -500,30 +453,44 @@ real dead ends:
   that splits in two.
 - **A batch whose scope is reduced or abandoned**, including reducing it after a
   requalification, or giving a flag an extended scope so a later batch can decide.
+- **A batch whose spec delta must change**: a corrective batch rewritten as an
+  ordinary one, or a technical story whose observable change needs a block.
 
-Without this path neither situation has an issue: the `Feature flag` field was
-decided at opening, and closing checks it against reality.
+Without this path none of them has an issue: the batch document is written
+at opening, and nothing else changes it before closing.
 
 Do it on a branch whose name **follows none of this plugin's branch patterns** —
 `adopt/<module>`, `batch/NN-<slug>`, `batch/NN-<slug>-close`,
-`story/NN-us-N-<slug>`, `fix/<slug>`, `chore/supercharlouze-init`. Some of those
+`story/NN-us-N-<slug>`, `bounded/<slug>`, `chore/supercharlouze-init`. Some of those
 names are read as claims: `batch/*` and `story/*` claim a number, `story/*` and
-`fix/*` claim sections. An amendment claims neither a number nor any section, so a
+`bounded/*` claim sections. An amendment claims neither a number nor any section, so a
 branch named after one of the claiming patterns would claim what it does not hold,
 and a name that follows none has nothing to carry: that is what makes it the one
 exception to
 restoring a conventional name, and the exception holds for that reason alone.
-Edit the batch document **in place** — no
-changelog inside it, no history of its own scope — and say in the pull request
-body what changed and why. An amendment is not mutable state
-flowing along: it is an explicit human decision that goes through a review.
+Edit the batch document in place, with no history of its own scope inside it,
+and say in the pull request body what changed and why. An amendment is not
+mutable state flowing along: it is an explicit human decision that goes through
+a review.
+
+By exception, an amendment that changes the spec delta is reviewed as an
+opening. Before its pull request opens, apply its new or changed blocks together
+with every block no merged story has declared yet, and invoke
+`supercharlouze:rereading-a-spec` on each applied copy, with the path of the
+spec it applies to, as `The Coherence Reread` does. Then the whole document
+goes through the batch-document reread. Its body states the exact text of every
+new or changed block, and what the coherence reread found.
+
+An amendment that takes a gaps register entry out of `Scope` releases its
+reservation in the same pull request: it removes the entry's
+`reserved by batch-NN` annotation and leaves the entry.
 
 **An amendment merges into the same clear moment as an opening**, and ends its
 review the same way: fixups during the review, agreement in the conversation,
-squash, and an announcement that names the next step. What differs is which step
-that is — an amendment hands back to whatever the batch was doing when it stopped,
-so the announcement names that, and its prompt names the amended batch document
-by path.
+squash, the pull request announced ready, then the next step named when your
+human partner announces the merge. What differs is which step that is: an
+amendment hands back to whatever the batch was doing when it stopped, so name
+that, and give a prompt that names the amended batch document by path.
 
 ## Requalifying a Corrective Batch
 
@@ -538,36 +505,38 @@ may correct a spec.
 
 **Procedure.**
 
-1. **Abandon the story — and do not assume it has a pull request.** Override 2
-   fires *inside* `superpowers:subagent-driven-development`, mid-implementation,
-   and a story's pull request is opened only at the very end of its Step 5, by
-   `superpowers:finishing-a-development-branch`. So the usual situation when
-   this triggers is a branch and a worktree and **no pull request at all**.
-   Therefore: **close the story's pull request without merging it if one is
-   already open.** Nothing has to be revoked either way, because nothing reached
-   `main`: the spec change, or the deleted gaps-register entry, travels with the
-   code and dies with the branch. The branch and its worktree go once the choice
-   below is ruled: delete the story branch locally and on the remote and remove
-   its worktree — whether a pull request existed or not — so no later session
-   resumes work under a qualification the batch no longer has. The gaps-register
-   reservation is untouched by all of this — it lives on `main`, posted by the
-   opening pull request, and `supercharlouze:closing-a-batch` releases it.
+1. **Leave the story as it stands until the choice below is ruled, then abandon
+   it.** A pull request already open stays open until then. Override 2 fires *inside*
+   `superpowers:subagent-driven-development`, mid-implementation, and a story's
+   pull request is opened only at the very end of its Step 5, by
+   `superpowers:finishing-a-development-branch`, so the usual situation is a
+   branch and a worktree and **no pull request at all**. Once the choice is
+   ruled, close the story's pull request without merging it if one is open,
+   delete the story branch locally and on the remote and remove its worktree, so
+   no later session resumes work under a qualification the batch no longer has:
+   a branch left on the remote is read as a live claim on its sections by every
+   sibling's concurrency scan.
+   Nothing has to be revoked, because nothing reached `main`: the spec change, or
+   the deleted gaps-register entry, travels with the code and dies with the
+   branch. Abandoning the story leaves the gaps-register reservations untouched:
+   they live on `main`, posted by the opening pull request.
 2. **Put the choice to the human**, who alone may rule:
-   - **Correct the spec** — then the batch stays corrective, on a reduced scope,
-     and the corrected spec ships through its own pull request; or
+   - **Correct the spec**: the batch stays corrective, on a reduced scope,
+     and the corrected spec ships through its own pull request;
    - **Rewrite the batch as an ordinary batch**, with a real spec delta, through
-     an **amendment pull request** that goes back through the gate above.
+     an **amendment pull request** reviewed as an opening;
+   - **Rule the remaining work a different batch**: it gets a fresh `NN`, and
+     this batch is closed with `supercharlouze:closing-a-batch` rather than left
+     open.
 
    The rewrite keeps `NN` and its directory: the number identifies a delivery
-   unit, and any story already merged lives under it — a new number would strand
-   them. Hence an amendment pull request on the existing document, replacing
-   the reserved gaps entries with a `Spec delta`, reviewed at the gate like an
-   opening. Allocate a fresh `NN` only when the human rules that the remaining
-   work is a *different* batch, and then close this one with
-   `supercharlouze:closing-a-batch` rather than leaving it open.
-3. **Revise the gaps register reservations** in either case: entries annotated
-   `reserved by batch-NN` that are no longer in scope must be released, and
-   `supercharlouze:closing-a-batch` releases whatever is left unconsumed.
+   unit, and any story already merged lives under it, so a new number would
+   strand them.
+3. **Release the reservations of the entries the batch no longer takes on.** A
+   reduced or rewritten scope releases them in the amendment pull request that
+   changes `Scope`. A batch closed in favour of a fresh one releases them at its
+   closing, before the fresh batch reserves them at its own opening: two batches
+   never reserve the same entry.
 
 Never carry out a requalification by deciding the substance yourself. Correcting
 a spec is a human act, never an agent act. Your job is to present the choice with
@@ -583,22 +552,22 @@ you already stopped, from inside `superpowers:subagent-driven-development`.
 
 **Procedure.**
 
-1. **Abandon the story**, exactly as a requalified corrective story is abandoned:
-   this fires mid-implementation, so the usual situation is a branch and a
-   worktree and **no pull request at all**. Close one without merging it only if
-   it is already open; the branch and its worktree stay until the choice below is
-   ruled, and go once it is — deleted locally and on the remote, worktree removed.
+1. **Abandon the story.** This fires mid-implementation, so the usual situation
+   is a branch and a worktree and **no pull request at all**. Close one without
+   merging it only if it is already open; the branch and its worktree stay until
+   the choice below is ruled, and go once it is — deleted locally and on the
+   remote, worktree removed.
    Nothing reached `main`, so nothing has to be revoked, and a branch left on the
    remote reads as a live claim on its sections.
 2. **Put the choice to the human**, who alone may rule. If they judge the
    observable change wanted, it needs a block, and a block is acquired by an
    amendment that goes back through the opening review — the exact text of a block
    is what that review reads, and a story that transcribes none never passes it.
-3. **A batch exempted from a flag because all of its stories were technical
-   declares one by that same amendment.** The exemption rested on the
-   qualification the story has just lost; leaving it standing would ship
-   observable behaviour with nothing guarding it, which is the whole of what the
-   criterion prevents.
+3. **The same amendment declares the flag the block requires, if it requires
+   one.** Ask the exemption criterion again of the batch with its new block:
+   would one story, merged alone, leave a user facing something incomplete?
+   The exemption drawn from all stories being technical no longer holds, so
+   the answer alone decides.
 
 **Concluded by** the merge of the amendment pull request: the work is rewritten as
 an ordinary story of the amended batch, with `supercharlouze:writing-a-user-story`.
@@ -611,12 +580,11 @@ amend: the story is abandoned and the batch carries on as it was.
 **English skeleton, project-language prose**, inside every document you write
 here. Section headings, field names, front matter values (`status: open`), table
 headers, path patterns and branch patterns are English, always, whatever the
-project speaks. The prose is in the project's language: the scope, the "why now",
-the spec delta, the justification of the flag decision. Slugs name business
+project speaks. The prose is in the project's language: the scope, the
+spec delta, the justification of the flag decision. Slugs name business
 objects, so they follow the project's language too.
 
-This plugin's own files are entirely English — it has no business prose, only
-skeleton.
+Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
 
 ## Red Flags
 
@@ -637,5 +605,4 @@ skeleton.
 | "I'll call the amendment branch `batch/NN-<slug>-amend`, it says what it is" | A name under one of this plugin's branch patterns claims what that pattern claims — a number, sections — and an amendment holds neither. Its branch follows none of them. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
-| "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Dispatch readers outside it. |
-| "One more round, the wording can still improve" | Four conditions close the rounds. Two rounds on the same clause end the question of its wording: take it out or put it to your human partner. |
+| "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-spec`. |

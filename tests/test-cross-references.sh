@@ -10,13 +10,13 @@ fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 
 echo "test-cross-references"
 
-KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch"
+KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec"
 # Commands share the plugin namespace with the skills: /supercharlouze:init is a
 # command, not a skill, so it resolves against commands/<name>.md instead.
 KNOWN_COMMANDS="init"
 
 # 1. Every supercharlouze:<name> reference names a skill or a command that exists.
-#    README.md and CONTRIBUTING.md are scanned too — they name the five skills
+#    README.md and CONTRIBUTING.md are scanned too — they name the skills
 #    and the init command.
 #    begin/end are the CLAUDE.md block markers, not references.
 BAD=0
@@ -76,7 +76,7 @@ fi
 # 4. The bounded path is spelled out (spec 8.2) — it has no skill of its own.
 UB="$(awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$REPO_ROOT/skills/using-batches/SKILL.md" | tr '\n' ' ')"
 has() { case "$2" in *"$1"*) return 0 ;; *) return 1 ;; esac }
-for needle in "out-of-batch" "if and only if nothing observable" "fix/" "no feature flag"; do
+for needle in "if and only if nothing observable" "bounded/" "no feature flag"; do
     if has "$needle" "$UB"; then
         pass "bounded path states: $needle"
     else
@@ -96,12 +96,62 @@ else
     pass "the README does not assert the unconditional spec update"
 fi
 
+# The README row of rereading-a-spec says it is not for direct use, and names
+# none of the skills that invoke it.
+RROW="$(grep -F '`supercharlouze:rereading-a-spec`' "$REPO_ROOT/README.md" || true)"
+case "$RROW" in
+    *"adopting-a-module"*|*"writing-a-batch"*|*"invoked by"*)
+        fail "the README row of rereading-a-spec names no caller" ;;
+    *)  pass "the README row of rereading-a-spec names no caller" ;;
+esac
+case "$RROW" in
+    *"Never directly"*) pass "the README row of rereading-a-spec rules out direct use" ;;
+    *)                  fail "the README row of rereading-a-spec rules out direct use" ;;
+esac
+
+# The specs carry no changelog any more, and the README says nothing of one.
+if grep -qi "changelog" "$REPO_ROOT/README.md"; then
+    fail "the README names no changelog"
+else
+    pass "the README names no changelog"
+fi
+
+# A bounded change lives on `bounded/<slug>`; the former name survives nowhere.
+if grep -q "fix/" "$REPO_ROOT/README.md"; then
+    fail "the README names no fix/ branch"
+else
+    pass "the README names no fix/ branch"
+fi
+
+# The amendment gate covers the spec delta, in the README's gate table too.
+if grep -q "a change of scope, of spec delta or of flag on an open batch" "$REPO_ROOT/README.md"; then
+    pass "the README's amendment gate covers the spec delta"
+else
+    fail "the README's amendment gate covers the spec delta"
+fi
+
+# The README presumes no continuous deployment either.
+if grep -qi "continuous" "$REPO_ROOT/README.md"; then
+    fail "the README requires no continuous deployment"
+else
+    pass "the README requires no continuous deployment"
+fi
+
+# The README defines drift as the spec does: code that contradicts the spec, or
+# behaviour no spec describes.
+README_FLAT="$(tr '\n' ' ' < "$REPO_ROOT/README.md" | tr -s ' ')"
+case "$README_FLAT" in
+    *"any code on \`main\` that contradicts the spec on \`main\`, and any behaviour on \`main\` that no spec describes, is drift"*)
+        pass "the README defines drift as the spec does" ;;
+    *)
+        fail "the README defines drift as the spec does" ;;
+esac
+
 # 5. No shipped artifact cites a numbered section of the archived design
 #    document. The living spec is the binding authority and its sections are
 #    titled, not numbered: a numbered pointer names a document that adoption
 #    stripped of authority, and it rots further at every reshuffle of the spec.
-#    tests/ is deliberately out of range — it is not shipped to users, and the
-#    gaps register entry this guard answers to names only the shipped artifacts.
+#    tests/ is out of range.
 BAD=0
 while read -r hit; do
     [ -n "$hit" ] || continue
@@ -131,5 +181,24 @@ for h in "Installing on a project" "The spec document" "Authority and conflict r
         fail "the living spec has a section named: $h"
     fi
 done
+
+# 7. A section a skill names in parentheses is a heading of that skill, never a
+#    section of the living spec: the spec is French, and it is not among what
+#    the plugin ships.
+BAD=0
+for f in "$REPO_ROOT"/skills/*/SKILL.md; do
+    while IFS= read -r title; do
+        [ -n "$title" ] || continue
+        if ! grep -qxE "#{1,4} $title" "$f"; then
+            echo "    $(basename "$(dirname "$f")"): ($title) is no section of this skill"
+            BAD=$((BAD + 1))
+        fi
+    done < <(grep -oE '\(`[A-Z][A-Za-z ]+`\)' "$f" | sed 's/^(`//; s/`)$//' | sort -u || true)
+done
+if [ "$BAD" = "0" ]; then
+    pass "a section a skill names in parentheses is one of its own"
+else
+    fail "a section a skill names in parentheses is one of its own ($BAD found)"
+fi
 
 exit $((FAILURES > 0))
