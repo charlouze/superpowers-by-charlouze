@@ -137,19 +137,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   violation :** il n'y a pas de norme à faire respecter, il y a une norme à
   écrire, et l'écrire est un acte humain.
 
-- **Language** — la section énonce que « le plugin lui-même est intégralement
-  anglais — skills, commandes, README, bloc d'instructions, messages », et rien ne
-  dit si le tiret illustre ou délimite : ni `tests/` ni `scripts/` n'y figurent.
-  La convention réelle est pourtant sans exception — aucun fichier de ces deux
-  répertoires ne portait de commentaire en français —, mais la phrase ne la
-  garantit pas. Ce que ce silence coûte s'est vu : un plan de story a prescrit du
-  français dans `tests/`, une revue de tâche l'a laissé passer, et c'est la revue
-  de branche qui l'a relevé. Constatée par la story
-  `05-us-3-une-entree-se-lit-seule`. **Gap et non violation :** le code respecte
-  la règle générale, c'est la phrase qui ne dit pas si sa liste illustre ou
-  délimite ; trancher veut dire décider ce que la spec doit dire, et cette
-  décision est humaine. `reserved by batch-11`
-
 - **The batch document / Opening a batch** — deux phrases écrites comme des
   totalités, « le spec delta est le texte exact que ce lot écrit dans les
   specs » et « la revue d'ouverture porte sur le texte exact de chaque bloc :
