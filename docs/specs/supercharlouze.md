@@ -50,6 +50,9 @@ un seul module et se livre en une pull request.
 **Story technique** (`technical story`) — une story qui ne change rien
 d'observable à la frontière de son module.
 
+**Conception technique** (`technical design`) — le mécanisme prévu pour les
+stories d'un lot, dont chacune peut s'écarter.
+
 **Flag** (`feature flag`) — ce qui garde un comportement incomplet hors de portée
 des utilisateurs jusqu'à sa levée.
 
@@ -70,6 +73,9 @@ consignée pour lui.
 
 **Arbitrage ouvert** (`open ruling`) — un arbitrage dont la décision laisse
 quelque chose à trancher.
+
+**Arbitrage de conception technique** (`technical design ruling`) — un arbitrage
+par lequel une story s'écarte de la conception technique de son lot.
 
 **Changement borné** (`bounded`) — un changement complet en une pull request, hors
 de tout lot.
@@ -153,8 +159,7 @@ Exception : la branche d'un amendement n'a pas de nom assigné.
 La spec est l'autorité contraignante de toute revue et de toute relecture.
 
 Hors son spec delta, un lot ne porte que ce qu'une spec ne peut pas porter : son
-périmètre, ses flags, l'ordre de ses stories et de ses blocs, et ses contraintes de
-migration et de compatibilité.
+périmètre, ses flags, ses contraintes et sa conception technique.
 
 La spec de `main` décrit toujours exactement ce que son code fait.
 
@@ -344,8 +349,11 @@ ces champs :
   charge ;
 - **Spec delta** — le texte exact que ce lot écrit dans les specs, en blocs ; ou
   `none` suivi de sa raison ;
-- **Constraints** — seulement les contraintes de migration et de compatibilité, et
-  l'ordre requis des stories et des blocs ; ou `none` ;
+- **Technical design** — la conception technique du lot ; ou `none` suivi de sa
+  raison ;
+- **Constraints** — seulement les contraintes de migration et de compatibilité,
+  les décisions techniques dont une story ne peut pas s'écarter sans casser une
+  autre story, et l'ordre requis des stories et des blocs ; ou `none` ;
 - **Feature flag** — les flags que ce lot déclare, chacun avec son nom, son défaut,
   sa portée et, si elle dépasse le lot, sa condition de levée ; ou `none` suivi de
   la raison de l'exemption.
@@ -446,6 +454,8 @@ La pull request de clôture porte :
 - la libération des réservations non consommées ;
 - le retrait du document de lot des blocs qu'aucune story fusionnée n'a livrés.
   L'humain décide si chacun rejoint le gaps register ;
+- la conception technique du document de lot, quand elle n'est pas `none`,
+  réécrite pour décrire le mécanisme que le lot a livré ;
 - le statut `closed` du document de lot.
 
 ## Story
@@ -550,6 +560,12 @@ Précondition, vérifiée avant de créer la branche : le lot est ouvert.
    modification de spec qu'aucun bloc n'annonce.
 4. Écrire le plan dans le document de story, le commiter et le pousser avant
    l'exécution.
+
+   Le plan part de la conception technique du lot. Exception : là où le code de
+   `main` s'en est écarté, il part du code.
+
+   Tout autre écart du plan à la conception technique est un arbitrage de
+   conception technique, consigné dans le `Rulings log`.
 5. Exécuter le plan par l'exécution par sous-agents de superpowers
    (`Built on superpowers`), puis conclure la branche par une pull request.
 6. Avant la fusion, recopier les arbitrages de l'exécution dans le
