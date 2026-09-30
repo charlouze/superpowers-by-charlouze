@@ -211,12 +211,18 @@ shared "the flag exemption names the technical batch identically" \
     "**A batch all of whose stories are technical** — none of them changes what is observable at its module's boundary, so every pull request is deployable as it stands. That is what the qualification means, not a tolerance granted to it." \
     using-batches writing-a-batch
 
-# The gating sentence has one form, fixed by the spec's template. `using-batches`
-# names it and `writing-a-user-story` shows it. Two spellings of the same sentence
-# is how a live flag stops being found. One assertion over the two skills that
-# write it out.
-shared "the gating sentence is spelled in the spec's one form" \
+# `writing-a-user-story` fixes the forms of the gating sentence, and
+# `using-batches` quotes the one without a lifting condition. Two spellings of
+# the same sentence is how a live flag stops being found. One assertion over the
+# skills that write it out.
+shared "the gating sentence is spelled in its fixed form" \
     "🔒 \`billing.recurring\`, off by default" \
+    using-batches writing-a-user-story
+
+# The forms of the gating sentence are neither counted nor designated by their
+# rank: the one with a lifting condition is recognised by that condition.
+absent "no skill counts or ranks the forms of the gating sentence" \
+    "gating sentence of the first form|or of the second when|one of the two forms" \
     using-batches writing-a-user-story
 
 # A gap's *category* does not depend on where you stand; only its sources do. So
@@ -719,5 +725,22 @@ absent "no story states a flag its module does not carry" \
 absent "no story skill lists the causes of a divergence" \
     "legitimate cause" \
     writing-a-user-story
+
+# The rules for code under a flag were rewritten. The former wording must survive
+# nowhere: the positive needles would stay green beside it.
+absent "no skill keeps the former guarded-code rules" \
+    "Whatever way the project switches its flags|Switching off stays possible at all times|It holds four rules|coexisting on the same data|switching off is always possible|save for the data produced with the flag on" \
+    using-batches writing-a-user-story
+
+# The spec no longer fixes the form of the gating sentence; a skill does.
+absent "no skill says the spec fixes the gating sentence's form" \
+    "form the spec fixes|form fixed by the spec" \
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+
+# Each flag is independent of the others. The skills that declare a flag per
+# (batch, module) say it in the same words.
+shared "each flag is independent of the others" \
+    "Each flag is switched on, switched off and lifted independently of the others: one flag's lifting story waits for no other flag's." \
+    using-batches writing-a-batch
 
 exit $((FAILURES > 0))

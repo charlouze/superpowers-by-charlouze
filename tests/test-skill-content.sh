@@ -450,17 +450,13 @@ require writing-a-user-story "GC is the only channel to SDD subagents" "only cha
 
 # --- writing-a-user-story: the rules a guarded story copies into Global
 # Constraints (spec section "Code under a feature flag") ---
-# These needles target text inside a Markdown blockquote, where the file's
-# re-wrapping guarantee does not hold: `body_flat` turns newlines into spaces
-# but leaves the `> ` prefixes, so a needle spanning a line break there can
-# never match. Each needle below must stay within one physical line of the
-# block, and re-wrapping that block means revisiting them.
-require writing-a-user-story "the flag mechanism is the project's" "Whatever way the project switches its flags"
-require writing-a-user-story "both states coexist on the same data" "work side by side on the same data"
-require writing-a-user-story "switching off loses nothing"        "with no error and no data loss"
-require writing-a-user-story "flag off restores the former behaviour" "With the flag off, the user finds the behaviour"
-require writing-a-user-story "both states and their coexistence are tested" "the flag-on behaviour, of the flag-off behaviour, and of their coexistence"
-require writing-a-user-story "lifting only removes"               "without writing anything new"
+require writing-a-user-story "guarded code holds up in every situation" "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off:"
+require writing-a-user-story "both states work on the same data" "The two states work on the same data: what one produces, the other reads and uses, with no error and no data loss."
+require writing-a-user-story "flag off restores the former behaviour" "With the flag off, the user finds the behaviour from before the batch."
+require writing-a-user-story "both states and their coexistence are tested" "The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence."
+require writing-a-user-story "lifting only removes"               "Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new."
+require using-batches "the guarded-code summary follows the rules" "both states working on the same data, the behaviour from before the batch with the flag off, each state and their coexistence tested, and a lifting that only removes"
+require using-batches "the guarded-code red flag follows the rules" "both states work on the same data, the flag off gives back the behaviour from before the batch, the pull request tests each state and their coexistence, and lifting only removes"
 
 # --- writing-a-user-story: Lifting and Teardown Stories ---
 require writing-a-user-story "an observation period is two stories" "the first moves the declared default of the gating sentence from \`off\` to \`on\`"
@@ -652,5 +648,12 @@ require using-batches "a bounded change touching no section declares none" \
         "when it touches none"
 require using-batches "a changed declaration redoes the detection" \
         "redoes the detection"
+
+require writing-a-user-story "the story skill fixes the forms of the gating sentence" \
+        "states the flag and its default in a gating sentence, which adds its lifting condition when the declared scope reaches beyond the batch: \`\`\`markdown 🔒 \`billing.recurring\`, off by default 🔒 \`billing.recurring\`, off by default — lifted when"
+require writing-a-user-story "the gating sentence names its variable parts" \
+        "The flag's name, its default and its lifting condition vary; the rest of each form is fixed."
+require using-batches "the form of the gating sentence comes from the story skill" \
+        "in one of the forms \`supercharlouze:writing-a-user-story\` fixes"
 
 exit $((FAILURES > 0))

@@ -300,6 +300,9 @@ Otherwise its lifting story would have to delete the gating sentence from two
 specs at once, and a story targets exactly one module — it would be impossible to
 write.
 
+Each flag is switched on, switched off and lifted independently of the others:
+one flag's lifting story waits for no other flag's.
+
 **A flag's life is short, and the batch bounds it by default.** A flag that
 lingers is dead code nobody dares remove, and that failure mode is silent.
 

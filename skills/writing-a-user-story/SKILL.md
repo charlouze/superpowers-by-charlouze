@@ -263,12 +263,16 @@ transcription against. The divergence lives in the pull request, where it is
 visible and gets ruled on.
 
 If the batch declares a feature flag for this story's module, the transcribed spec
-change states the flag and its default and, when the declared scope reaches beyond
-the batch, its lifting condition:
+change states the flag and its default in a gating sentence, which adds its
+lifting condition when the declared scope reaches beyond the batch:
 
 ```markdown
+🔒 `billing.recurring`, off by default
 🔒 `billing.recurring`, off by default — lifted when the `facturation` module is fully delivered
 ```
+
+The flag's name, its default and its lifting condition vary; the rest of each form
+is fixed.
 
 The code you write next is guarded by that flag. Without this sentence a story
 merged behind a flag would make the spec false as users read it, and would
@@ -465,24 +469,16 @@ This holds whether the flag was declared by this story's batch or by another one
 what decides is that this story writes guarded code, not which batch owns the
 flag. Copy the block below verbatim:
 
-> Whatever way the project switches its flags, code guarded by a feature flag
-> holds up under activation for some users only, activation for everyone, and
-> deactivation. It holds four rules:
+> Code guarded by a feature flag holds up when the flag is on for some users
+> only, on for everyone, and off:
 >
-> - **Both states coexist.** A user with the flag on and a user with the flag
->   off work side by side on the same data. What one produces, the other can
->   read and use.
-> - **Switching off stays possible at all times.** Turning the flag off, for one
->   user or for everyone, leaves what the on state produced readable and usable,
->   with no error and no data loss.
-> - **Nothing else changes.** With the flag off, the user finds the behaviour
->   from before the batch, save for the data produced with the flag on.
-> - **Each state is verified.** The story's pull request carries tests of
->   the flag-on behaviour, of the flag-off behaviour, and of their coexistence.
->
-> **Lifting will only remove.** Guarded code is written so that lifting the flag
-> comes down to deleting the branching and the behaviour from before the batch,
-> without writing anything new.
+> - The two states work on the same data: what one produces, the other reads
+>   and uses, with no error and no data loss.
+> - With the flag off, the user finds the behaviour from before the batch.
+> - The story's pull request tests the flag-on behaviour, the flag-off
+>   behaviour, and their coexistence.
+> - Lifting the flag comes down to deleting the branching and the behaviour
+>   from before the batch, without writing anything new.
 
 This block is the only place those rules are written out, and copying it is what
 puts them in front of the implementer — a norm nobody reads while writing the
