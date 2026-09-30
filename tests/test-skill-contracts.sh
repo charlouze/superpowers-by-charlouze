@@ -177,6 +177,32 @@ shared "the technical stop condition is copied exactly as stated" \
     "If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical." \
     using-batches writing-a-user-story
 
+# The concision rules are copied into every story's Global Constraints.
+# `using-batches` states them and `writing-a-user-story` has them copied; a rule
+# spelled differently in the copy is no longer the rule the implementers obey.
+# Only each rule's first sentence is pinned: the copy adapts the exception and
+# the gloss on relief for an implementer who reads nothing else.
+for rule in \
+    "Every sentence says one exact thing, once, and stands on its own." \
+    "Every paragraph carries one rule." \
+    "A rule says how far it holds, and an exception presents itself as one." \
+    "A text says what it delivers or decides, without telling how it got there or why." \
+    "No sentence is set in relief"; do
+    shared "the concision rule is copied as stated: $rule" "$rule" \
+        using-batches writing-a-user-story
+done
+
+# The mirror: an item of Global Constraints is named, never counted or numbered.
+# An ordinal goes false in every paragraph the day an item is added or removed.
+absent "no Global Constraints item is counted or numbered" \
+    "(first|second|third|fourth|fifth|sixth|seventh|eighth) thing|[0-9]\. the (constraints|freeze|authority|concision)|[0-9]\. \*\*in a " \
+    writing-a-user-story
+
+# The mirror: the story header does not count its fields.
+absent "the story header does not count its fields" \
+    "(two|three|four|five|six|seven) fields|five on a technical story" \
+    writing-a-user-story
+
 # The three families that answer the exemption criterion by construction are
 # listed in both skills. A family spelled two ways is a family a reader cannot
 # claim: the batch document quotes the wording, and the opening review reads it.
@@ -682,5 +708,16 @@ absent "using-batches copies no requalification procedure" \
 absent "no skill makes a lost technical exemption declare a flag" \
     "declares one by that same amendment|a flag if the batch was exempted because all of its stories were technical" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
+# The mirror: a story states a flag only when its batch declares one for the
+# story's module. The former unconditional sentence must not survive.
+absent "no story states a flag its module does not carry" \
+    "If the batch declares a feature flag, the transcribed" \
+    writing-a-user-story
+
+# The mirror: the divergence rule says what to do, and no longer lists causes.
+absent "no story skill lists the causes of a divergence" \
+    "legitimate cause" \
+    writing-a-user-story
 
 exit $((FAILURES > 0))

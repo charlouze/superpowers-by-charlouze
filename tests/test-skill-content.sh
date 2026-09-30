@@ -413,6 +413,7 @@ require writing-a-user-story "an open ruling needs a destination"  "A story does
 require writing-a-user-story "the review is the last place to act" "do not announce the pull request ready while an open ruling without a destination stands"
 require writing-a-user-story "story branch naming convention"     "story/NN"
 require writing-a-user-story "spec change states flag and default" "states the flag and its default"
+require writing-a-user-story "the gating sentence follows the story's module" "If the batch declares a feature flag for this story's module"
 require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
 require writing-a-user-story "teardown story exists"              "teardown story"
 require writing-a-user-story "a technical story declares itself" \
@@ -435,12 +436,15 @@ require writing-a-user-story "no ruling houses a rule twice"      "no ruling put
 # --- writing-a-user-story: what Global Constraints carries (spec section "The user story document") ---
 require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
 require writing-a-user-story "GC carries the spec freeze"         "freeze of the spec file"
-require writing-a-user-story "GC carries the authority rule"      "That rule is the third thing \`Global Constraints\` carries"
+require writing-a-user-story "GC carries the authority rule"      "That rule is the authority rule \`Global Constraints\` carries"
 require writing-a-user-story "the authority rule is stated in full" "the spec wins — without exception and without deliberation"
 require writing-a-user-story "GC carries the corrective stop condition" "the stop condition proper to a corrective batch, written out in full"
-require writing-a-user-story "GC carries the technical stop condition" "carries a sixth thing: the stop condition proper to a technical story"
-require writing-a-user-story "GC lists a sixth item"              "6. **in a technical story only**, the stop condition proper to a technical story"
-require writing-a-user-story "GC carries the guarded-code rules"  "carries a fifth thing: the rules for code under a flag"
+require writing-a-user-story "GC lists the concision rules"       "- the concision rules;"
+require writing-a-user-story "GC carries the concision rules"     "In every story, \`Global Constraints\` carries the concision rules, written out in full"
+require writing-a-user-story "the concision block names what it covers" "These rules hold for every document, pull request body and commit message this story writes"
+require writing-a-user-story "GC carries the guarded-code rules"  "carries the rules for code under a flag, written out in full"
+require writing-a-user-story "GC carries the technical stop condition" "carries the stop condition proper to a technical story, written out in full"
+require writing-a-user-story "GC lists the technical stop condition" "- **in a technical story only**, the stop condition proper to a technical story"
 require writing-a-user-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
 require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
 
@@ -468,16 +472,19 @@ require writing-a-user-story "only a story changes the declared default" "Only a
 require writing-a-user-story "a story knows its batch's stories"   "each knowing the stories of its batch already written"
 require writing-a-user-story "each story chooses its own blocks"  "chooses, as it is written, the blocks of the spec delta it transcribes"
 require writing-a-user-story "a block is never shared"            "a block is never shared between two stories"
-require writing-a-user-story "the header carries four extra fields" "extend the standard header with four fields"
+require writing-a-user-story "the header carries extra fields"     "extend the standard header with the fields below"
 require writing-a-user-story "the header template declares Blocks"  "**Blocks:** D3, D7"
+# A section title is skeleton, so the example header names English sections.
+require writing-a-user-story "the header example names English sections" "**Sections:** Subscription > Renewal, Subscription > Proration"
 require writing-a-user-story "Blocks is what closing reads"         "reads to find the blocks nobody delivered"
 require writing-a-user-story "Blocks is none when none is taken"    "\`none\` for a story that transcribes none"
 require writing-a-user-story "three properties are load-bearing"    "Three properties are load-bearing"
 require writing-a-user-story "transcription is word for word"       "exactly as the opening review read it"
 require writing-a-user-story "a diff block yields its paragraph"    "is transcribed as the paragraph it produces"
-require writing-a-user-story "main moved under a block's paragraph" "The paragraph a block changes no longer reads in \`main\` as the block shows it"
+require writing-a-user-story "main moved under a block's paragraph" "the paragraph a block changes no longer reads in \`main\` as the block shows it"
 require writing-a-user-story "a divergence is named in the PR"      "Every divergence from a block is named in the body of the pull request"
-require writing-a-user-story "a divergence has two legitimate causes" "only two legitimate causes"
+require writing-a-user-story "main moved: fit the block"            "When \`main\` moved under a block, fit the block to what \`main\` now carries"
+require writing-a-user-story "a problematic block goes to the human" "When the block's text is a problem, stop and put it to your human partner before transcribing it"
 require writing-a-user-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
 require writing-a-user-story "no divergence amends the batch document" "Neither case amends the batch document"
 require writing-a-user-story "ends the review as every gate does"   "never approves and never merges a pull request"
@@ -485,6 +492,21 @@ require writing-a-user-story "pushes corrections as fixups"         "pushed as a
 require writing-a-user-story "names the merge a clear moment"       "a moment to clear the context"
 require writing-a-user-story "hands over to the next story"         "name the next story as the next step"
 require writing-a-user-story "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
+
+# --- writing-a-user-story: what the spec leaves to the skill (sections
+# "The user story document", "Delivering a story", "Abandoning a story") ---
+# The spec states the rules; these details are the method, and the skill is the
+# only place that still carries them.
+require writing-a-user-story "the NN- prefix keeps basenames unique" "The \`NN-\` prefix keeps basenames unique across batches"
+require writing-a-user-story "Spec: is the binding authority"       "\`Spec:\` is the field \`subagent-driven-development\` already reads as the binding authority"
+require writing-a-user-story "sections are declared, not derived"   "Sections are declared, not derived"
+require writing-a-user-story "never the batch's whole delta"        "and never the batch's whole delta"
+require writing-a-user-story "an open batch has its opening merged" "Its opening pull request is merged and its document says \`status: open\`"
+require writing-a-user-story "the plan goes into the first commit's document" "Step 4 then writes the plan into that document rather than creating it"
+require writing-a-user-story "the plan is pushed immediately"       "and push it immediately"
+require writing-a-user-story "the records are pushed"               "Commit both on the branch and push, so they merge with it"
+require writing-a-user-story "the merge delivers the story"         "The story is delivered when its pull request is merged"
+require writing-a-user-story "abandoning removes the worktree too"  "remove its worktree and delete its branch, locally and on the remote"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "every duty lands in one pull request"  "Every duty lands in one pull request"

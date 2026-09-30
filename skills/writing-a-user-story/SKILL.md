@@ -244,27 +244,27 @@ travels in the pull request, and the freeze of Step 4 gets an identifiable
 starting point.
 
 **Named in the pull request.** Every divergence from a block is named in the body
-of the pull request Step 5 opens, and ruled on at the delivery review. A
-divergence has only two legitimate causes:
+of the pull request Step 5 opens, and ruled on at the delivery review.
 
-- **`main` moved.** The paragraph a block changes no longer reads in `main` as
-  the block shows it, because another story or a bounded change landed on that
-  section since the batch opened. Fit the block to what `main` now carries,
-  without changing its meaning, and say in the pull request what you fitted
-  and why.
-- **The block's text is a problem.** Stop, and put it to your human partner
-  before transcribing it. Do not transcribe a text you believe is wrong, and do
-  not repair it on your own: the opening gate is where that text was ruled on,
-  and reopening it is your human partner's act.
+When `main` moved under a block, fit the block to what `main` now carries, without
+changing its meaning, and say in the pull request what you fitted and why. `main`
+moved when the paragraph a block changes no longer reads in `main` as the block
+shows it, because another story or a bounded change landed on that section since
+the batch opened.
+
+When the block's text is a problem, stop and put it to your human partner before
+transcribing it. Do not transcribe a text you believe is wrong, and do not repair
+it on your own: the opening gate is where that text was ruled on, and reopening it
+is your human partner's act.
 
 **Neither case amends the batch document.** It records what the opening review
 read, and editing it would erase the very text a reviewer compares your
 transcription against. The divergence lives in the pull request, where it is
 visible and gets ruled on.
 
-If the batch declares a feature flag, the transcribed spec change **states the flag
-and its default**, and — when the declared scope reaches beyond the batch — its
-lifting condition:
+If the batch declares a feature flag for this story's module, the transcribed spec
+change states the flag and its default and, when the declared scope reaches beyond
+the batch, its lifting condition:
 
 ```markdown
 🔒 `billing.recurring`, off by default — lifted when the `facturation` module is fully delivered
@@ -329,13 +329,12 @@ an implementation to the length of a single commit.
 ## Step 4 — Write the Plan
 
 Call `superpowers:writing-plans`. The plan **is** the story document: save it
-into the batch directory, and extend the standard header with four fields — five
-on a technical story.
+into the batch directory, and extend the standard header with the fields below.
 
 ```markdown
 **Spec:** docs/specs/facturation.md
 **Batch:** docs/batches/07-facturation-recurrente/README.md
-**Sections:** Abonnement > Renouvellement, Abonnement > Proration
+**Sections:** Subscription > Renewal, Subscription > Proration
 **Blocks:** D3, D7
 ```
 
@@ -394,15 +393,16 @@ have to recognise a category in prose.
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
 part of every task's requirements — carries:
 
-1. the constraints the batch imposes;
-2. the freeze of the spec file;
-3. the authority rule;
-4. **in a corrective batch only**, the stop condition proper to a corrective
-   batch;
-5. **in a story that writes code guarded by a flag only**, the rules for code
-   under a flag;
-6. **in a technical story only**, the stop condition proper to a technical
-   story.
+- the constraints the batch imposes;
+- the freeze of the spec file;
+- the authority rule;
+- the concision rules;
+- **in a corrective batch only**, the stop condition proper to a corrective
+  batch;
+- **in a story that writes code guarded by a flag only**, the rules for code
+  under a flag;
+- **in a technical story only**, the stop condition proper to a technical
+  story.
 
 The batch's constraints are its `Constraints` section copied verbatim. The
 freeze of the spec file reads:
@@ -424,10 +424,29 @@ conflict on the spec file.
 **When the batch and the spec contradict each other, the spec wins — without
 exception and without deliberation.** Implement what the spec says, record a
 `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an
-agent's.** That rule is the third thing `Global Constraints` carries.
+agent's.** That rule is the authority rule `Global Constraints` carries.
 
-**In a corrective batch, `Global Constraints` carries a fourth thing: the stop
-condition proper to a corrective batch, written out in full.** Copy it verbatim,
+In every story, `Global Constraints` carries the concision rules, written out in
+full. Copy the block below verbatim:
+
+> These rules hold for every document, pull request body and commit message
+> this story writes.
+>
+> Every sentence says one exact thing, once, and stands on its own.
+>
+> Every paragraph carries one rule.
+>
+> A rule says how far it holds, and an exception presents itself as one.
+>
+> A text says what it delivers or decides, without telling how it got there or
+> why. Exception: a reason that is explicitly asked for, such as the why of a
+> ruling.
+>
+> No sentence is set in relief: no bold that ranks one sentence above its
+> neighbours.
+
+**In a corrective batch, `Global Constraints` carries the stop condition proper
+to a corrective batch, written out in full.** Copy it verbatim,
 exactly as `supercharlouze:using-batches` states it:
 
 > If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
@@ -441,7 +460,7 @@ stop condition stated to you and not written here never reaches the agent who
 has to obey it.
 
 **In a story that writes code guarded by a feature flag, `Global Constraints`
-carries a fifth thing: the rules for code under a flag, written out in full.**
+carries the rules for code under a flag, written out in full.**
 This holds whether the flag was declared by this story's batch or by another one:
 what decides is that this story writes guarded code, not which batch owns the
 flag. Copy the block below verbatim:
@@ -470,8 +489,8 @@ puts them in front of the implementer — a norm nobody reads while writing the
 code bites on nothing. They travel the way the freeze does, through the only
 channel SDD's subagents read.
 
-**In a technical story, `Global Constraints` carries a sixth thing: the stop
-condition proper to a technical story, written out in full.** Copy it verbatim,
+**In a technical story, `Global Constraints` carries the stop condition proper to
+a technical story, written out in full.** Copy it verbatim,
 exactly as `supercharlouze:using-batches` states it:
 
 > If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical.
