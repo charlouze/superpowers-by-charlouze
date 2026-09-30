@@ -329,31 +329,17 @@ pourquoi les autres ne l'ont pas été.
 
 ## Batch
 
-Un lot vit dans `docs/batches/NN-<slug>/`. Il peut être transverse à plusieurs
-modules.
+Un lot vit dans `docs/batches/NN-<slug>/`.
 
-**Un lot est identifié par `NN`**, le plus petit entier
+Un lot est identifié par `NN`, le plus petit entier ni utilisé dans
+`docs/batches/` sur `main`, ni revendiqué par une pull request ouverte ou par une
+branche poussée.
 
-- non utilisé dans `docs/batches/` sur `main`,
-- non revendiqué par une pull request ouverte,
-- non revendiqué par une branche poussée qui ne porte pas encore de pull request.
+La branche `batch/NN-<slug>` revendique `NN`.
 
-Seules les branches `batch/*` et `story/*` revendiquent un numéro :
-`batch/NN-<slug>` revendique `NN`, et `story/NN-us-N-<slug>` revendique `NN` et
-`us-N`.
+Le document de lot ne change que par un amendement, ou à sa clôture.
 
-**Le document de lot ne porte aucun état mutable**, et rien dans le déroulement
-normal ne le modifie avant sa clôture, qui l'amende et le déclare clos. En
-conséquence :
-
-- **la liste des stories n'y figure pas** : elle est le contenu du répertoire du
-  lot, complété par les pull requests ouvertes et par les branches `story/*`
-  poussées qui ne portent pas encore de pull request ;
-- **l'état d'une story n'y figure pas** : l'état d'une story *est* l'état de sa
-  pull request.
-
-**Il reste amendable par une pull request d'amendement** (`Amending a batch`),
-revue comme les autres.
+Il ne porte ni la liste de ses stories, ni leur état.
 
 ### The batch document
 
@@ -403,62 +389,43 @@ rien trouvé.
 
 ### Opening a batch
 
-Une conception architecturale se conclut ici (`Departures from superpowers`).
 L'ouverture :
 
-1. Vérifie que chaque module touché est adopté ; sinon l'ouverture s'arrête, et
-   l'adoption se conduit à part (`Departures from superpowers`).
-2. Attribue `NN`.
-3. Rédige le document de lot : `Scope`, `Spec delta`, `Constraints`,
-   `Feature flag`.
-4. **Réserve dans le gaps register toute entrée que ce lot prend en charge** —
-   lot correctif puisant dans *Violations* comme lot ordinaire puisant dans
-   *Gaps*. Deux lots ne réservent jamais la même entrée. **Aucune écriture dans
-   les specs à ce stade.**
-5. **Fait passer le spec delta entier par la relecture de cohérence**
-   (`The coherence reread`).
-6. Ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
+1. vérifie que chaque module touché est adopté, et s'arrête sinon ;
+2. attribue `NN` ;
+3. rédige le document de lot ;
+4. réserve les entrées du gaps register que le lot prend en charge ;
+5. fait passer le spec delta par la relecture de cohérence ;
+6. relit le document de lot en entier ;
+7. ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
 
-**La revue d'ouverture porte sur le texte exact de chaque bloc** : c'est là que
-l'humain lit ce que diront les specs, avant qu'aucun code ne s'écrive dessus. Quand
-le champ `Spec delta` ne porte aucun bloc, elle porte sur ce qui en tient lieu : les
-entrées réservées, ou la raison du `none`.
-
-**Conclue par** la fusion de sa pull request : le lot est ouvert. Tant qu'elle n'est
-pas fusionnée, aucune story ne s'écrit.
+Rien n'est écrit dans les specs à l'ouverture.
 
 ### Amending a batch
 
-Un amendement change le périmètre ou le flag d'un lot ouvert, par une pull request
-sur son document existant. C'est par lui qu'un lot exempté de flag en déclare un,
-qu'un flag reçoit une portée étendue, et qu'un lot réduit ou abandonne son
-périmètre.
+Un amendement change le périmètre, le spec delta ou le flag d'un lot ouvert, par
+une pull request sur son document.
 
-Sa branche ne suit aucun des patrons que ce document définit : elle ne revendique
-ni numéro ni section.
+Exception à la revue d'amendement : un amendement qui change le spec delta est revu
+comme une ouverture.
 
-**Requalification d'un lot correctif.** Quand sa condition d'arrêt propre se
-déclenche (`Departures from superpowers`), la story en cours est abandonnée
-(`Abandoning a story`) une fois la requalification tranchée ; la réservation au
-gaps register n'est pas touchée. Puis l'humain tranche :
+Quand la condition d'arrêt d'un lot correctif se déclenche, l'humain tranche :
 
-- soit il corrige la spec — lui seul le peut — et le lot reste correctif sur un
-  périmètre réduit ;
-- soit le lot est réécrit comme lot ordinaire, avec un spec delta, par un
-  amendement. **Cette réécriture garde `NN` et son répertoire**, et repasse la revue
-  d'ouverture.
+- soit il corrige la spec, et le lot reste correctif sur un périmètre réduit ;
+- soit un amendement réécrit le lot comme lot ordinaire, en gardant `NN` et son
+  répertoire ;
+- soit il juge le travail restant être un autre lot, qui reçoit un `NN` neuf, et le
+  lot requalifié est clos.
 
-Un `NN` neuf n'est attribué que si l'humain juge le travail restant être un
-*autre* lot, et celui-ci est alors clos plutôt que laissé ouvert. Dans tous les
-cas, les réservations au gaps register sont révisées.
+La story en cours est abandonnée une fois la requalification tranchée.
 
-**Requalification d'une story technique.** Quand sa condition d'arrêt se déclenche
-(`Departures from superpowers`), la story est abandonnée (`Abandoning a story`). Si
-l'humain juge le changement observable voulu, il lui faut un bloc, acquis par un
-amendement qui repasse la revue d'ouverture ; et un lot exempté de flag parce que
-toutes ses stories étaient techniques en déclare un par le même amendement.
+Les entrées du gaps register que le lot ne prend plus en charge sont libérées.
 
-**Conclu par** la fusion de sa pull request : le lot est amendé.
+Quand la condition d'arrêt d'une story technique se déclenche, la story est
+abandonnée.
+
+Si l'humain veut le changement observable qu'elle a révélé, un amendement ajoute
+son bloc, et le flag qu'il exige s'il en exige un (`Feature flags`).
 
 ### Closing a batch
 
