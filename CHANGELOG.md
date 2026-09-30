@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.7.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.6.0...v0.7.0) (2026-09-30)
+
+
+### Features
+
+* chaque story transmet les règles de concision à ses implémenteurs ([43bf3a4](https://github.com/charlouze/superpowers-by-charlouze/commit/43bf3a4e005688cc32e1608a77dee7b6ff737a9f))
+* l'adoption fait relire sa spec avant d'ouvrir sa pull request ([5d7feb5](https://github.com/charlouze/superpowers-by-charlouze/commit/5d7feb5a611dccd090237668464d36f96d88e873))
+* la détection de concurrence filtre par nom de branche ([6eff033](https://github.com/charlouze/superpowers-by-charlouze/commit/6eff0334213362e762b1b086cc985e9da2d870bf))
+* la relecture du document de lot se conduit hors du contexte qui l'a écrit ([41e2d5a](https://github.com/charlouze/superpowers-by-charlouze/commit/41e2d5a83a4cc8f4cea16404702a5fa2cf682347))
+* la story technique ([#60](https://github.com/charlouze/superpowers-by-charlouze/issues/60)) ([1bae213](https://github.com/charlouze/superpowers-by-charlouze/commit/1bae2131bdf7a851227685221814a908428a16b2))
+* le document de lot ne porte que ce qu'une spec ne peut pas porter ([1092f18](https://github.com/charlouze/superpowers-by-charlouze/commit/1092f1805f0ecc1b593171078183ddc9e46fd38f))
+* le nom de la branche d'un amendement ne suit aucun patron du plugin ([cf08307](https://github.com/charlouze/superpowers-by-charlouze/commit/cf08307e8031278eb7ccea28af00cc16204b68d9))
+* les flags suivent leurs règles réécrites, de leur mention à leur levée ([70ff153](https://github.com/charlouze/superpowers-by-charlouze/commit/70ff1530123b690dcb8cf07485044baf2ab8bca0))
+* les skills définissent les termes du flux comme la spec, de la pull request à la dérive ([043a875](https://github.com/charlouze/superpowers-by-charlouze/commit/043a875e0a8a99ad722e8bb5384adf5246c52693))
+* les specs ne portent plus de changelog ([e42d14a](https://github.com/charlouze/superpowers-by-charlouze/commit/e42d14afa741488a6d591e5450ccdb0b91b8d059))
+* tout texte du flux est précis et concis ([ac3ba6c](https://github.com/charlouze/superpowers-by-charlouze/commit/ac3ba6c8a8bbe96fd3413ba3cf8ae1ba4ddde92a))
+* un amendement peut changer le spec delta d'un lot, revu comme une ouverture ([dc01876](https://github.com/charlouze/superpowers-by-charlouze/commit/dc01876e09e9cd278271c84fd565a002e9b467e9))
+* un changement borné sans effet observable laisse la spec muette ([23ae14d](https://github.com/charlouze/superpowers-by-charlouze/commit/23ae14d2e69029b8bdb0729c48031ebea63235c1))
+* un lot peut s'ouvrir sans aucun bloc ([bff2c1a](https://github.com/charlouze/superpowers-by-charlouze/commit/bff2c1a4613c1cee437a7fab936906caeb16d9db))
+* un travail qui ne déplace aucune règle se livre en story technique ([a0703cd](https://github.com/charlouze/superpowers-by-charlouze/commit/a0703cd0e3d4ca775cf1bacbb540f12babc48181))
+* une skill commune relit une spec, neuve ou modifiée ([ec3936d](https://github.com/charlouze/superpowers-by-charlouze/commit/ec3936dbb8721243efa89f56d999027dbfe80236))
+* une story peut livrer du code sans modification de spec ([6e7a1cb](https://github.com/charlouze/superpowers-by-charlouze/commit/6e7a1cb91ccdbb76721ac3f2b873d0b551f1ea13))
+
+
+### Bug Fixes
+
+* l'installation archive les répertoires vides au lieu de les supprimer ([e865820](https://github.com/charlouze/superpowers-by-charlouze/commit/e865820fab8c6c44077baa99b49a45b92f148ac0))
+* writing-a-batch n'annonce plus quatre préconditions quand il en liste trois ([3063540](https://github.com/charlouze/superpowers-by-charlouze/commit/30635400786da0085dd7665c4d905b22ba75e2de))
+
 ## [0.6.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.5.0...v0.6.0) (2026-09-21)
 
 
