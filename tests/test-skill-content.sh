@@ -157,7 +157,7 @@ require writing-a-batch "an amendment goes through the technical reread" "An ame
 require writing-a-batch "its technical reread is the opening's" "Conduct it as \`The Technical Reread\` does"
 require writing-a-batch "its technical reread reads the pending blocks applied" "on the amended document and on each spec with every block no merged story has declared yet applied"
 require writing-a-batch "its technical reread builds the copies itself" "in a copy built as \`The Coherence Reread\` builds it"
-require writing-a-batch "a block the technical reread returns makes a delta amendment" "A block it returns makes the amendment one that changes the spec delta"
+require writing-a-batch "a behaviour taken back makes a delta amendment" "A behaviour it returns as taken back to the spec delta makes the amendment one that changes the spec delta"
 require writing-a-batch "its body carries what an opening body carries" "the exact text of every new or changed block, and what the coherence reread found"
 require writing-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
 require writing-a-batch "the human rules on a constraint a story cannot hold" "**When a story stops on a constraint it cannot hold, your human partner rules on the constraint.**"
@@ -330,9 +330,13 @@ require writing-a-batch "a batch with neither skips it"         "A batch whose \
 require writing-a-batch "the batch goes to the technical reread" "Invoke \`supercharlouze:rereading-a-technical-design\` with the batch document and each spec the batch touches"
 require writing-a-batch "a spec no block targets goes as it is" "the applied copy the coherence reread built, or the spec itself when no block targets it"
 require writing-a-batch "revisions go back into the design"     "Carry every revision it returns back into \`Technical design\` and \`Constraints\`"
-# A block ruled on the technical reread's result was never read by the coherence
-# reread, which ran before it.
-require writing-a-batch "a block it returns goes through the coherence reread" "Write every block it returns into \`Spec delta\`, then put the delta back through \`The Coherence Reread\` before the batch-document reread."
+# The technical reread reads the delta and never writes into it: a block is a
+# design decision, and it goes back through the opening from the delta on.
+require writing-a-batch "the technical reread changes no spec delta" "The technical reread never changes \`Spec delta\`, and sends nothing back through the coherence reread."
+require writing-a-batch "a behaviour taken back restarts the delta" "A behaviour it returns as taken back to the spec delta sends the opening back to step 5, with the block your human partner rules."
+# The two rereads never run side by side.
+require writing-a-batch "the technical reread waits for the coherence reread" "**Start it only once the coherence reread has closed its rounds.** Run side by side, each reread revises what the other is reading"
+require writing-a-batch "red flag: both rereads together"         "| \"The rereads read different things, I'll run them together\" | Each revises what the other is reading."
 require writing-a-batch "the pull request body says what it found" "The body of the pull request that runs it, opening or amendment, says what it found, or that it found nothing"
 require writing-a-batch "the red flag sends the design to the reread" "Invoke \`supercharlouze:rereading-a-technical-design\`. |"
 
@@ -432,15 +436,20 @@ require rereading-a-spec "the reading stays on the applied state" "The reading i
 require rereading-a-spec "every reader returns before anything goes up" "Every reader returns before anything goes up"
 require rereading-a-spec "no running report"                     "never a running report"
 require rereading-a-spec "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
+# A defect the change did not write is returned and left alone. Fixed in the
+# reread, it widens what the human reviews; left to every round, it comes back
+# with each of them.
+require rereading-a-spec "a defect already on main is not fixed"  "A defect the spec already carries on \`main\` is not fixed: the change did not write that passage, and fixing it widens what your human partner reviews"
+require rereading-a-spec "a defect already on main opens no round" "It goes once into what the reread found, and opens no round"
+require rereading-a-spec "red flag: an old passage"               "| \"The reader is right about this old passage, I'll fix it too\" | The change did not write it."
 require rereading-a-spec "a round runs on the revised text"       "A round runs on the revised text"
-# The stop conditions: one assertion per condition, one more for the rider that
-# decides the first condition's common case, and one for its removal half.
+# The stop conditions themselves are spelled alike in both rereads, and guarded
+# once over both in test-skill-contracts.sh. Here: that they exist, the red flags
+# that answer the excuses, and the one condition whose wording is this skill's.
 require rereading-a-spec "the rounds have stop conditions"        "These stop the rounds"
-require rereading-a-spec "only an unread state reopens a round"   "A fresh round only on a state the reread has not read"
-require rereading-a-spec "moving a sentence is an addition"       "moving a sentence is an addition"
-require rereading-a-spec "a removal reopens what leaned on it"    "a removal reopens what depended on it and nothing else"
-require rereading-a-spec "two stuck rounds close the wording"     "Two rounds stuck on the same clause close the question of its wording"
-require rereading-a-spec "a round of declined findings is one too many" "already examined and declined is one round too many"
+require rereading-a-spec "red flag: one more round"               "| \"One more round, the wording can still improve\" | The third round is the last you open."
+require rereading-a-spec "red flag: a section rewritten whole"    "| \"This section reads better rewritten whole\" | A rewritten section is unread, and sends every reading out again."
+require rereading-a-spec "red flag: a reworded clause"            "| \"I reworded the clause, so this finding is a new one\" | A finding is its problem, not its words."
 require rereading-a-spec "the reread does not replace the review"  "prepares the review of the pull request that carries the spec, it does not replace it"
 
 # --- rereading-a-technical-design (spec section "The technical reread") ---
@@ -451,7 +460,9 @@ require rereading-a-technical-design "it is invoked by a skill"          "It is 
 require rereading-a-technical-design "input: the batch and its applied specs" "The input is the batch document, and each spec the batch touches with the batch's blocks applied"
 require rereading-a-technical-design "the readers read main's code"     "The readers read the code as \`main\` carries it"
 require rereading-a-technical-design "output: the design revised"        "the technical design and the constraints, revised: every finding worked through, and every ruling of your human partner applied"
-require rereading-a-technical-design "output: the blocks the human ruled" "the blocks your human partner ruled the batch needs, each with the behaviour it describes"
+require rereading-a-technical-design "output: the behaviours taken back to the delta" "the behaviours your human partner took back to the spec delta, which ended the reread"
+require rereading-a-technical-design "the reread writes no block" "It leaves the design, or your human partner takes the batch back to its spec delta and the reread ends: this reread writes no block."
+require rereading-a-technical-design "red flag: writing the block" "| \"The design needs this rule, I'll write the block\" | This reread writes no block."
 require rereading-a-technical-design "output: what the reread found"     "what the reread found, or that it found nothing, written for a pull request body"
 # One reader per reading, dispatched from a template.
 require rereading-a-technical-design "a reader takes one reading"        "A reader takes one reading"
@@ -488,6 +499,9 @@ require rereading-a-technical-design "a fix keeps what the design decides" "Fix 
 require rereading-a-technical-design "an undescribed behaviour always goes up" "A behaviour the design would make observable that no specification describes is always put to your human partner"
 require rereading-a-technical-design "a round runs on the revised text"  "A round runs on the revised text"
 require rereading-a-technical-design "the rounds have stop conditions"   "These stop the rounds"
+require rereading-a-technical-design "red flag: one more round"          "| \"One more round, the design can still improve\" | The third round is the last you open."
+require rereading-a-technical-design "red flag: a section rewritten whole" "| \"This section reads better rewritten whole\" | A rewritten section is unread, and sends every reading out again."
+require rereading-a-technical-design "red flag: a reworded clause"       "| \"I reworded the clause, so this finding is a new one\" | A finding is its problem, not its words."
 require rereading-a-technical-design "the reread does not replace the review" "prepares the review of the pull request that carries the design, it does not replace it"
 
 # --- writing-a-batch: ending the opening and amendment reviews ---

@@ -1,7 +1,8 @@
 # Technical Design Reread — Reader Prompt
 
 One reader, one reading, one batch. Fill every `<…>` slot before dispatching: a
-slot left as written is a reader with nothing to read.
+slot left as written is a reader with nothing to read. For the first round, leave
+out the paragraph on the state the previous round read, with its heading.
 
 The reading is one of the readings that `## The Readings` of the skill states,
 pasted word for word from there. This file restates none of them: a second copy
@@ -18,6 +19,13 @@ What you evaluate is its `Technical design` section and its `Constraints`
 section, which this prompt calls the design. A section that reads `none` gives
 you nothing to evaluate, and its absence is not a finding. The rest of the
 document says what the batch promises: read it for that.
+
+**The state the previous round read:** `<path to the copy of the batch document that the round before read>`
+
+A round has already read that state. Report only what the revision between that
+state and the document above makes wrong: a sentence it added, moved or
+reworded, and a passage that leaned on a sentence it took out. Report nothing
+that stands unchanged since that state.
 
 **The specifications, with the batch's changes applied:** `<path to each specification the batch touches, with its blocks applied>`
 

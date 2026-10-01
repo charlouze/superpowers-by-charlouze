@@ -2,7 +2,8 @@
 
 One reader, one reading, one spec. Fill every `<…>` slot before dispatching: a
 slot left as written is a reader with nothing to read. For a new spec, leave out
-the paragraph on the earlier state, with its heading.
+the paragraph on the earlier state, with its heading. For the first round, leave
+out the paragraph on the state the previous round read, with its heading.
 
 The reading is one of the readings that `## The Readings` of the skill states,
 pasted word for word from there. This file restates none of them: a second copy
@@ -21,7 +22,16 @@ Read it whole. Everything you report is about this document.
 
 This one is for locating what changed: diff it against the document above
 whenever that helps. Do not review the change as a diff: your finding is about
-the document above, read whole.
+the document above, read whole. A defect this earlier state already carries, and
+that the change neither brings nor worsens, is reported apart, under
+`Already there`.
+
+**The state the previous round read:** `<path to the copy of the document above that the round before read>`
+
+A round has already read that state. Report only what the revision between that
+state and the document above makes wrong: a sentence it added, moved or
+reworded, and a passage that leaned on a sentence it took out. Report nothing
+that stands unchanged since that state.
 
 **The project's aside convention:** `<the convention the project declares, or "none declared">`
 

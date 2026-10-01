@@ -54,6 +54,12 @@ has "the applied specs are handed over"     "**The specifications, with the batc
 has "the specs are not evaluated"           "Report nothing about them: your findings are about the design"
 has "the code is handed over"               "**The code as it stands today:**"
 has "the code is not evaluated"             "Report nothing about the code itself: your findings are about the design"
+# A later round's reader gets the state the round before read, and reports on the
+# revision alone.
+has "a first round's reader gets no previous state" "For the first round, leave out the paragraph on the state the previous round read"
+has "a later round's reader gets the state last read" "**The state the previous round read:**"
+has "a later round reports on the revision" "Report only what the revision between that state and the document above makes wrong: a sentence it added, moved or reworded, and a passage that leaned on a sentence it took out"
+has "a later round leaves the unchanged alone" "Report nothing that stands unchanged since that state"
 has "a reader loads no unnamed skill"       "Load no skill your reading does not name"
 has "everything needed is in the prompt"    "Everything you need is in this prompt"
 has "a finding quotes its passage"          "the passage it bears on, quoted with the section it"
