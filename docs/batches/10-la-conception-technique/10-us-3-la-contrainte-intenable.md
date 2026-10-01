@@ -375,4 +375,10 @@ git commit -m "feat: les conditions d'arrêt du flux ne sont plus comptées"
 
 ## Rulings log
 
+- Ruling: la revue finale a relevé trois points mineurs, corrigés avant l'ouverture : l'intitulé d'une garde qui disait encore « either », le renvoi « as the authority rule states » retiré de la phrase de référence et de sa copie, et la garde contre le comptage des conditions élargie à « both », « either » et « neither » — chacun rend une garde ou un texte collé autonome — si c'est à tort, la pull request montre un changement de formulation inutile.
+- Ruling: `using-batches` garde dans le paragraphe des arbitrages et dans la justification la raison de la condition, qu'une autre story du lot repose sur la contrainte — les deux autres conditions y portent aussi leur raison deux fois — si c'est à tort, une proposition redondante survit.
+- Ruling: `using-batches` et `writing-a-user-story` gardent « your human partner rules on the constraint » — « soumets-la à l'humain » l'implique déjà, et la phrase ne dit rien de ce que l'humain décide — si c'est à tort, la story de `D10` écrit sa règle à côté de ces phrases au lieu de les compléter.
+- Technical design ruling: l'étape 5 de `writing-a-user-story` nomme la condition et `Red Flags` répond à son excuse, en plus de l'élément de `Global Constraints` que la conception prévoit — l'étape 5 nomme chaque condition de l'override 2, et `Red Flags` répond à l'excuse d'un agent — si c'est à tort, deux passages répètent une condition que `Global Constraints` porte déjà.
+- Technical design ruling: `writing-a-batch` et le README cessent de compter les conditions d'arrêt, ce que la conception ne prévoit pas — tous deux disaient « two », que la nouvelle condition rend faux — si c'est à tort, le résumé du README change hors de la conception.
+
 ## Observed drift
