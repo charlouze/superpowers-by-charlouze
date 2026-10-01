@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.8.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.7.0...v0.8.0) (2026-10-01)
+
+
+### Features
+
+* l'ouverture d'un lot fait relire sa conception technique hors du contexte qui l'a écrite ([7c8616a](https://github.com/charlouze/superpowers-by-charlouze/commit/7c8616a1009b226ea810ab5b9ae29a9ad42c82b9))
+* un lot ouvert s'amende dans sa conception technique ou ses contraintes ([c2e1f81](https://github.com/charlouze/superpowers-by-charlouze/commit/c2e1f81f18a3f18ea58e46450b9aa377149c29d0))
+* un lot porte la conception technique de ses stories ([86abc1d](https://github.com/charlouze/superpowers-by-charlouze/commit/86abc1df82e04a183bb33e7193a2cb2db2ebc61a))
+* une story soumet à l'humain la contrainte de son lot qu'elle ne peut pas tenir ([c1cc246](https://github.com/charlouze/superpowers-by-charlouze/commit/c1cc246e9c0ea070981e5d4b5bebdd540d711664))
+
+
+### Bug Fixes
+
+* un lecteur de relecture ne lance plus les tests ([9b54244](https://github.com/charlouze/superpowers-by-charlouze/commit/9b54244f2cd1f075fe358bb9bfb6103efb73075c))
+* une relecture ne tourne plus sans fin ([da1ad4c](https://github.com/charlouze/superpowers-by-charlouze/commit/da1ad4c6e1ec4d0d144c654543f2226a5e1c1d01))
+
 ## [0.7.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.6.0...v0.7.0) (2026-09-30)
 
 
