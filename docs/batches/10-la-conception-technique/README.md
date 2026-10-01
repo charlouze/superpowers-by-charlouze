@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 10 — La conception technique
