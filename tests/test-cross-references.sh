@@ -146,11 +146,12 @@ else
     pass "the README names no fix/ branch"
 fi
 
-# The amendment gate covers the spec delta, in the README's gate table too.
-if grep -q "a change of scope, of spec delta or of flag on an open batch" "$REPO_ROOT/README.md"; then
-    pass "the README's amendment gate covers the spec delta"
+# The amendment gate covers the technical design and the constraints, in the
+# README's gate table too.
+if grep -q "a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch" "$REPO_ROOT/README.md"; then
+    pass "the README's amendment gate covers the design and the constraints"
 else
-    fail "the README's amendment gate covers the spec delta"
+    fail "the README's amendment gate covers the design and the constraints"
 fi
 
 # The README presumes no continuous deployment either.

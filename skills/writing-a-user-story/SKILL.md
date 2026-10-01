@@ -602,7 +602,9 @@ In a story whose batch declares constraints: if, while conducting it, you
 discover that a constraint of its batch cannot be held, stop and put the
 constraint to your human partner. A constraint the spec contradicts is not this
 case, since the spec wins. When you stop, your human partner rules on the
-constraint, and until then the branch and the worktree stay as they are.
+constraint, and until then the branch and the worktree stay as they are. If they
+rule it untenable, the story is abandoned and `supercharlouze:writing-a-batch`
+amends the constraint; otherwise resume the story and hold the constraint.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session

@@ -21,7 +21,7 @@ Three entry points, all landing in a pull request:
 | Entry point | Section |
 |---|---|
 | Opening a new batch | Preconditions through Opening the Pull Request |
-| Changing the scope, the spec delta or the flag of an existing batch | Amending a Batch |
+| Changing the scope, the spec delta, the technical design, the constraints or the flag of an existing batch | Amending a Batch |
 | A corrective batch that turned out not to be corrective | Requalifying a Corrective Batch |
 
 ## Opening, in Order
@@ -494,8 +494,8 @@ document still carries, and it never refers back to this conversation.
 
 The batch document carries no mutable state, but it stays amendable by an
 **amendment pull request**, reviewed like the others. An amendment changes the
-scope, the spec delta or the flag of an open batch. That is the exit from these
-real dead ends:
+scope, the spec delta, the technical design, the constraints or the flag of an
+open batch. That is the exit from these real dead ends:
 
 - **An exempted batch that discovers it needed a flag** — a batch whose stories
   were all technical and one of them turned out not to be, a single-story batch
@@ -504,6 +504,9 @@ real dead ends:
   requalification, or giving a flag an extended scope so a later batch can decide.
 - **A batch whose spec delta must change**: a corrective batch rewritten as an
   ordinary one, or a technical story whose observable change needs a block.
+- **A batch whose technical design or constraints must change**: a design the
+  remaining stories should no longer start from, or a constraint your human
+  partner ruled untenable.
 
 Without this path none of them has an issue: the batch document is written
 at opening, and nothing else changes it before closing.
@@ -526,9 +529,27 @@ By exception, an amendment that changes the spec delta is reviewed as an
 opening. Before its pull request opens, apply its new or changed blocks together
 with every block no merged story has declared yet, and invoke
 `supercharlouze:rereading-a-spec` on each applied copy, with the path of the
-spec it applies to, as `The Coherence Reread` does. Then the whole document
-goes through the batch-document reread. Its body states the exact text of every
-new or changed block, and what the coherence reread found.
+spec it applies to, as `The Coherence Reread` does. Its body states the exact
+text of every new or changed block, and what the coherence reread found.
+
+An amendment that changes the spec delta, the technical design or the
+constraints goes through the technical reread before its pull request opens,
+after the coherence reread when it runs one. Conduct it as
+`The Technical Reread` does, on the amended document and on each spec with every
+block no merged story has declared yet applied, in a copy built as
+`The Coherence Reread` builds it. A block it returns makes the amendment one
+that changes the spec delta.
+
+After its rereads, an amendment that changes the spec delta puts the whole
+document through the batch-document reread.
+
+**When a story stops on a constraint it cannot hold, your human partner rules on
+the constraint.** If they rule it untenable, an amendment changes or removes the
+constraint and the story is abandoned: close its pull request without merging it
+if one is open, delete its branch locally and on the remote, and remove its
+worktree, since a branch left on the remote reads as a live claim on its
+sections. Otherwise the story resumes and holds the constraint, and nothing is
+amended.
 
 An amendment that takes a gaps register entry out of `Scope` releases its
 reservation in the same pull request: it removes the entry's
@@ -657,4 +678,5 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-spec`. |
 | "I wrote this design, I can reread it myself" | The context that argued it into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-technical-design`. |
 | "The design is obvious from the delta, `Technical design` can say `none`" | An obvious design is still a design: write it. `none` is for a batch with no design to plan from, and it carries its reason; written `none`, it leaves each story to invent its own mechanism. |
+| "The story is right, this constraint cannot be held, I'll amend it" | Whether a constraint can be held is your human partner's ruling. Put it to them: the amendment follows a ruling of untenable, and the story resumes on any other. |
 | "This technical decision matters, so it goes in `Constraints`" | Only if the rest of the technical design relies on it. Otherwise it goes in `Technical design`, where a story may depart from it by a ruling. |

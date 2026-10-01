@@ -641,6 +641,13 @@ absent "no skill bounds an amendment to scope and flag" \
     "scope or (its |the |of )?flag" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
 
+# An amendment also changes the technical design and the constraints. A leftover
+# ending the list on the spec delta would send a constraint ruled untenable
+# nowhere.
+absent "no skill bounds an amendment to scope, spec delta and flag" \
+    "spec delta or (its |the |of )?flag" \
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+
 # Everything that reaches `main` may ship to production. The flow presumes no
 # more of the project: a skill still requiring continuous deployment asks more
 # than the flow does.
