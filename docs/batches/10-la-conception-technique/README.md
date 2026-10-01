@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 10 — La conception technique
@@ -225,42 +225,66 @@ Ce lot remplit le champ qu'il crée, sans la relecture technique, qu'il crée au
 - Le gabarit de `## The Batch Document` place `## Technical design` entre
   `## Spec delta` et `## Constraints` : la conception technique approuvée à
   l'étape de conception du brainstorming, ou `none` et sa raison.
-- Le paragraphe sur `Constraints` ajoute les décisions techniques dont une story ne
-  peut pas s'écarter sans casser une autre story.
+- Le paragraphe sur `Constraints` ajoute les décisions techniques sur lesquelles
+  repose le reste de la conception technique.
 - `## Opening, in Order` ajoute l'étape de la relecture technique après celle de la
   relecture de cohérence, sautée quand le lot n'a ni conception technique ni
   contraintes.
+- `## The Technical Reread` porte cette étape. Elle passe à la skill de relecture
+  le document de lot et chaque spec touchée, blocs appliqués, puis reporte ses
+  révisions dans `Technical design` et `Constraints`. Elle écrit dans `Spec delta`
+  les blocs que la relecture rend, et refait passer le delta par la relecture de
+  cohérence. Elle fait dire au corps de la pull request, d'ouverture ou
+  d'amendement, ce que la relecture a trouvé, ou qu'elle n'a rien trouvé.
 - La relecture du document de lot vérifie `Technical design` rempli et le critère
   d'entrée de `Constraints`.
 - Le corps de la pull request énonce `Technical design` et `Constraints` parmi ce
-  que l'humain tranche, et dit ce que la relecture technique a trouvé, ou qu'elle
-  n'a rien trouvé.
-- `## Amending a Batch` couvre la conception technique, les contraintes, la
-  contrainte qui ne peut pas être tenue, et la relecture technique d'un amendement
-  qui change le spec delta, la conception technique ou les contraintes, déclarée
-  dans le corps de sa pull request.
+  que l'humain tranche.
+- `## Amending a Batch` couvre la conception technique et les contraintes. Un
+  amendement qui change le spec delta, la conception technique ou les contraintes
+  passe par la relecture technique, conduite comme `## The Technical Reread`, sur
+  une copie des specs construite comme `## The Coherence Reread` la construit.
+- `## Amending a Batch` dit ce qui suit l'arrêt d'une story sur une contrainte :
+  l'humain la juge ; intenable, un amendement la change ou la retire, et la story
+  est abandonnée, sa branche et son worktree supprimés ; sinon la story reprend.
+- La skill nomme les conditions d'arrêt sans les compter.
 
 ### `skills/rereading-a-technical-design/`
 
-Une skill neuve, sur le modèle de `supercharlouze:rereading-a-spec` :
+Une skill sur le modèle de `supercharlouze:rereading-a-spec` :
 `user-invocable: false`, invoquée par writing-a-batch, un lecteur par lecture,
 tous rendus avant que rien ne remonte, constats instruits puis soumis à
 l'humain, mêmes conditions d'arrêt des tours.
 
+Les règles de dispatch et les conditions d'arrêt des tours sont écrites dans les
+deux skills de relecture, et des gardes communes les tiennent identiques.
+
 Son prompt de lecteur est dans `references/reader-prompt.md`. Le lecteur reçoit
-la conception technique, les contraintes, les specs, blocs appliqués, et le code
-tel que `origin/main` le porte.
+le document de lot entier, dont il n'évalue que `Technical design` et
+`Constraints`, les specs, blocs appliqués, et la racine d'un répertoire de
+travail dont le code est celui d'`origin/main`.
 
-Ses cinq lectures :
+Ses lectures :
 
-1. Couverture : la conception réalise-t-elle ce que les blocs promettent ?
+1. Couverture : la conception réalise-t-elle ce que le lot promet, par ses blocs
+   ou, sans bloc, par son `Scope` ? Elle rapporte aussi un comportement observable
+   qu'aucune spec ne décrit.
 2. Ancrage dans le code : ce qu'elle suppose exister existe-t-il, suit-elle la
-   structure en place, touche-t-elle ce qu'elle croit toucher ?
+   structure en place, touche-t-elle ce qu'elle croit toucher ? Elle rapporte
+   aussi une contrainte que le code enfreint déjà.
 3. Architecture : découpage en unités, frontières, sens des dépendances, avec
    `clean-architecture` si elle est disponible.
 4. Conception des modules : profondeur, masquage d'information, fuites,
    complexité, avec `software-design-philosophy` si elle est disponible.
-5. Robustesse : gestion d'erreurs, stratégie de test, risques non nommés.
+5. Robustesse : gestion d'erreurs, stratégie de test, risques non nommés. Elle
+   rapporte aussi une contrainte qu'une story ne pourrait pas tenir.
+
+Un comportement observable qu'aucune spec ne décrit est toujours soumis à
+l'humain : il appelle un bloc, ou il quitte la conception.
+
+La skill rend la conception technique et les contraintes révisées, les blocs que
+l'humain juge nécessaires, et ce que la relecture a trouvé, écrit pour le corps
+d'une pull request.
 
 ### `skills/writing-a-user-story/SKILL.md`
 
@@ -271,13 +295,19 @@ Ses cinq lectures :
 - `Global Constraints` gagne un huitième élément, dans une story dont le lot
   déclare des contraintes seulement : la condition d'arrêt sur une contrainte qui
   ne peut pas être tenue, recopiée mot pour mot.
+- `## Step 5` nomme cette condition et dit ce qui suit le jugement de l'humain, et
+  `## Red Flags` répond à l'excuse de la contourner par un arbitrage.
 - `## Step 6` recopie sous la forme `Technical design ruling:` les arbitrages de
   l'exécution qui s'écartent de la conception technique.
 
 ### `skills/using-batches/SKILL.md`
 
 L'override 2 porte la nouvelle condition d'arrêt dans son texte anglais de
-référence. `## The Model` définit les deux termes.
+référence, et dit ce qui suit le jugement de l'humain. `## The Model` définit les
+deux termes.
+
+La table des gates et la ligne de routage vers writing-a-batch énumèrent la
+conception technique et les contraintes parmi ce qu'un amendement change.
 
 ### `skills/closing-a-batch/SKILL.md`
 
@@ -289,14 +319,20 @@ clôture, et que le code fait foi ensuite.
 
 ### `README.md`
 
-Il recommande `clean-architecture` et `software-design-philosophy` à côté de
-`domain-driven-design`.
+Il recommande `domain-driven-design`, `clean-architecture` et
+`software-design-philosophy`.
+
+Sa table des skills liste `rereading-a-technical-design`, et sa table des gates
+énumère la conception technique et les contraintes parmi ce qu'un amendement
+change.
+
+Il nomme les conditions d'arrêt sans les compter.
 
 ### Tests
 
 Chaque norme d'une skill a sa garde dans `tests/`, écrite avant le texte : la
 condition d'arrêt mot pour mot dans using-batches et writing-a-user-story, et le
-prompt du lecteur technique sur le modèle de `tests/test-reader-prompt.sh`.
+prompt du lecteur technique dans `tests/test-technical-reader-prompt.sh`.
 
 ### Names
 
