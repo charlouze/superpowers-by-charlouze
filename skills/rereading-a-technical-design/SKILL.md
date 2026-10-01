@@ -30,8 +30,8 @@ When the rounds are over, return:
 
 - the technical design and the constraints, revised: every finding worked
   through, and every ruling of your human partner applied;
-- the blocks your human partner ruled the batch needs, each with the behaviour
-  it describes;
+- the behaviours your human partner took back to the spec delta, which ended
+  the reread;
 - what the reread found, or that it found nothing, written for a pull request
   body.
 
@@ -57,7 +57,8 @@ Each reading below is the text a reader's prompt carries, pasted word for word
 into the slot the template leaves for it. It is written for a reader that has
 nothing else: never abbreviate it, and never hand a reader two.
 
-Every batch gets every reading.
+Every batch gets every reading. This is the first round's dispatch: a later
+round sends out fewer (`Findings and Rounds`).
 
 > **Does the design deliver what the batch promises?** The batch promises the
 > rules its blocks write into the specifications or, when it has no block, what
@@ -111,26 +112,37 @@ to your human partner when fixing it would: they approved what the design
 decides.
 
 A behaviour the design would make observable that no specification describes is
-always put to your human partner. It calls for a block, or it leaves the design.
+always put to your human partner. It leaves the design, or your human partner
+takes the batch back to its spec delta and the reread ends: this reread writes
+no block.
 
 Then put to your human partner what you changed and what you could not settle,
 and apply their rulings. Forwarding raw findings makes your human partner
 arbitrate a draft, which is the work the review exists to spare them.
 
-A round runs on the revised text. These stop the rounds, and without them they
+A round runs on the revised text. Keep a copy of the state each round read: the
+next round's readers are handed it. These stop the rounds, and without them they
 chain indefinitely:
 
-- **A fresh round only on a state the reread has not read.** A revision that
-  adds a sentence produces one, and moving a sentence is an addition, its reach
-  changing with its place. A revision that takes a sentence out produces one
-  too, but only where something leaned on what left: coherence is a property of
-  the state, not of the text that remains, so a removal reopens what depended on
-  it and nothing else.
-- **Two rounds stuck on the same clause close the question of its wording.**
-  Take the clause out, or put it to your human partner.
-- **A round returning only findings already examined and declined is one round
-  too many.** What is left is a disagreement of judgment, and judgment is
-  settled at the review.
+- **A revision retouches.** Change only the sentences a finding names. A section
+  rewritten whole is a section no reader has read, and it sends every reading
+  out again.
+- **A later round reads the revision, and nothing else.** What a revision adds,
+  moves or rewords is unread; what it takes out reopens only what leaned on it,
+  coherence being a property of the state and not of the text that remains. A
+  revision that leaves nothing unread opens no round. Dispatch only the readings
+  the revision bears on: a reworded sentence goes back to the reading that found
+  it wanting, an added one to every reading. Hand each reader the state the
+  round before read, next to the revised one.
+- **A problem that comes back goes to your human partner.** Keep a ledger from
+  round to round: each finding's problem, the round that returned it, and what
+  you did with it. Recognise a finding by its problem, not by its words: a
+  reworded clause still carries the problem a reader found in it. When a second
+  round returns the same problem, put it to your human partner with the option
+  you recommend, and do not reword it a third time.
+- **The third round is the last you open.** After it, stop and put to your human
+  partner what is still open, with your recommendation. A further round runs
+  only on their decision.
 - **The reread prepares the review of the pull request that carries the design,
   it does not replace it.**
 
@@ -144,4 +156,7 @@ chain indefinitely:
 | "This reader is done, I'll put its findings up now" | The next reader may displace them. Wait for every reader. |
 | "This finding is right, I'll rework the design around it" | Your human partner approved what the design decides. Fix the wording, or put the change to them. |
 | "This behaviour is small, the design can carry it without a block" | What a user or a neighbouring module would observe needs a block. Put it to your human partner. |
-| "One more round, the design can still improve" | The stop conditions close the rounds. Two rounds on the same clause end the question of its wording: take it out or put it to your human partner. |
+| "The design needs this rule, I'll write the block" | This reread writes no block. Put the behaviour to your human partner. |
+| "One more round, the design can still improve" | The third round is the last you open. After it, your human partner decides whether another runs. |
+| "This section reads better rewritten whole" | A rewritten section is unread, and sends every reading out again. Retouch the sentences a finding names. |
+| "I reworded the clause, so this finding is a new one" | A finding is its problem, not its words. Returned by a second round, it goes to your human partner. |

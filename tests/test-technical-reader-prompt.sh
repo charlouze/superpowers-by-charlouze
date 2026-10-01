@@ -54,12 +54,21 @@ has "the applied specs are handed over"     "**The specifications, with the batc
 has "the specs are not evaluated"           "Report nothing about them: your findings are about the design"
 has "the code is handed over"               "**The code as it stands today:**"
 has "the code is not evaluated"             "Report nothing about the code itself: your findings are about the design"
+# A later round's reader gets the state the round before read, and reports on the
+# revision alone.
+has "a first round's reader gets no previous state" "For the first round, leave out the paragraph on the state the previous round read"
+has "a later round's reader gets the state last read" "**The state the previous round read:**"
+has "a later round reports on the revision" "Report only what the revision between that state and the document above makes wrong: a sentence it added, moved or reworded, and a passage that leaned on a sentence it took out"
+has "a later round leaves the unchanged alone" "Report nothing that stands unchanged since that state"
 has "a reader loads no unnamed skill"       "Load no skill your reading does not name"
 has "everything needed is in the prompt"    "Everything you need is in this prompt"
 has "a finding quotes its passage"          "the passage it bears on, quoted with the section it"
 has "an empty result is reported"           "Return \"nothing found\" when you found nothing"
 has "a reader revises nothing"              "Do not revise the design, and do not modify the code"
 has "a reader dispatches nothing"           "Do not dispatch subagents"
+# A reader handed a working tree is tempted to run its test suite. What the suite
+# says is the code's business; the reading is about the design.
+has "a reader runs nothing"                 "Run nothing, neither a test, a build nor a script: you read files and search them"
 
 # --- the prompt restates no reading ---
 # The readings live in `## The Readings` of the skill. A copy pasted in here

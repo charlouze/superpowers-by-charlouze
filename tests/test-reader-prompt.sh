@@ -60,6 +60,16 @@ has "the evaluated document is the object"  "**The document you are evaluating:*
 has "the reader gets the spec as it stands" "The same specification as it stands today"
 has "the earlier state locates the change"  "for locating what changed"
 has "the change is not reviewed as a diff"  "Do not review the change as a diff"
+# The reader is the one holding both states, so it is the one that can tell a
+# defect the change brings from one that was already there.
+has "a defect already there is reported apart" "A defect this earlier state already carries, and that the change neither brings nor worsens, is reported apart, under \`Already there\`"
+# A later round's reader gets the state the round before read, and reports on the
+# revision alone. Without the fence it reads the whole document as a first round
+# would, and returns what the round before already returned.
+has "a first round's reader gets no previous state" "For the first round, leave out the paragraph on the state the previous round read"
+has "a later round's reader gets the state last read" "**The state the previous round read:**"
+has "a later round reports on the revision" "Report only what the revision between that state and the document above makes wrong: a sentence it added, moved or reworded, and a passage that leaned on a sentence it took out"
+has "a later round leaves the unchanged alone" "Report nothing that stands unchanged since that state"
 has "the aside convention is handed over"   "The project's aside convention"
 # The other specs let a reader check a borrowed term or a rule that spills over
 # a boundary; they are consulted, never evaluated.
@@ -74,6 +84,7 @@ has "a finding quotes its passage"          "the passage it bears on, quoted wit
 has "an empty result is reported"           "Return \"nothing found\" when you found nothing"
 has "a reader does not revise"              "Do not revise the specification"
 has "a reader dispatches nothing"           "Do not dispatch subagents"
+has "a reader runs nothing"                 "Run nothing, neither a test, a build nor a script: you read files and search them"
 
 # --- the prompt restates no reading, and hands over no blocks ---
 # The readings live in `## The Readings` of the skill, which is where a

@@ -821,26 +821,38 @@ shared "both rereads dispatch on the conductor's model" \
 shared "both rereads wait for every reader" \
     "Every reader returns before anything goes up. Wait for all of them and gather their findings, never a running report" \
     rereading-a-spec rereading-a-technical-design
-shared "both rereads open a round only on an unread state" \
-    "A fresh round only on a state the reread has not read." \
+shared "both rereads retouch" \
+    "**A revision retouches.** Change only the sentences a finding names. A section rewritten whole is a section no reader has read, and it sends every reading out again." \
     rereading-a-spec rereading-a-technical-design
-shared "both rereads close a stuck wording" \
-    "Two rounds stuck on the same clause close the question of its wording." \
+shared "both rereads keep the state a round read" \
+    "Keep a copy of the state each round read: the next round's readers are handed it." \
     rereading-a-spec rereading-a-technical-design
-shared "both rereads stop on declined findings" \
-    "A round returning only findings already examined and declined is one round too many." \
+shared "both rereads read only the revision in a later round" \
+    "**A later round reads the revision, and nothing else.** What a revision adds, moves or rewords is unread; what it takes out reopens only what leaned on it" \
     rereading-a-spec rereading-a-technical-design
-shared "both rereads reopen a round on a moved sentence" \
-    "moving a sentence is an addition, its reach changing with its place" \
+shared "both rereads open no round on nothing unread" \
+    "A revision that leaves nothing unread opens no round." \
     rereading-a-spec rereading-a-technical-design
-shared "both rereads reopen only what leaned on a removal" \
-    "so a removal reopens what depended on it and nothing else" \
+shared "both rereads dispatch a later round's readings alike" \
+    "Dispatch only the readings the revision bears on: a reworded sentence goes back to the reading that found it wanting, an added one to every reading. Hand each reader the state the round before read, next to the revised one." \
     rereading-a-spec rereading-a-technical-design
-shared "both rereads settle a stuck clause the same way" \
-    "Take the clause out, or put it to your human partner." \
+shared "both rereads keep a ledger of problems" \
+    "Keep a ledger from round to round: each finding's problem, the round that returned it, and what you did with it. Recognise a finding by its problem, not by its words" \
     rereading-a-spec rereading-a-technical-design
-shared "both rereads leave judgment to the review" \
-    "What is left is a disagreement of judgment, and judgment is settled at the review." \
+shared "both rereads send a returning problem to the human" \
+    "When a second round returns the same problem, put it to your human partner with the option you recommend, and do not reword it a third time." \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads open three rounds at most" \
+    "**The third round is the last you open.** After it, stop and put to your human partner what is still open, with your recommendation. A further round runs only on their decision." \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads send out fewer readings after the first round" \
+    "This is the first round's dispatch: a later round sends out fewer (\`Findings and Rounds\`)." \
+    rereading-a-spec rereading-a-technical-design
+# The conditions these replaced never stopped a reread: one read as an order to
+# reopen, the other waited for a round with no fresh finding, which a reader of
+# freshly revised text always has.
+absent "no reread reopens on every unread state" \
+    "A fresh round only on a state|already examined and declined|Two rounds stuck on the same clause" \
     rereading-a-spec rereading-a-technical-design
 shared "both rereads instruct their findings" \
     "You instruct the findings; you do not forward them." \

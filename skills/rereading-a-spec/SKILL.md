@@ -68,7 +68,8 @@ nothing else: never abbreviate it, and never hand a reader two.
 
 A changed spec gets every reading. A new spec gets *Does this specification hold
 what a specification must hold?*, *Is this specification precise and concise?*
-and *Where does this sit in the model?*
+and *Where does this sit in the model?* This is the first round's dispatch: a
+later round sends out fewer (`Findings and Rounds`).
 
 > **What does this change make false elsewhere?** Find a passage of this
 > specification that the change does not aim at and that it now contradicts.
@@ -132,6 +133,9 @@ spec:
 - A rule that would constrain behaviour observable at the boundary of more than
   one module stays as it is, and goes to the output: the module breakdown is
   your human partner's decision, not a wording.
+- A defect the spec already carries on `main` is not fixed: the change did not
+  write that passage, and fixing it widens what your human partner reviews. It
+  goes once into what the reread found, and opens no round.
 - Any other finding is fixed without changing what its sentence rules, or put to
   your human partner when fixing it would.
 
@@ -139,20 +143,29 @@ Then put to your human partner what you changed and what you could not settle,
 and apply their rulings. Forwarding raw findings makes your human partner
 arbitrate a draft, which is the work the review exists to spare them.
 
-A round runs on the revised text. These stop the rounds, and without them they
+A round runs on the revised text. Keep a copy of the state each round read: the
+next round's readers are handed it. These stop the rounds, and without them they
 chain indefinitely:
 
-- **A fresh round only on a state the reread has not read.** A revision that
-  adds a sentence produces one, and moving a sentence is an addition, its reach
-  changing with its place. A revision that takes a sentence out produces one
-  too, but only where something leaned on what left: coherence is a property of
-  the state, not of the text that remains, so a removal reopens what depended on
-  it and nothing else.
-- **Two rounds stuck on the same clause close the question of its wording.**
-  Take the clause out, or put it to your human partner.
-- **A round returning only findings already examined and declined is one round
-  too many.** What is left is a disagreement of judgment, and judgment is
-  settled at the review.
+- **A revision retouches.** Change only the sentences a finding names. A section
+  rewritten whole is a section no reader has read, and it sends every reading
+  out again.
+- **A later round reads the revision, and nothing else.** What a revision adds,
+  moves or rewords is unread; what it takes out reopens only what leaned on it,
+  coherence being a property of the state and not of the text that remains. A
+  revision that leaves nothing unread opens no round. Dispatch only the readings
+  the revision bears on: a reworded sentence goes back to the reading that found
+  it wanting, an added one to every reading. Hand each reader the state the
+  round before read, next to the revised one.
+- **A problem that comes back goes to your human partner.** Keep a ledger from
+  round to round: each finding's problem, the round that returned it, and what
+  you did with it. Recognise a finding by its problem, not by its words: a
+  reworded clause still carries the problem a reader found in it. When a second
+  round returns the same problem, put it to your human partner with the option
+  you recommend, and do not reword it a third time.
+- **The third round is the last you open.** After it, stop and put to your human
+  partner what is still open, with your recommendation. A further round runs
+  only on their decision.
 - **The reread prepares the review of the pull request that carries the spec, it
   does not replace it.**
 
@@ -166,4 +179,7 @@ chain indefinitely:
 | "This reader is done, I'll put its findings up now" | The next reader may displace them. Wait for every reader. |
 | "I'll hand my human partner the findings to rule on" | Instruct them first. Your human partner rules on what you changed and what you could not settle. |
 | "This rule spills into the next module, I'll reword it to fit" | The breakdown is your human partner's decision. Leave the rule as it is, and return it. |
-| "One more round, the wording can still improve" | The stop conditions close the rounds. Two rounds on the same clause end the question of its wording: take it out or put it to your human partner. |
+| "The reader is right about this old passage, I'll fix it too" | The change did not write it. Return it once, and fix nothing. |
+| "One more round, the wording can still improve" | The third round is the last you open. After it, your human partner decides whether another runs. |
+| "This section reads better rewritten whole" | A rewritten section is unread, and sends every reading out again. Retouch the sentences a finding names. |
+| "I reworded the clause, so this finding is a new one" | A finding is its problem, not its words. Returned by a second round, it goes to your human partner. |

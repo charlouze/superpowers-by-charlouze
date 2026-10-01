@@ -419,6 +419,10 @@ After the coherence reread, the technical design and the constraints go through
 the **technical reread**, which reads them against the specs with the blocks
 applied and against the code on `main`.
 
+**Start it only once the coherence reread has closed its rounds.** Run side by
+side, each reread revises what the other is reading, and neither reads a state
+that holds.
+
 **A batch whose `Technical design` and `Constraints` both read `none` skips this
 step.**
 
@@ -428,8 +432,9 @@ spec itself when no block targets it.
 
 Carry every revision it returns back into `Technical design` and `Constraints`.
 
-Write every block it returns into `Spec delta`, then put the delta back through
-`The Coherence Reread` before the batch-document reread.
+The technical reread never changes `Spec delta`, and sends nothing back through
+the coherence reread. A behaviour it returns as taken back to the spec delta
+sends the opening back to step 5, with the block your human partner rules.
 
 The body of the pull request that runs it, opening or amendment, says what it
 found, or that it found nothing.
@@ -537,8 +542,8 @@ constraints goes through the technical reread before its pull request opens,
 after the coherence reread when it runs one. Conduct it as
 `The Technical Reread` does, on the amended document and on each spec with every
 block no merged story has declared yet applied, in a copy built as
-`The Coherence Reread` builds it. A block it returns makes the amendment one
-that changes the spec delta.
+`The Coherence Reread` builds it. A behaviour it returns as taken back to the
+spec delta makes the amendment one that changes the spec delta.
 
 After its rereads, an amendment that changes the spec delta puts the whole
 document through the batch-document reread.
@@ -676,6 +681,7 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
 | "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-spec`. |
+| "The rereads read different things, I'll run them together" | Each revises what the other is reading. Start the technical reread once the coherence reread has closed its rounds. |
 | "I wrote this design, I can reread it myself" | The context that argued it into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-technical-design`. |
 | "The design is obvious from the delta, `Technical design` can say `none`" | An obvious design is still a design: write it. `none` is for a batch with no design to plan from, and it carries its reason; written `none`, it leaves each story to invent its own mechanism. |
 | "The story is right, this constraint cannot be held, I'll amend it" | Whether a constraint can be held is your human partner's ruling. Put it to them: the amendment follows a ruling of untenable, and the story resumes on any other. |
