@@ -544,8 +544,8 @@ that, and give a prompt that names the amended batch document by path.
 ## Requalifying a Corrective Batch
 
 **Trigger — Override 2, the stop condition proper to a corrective batch.** This
-plugin adds two stop conditions to
-`superpowers:subagent-driven-development`, and this is the corrective one: while
+plugin adds stop conditions to `superpowers:subagent-driven-development`, and
+this is the corrective one: while
 bringing code into conformance with a spec, if a story discovers that the
 **spec** is wrong and the code is right, it stops. The batch is no longer
 corrective and must be requalified. The four native stop conditions assume a

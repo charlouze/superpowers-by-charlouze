@@ -166,7 +166,7 @@ require writing-a-batch "a corrective story is abandoned once ruled" "1. **Leave
 require writing-a-batch "an open pull request waits for the ruling" "A pull request already open stays open until then."
 require writing-a-batch "a corrective story's remote branch is a live claim" "a branch left on the remote is read as a live claim on its sections by every sibling's concurrency scan"
 # Both requalifications live in writing-a-batch; using-batches only routes to it.
-require using-batches "either stop condition routes to writing-a-batch" "When either condition fires, you stop, and \`supercharlouze:writing-a-batch\` conducts the requalification"
+require using-batches "the corrective and the technical conditions route to writing-a-batch" "When the corrective or the technical condition fires, you stop, and \`supercharlouze:writing-a-batch\` conducts the requalification"
 require writing-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`bounded/<slug>\`, \`chore/supercharlouze-init\`"
 require writing-a-batch "a pattern name claims what it does not hold" "would claim what it does not hold"
 require writing-a-batch "carries the requalification procedure"   "requalification"
@@ -551,6 +551,14 @@ require writing-a-user-story "the concision block names what it covers" "These r
 require writing-a-user-story "GC carries the guarded-code rules"  "carries the rules for code under a flag, written out in full"
 require writing-a-user-story "GC carries the technical stop condition" "carries the stop condition proper to a technical story, written out in full"
 require writing-a-user-story "GC lists the technical stop condition" "- **in a technical story only**, the stop condition proper to a technical story"
+require writing-a-user-story "GC lists the constraint stop condition" \
+    "- **in a story whose batch declares constraints only**, the stop condition on a constraint that cannot be held."
+require writing-a-user-story "GC carries the constraint stop condition" \
+    "carries the stop condition on a constraint that cannot be held, written out in full"
+require writing-a-user-story "a batch declares constraints when they are not none" \
+    "A batch declares constraints when its \`Constraints\` section is not \`none\`."
+require writing-a-user-story "the constraint condition leaves the branch as it is" \
+    "your human partner rules on the constraint, and until then the branch and the worktree stay as they are."
 require writing-a-user-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
 require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
 
@@ -732,8 +740,14 @@ require using-batches "a batch no longer promises behaviour" \
     "It groups several user stories, and targets one or more modules, hence one or more specs."
 require using-batches "a technical story has a stop condition too" \
     "you discover that it changes something observable at the module's boundary, stop. The story is no longer technical."
-require using-batches "a ruling replaces neither condition" \
-    "A ruling replaces neither of them"
+require using-batches "a ruling replaces no stop condition" \
+    "A ruling replaces none of them"
+require using-batches "a story stops on a constraint it cannot hold" \
+    "If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner."
+require using-batches "a contradicted constraint is not this case" \
+    "A constraint the spec contradicts does not fall under this condition: the spec wins."
+require using-batches "the human rules on the constraint" \
+    "When the constraint condition fires, your human partner rules on the constraint."
 
 # --- using-batches: the shape of a review's end ---
 require using-batches "the amendment gate covers the spec delta" "the decision to change its scope, its spec delta or its flag"

@@ -412,7 +412,9 @@ part of every task's requirements — carries:
 - **in a story that writes code guarded by a flag only**, the rules for code
   under a flag;
 - **in a technical story only**, the stop condition proper to a technical
-  story.
+  story;
+- **in a story whose batch declares constraints only**, the stop condition on a
+  constraint that cannot be held.
 
 The batch's constraints are its `Constraints` section copied verbatim. The
 freeze of the spec file reads:
@@ -506,6 +508,18 @@ subagents, whose only channel to this skill's rules is this list — a stop
 condition stated to you and not written here never reaches the agent who has to
 obey it.
 
+**In a story whose batch declares constraints, `Global Constraints` carries the
+stop condition on a constraint that cannot be held, written out in full.** A
+batch declares constraints when its `Constraints` section is not `none`. Copy the
+block below verbatim, exactly as `supercharlouze:using-batches` states it:
+
+> If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner.
+>
+> A constraint the spec contradicts does not fall under this condition: the spec wins.
+
+A constraint is a decision another story of the batch relies on, so an
+implementer who works around it breaks a story they cannot see.
+
 **Commit the story document — header, the two empty sections and
 `Global Constraints` together — and push it immediately**, `git push`, before
 anything else in Step 5 starts. Before this push, a sibling's Step 1 reads this
@@ -544,9 +558,9 @@ So this override removes one choice that cannot succeed, and one that leads
 nowhere.
 
 **Override 2 — the stop conditions the flow adds.** SDD states that four things
-stop you and only these. This plugin adds two, and each one ends the same way:
-**the story is abandoned**, and the decision goes to
-`supercharlouze:writing-a-batch`.
+stop you and only these. This plugin adds its own. The corrective and the
+technical conditions end the same way: **the story is abandoned**, and the
+decision goes to `supercharlouze:writing-a-batch`.
 
 In a corrective batch: if, while bringing code into conformity with the spec, you
 discover that the **spec** is wrong and the code is right, stop. The batch is no
@@ -583,6 +597,12 @@ ruled, delete the abandoned branch, locally and on the remote, and remove its
 worktree — the branch left on the remote would read as a live claim on its
 sections, and the worktree left behind is where a later session resumes work
 under a qualification the batch — or the story — no longer has.
+
+In a story whose batch declares constraints: if, while conducting it, you
+discover that a constraint of its batch cannot be held, stop and put the
+constraint to your human partner. A constraint the spec contradicts is not this
+case, since the spec wins. When you stop, your human partner rules on the
+constraint, and until then the branch and the worktree stay as they are.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session
@@ -766,3 +786,4 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "The block's rule spills onto the next module — the spec wins, I record a Ruling" | No ruling puts a rule in two places. A rule belongs to exactly one spec, and a rule that reaches further signals the breakdown. Stop and put it to your human partner. |
 | "My plan departs only slightly from the design, no ruling needed" | Every departure is a `Technical design ruling:`. One left out leaves the batch's design describing a mechanism nobody built. |
 | "`main`'s code contradicts the design, so the design wins" | The design only guides. Where `main`'s code departed from it, the plan starts from the code. |
+| "This constraint cannot be held, I'll work around it and record a ruling" | A ruling replaces no stop condition. Another story of the batch relies on that constraint: stop and put it to your human partner. |

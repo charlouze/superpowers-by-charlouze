@@ -177,6 +177,13 @@ shared "the technical stop condition is copied exactly as stated" \
     "If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical." \
     using-batches writing-a-user-story
 
+# The stop condition on a constraint that cannot be held travels the same way,
+# with the sentence that bounds it: an implementer who meets a constraint the
+# spec contradicts must find, in the same copy, that this is not the case.
+shared "the constraint stop condition is copied exactly as stated" \
+    "If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner. A constraint the spec contradicts does not fall under this condition: the spec wins." \
+    using-batches writing-a-user-story
+
 # The concision rules are copied into every story's Global Constraints.
 # `using-batches` states them and `writing-a-user-story` has them copied; a rule
 # spelled differently in the copy is no longer the rule the implementers obey.
@@ -850,5 +857,12 @@ absent "the batch skill carries no technical reading of its own" \
 absent "the opening counts no rereads" \
     "[Tt]wo rereads|[Tt]hree rereads" \
     writing-a-batch
+
+# The flow's stop conditions are named, never counted: a count goes false in
+# every skill the day a condition is added, as it did when the constraint
+# condition joined the corrective and the technical ones.
+absent "no skill counts the stop conditions the flow adds" \
+    "adds (two|three|four)( stop)? conditions|adds (two|three|four)[.,]|(both|either|neither) (stop )?conditions?" \
+    using-batches writing-a-user-story writing-a-batch
 
 exit $((FAILURES > 0))

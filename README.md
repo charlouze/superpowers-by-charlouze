@@ -191,11 +191,13 @@ places, each declared rather than improvised:
 
 1. **No dated design document.** An architectural design ends by opening a batch;
    the plan is written with each story, not before.
-2. **The flow adds two stop conditions.** If the code turns out to be right and
-   the spec wrong, a corrective batch is no longer corrective and must be
+2. **The flow adds stop conditions.** If the code turns out to be right and the
+   spec wrong, a corrective batch is no longer corrective and must be
    requalified. If a story declared technical turns out to change something
-   observable at its module's boundary, it is no longer technical. An agent may
-   neither correct a spec nor keep a qualification it has lost.
+   observable at its module's boundary, it is no longer technical. If a story
+   finds that a constraint of its batch cannot be held, it stops and puts the
+   constraint to the human. An agent may neither correct a spec, nor keep a
+   qualification it has lost, nor bend a constraint.
 3. **The execution mode is imposed** — subagent-driven development, because
    repatriating its rulings depends on its ledger, and those rulings are the only
    record of where the spec was ambiguous.

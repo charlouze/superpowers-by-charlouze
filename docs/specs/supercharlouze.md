@@ -138,7 +138,15 @@ L'emplacement des documents et ce que le flux ajoute à un plan ne sont pas des
   > chose d'observable à la frontière du module, arrête-toi. La story n'est plus
   > technique.
 
-  Un arbitrage ne remplace ni l'une ni l'autre.
+  Dans une story dont le lot déclare des contraintes seulement :
+
+  > Si, en conduisant une story, tu découvres qu'une contrainte de son lot ne peut
+  > pas être tenue, arrête-toi et soumets-la à l'humain.
+
+  Une contrainte que la spec contredit ne relève pas de cette condition, mais de
+  `Authority and conflict rules`.
+
+  Un arbitrage ne remplace aucune de ces conditions.
 - Une story s'exécute par sous-agents, et le choix d'un autre mode n'est pas
   proposé.
 - Une story se conclut par une pull request. La conclusion de sa branche n'offre
@@ -528,6 +536,9 @@ qui l'accueille quand il en rejoint une.
 6. dans une story qui écrit du code gardé par un flag seulement, les règles de
    `Code under a feature flag`, quel que soit le lot qui déclare le flag ;
 7. dans une story technique seulement, sa condition d'arrêt
+   (`Departures from superpowers`) ;
+8. dans une story dont le lot déclare des contraintes seulement, la condition
+   d'arrêt sur une contrainte qui ne peut pas être tenue
    (`Departures from superpowers`).
 
 ### Concurrency detection
