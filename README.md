@@ -90,7 +90,7 @@ own; it puts its checkpoints where your flow already has them.
 | Module adoption | the spec and the gaps register, before any batch touches that module |
 | Batch opening | the exact text each spec will receive, before a line of code is written against it |
 | Story delivery | a story's code, and its spec change if it has one, in one diff |
-| Batch amendment | a change of scope, of spec delta or of flag on an open batch |
+| Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch |
 | Batch closing | the consolidation, `status: closed` |
 
 The opening gate is the one that pays. You read the wording of a spec at the

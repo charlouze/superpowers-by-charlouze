@@ -18,7 +18,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
 | A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:writing-a-batch`, as an ordinary batch that finally specifies them |
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
-| A batch must change its scope, its spec delta or its flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
+| A batch must change its scope, its spec delta, its technical design, its constraints or its flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
 | Spike or bounded work | Nothing is rerouted except what `What Is Kept, What Is Rerouted` states below |
 
@@ -150,7 +150,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 | Batch opening | the pull request carrying the batch document |
 | Story delivery | the pull request carrying a story's code, and its spec change if it has one |
 | Batch closing | the pull request carrying the consolidation and `status: closed` |
-| Batch amendment | the pull request carrying the decision to change its scope, its spec delta or its flag |
+| Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag |
 
 **Preconditions for every pull request of this system**, checked before creating a branch: fetch, then start the branch from **`main` as the remote carries it**, never from another branch. That is what keeps a session chaining two pieces of work from stacking the second on the first one's branch, and what makes numbering and concurrency detection reason on the remote state. **Where you are standing does not matter**, and it must not: a session the harness launched inside a worktree cannot run git against the shared checkout at all, so a precondition on the directory would be unreachable exactly there. The starting point is reachable from anywhere — inside a reused workspace, `git fetch origin && git switch -c <branch> origin/main` satisfies it without leaving. `gh` is assumed available and authenticated; without it both degrade to a partial safety net and stop preventing anything.
 
@@ -278,7 +278,7 @@ Justification: the four native conditions assume a valid authority exists, assum
 
 When the corrective or the technical condition fires, you stop, and `supercharlouze:writing-a-batch` conducts the requalification: under `Requalifying a Corrective Batch` for the corrective one, under `Requalifying a Technical Story` for the technical one.
 
-When the constraint condition fires, your human partner rules on the constraint.
+When the constraint condition fires, your human partner rules on the constraint. If they rule it untenable, the story is abandoned and `supercharlouze:writing-a-batch` amends the constraint, under `Amending a Batch`; otherwise the story resumes and holds it.
 
 ### Override 3 — imposed execution mode
 
