@@ -814,4 +814,13 @@ EOF
 
 ## Rulings log
 
+- Ruling: les conditions d'arrêt des tours et les règles de dispatch sont recopiées dans les deux skills de relecture plutôt que renvoyées de l'une à l'autre — le document de lot demande les mêmes conditions d'arrêt, et une skill ne charge pas l'autre ; des gardes `shared` les tiennent identiques — si c'est faux, une règle vit en deux copies que seules les gardes relient.
+- Ruling: une seule vague corrige le constat important de la relecture finale et quatre mineurs — chacun tient en une garde et une phrase — un correctif faux alourdit la relecture ciblée.
+- Ruling: la phrase « The architecture and module readings invoke their skill only if present » reste, malgré la relecture finale qui la jugeait redondante — elle est le pendant de celle de `rereading-a-spec`, et la couper dans une seule des deux skills les ferait diverger — si c'est faux, une phrase redondante reste dans la skill.
+- Technical design ruling: le README recommande `domain-driven-design` avec `clean-architecture` et `software-design-philosophy` — la conception supposait qu'il recommandait déjà `domain-driven-design`, alors que seule `rereading-a-spec` le disait — si c'est faux, le README recommande une skill de plus que prévu.
+- Technical design ruling: le lecteur reçoit le document de lot entier, et non la seule conception et les seules contraintes — la lecture de couverture a besoin de ce que le lot promet, que portent ses blocs ou, sans bloc, son `Scope` — si c'est faux, un lecteur lit des sections qu'il n'évalue pas.
+- Technical design ruling: la lecture de couverture rapporte aussi un comportement observable qu'aucune spec ne décrit, et la skill le soumet toujours à l'humain — ce qui est observable va dans un bloc, jamais dans `Technical design` — si c'est faux, une lecture rapporte ce qu'une autre relecture aurait trouvé.
+- Technical design ruling: la lecture d'ancrage rapporte une contrainte que le code enfreint déjà, et celle de robustesse une contrainte qu'une story ne pourrait pas tenir — la relecture technique relit les contraintes autant que la conception, et la conception ne les attribuait à aucune lecture — si c'est faux, deux lectures portent un objet que la conception ne leur donnait pas.
+- Technical design ruling: la relecture technique rend les blocs que l'humain juge nécessaires, et `writing-a-batch` les écrit dans `Spec delta` puis refait passer le delta par la relecture de cohérence — sans cela un bloc décidé à l'étape 6 ouvrait le lot sans avoir été relu — si c'est faux, une relecture de cohérence de plus à l'ouverture.
+
 ## Observed drift
