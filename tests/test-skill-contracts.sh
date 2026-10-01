@@ -608,7 +608,7 @@ absent "the batch-document reread leaves the blocks to the coherence reread" \
 # can reach.
 absent "no skill rereads with fresh eyes" \
     "fresh eyes" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module rereading-a-spec
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module rereading-a-spec rereading-a-technical-design
 
 # One skill rereads a spec, new or changed, and the skills that need a spec
 # reread invoke it rather than carrying readers of their own.
@@ -773,7 +773,7 @@ shared "the skills keep the form of a ruling line" \
 # projects the skills work on.
 absent "no skill states the plugin's own language" \
     "entirely English" \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design
 
 # A batch's constraints now include its shared technical decisions, so the old
 # enumeration of what a batch carries must not survive beside the new one.
@@ -798,5 +798,57 @@ absent "no constraint is judged against the stories" \
 shared "the batch, the story and closing spell a technical design ruling alike" \
     "\`Technical design ruling:\`" \
     writing-a-batch writing-a-user-story closing-a-batch
+
+# Both rereads dispatch their readers, gather them and close their rounds the
+# same way. One assertion per rule over both skills, so neither drifts alone.
+shared "both rereads dispatch on the conductor's model" \
+    "Dispatch every reader on the model you run on, and name that model in the dispatch" \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads wait for every reader" \
+    "Every reader returns before anything goes up. Wait for all of them and gather their findings, never a running report" \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads open a round only on an unread state" \
+    "A fresh round only on a state the reread has not read." \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads close a stuck wording" \
+    "Two rounds stuck on the same clause close the question of its wording." \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads stop on declined findings" \
+    "A round returning only findings already examined and declined is one round too many." \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads reopen a round on a moved sentence" \
+    "moving a sentence is an addition, its reach changing with its place" \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads reopen only what leaned on a removal" \
+    "so a removal reopens what depended on it and nothing else" \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads settle a stuck clause the same way" \
+    "Take the clause out, or put it to your human partner." \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads leave judgment to the review" \
+    "What is left is a disagreement of judgment, and judgment is settled at the review." \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads instruct their findings" \
+    "You instruct the findings; you do not forward them." \
+    rereading-a-spec rereading-a-technical-design
+shared "both rereads spare the human a draft" \
+    "Forwarding raw findings makes your human partner arbitrate a draft, which is the work the review exists to spare them." \
+    rereading-a-spec rereading-a-technical-design
+
+# The technical reread knows none of the skills that invoke it.
+absent "the technical reread names no skill that invokes it" \
+    "supercharlouze:|adopting-a-module|writing-a-batch|calling skill" \
+    rereading-a-technical-design
+
+# The readings of the technical reread live in its skill; the batch skill that
+# invokes it carries none of them.
+absent "the batch skill carries no technical reading of its own" \
+    "deliver what the batch promises|stand on the code as it is|hold as an architecture|modules this design draws deep|How does this design fail" \
+    writing-a-batch
+
+# The opening now places more than two rereads; the former count must not survive.
+absent "the opening counts no rereads" \
+    "[Tt]wo rereads|[Tt]hree rereads" \
+    writing-a-batch
 
 exit $((FAILURES > 0))

@@ -10,7 +10,7 @@ fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 
 echo "test-cross-references"
 
-KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec"
+KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design"
 # Commands share the plugin namespace with the skills: /supercharlouze:init is a
 # command, not a skill, so it resolves against commands/<name>.md instead.
 KNOWN_COMMANDS="init"
@@ -107,6 +107,29 @@ esac
 case "$RROW" in
     *"Never directly"*) pass "the README row of rereading-a-spec rules out direct use" ;;
     *)                  fail "the README row of rereading-a-spec rules out direct use" ;;
+esac
+
+# The README row of rereading-a-technical-design, like the spec reread's, says it
+# is not for direct use and names none of the skills that invoke it.
+TROW="$(grep -F '`supercharlouze:rereading-a-technical-design`' "$REPO_ROOT/README.md" || true)"
+case "$TROW" in
+    *"writing-a-batch"*|*"invoked by"*)
+        fail "the README row of rereading-a-technical-design names no caller" ;;
+    *)  pass "the README row of rereading-a-technical-design names no caller" ;;
+esac
+case "$TROW" in
+    *"Never directly"*) pass "the README row of rereading-a-technical-design rules out direct use" ;;
+    *)                  fail "the README row of rereading-a-technical-design rules out direct use" ;;
+esac
+
+# The rereads use three skills when they are installed; the README recommends
+# them all, since nothing else tells a user they exist. Anchored on the
+# recommendation itself: a skill named anywhere else in the README proves nothing.
+README_REC="$(tr '\n' ' ' < "$REPO_ROOT/README.md" | tr -s ' ')"
+case "$README_REC" in
+    *"**Recommended: the \`domain-driven-design\`, \`clean-architecture\` and \`software-design-philosophy\` skills.**"*)
+        pass "the README recommends the skills the rereads use" ;;
+    *)  fail "the README recommends the skills the rereads use" ;;
 esac
 
 # The specs carry no changelog any more, and the README says nothing of one.
