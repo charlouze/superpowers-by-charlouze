@@ -258,7 +258,7 @@ Justification: `supercharlouze:writing-a-batch` is not an implementation skill �
 
 ### Override 2 — the stop conditions the flow adds
 
-`superpowers:subagent-driven-development` states *"Four things stop you, and only these"*. This plugin adds two. For corrective batches only:
+`superpowers:subagent-driven-development` states *"Four things stop you, and only these"*. This plugin adds the conditions below. For corrective batches only:
 
 > If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
 
@@ -266,11 +266,19 @@ For a technical story only:
 
 > If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical.
 
-A ruling replaces neither of them. A ruling is a decision an agent takes on its human partner's behalf, and neither of these is an agent's to take: the first would correct a spec, the second would keep a qualification the story has just lost. Recording one and carrying on is exactly the failure both conditions exist to prevent.
+For a story whose batch declares constraints only:
 
-Justification: the four native conditions assume a valid authority exists, and assume the story is the story it says it is. The first is what a corrective batch puts in question; the second is what a technical story puts in question — "purely technical" is otherwise the door through which behaviour enters with no gate behind it, since a story that transcribes no block passes no opening review.
+> If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner.
 
-When either condition fires, you stop, and `supercharlouze:writing-a-batch` conducts the requalification: under `Requalifying a Corrective Batch` for the first, under `Requalifying a Technical Story` for the second.
+A constraint the spec contradicts does not fall under this condition: the spec wins.
+
+A ruling replaces none of them. A ruling is a decision an agent takes on its human partner's behalf, and none of these is an agent's to take: the corrective condition would correct a spec, the technical condition would keep a qualification the story has just lost, and the constraint condition would break a decision another story of the batch relies on. Recording one and carrying on is exactly the failure these conditions exist to prevent.
+
+Justification: the four native conditions assume a valid authority exists, assume the story is the story it says it is, and know nothing of the stories beside it. A corrective batch puts the authority in question; a technical story puts its own qualification in question — "purely technical" is otherwise the door through which behaviour enters with no gate behind it, since a story that transcribes no block passes no opening review; and a constraint is what the other stories of its batch rely on, so a story that cannot hold one cannot settle it alone.
+
+When the corrective or the technical condition fires, you stop, and `supercharlouze:writing-a-batch` conducts the requalification: under `Requalifying a Corrective Batch` for the corrective one, under `Requalifying a Technical Story` for the technical one.
+
+When the constraint condition fires, your human partner rules on the constraint.
 
 ### Override 3 — imposed execution mode
 
