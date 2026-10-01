@@ -189,7 +189,7 @@ doit changer s'arrête.
 | Adoption | la spec et le gaps register du module | le module est adopté |
 | Ouverture | le document de lot | le lot est ouvert |
 | Livraison | le code d'une story, et sa modification de spec s'il y en a une | la story est livrée |
-| Amendement | la décision de changer le périmètre, le spec delta ou le flag d'un lot | le lot est amendé |
+| Amendement | la décision de changer le périmètre, le spec delta, la conception technique, les contraintes ou le flag d'un lot | le lot est amendé |
 | Clôture | la consolidation et `status: closed` | le lot est clos |
 
 L'agent n'approuve ni ne fusionne jamais une pull request de revue.
@@ -427,8 +427,8 @@ Rien n'est écrit dans les specs à l'ouverture.
 
 ### Amending a batch
 
-Un amendement change le périmètre, le spec delta ou le flag d'un lot ouvert, par
-une pull request sur son document.
+Un amendement change le périmètre, le spec delta, la conception technique, les
+contraintes ou le flag d'un lot ouvert, par une pull request sur son document.
 
 Exception à la revue d'amendement : un amendement qui change le spec delta est revu
 comme une ouverture.
@@ -450,6 +450,14 @@ abandonnée.
 
 Si l'humain veut le changement observable qu'elle a révélé, un amendement ajoute
 son bloc, et le flag qu'il exige s'il en exige un (`Feature flags`).
+
+Quand la condition d'arrêt sur une contrainte qui ne peut pas être tenue se
+déclenche, l'humain juge la contrainte. S'il la juge intenable, la story est
+abandonnée et un amendement modifie ou retire la contrainte ; sinon, la story
+reprend en la tenant.
+
+Un amendement qui change le spec delta, la conception technique ou les contraintes
+d'un lot passe par la relecture technique.
 
 ### Closing a batch
 
