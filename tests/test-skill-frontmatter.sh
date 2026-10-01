@@ -10,7 +10,7 @@ fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 
 echo "test-skill-frontmatter"
 
-EXPECTED_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec"
+EXPECTED_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design"
 
 for skill in $EXPECTED_SKILLS; do
     f="$REPO_ROOT/skills/$skill/SKILL.md"
@@ -43,25 +43,27 @@ for skill in $EXPECTED_SKILLS; do
     fi
 done
 
-# rereading-a-spec is a building block: only a skill invokes it. It keeps its
+# The rereads are building blocks: only a skill invokes them. Each keeps its
 # frontmatter, since a skill without one still loads and takes its first line as
 # its description. It is hidden from the slash menu, and its description asks
 # for an explicit call. `disable-model-invocation` would stop the calling skills
 # from invoking it too.
-RFRONT="$(awk 'NR>1 && /^---$/{exit} NR>1{print}' "$REPO_ROOT/skills/rereading-a-spec/SKILL.md" 2>/dev/null || true)"
-case "$RFRONT" in
-    *"user-invocable: false"*) pass "rereading-a-spec is hidden from the slash menu" ;;
-    *)                          fail "rereading-a-spec is hidden from the slash menu" ;;
-esac
-case "$RFRONT" in
-    *"description: Use only when a skill tells you to invoke rereading-a-spec"*)
-        pass "rereading-a-spec asks for an explicit call" ;;
-    *)  fail "rereading-a-spec asks for an explicit call" ;;
-esac
-case "$RFRONT" in
-    *"disable-model-invocation"*) fail "rereading-a-spec stays invocable by the skills" ;;
-    *)                            pass "rereading-a-spec stays invocable by the skills" ;;
-esac
+for r in rereading-a-spec rereading-a-technical-design; do
+    RFRONT="$(awk 'NR>1 && /^---$/{exit} NR>1{print}' "$REPO_ROOT/skills/$r/SKILL.md" 2>/dev/null || true)"
+    case "$RFRONT" in
+        *"user-invocable: false"*) pass "$r is hidden from the slash menu" ;;
+        *)                          fail "$r is hidden from the slash menu" ;;
+    esac
+    case "$RFRONT" in
+        *"description: Use only when a skill tells you to invoke $r"*)
+            pass "$r asks for an explicit call" ;;
+        *)  fail "$r asks for an explicit call" ;;
+    esac
+    case "$RFRONT" in
+        *"disable-model-invocation"*) fail "$r stays invocable by the skills" ;;
+        *)                            pass "$r stays invocable by the skills" ;;
+    esac
+done
 
 if [ -d "$REPO_ROOT/skills" ]; then
     actual="$(ls "$REPO_ROOT/skills" | sort | tr '\n' ' ')"

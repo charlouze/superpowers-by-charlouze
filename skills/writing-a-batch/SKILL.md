@@ -39,15 +39,19 @@ that carries it.
    the specs at this stage (`The Batch Document`).
 5. **Put the whole spec delta through the coherence reread** — skipped when the
    delta carries no block (`The Coherence Reread`).
-6. **Reread the whole batch document** (`Opening the Pull Request`).
-7. **Open the pull request** from `batch/NN-<slug>`, in the same section.
+6. **Put the technical design and the constraints through the technical
+   reread** — skipped when the batch has neither (`The Technical Reread`).
+7. **Reread the whole batch document** (`Opening the Pull Request`).
+8. **Open the pull request** from `batch/NN-<slug>`, in the same section.
 
-**The two rereads are steps 5 and 6, and they have different objects.** The
+**The rereads are steps 5, 6 and 7, and each has its own object.** The
 coherence reread bears on the blocks and on the state they produce, read whole.
-The batch-document reread bears on the whole document: `Scope`, `Spec delta`,
-`Technical design`, `Constraints`, `Feature flag`. Merge them and the second is
-the one that disappears, leaving a corrective batch, which has no blocks, with
-no reread at all.
+The technical reread bears on the technical design and the constraints, against
+the specs with the blocks applied and against the code on `main`. The
+batch-document reread bears on the whole document: `Scope`, `Spec delta`,
+`Technical design`, `Constraints`, `Feature flag`. Merge the batch-document
+reread into another and it disappears wherever that one is skipped, leaving a
+corrective batch, which has no blocks, without a reread of its document.
 
 ## Preconditions
 
@@ -384,7 +388,7 @@ reads each touched spec whole, on the state its blocks produce.
 **A delta that carries no block skips this step.** That is not a dispensation
 granted to a smaller batch: this reread reads blocks against the spec they will
 change, so with no block it has nothing to read and no state to build. What such a
-batch still owes, it owes at step 6 — the batch-document reread, which bears on
+batch still owes, it owes at step 7 — the batch-document reread, which bears on
 whatever stands in the blocks' place.
 
 Build that state — a copy of each touched spec with its blocks applied —
@@ -409,9 +413,30 @@ the breakdown to your human partner.
 The pull request body says what the reread found, or that it found nothing. A
 reread nobody can see from the pull request is a practice again, not a rule.
 
+## The Technical Reread
+
+After the coherence reread, the technical design and the constraints go through
+the **technical reread**, which reads them against the specs with the blocks
+applied and against the code on `main`.
+
+**A batch whose `Technical design` and `Constraints` both read `none` skips this
+step.**
+
+Invoke `supercharlouze:rereading-a-technical-design` with the batch document and
+each spec the batch touches: the applied copy the coherence reread built, or the
+spec itself when no block targets it.
+
+Carry every revision it returns back into `Technical design` and `Constraints`.
+
+Write every block it returns into `Spec delta`, then put the delta back through
+`The Coherence Reread` before the batch-document reread.
+
+The body of the pull request that runs it, opening or amendment, says what it
+found, or that it found nothing.
+
 ## Opening the Pull Request
 
-**The batch-document reread**, step 6, comes after the coherence reread and
+**The batch-document reread**, step 7, comes after the technical reread and
 bears on the whole document. Conduct it outside the context that wrote the
 document, by dispatching a subagent that checks it against the specs: `Scope`
 stating what the batch delivers, with every gaps register entry it takes on,
@@ -630,5 +655,6 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |
 | "The rule holds for both modules, so the delta carries it twice" | A rule belongs to exactly one spec, so two blocks writing the same rule into two specs signal the breakdown, not a delta. Stop and put it to your human partner. |
 | "I wrote these blocks, I can reread them myself" | The context that argued them into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-spec`. |
+| "I wrote this design, I can reread it myself" | The context that argued it into existence rereads its intentions, not its text. Invoke `supercharlouze:rereading-a-technical-design`. |
 | "The design is obvious from the delta, `Technical design` can say `none`" | An obvious design is still a design: write it. `none` is for a batch with no design to plan from, and it carries its reason; written `none`, it leaves each story to invent its own mechanism. |
 | "This technical decision matters, so it goes in `Constraints`" | Only if the rest of the technical design relies on it. Otherwise it goes in `Technical design`, where a story may depart from it by a ruling. |

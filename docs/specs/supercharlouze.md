@@ -389,6 +389,18 @@ Elle n'est jamais conduite dans le contexte qui a écrit les blocs.
 Le corps de la pull request d'ouverture dit ce qu'elle a trouvé, ou qu'elle n'a
 rien trouvé.
 
+### The technical reread
+
+La relecture technique relit la conception technique et les contraintes d'un lot,
+contre les specs, blocs appliqués, et contre le code de `main`.
+
+Un lot qui n'a ni conception technique ni contraintes s'en passe.
+
+Elle n'est jamais conduite dans le contexte qui a écrit ce qu'elle relit.
+
+Le corps de la pull request d'ouverture ou d'amendement dit ce qu'elle a trouvé,
+ou qu'elle n'a rien trouvé.
+
 ### Opening a batch
 
 L'ouverture :
@@ -398,8 +410,10 @@ L'ouverture :
 3. rédige le document de lot ;
 4. réserve les entrées du gaps register que le lot prend en charge ;
 5. fait passer le spec delta par la relecture de cohérence ;
-6. relit le document de lot en entier ;
-7. ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
+6. fait passer la conception technique et les contraintes du lot par la
+   relecture technique ;
+7. relit le document de lot en entier ;
+8. ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
 
 Rien n'est écrit dans les specs à l'ouverture.
 

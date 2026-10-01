@@ -214,6 +214,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
 | `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |
+| `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design reread |
 
 ## Requirements
 
@@ -224,6 +225,10 @@ There is never an undeclared fifth one.
   anything
 
 Projects organised as git submodules are not supported.
+
+**Recommended: the `domain-driven-design`, `clean-architecture` and
+`software-design-philosophy` skills.** The rereads use them when they are
+installed, and read without them otherwise.
 
 **Strongly recommended: give the agent a git identity of its own.** Every gate of
 this flow is a pull request review, and GitHub does not let the author of a pull
