@@ -52,4 +52,5 @@ are. Return "nothing found" when you found nothing: an empty report and a reader
 that failed look the same to whoever reads it.
 
 Do not revise the design, and do not modify the code: naming what is wrong is
-your job, deciding what replaces it is not. Do not dispatch subagents.
+your job, deciding what replaces it is not. Do not dispatch subagents. Run
+nothing, neither a test, a build nor a script: you read files and search them.

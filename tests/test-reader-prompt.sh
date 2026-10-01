@@ -84,6 +84,7 @@ has "a finding quotes its passage"          "the passage it bears on, quoted wit
 has "an empty result is reported"           "Return \"nothing found\" when you found nothing"
 has "a reader does not revise"              "Do not revise the specification"
 has "a reader dispatches nothing"           "Do not dispatch subagents"
+has "a reader runs nothing"                 "Run nothing, neither a test, a build nor a script: you read files and search them"
 
 # --- the prompt restates no reading, and hands over no blocks ---
 # The readings live in `## The Readings` of the skill, which is where a

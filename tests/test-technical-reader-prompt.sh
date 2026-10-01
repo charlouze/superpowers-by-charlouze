@@ -66,6 +66,9 @@ has "a finding quotes its passage"          "the passage it bears on, quoted wit
 has "an empty result is reported"           "Return \"nothing found\" when you found nothing"
 has "a reader revises nothing"              "Do not revise the design, and do not modify the code"
 has "a reader dispatches nothing"           "Do not dispatch subagents"
+# A reader handed a working tree is tempted to run its test suite. What the suite
+# says is the code's business; the reading is about the design.
+has "a reader runs nothing"                 "Run nothing, neither a test, a build nor a script: you read files and search them"
 
 # --- the prompt restates no reading ---
 # The readings live in `## The Readings` of the skill. A copy pasted in here
