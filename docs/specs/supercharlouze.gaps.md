@@ -65,7 +65,7 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   explicitement laissé ce cas hors de son périmètre. **Gap et non violation :**
   les deux règles sont implémentées fidèlement, c'est leur conjonction qui est
   muette ; résorber veut dire décider ce que la spec doit dire, et cette décision
-  est humaine.
+  est humaine. `reserved by batch-12`
 
 - **The spec document** — la règle « un renvoi nomme la section qu'il vise » n'est
   écrite dans aucune spec, et rien n'attrape un renvoi par la position. Le lot 01
