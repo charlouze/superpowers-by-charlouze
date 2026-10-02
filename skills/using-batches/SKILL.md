@@ -57,6 +57,10 @@ An ADR contradicts no spec and no other ADR.
 
 An ADR whose decision is replaced is rewritten in place, and one whose decision is abandoned is deleted.
 
+The code of a story or of a bounded change holds the ADRs `main` carries when its branch starts.
+
+No ADR binds the code already on `main`.
+
 **Corrective batch** — a batch that brings existing code back into conformance with a spec that is already true. Its spec delta carries no block. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
 
 **Delta block** — the unit of a batch's spec delta: one targeted section and the exact text it must receive, transcribed word for word by a story.
@@ -168,7 +172,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 |---|---|
 | Module adoption | the pull request carrying the spec and the gaps register, and the ADRs written with them |
 | Batch opening | the pull request carrying the batch document |
-| Story delivery | the pull request carrying a story's code, and its spec change if it has one |
+| Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |
 | Batch closing | the pull request carrying the consolidation and `status: closed` |
 | Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag |
 
@@ -230,7 +234,7 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
 
 **Spike** — unchanged. An answer, no artifact.
 
-**Bounded** — ceremony unchanged, with these rules:
+**Bounded** — ceremony unchanged, except for the reading of `docs/adr/` stated below, with these rules:
 
 - **(a) Its pull request leaves the spec silent if and only if nothing observable at the module's boundary changes.** Whether it *alters* a behaviour some spec already describes or *adds* one no spec describes, it updates the spec in the same pull request as the code. Handling only the "alters" case would reopen the same hole one notch over. Where nothing observable at that boundary changes — a dependency bump, an internal rename, a preparatory refactor — the spec stays silent. That silence is not a tolerance: a rule does not move when a mechanism moves, so there is nothing to write, and writing something anyway means inventing a sentence from the code, which canonises the drift it describes.
 - **(b) It undergoes the same concurrency detection as a story**, and therefore declares in the body of its pull request **the spec it targets and the sections it touches**, `none` when it touches none — otherwise it would hit a story in flight through a back door. The spec is named because nothing else in the declaration says which document those section titles belong to, and a bounded change that updates no spec file leaves a reader nothing to infer it from; two identically titled sections in two different specs are not a conflict. And `none` is a declaration, not a blank: it is what a bounded change that changes nothing observable has to say, where a blank body is indistinguishable from one nobody filled in — which is an unknown, and an unknown stops the reader. Run **Step 1 of `supercharlouze:writing-a-user-story`** before creating `bounded/<slug>` — the same open pull requests and the same pushed `story/*` and `bounded/*` branches to scan, the same `gh` calls, the same declaration read wherever each pull request keeps it — and stop on the same conditions, including the one where a declaration cannot be read. Symmetrically, a bounded change's declaration is read in its pull request body, because that is where a bounded keeps it: it has no story document, and a reader that looked only for one would stop on every open bounded change and jam the nominal path for as long as one stays open.
@@ -255,10 +259,14 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
   Within a batch, only the closing pull request adds entries to the gaps register: stories record their findings in their own document, and `supercharlouze:closing-a-batch` consolidates them.
 
 - **(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.** Invoke `supercharlouze:recording-a-decision` to write or rewrite one. Delete yourself the one your human partner abandons, and correct yourself, on their decision, a text whose decision does not change.
+- **(f) It holds the ADRs `main` carries when its branch starts.** Once `bounded/<slug>` is created, reread `docs/adr/` and hold what you find there: the design read it where you stood, and the branch starts from `main` as the remote carries it. When you cannot hold an ADR, put it to your human partner: if they rule it untenable, rewrite or delete it under rule (e); otherwise hold it.
+- **(g) It puts to your human partner the technical decision it takes that meets the conditions of an ADR (`The Model`).** That holds for a decision taken along the way as for one taken at design. If they want it as an ADR, write it under rule (e).
 
 No batch, no user story: a bounded change is already a single pull request, and whether it carries a spec update is what rule (a) decides. Its branch is `bounded/<slug>`.
 
-**Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`, which stops the design outright when a module it touches has no spec. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**: that is the design work itself, and it has no reason to change.
+**Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`, which stops the design outright when a module it touches has no spec. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**, except for the reading of `docs/adr/` stated below: that is the design work itself.
+
+**The design reads `docs/adr/`.** On the bounded path and on the architectural path, read every ADR in `docs/adr/` before proposing an approach, and put to your human partner each technical decision the design takes that meets the conditions of an ADR (`The Model`). An approach that breaks an ADR is one the code may not take, and only your human partner decides an ADR.
 
 ## Declared Overrides
 
@@ -288,19 +296,25 @@ For a technical story only:
 
 > If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical.
 
-For a story whose batch declares constraints only:
+For a story only if its batch declares constraints or `main` carries an ADR when its branch starts:
 
-> If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner.
+> If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner.
 
 A constraint the spec contradicts does not fall under this condition: the spec wins.
 
-A ruling replaces none of them. A ruling is a decision an agent takes on its human partner's behalf, and none of these is an agent's to take: the corrective condition would correct a spec, the technical condition would keep a qualification the story has just lost, and the constraint condition would break a decision another story of the batch relies on. Recording one and carrying on is exactly the failure these conditions exist to prevent.
+A ruling replaces none of them. A ruling is a decision an agent takes on its human partner's behalf, and none of these is an agent's to take: the corrective condition would correct a spec, the technical condition would keep a qualification the story has just lost, and the condition on a constraint or an ADR would break a decision another story of the batch relies on, or one your human partner took for all the code to come. Recording one and carrying on is exactly the failure these conditions exist to prevent.
 
-Justification: the four native conditions assume a valid authority exists, assume the story is the story it says it is, and know nothing of the stories beside it. A corrective batch puts the authority in question; a technical story puts its own qualification in question — "purely technical" is otherwise the door through which behaviour enters with no gate behind it, since a story that transcribes no block passes no opening review; and a constraint is what the other stories of its batch rely on, so a story that cannot hold one cannot settle it alone.
+Justification: the four native conditions assume a valid authority exists, assume the story is the story it says it is, and know nothing of the stories beside it. A corrective batch puts the authority in question; a technical story puts its own qualification in question — "purely technical" is otherwise the door through which behaviour enters with no gate behind it, since a story that transcribes no block passes no opening review; a constraint is what the other stories of its batch rely on, so a story that cannot hold one cannot settle it alone; and an ADR is a decision your human partner took, so only they judge it untenable.
 
 When the corrective or the technical condition fires, you stop, and `supercharlouze:writing-a-batch` conducts the requalification: under `Requalifying a Corrective Batch` for the corrective one, under `Requalifying a Technical Story` for the technical one.
 
-When the constraint condition fires, your human partner rules on the constraint. If they rule it untenable, the story is abandoned and `supercharlouze:writing-a-batch` amends the constraint, under `Amending a Batch`; otherwise the story resumes and holds it.
+When the condition on a constraint or an ADR fires, your human partner rules on the constraint or the ADR.
+
+If they rule a constraint untenable, the story is abandoned and `supercharlouze:writing-a-batch` amends the constraint, under `Amending a Batch`.
+
+If they rule an ADR untenable, the story is abandoned and a bounded change rewrites or deletes the ADR.
+
+Otherwise the story resumes and holds the constraint or the ADR.
 
 ### Override 3 — imposed execution mode
 
@@ -397,3 +411,4 @@ The identifier may follow in parentheses when the human has to find it in the do
 | "This rule holds for every module, so it lives above them all" | There is no spec above the specs. A rule belongs to exactly one spec; a rule that seems to belong to several signals a module breakdown to revisit, and that is your human partner's decision. A technical decision with nothing observable at a module's boundary is no rule at all: its outlet is an ADR. |
 | "This sentence is safer in, even if it repeats the rule above" | A text that says what goes without saying makes the reader doubt what does not, and ends up unread. Apply the cut test. |
 | "The human has the batch document, `D12` is enough" | They do not keep the identifiers in mind. Name the section the block targets and what it changes there. |
+| "This decision is technical, no need to bring it to my human partner" | If it meets the conditions of an ADR, put it to them: only they decide an ADR. |

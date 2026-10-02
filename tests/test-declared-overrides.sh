@@ -68,6 +68,14 @@ check_verb "steps 6 to 9 are replaced by writing-a-batch" \
 check_verb "the stop conditions are extended, not restated" \
     "This plugin adds the conditions below. For corrective batches only:" \
     "extends the stop conditions of superpowers:subagent-driven-development"
+
+# The condition on a constraint is introduced with both of its triggers: a batch
+# that declares constraints, or an ADR on `main`.
+if has "For a story only if its batch declares constraints or \`main\` carries an ADR when its branch starts:" "$SKILL_FLAT"; then
+    pass "using-batches introduces the stop condition on a constraint or an ADR"
+else
+    fail "using-batches introduces the stop condition on a constraint or an ADR"
+fi
 check_verb "SDD is imposed as the execution mode" \
     "This plugin imposes SDD as the execution mode" \
     "requires subagent-driven-development as the execution mode"
