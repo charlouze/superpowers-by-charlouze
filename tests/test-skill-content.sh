@@ -240,6 +240,10 @@ require writing-a-batch "a decision is a constraint only if the design relies on
     "A technical decision goes in \`Constraints\` only if the rest of the technical design relies on it"
 require writing-a-batch "every other decision is design" \
     "Every other technical decision goes in \`Technical design\`, where a story may depart from it."
+# A batch's constraints bind only its stories (spec section "The batch document"):
+# neither another batch nor the code that comes after the batch has to hold them.
+require writing-a-batch "a batch's constraints bind only its stories" \
+    "A batch's constraints bind only its stories."
 require writing-a-batch "the document reread checks the widened Constraints" \
     "\`Constraints\` carrying only migration and compatibility constraints, the technical decisions the rest of the technical design relies on, and the required order of stories and blocks, or \`none\`"
 require writing-a-batch "the PR body puts the constraints to the reviewer" \
