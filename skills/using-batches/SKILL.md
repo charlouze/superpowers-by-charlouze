@@ -20,6 +20,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
 | A batch must change its scope, its spec delta, its technical design, its constraints or its flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
+| Your human partner wants an ADR written, rewritten or deleted | A bounded change, under `What Is Kept, What Is Rerouted` below |
 | Spike or bounded work | Nothing is rerouted except what `What Is Kept, What Is Rerouted` states below |
 
 ## The Model
@@ -39,6 +40,22 @@ This project replaces dated design docs and one-off plans with a **living spec p
 **Technical design** — the mechanism a batch plans for its stories, each of which may depart from it. It lives in the batch document's `Technical design` field, and a story's plan starts from it: the spec binds a story, the technical design only guides it.
 
 **Technical design ruling** — a ruling by which a story departs from its batch's technical design.
+
+**ADR** — the document that records a technical decision of the project and its reason: a `.md` file placed directly in `docs/adr/`, at `docs/adr/<slug>.md`. An ADR this flow writes or rewrites carries no date and no status.
+
+A technical decision is recorded as an ADR only if it meets these conditions:
+
+- undoing it is expensive;
+- it surprises whoever does not know its context;
+- it settles between real alternatives.
+
+**Your human partner decides every ADR.** An agent neither writes, rewrites nor deletes one unless they have decided it.
+
+What is observable at a module's boundary is a rule of that module's spec, never an ADR.
+
+An ADR contradicts no spec and no other ADR.
+
+An ADR whose decision is replaced is rewritten in place, and one whose decision is abandoned is deleted.
 
 **Corrective batch** — a batch that brings existing code back into conformance with a spec that is already true. Its spec delta carries no block. Its scope is drawn from a module's gaps register, `docs/specs/<module>.gaps.md`.
 
@@ -91,7 +108,7 @@ Four signs recognise it without knowing anything about the domain:
 - it **names an internal actor** — what watches, what computes, what this module does not count;
 - **nobody outside the module could tell whether it is held.**
 
-The question that settles all four: *what does a user or a neighbouring module lose if this sentence is false?* If the answer is "nothing observable", it is not a rule — it is a gap, and it goes to the register.
+The question that settles all four: *what does a user or a neighbouring module lose if this sentence is false?* If the answer is "nothing observable", it is not a rule — it is a gap, and it goes to the register. Exception: a sentence that states a technical decision has an ADR for outlet, under the conditions `The Model` states.
 
 **A business choice carries its number.** A duration, a step, a window, a ceiling, a guarantee delay are business decisions, and a business decision is written with its value: "a session lasts four hours", "extending pushes the closing back by one hour and is offered only in the last thirty minutes". If the value changes one day, the spec changes, and that is exactly what a living spec is for. **Vagueness is not prudence** — it is a rule no code can contradict, therefore a rule that serves nothing.
 
@@ -121,9 +138,10 @@ does not share a rule.
 There is no spec above the specs, and that is the point. A rule housed outside
 the module specs — in a CLAUDE.md, in an architecture note — sits beyond
 everything that makes a spec binding: the review held against it, the drift rule,
-the gaps register. It would read as a norm and be none.
+the gaps register. It would read as a norm and be none. A technical decision
+that no module boundary makes observable is not a rule: its outlet is an ADR.
 
-**Scope.** These clauses bear on the spec file, **all of its lines**: this is a property of the document, so it holds for whoever writes in it. They do not bear on `docs/specs/<module>.gaps.md`, which is not a spec — a register entry names a mechanism, that is its job, and that is where everything the test ejects goes. Saying both is necessary: a rule with no declared outlet leaves an agent who has understood it with nowhere to write down what they found.
+**Scope.** These clauses bear on the spec file, **all of its lines**: this is a property of the document, so it holds for whoever writes in it. They do not bear on `docs/specs/<module>.gaps.md`, which is not a spec — a register entry names a mechanism, that is its job, and that is where what the test ejects goes, except a technical decision, which has an ADR for outlet. Saying both is necessary: a rule with no declared outlet leaves an agent who has understood it with nowhere to write down what they found.
 
 ## The Git Model
 
@@ -141,6 +159,8 @@ The second is why feature flags exist, and it rules out the two natural alternat
 **The spec change is the first commit of every story branch**, before the plan is written and before any task runs. Not for visibility — the file would be readable in the worktree uncommitted — but because that is what makes the norm *prior and opposable* to the code: it is already in the branch's history when implementation starts. A story that transcribes no block is the exception in form and not in purpose: no block dictates its first commit, so that commit carries the header of the story document and its empty `Rulings log` and `Observed drift` sections, plus what that story removes, if it removes anything — a corrective batch's story deletes the gaps register entry it resolves, a teardown story removes from the spec what no block announced, a technical story removes nothing — which fixes its scope in the branch's history exactly the same way. Batch-opening and batch-closing branches carry no spec change at all — they carry no code either.
 
 **The drift rule therefore has no exception:** any code on `main` that contradicts the spec on `main`, and any behaviour on `main` that no spec describes, is drift, hence corrective work. There is no "not delivered yet" case to exempt, because that case does not exist. Behaviour still gated states its flag, its default and — when the scope outlives the batch — its lifting condition in the spec itself, so the spec stays exactly true: it describes not only what the code does but what it exposes and under what condition.
+
+**The commit that rewrites or deletes an ADR says why.** The file keeps nothing of the decision it replaced, so the commit is where its reason stays readable.
 
 **Human gates are pull request reviews.** The plugin adds no ceremony; it puts its checkpoints where your flow already has them.
 
@@ -210,7 +230,7 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
 
 **Spike** — unchanged. An answer, no artifact.
 
-**Bounded** — ceremony unchanged, with four rules:
+**Bounded** — ceremony unchanged, with these rules:
 
 - **(a) Its pull request leaves the spec silent if and only if nothing observable at the module's boundary changes.** Whether it *alters* a behaviour some spec already describes or *adds* one no spec describes, it updates the spec in the same pull request as the code. Handling only the "alters" case would reopen the same hole one notch over. Where nothing observable at that boundary changes — a dependency bump, an internal rename, a preparatory refactor — the spec stays silent. That silence is not a tolerance: a rule does not move when a mechanism moves, so there is nothing to write, and writing something anyway means inventing a sentence from the code, which canonises the drift it describes.
 - **(b) It undergoes the same concurrency detection as a story**, and therefore declares in the body of its pull request **the spec it targets and the sections it touches**, `none` when it touches none — otherwise it would hit a story in flight through a back door. The spec is named because nothing else in the declaration says which document those section titles belong to, and a bounded change that updates no spec file leaves a reader nothing to infer it from; two identically titled sections in two different specs are not a conflict. And `none` is a declaration, not a blank: it is what a bounded change that changes nothing observable has to say, where a blank body is indistinguishable from one nobody filled in — which is an unknown, and an unknown stops the reader. Run **Step 1 of `supercharlouze:writing-a-user-story`** before creating `bounded/<slug>` — the same open pull requests and the same pushed `story/*` and `bounded/*` branches to scan, the same `gh` calls, the same declaration read wherever each pull request keeps it — and stop on the same conditions, including the one where a declaration cannot be read. Symmetrically, a bounded change's declaration is read in its pull request body, because that is where a bounded keeps it: it has no story document, and a reader that looked only for one would stop on every open bounded change and jam the nominal path for as long as one stays open.
@@ -233,6 +253,8 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
   An entry designates no other entry: a settled entry leaves the file whole, and takes with it anything that pointed at it.
 
   Within a batch, only the closing pull request adds entries to the gaps register: stories record their findings in their own document, and `supercharlouze:closing-a-batch` consolidates them.
+
+- **(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.** Invoke `supercharlouze:recording-a-decision` to write or rewrite one. Delete yourself the one your human partner abandons, and correct yourself, on their decision, a text whose decision does not change.
 
 No batch, no user story: a bounded change is already a single pull request, and whether it carries a spec update is what rule (a) decides. Its branch is `bounded/<slug>`.
 
@@ -372,6 +394,6 @@ The identifier may follow in parentheses when the human has to find it in the do
 | "This is a small fix, the spec can stay silent about it" | Only if nothing observable at the module's boundary changes. The moment behaviour moves, the spec is updated in the same pull request, and either way the change declares the spec it targets and the sections it touches. |
 | "The delta names a mechanism — I'll reword it into a business rule" | That is the laundering this rule exists to stop: what you would write describes the observed behaviour, so it canonises the drift. The spec wins, record a `Ruling:` for the clause you left out, and carry on. |
 | "I can't say where this number came from, I'll write 'a few minutes'" | Vagueness is not prudence — it is a rule no code can contradict. A number you cannot answer for is a gap, not a guarantee. |
-| "This rule holds for every module, so it lives above them all" | There is no spec above the specs. A rule belongs to exactly one spec; a rule that seems to belong to several signals a module breakdown to revisit, and that is your human partner's decision. |
+| "This rule holds for every module, so it lives above them all" | There is no spec above the specs. A rule belongs to exactly one spec; a rule that seems to belong to several signals a module breakdown to revisit, and that is your human partner's decision. A technical decision with nothing observable at a module's boundary is no rule at all: its outlet is an ADR. |
 | "This sentence is safer in, even if it repeats the rule above" | A text that says what goes without saying makes the reader doubt what does not, and ends up unread. Apply the cut test. |
 | "The human has the batch document, `D12` is enough" | They do not keep the identifiers in mind. Name the section the block targets and what it changes there. |

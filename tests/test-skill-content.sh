@@ -38,12 +38,12 @@ require() {
 }
 
 # Every document-producing skill states the language rule (Global Constraints, spec 10).
-for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch; do
+for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision; do
     require "$s" "states the language rule" "English skeleton"
 done
 
 # Every document-producing skill sends its writer to the concision rules.
-for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch; do
+for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision; do
     require "$s" "points at the concision rules" "follows \`Concision\` in \`supercharlouze:using-batches\`"
 done
 
@@ -504,6 +504,53 @@ require rereading-a-technical-design "red flag: a section rewritten whole" "| \"
 require rereading-a-technical-design "red flag: a reworded clause"       "| \"I reworded the clause, so this finding is a new one\" | A finding is its problem, not its words."
 require rereading-a-technical-design "the reread does not replace the review" "prepares the review of the pull request that carries the design, it does not replace it"
 
+# --- recording-a-decision ---
+# A building block: it writes the ADR its human partner decided, and decides
+# nothing itself.
+require recording-a-decision "it is invoked by a skill" "It is invoked by another skill, never on a request of your human partner"
+require recording-a-decision "an ADR is a file directly in docs/adr" "a \`.md\` file placed directly in \`docs/adr/\`"
+require recording-a-decision "the human has decided before it runs" "Your human partner has decided it before this skill runs: without their decision, write nothing."
+require recording-a-decision "a deletion does not come through it" "Deleting an ADR, and correcting its text without changing its decision, do not come through this skill"
+require recording-a-decision "a correction that changes the decision is a rewrite" "A correction that changes the decision is a rewrite, and does."
+require recording-a-decision "input: the decision and its reason" "the decision and its reason;"
+require recording-a-decision "input: the ADR to rewrite" "the path of the ADR to rewrite, when there is one;"
+require recording-a-decision "input: the spec copies handed over" "copies of specs to read in place of the files under \`docs/specs/\`, when the skill that invokes this one hands some"
+require recording-a-decision "output: the path or the ruling" "Return the path of the file written, or what your human partner ruled when nothing is written"
+require recording-a-decision "it works on the current branch" "Follow these steps on the branch you are working on"
+require recording-a-decision "step 1 reads the ADRs and the specs" "1. Read every ADR in \`docs/adr/\` and every spec in \`docs/specs/\`"
+require recording-a-decision "a handed copy replaces its spec" "Where you were handed a copy of a spec, read the copy"
+require recording-a-decision "step 2 stops on a contradiction or a boundary rule" "2. When the decision contradicts a spec or another ADR, or is observable at a module's boundary, say so to your human partner and write nothing until they have ruled"
+require recording-a-decision "step 3 writes from the template" "3. Write the file from \`skills/recording-a-decision/references/adr-template.md\`, creating \`docs/adr/\` if it does not exist"
+require recording-a-decision "a rewrite happens in place" "A rewrite replaces the text at the path you were given"
+require recording-a-decision "it does not commit" "Do not commit: the skill that invoked this one does."
+require recording-a-decision "a rewrite's commit says why" "The commit that rewrites an ADR says why"
+require recording-a-decision "red flag: wording around a contradiction" "| \"The decision contradicts a spec, I'll word the ADR so it fits\" | A reworded contradiction is still one. Say so to your human partner, and write nothing until they have ruled. |"
+require recording-a-decision "red flag: a status line" "| \"Every ADR has a date and a status, I'll add them\" | An ADR of this flow carries neither. The file states what holds now. |"
+require recording-a-decision "red flag: superseding" "| \"The old decision is worth keeping, I'll mark it superseded\" | Rewrite in place. Git history keeps the old text, and the commit says why it changed. |"
+require recording-a-decision "red flag: committing" "| \"The file is written, I'll commit it\" | The skill that invoked this one commits. |"
+require recording-a-decision "step 2 gives its reason" "An ADR contradicts neither a spec nor another ADR, and what is observable at a module's boundary is a rule of that module's spec, which only your human partner changes."
+require recording-a-decision "the section titles are skeleton" "The section titles \`Considered options\` and \`Consequences\` are skeleton."
+require recording-a-decision "a new ADR goes to its slug" "A new ADR goes to \`docs/adr/<slug>.md\`"
+require recording-a-decision "the title, the sentences and the slug are prose" "The title, the sentences and the file's slug are prose"
+require recording-a-decision "red flag: a decision observable at the boundary" "| \"This decision shows at the module's boundary, but an ADR is quicker than a spec change\" | What is observable at a module's boundary is a rule of its spec. Say so to your human partner. |"
+
+# The template carries neither a date nor a status, in any spelling.
+ADR_TEMPLATE="$REPO_ROOT/skills/recording-a-decision/references/adr-template.md"
+if [ ! -f "$ADR_TEMPLATE" ]; then
+    fail "recording-a-decision: the template carries no date and no status (no template)"
+elif grep -qiE 'date|status|statut' "$ADR_TEMPLATE"; then
+    fail "recording-a-decision: the template carries no date and no status"
+else
+    pass "recording-a-decision: the template carries no date and no status"
+fi
+for needle in "## Considered options" "## Consequences" "One to three sentences that state the decision and its reason" "Optional. The alternatives this decision settles between" "Optional. What the decision rules out or makes harder"; do
+    if [ -f "$ADR_TEMPLATE" ] && grep -qF "$needle" "$ADR_TEMPLATE"; then
+        pass "recording-a-decision: the template carries: $needle"
+    else
+        fail "recording-a-decision: the template carries: $needle"
+    fi
+done
+
 # --- writing-a-batch: ending the opening and amendment reviews ---
 require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
 require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"
@@ -829,6 +876,38 @@ require using-batches "the form of the gating sentence comes from the story skil
 
 require using-batches "a corrective batch's delta carries no block" \
         "**Corrective batch** — a batch that brings existing code back into conformance with a spec that is already true. Its spec delta carries no block."
+
+# --- using-batches: the ADR (spec sections "The model", "Architecture decision
+# records" and "Bounded change") ---
+require using-batches "defines the ADR" \
+        "**ADR** — the document that records a technical decision of the project and its reason: a \`.md\` file placed directly in \`docs/adr/\`, at \`docs/adr/<slug>.md\`."
+# The reference text of the conditions. Word for word: another skill copies it.
+require using-batches "the conditions of an ADR, word for word" \
+        "A technical decision is recorded as an ADR only if it meets these conditions: - undoing it is expensive; - it surprises whoever does not know its context; - it settles between real alternatives."
+require using-batches "the human decides every ADR" \
+        "**Your human partner decides every ADR.** An agent neither writes, rewrites nor deletes one unless they have decided it."
+require using-batches "what is observable is a spec rule, never an ADR" \
+        "What is observable at a module's boundary is a rule of that module's spec, never an ADR."
+require using-batches "an ADR contradicts no spec and no other ADR" \
+        "An ADR contradicts no spec and no other ADR."
+require using-batches "a replaced decision is rewritten in place" \
+        "An ADR whose decision is replaced is rewritten in place, and one whose decision is abandoned is deleted."
+require using-batches "the commit that rewrites or deletes an ADR says why" \
+        "**The commit that rewrites or deletes an ADR says why.**"
+require using-batches "routing sends an ADR to a bounded change" \
+        "| Your human partner wants an ADR written, rewritten or deleted | A bounded change, under \`What Is Kept, What Is Rerouted\` below |"
+require using-batches "a decision with nothing observable has the ADR for outlet" \
+        "Exception: a sentence that states a technical decision has an ADR for outlet, under the conditions \`The Model\` states."
+require using-batches "a decision housed outside the specs goes to an ADR" \
+        "A technical decision that no module boundary makes observable is not a rule: its outlet is an ADR."
+require using-batches "the scope paragraph names both outlets" \
+        "that is where what the test ejects goes, except a technical decision, which has an ADR for outlet"
+require using-batches "the red flag names the ADR as the outlet" \
+        "A technical decision with nothing observable at a module's boundary is no rule at all: its outlet is an ADR. |"
+require using-batches "a bounded change writes, rewrites and deletes ADRs" \
+        "**(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.**"
+require using-batches "a bounded change invokes recording-a-decision" \
+        "Invoke \`supercharlouze:recording-a-decision\` to write or rewrite one. Delete yourself the one your human partner abandons, and correct yourself, on their decision, a text whose decision does not change."
 
 # --- using-batches: the glossary terms of the review (spec section "The model") ---
 require using-batches "defines the pull request" \
