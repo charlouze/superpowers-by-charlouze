@@ -195,6 +195,8 @@ design relies on it, such as a name or a format several parts of the design use.
 Every other technical decision goes in `Technical design`, where a story may
 depart from it.
 
+A batch's constraints bind only its stories.
+
 `Technical design` carries the design your human partner approved during
 `superpowers:brainstorming`, which this document replaces as the design doc.
 Each story's plan starts from it, and a story may depart from it by recording
