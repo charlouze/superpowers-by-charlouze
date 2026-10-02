@@ -370,6 +370,8 @@ ces champs :
   sa portée et, si elle dépasse le lot, sa condition de levée ; ou `none` suivi de
   la raison de l'exemption.
 
+Les contraintes d'un lot ne lient que ses stories.
+
 Chaque bloc porte un identifiant unique dans le lot, et nomme la spec et la section
 qu'il vise.
 
