@@ -224,6 +224,14 @@ case "$README_FLAT" in
     *)  fail "the README's delivery gate carries the ADRs the review asks for" ;;
 esac
 
+# The opening gate carries the ADRs written, rewritten or deleted with the batch
+# document, in the README's gate table too.
+case "$README_FLAT" in
+    *"| Batch opening | the exact text each spec will receive, before a line of code is written against it, and the ADRs written, rewritten or deleted with it |"*)
+        pass "the README's opening gate carries the ADRs changed with the batch document" ;;
+    *)  fail "the README's opening gate carries the ADRs changed with the batch document" ;;
+esac
+
 # The README extends the stop condition on a constraint to an ADR.
 case "$README_FLAT" in
     *"If a story finds that a constraint of its batch or an ADR cannot be held, it stops and puts it to the human. An agent may neither correct a spec, nor keep a qualification it has lost, nor bend a constraint or an ADR."*)
