@@ -498,8 +498,6 @@ La pull request de clôture porte :
 - la libération des réservations non consommées ;
 - le retrait du document de lot des blocs qu'aucune story fusionnée n'a livrés.
   L'humain décide si chacun rejoint le gaps register ;
-- la conception technique du document de lot, quand elle n'est pas `none`,
-  réécrite pour décrire le mécanisme que le lot a livré ;
 - le statut `closed` du document de lot.
 
 ## Story
