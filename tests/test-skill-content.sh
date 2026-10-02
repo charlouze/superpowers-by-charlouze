@@ -282,12 +282,13 @@ require writing-a-batch "the opening is stated in order"        "Opening a new b
 require writing-a-batch "step 3 names every field it writes"    "3. **Write the batch document**: \`Scope\`, \`Spec delta\`, \`Technical design\`, \`Constraints\`, \`Feature flag\`"
 require writing-a-batch "the document reread names every field" "The batch-document reread bears on the whole document: \`Scope\`, \`Spec delta\`, \`Technical design\`, \`Constraints\`, \`Feature flag\`."
 require writing-a-batch "the coherence reread is step 5"        "Put the whole spec delta through the coherence reread"
-require writing-a-batch "the technical reread is step 6"        "6. **Put the technical design and the constraints through the technical reread** — skipped when the batch has neither (\`The Technical Reread\`)."
+require writing-a-batch "step 3 ends on the ADRs"               "then write, rewrite or delete the ADRs your human partner decided (\`The ADRs\`)"
+require writing-a-batch "the technical reread is step 6"        "6. **Put the batch through the technical reread** (\`The Technical Reread\`)."
 require writing-a-batch "the document reread is step 7"         "7. **Reread the whole batch document**"
 require writing-a-batch "the pull request is step 8"            "8. **Open the pull request** from \`batch/NN-<slug>\`"
 require writing-a-batch "the document reread is named where it runs" "**The batch-document reread**, step 7, comes after the technical reread"
 require writing-a-batch "each reread has its own object"        "The rereads are steps 5, 6 and 7, and each has its own object"
-require writing-a-batch "the technical reread's object is stated" "The technical reread bears on the technical design and the constraints, against the specs with the blocks applied and against the code on \`main\`."
+require writing-a-batch "the technical reread's object is stated" "The technical reread bears on the technical design and the constraints, on the blocks read against the ADRs, and on the ADRs this pull request writes or rewrites."
 require writing-a-batch "the document reread takes the whole document" "bears on the whole document"
 # The context that wrote the document rereads its own intentions, exactly as it
 # would the blocks, so the batch-document reread leaves it too.
@@ -306,6 +307,7 @@ require writing-a-batch "the delta goes through the coherence reread" "Before op
 # untouched, and it is what still bears on a blockless delta.
 require writing-a-batch "a blockless delta skips this reread"    "A delta that carries no block skips this step"
 require writing-a-batch "the skip is not a dispensation"         "it has nothing to read and no state to build"
+require writing-a-batch "a blockless batch still owes the rereads that follow" "Such a batch still owes step 6, and step 7, the batch-document reread, which bears on whatever stands in the blocks' place."
 require writing-a-batch "step 5 states the skip where it is ordered" "skipped when the delta carries no block"
 require writing-a-batch "the applied state is built outside the repository" "**outside the repository**"
 require writing-a-batch "no block reaches a spec before a story"      "no block is written into a spec before a story transcribes it"
@@ -323,11 +325,16 @@ require writing-a-batch "a boundary rule stops the opening"        "A rule it re
 require writing-a-batch "the pull request body says what the reread found" "The pull request body says what the reread found, or that it found nothing"
 
 # --- writing-a-batch: the technical reread (spec section "The technical reread") ---
-# The step exists, what it skips, what it hands the shared reread, where its
+# The step exists for every batch, what it hands the shared reread, where its
 # revisions go, and the declaration that makes it observable.
-require writing-a-batch "the design goes through the technical reread" "the technical design and the constraints go through the **technical reread**"
-require writing-a-batch "a batch with neither skips it"         "A batch whose \`Technical design\` and \`Constraints\` both read \`none\` skips this step"
-require writing-a-batch "the batch goes to the technical reread" "Invoke \`supercharlouze:rereading-a-technical-design\` with the batch document and each spec the batch touches"
+require writing-a-batch "the batch goes through the technical reread" "After the coherence reread, the batch goes through the **technical reread**"
+require writing-a-batch "the technical reread is invoked for every batch" "**Invoke it for every batch.** It returns that it has nothing to reread when that is so"
+require writing-a-batch "the invocation hands the specs, the ADRs and their paths" "Hand it also \`docs/specs/\`, \`docs/adr/\` and the path of each ADR this pull request writes or rewrites."
+require writing-a-batch "a block taken back restarts the delta" "A block it returns as taken back to the spec delta does the same, with the block as your human partner corrects it."
+require writing-a-batch "the technical reread changes no ADR" "It changes no ADR either."
+require writing-a-batch "an ADR corrected on a finding goes back through the reread" "When your human partner has an ADR corrected on a finding it returns, invoke \`supercharlouze:recording-a-decision\` as \`The ADRs\` does if the correction changes the ADR's decision, and correct the text yourself if it does not. When they abandon the ADR, delete it. After a correction or a deletion, invoke the technical reread again."
+require writing-a-batch "a corrected ADR is handed to the reread" "An ADR whose text you corrected on a finding counts among those it rewrites."
+require writing-a-batch "the reread is handed the batch document and its specs" "Invoke \`supercharlouze:rereading-a-technical-design\` with the batch document and each spec the batch touches"
 require writing-a-batch "a spec no block targets goes as it is" "the applied copy the coherence reread built, or the spec itself when no block targets it"
 require writing-a-batch "revisions go back into the design"     "Carry every revision it returns back into \`Technical design\` and \`Constraints\`"
 # The technical reread reads the delta and never writes into it: a block is a
@@ -338,7 +345,20 @@ require writing-a-batch "a behaviour taken back restarts the delta" "A behaviour
 require writing-a-batch "the technical reread waits for the coherence reread" "**Start it only once the coherence reread has closed its rounds.** Run side by side, each reread revises what the other is reading"
 require writing-a-batch "red flag: both rereads together"         "| \"The rereads read different things, I'll run them together\" | Each revises what the other is reading."
 require writing-a-batch "the pull request body says what it found" "The body of the pull request that runs it, opening or amendment, says what it found, or that it found nothing"
+require writing-a-batch "the pull request body says when there was nothing to reread" "When it returned that it had nothing to reread, the body says that instead."
 require writing-a-batch "the red flag sends the design to the reread" "Invoke \`supercharlouze:rereading-a-technical-design\`. |"
+
+# --- writing-a-batch: the ADRs of an opening (spec section "Opening a batch") ---
+require writing-a-batch "the ADRs change in the opening pull request" "Write, rewrite or delete in this pull request, with the batch document, the ADRs your human partner decided during the brainstorming."
+require writing-a-batch "the applied copies are built before an ADR is written" "Before writing or rewriting one, build a copy of each spec the batch touches with its blocks applied, as \`The Coherence Reread\` builds it."
+require writing-a-batch "an ADR is confronted with the specs as the batch leaves them" "An ADR is confronted with the specs as the batch leaves them, and no block is in a spec yet."
+require writing-a-batch "an ADR is written by the shared skill" "Invoke \`supercharlouze:recording-a-decision\` for each ADR to write or to rewrite, and hand it those copies."
+require writing-a-batch "an abandoned ADR is deleted" "Delete yourself each ADR your human partner abandoned, in a commit that says why."
+require writing-a-batch "the PR body puts the ADRs to the reviewer" "any flag lifting the delta announces; and each ADR this pull request writes, rewrites or deletes."
+require writing-a-batch "red flag: skipping the technical reread" "| \"The batch has no design and no constraints, I'll skip the technical reread\" | Invoke it for every batch. It says itself when it has nothing to reread, and it rereads the ADRs this pull request writes. |"
+require writing-a-batch "red flag: writing the ADR by hand" "| \"My human partner decided this ADR, I'll write the file myself\" | Invoke \`supercharlouze:recording-a-decision\`. It confronts the decision with the specs, blocks applied, and with the other ADRs. |"
+require writing-a-batch "red flag: a corrected ADR is reread" "| \"I only corrected the ADR's wording, no need to reread again\" | The corrected text is one no reader has read. Invoke the technical reread again. |"
+require writing-a-batch "red flag: an ADR nobody decided" "| \"This design decision deserves an ADR, I'll write it with the batch\" | Only your human partner decides an ADR. Put the decision to them, and write it once they want it. |"
 
 # --- rereading-a-spec (spec sections "Module adoption" and "The coherence reread") ---
 # Outside the context that wrote the text, whichever state the spec is in.
@@ -457,27 +477,41 @@ require rereading-a-spec "the reread does not replace the review"  "prepares the
 require rereading-a-technical-design "the reread runs outside the writing context" "outside the context that wrote them, by readers dispatched as subagents"
 require rereading-a-technical-design "it is invoked by a skill"          "It is invoked by another skill, never on a request of your human partner"
 # Its input and its output say everything a caller needs, as for the spec reread.
-require rereading-a-technical-design "input: the batch and its applied specs" "The input is the batch document, and each spec the batch touches with the batch's blocks applied"
+require rereading-a-technical-design "the reread also bears on the blocks and the ADRs" "The reread also reads the batch's blocks and its design against the ADRs, and rereads each ADR that the pull request opening or amending the batch writes or rewrites."
+require rereading-a-technical-design "input: the batch, its applied specs, the other specs and the ADRs" "The input is: - the batch document; - each spec the batch touches, with the batch's blocks applied; - \`docs/specs/\`, for the specs the batch does not touch; - \`docs/adr/\`, as the pull request that opens or amends the batch leaves it; - the path of each ADR that pull request writes or rewrites."
 require rereading-a-technical-design "the readers read main's code"     "The readers read the code as \`main\` carries it"
 require rereading-a-technical-design "output: the design revised"        "the technical design and the constraints, revised: every finding worked through, and every ruling of your human partner applied"
-require rereading-a-technical-design "output: the behaviours taken back to the delta" "the behaviours your human partner took back to the spec delta, which ended the reread"
+require rereading-a-technical-design "output: the behaviours and the blocks taken back to the delta" "the behaviours and the blocks your human partner took back to the spec delta, which ended the reread"
+require rereading-a-technical-design "output: the findings on an ADR" "the findings on an ADR, each with what your human partner ruled on it;"
+require rereading-a-technical-design "output: nothing to reread" "When no reading is dispatched (\`The Readings\`), return \"nothing to reread\"."
 require rereading-a-technical-design "the reread writes no block" "It leaves the design, or your human partner takes the batch back to its spec delta and the reread ends: this reread writes no block."
 require rereading-a-technical-design "red flag: writing the block" "| \"The design needs this rule, I'll write the block\" | This reread writes no block."
 require rereading-a-technical-design "output: what the reread found"     "what the reread found, or that it found nothing, written for a pull request body"
 # One reader per reading, dispatched from a template.
 require rereading-a-technical-design "a reader takes one reading"        "A reader takes one reading"
+require rereading-a-technical-design "the motions cover the ADRs" "a judgement of structure, a reasoning about failures or a confrontation with the ADRs, and one reader holding several does the cheapest of them and returns"
 require rereading-a-technical-design "never two readings to one reader"  "never hand a reader two"
 require rereading-a-technical-design "the dispatch is composed from a template" "skills/rereading-a-technical-design/references/reader-prompt.md"
-require rereading-a-technical-design "every batch gets every reading"    "Every batch gets every reading"
+require rereading-a-technical-design "a reading is dispatched when its object exists" "Dispatch a reading when its object exists."
+require rereading-a-technical-design "the object of the design readings" "The object of these readings is the design: the batch document's \`Technical design\` and \`Constraints\`. It exists unless both read \`none\`."
+require rereading-a-technical-design "the object of the reading against the ADRs" "The object of this reading is the batch's blocks and its design. It exists when a \`.md\` file is placed directly in \`docs/adr/\`, and the batch has a block or a design."
+require rereading-a-technical-design "the object of the reading of the ADRs" "The object of this reading is each ADR the pull request writes or rewrites. It exists when the input names one."
 require rereading-a-technical-design "a reading is pasted word for word" "pasted word for word into the slot the template leaves for it"
 require rereading-a-technical-design "a reading is written for a bare reader" "written for a reader that has nothing else"
-# The readings the batch document names: coverage, anchoring in the code,
-# architecture, module design, robustness.
+# The readings: coverage, anchoring in the code, architecture, module design,
+# robustness, the ADRs held, the ADRs reread.
 require rereading-a-technical-design "reading: coverage"       "**Does the design deliver what the batch promises?**"
 require rereading-a-technical-design "reading: the code"       "**Does the design stand on the code as it is?**"
 require rereading-a-technical-design "reading: architecture"   "**Does the design hold as an architecture?**"
 require rereading-a-technical-design "reading: module design"  "**Are the modules this design draws deep?**"
 require rereading-a-technical-design "reading: robustness"     "**How does this design fail?**"
+require rereading-a-technical-design "reading: the ADRs held"  "**Do the blocks and the design hold the ADRs?**"
+require rereading-a-technical-design "reading: the ADRs reread" "**Does each ADR to reread stand with the specifications and the other ADRs?**"
+require rereading-a-technical-design "the held reading reports a block and a part of the design" "Report a block that writes into a specification a rule an ADR contradicts, and a part of the design that an ADR rules out or that would make the code break one."
+require rereading-a-technical-design "the reread reading reports a contradiction and an observable rule" "Report an ADR that contradicts a specification, an ADR that contradicts another ADR, and an ADR that states what a user or a neighbouring module would observe"
+require rereading-a-technical-design "the held reading reads every ADR" "it is a \`.md\` file placed directly in the ADR directory. Read every one."
+require rereading-a-technical-design "the reread reading reads against the applied specs and the other ADRs" "Read each ADR to reread against every specification, the batch's changes applied, and against every other \`.md\` file placed directly in the ADR directory."
+require rereading-a-technical-design "an observable rule is no decision for an ADR" "that is a rule of a specification, never a decision an ADR records."
 require rereading-a-technical-design "coverage reports undescribed behaviour" "a behaviour the design would make observable to a user or a neighbouring module that no specification describes"
 require rereading-a-technical-design "the code reading checks the constraints" "and a constraint the code already breaks"
 require rereading-a-technical-design "robustness reports a constraint nobody can hold" "a constraint that a story could not hold"
@@ -488,7 +522,7 @@ require rereading-a-technical-design "a reader says it read without"     "read w
 require rereading-a-technical-design "the skills are invoked only if present" "invoke their skill only if present"
 require rereading-a-technical-design "the human hears of a missing skill" "tell your human partner that the skill is not available, so they can install it"
 case "$(body_flat "$REPO_ROOT/skills/rereading-a-technical-design/SKILL.md" 2>/dev/null || true)" in
-    *[Ff]"ive readings"*|*[Ff]"ive readers"*|*"of the five"*)
+    *[Ff]"ive readings"*|*[Ff]"ive readers"*|*"of the five"*|*[Ss]"ix readings"*|*[Ss]"even readings"*|*[Ss]"even readers"*|*"of the seven"*|*[Tt]"wo new readings"*)
         fail "rereading-a-technical-design: no sentence counts the readings" ;;
     *)  pass "rereading-a-technical-design: no sentence counts the readings" ;;
 esac
@@ -497,6 +531,13 @@ esac
 require rereading-a-technical-design "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
 require rereading-a-technical-design "a fix keeps what the design decides" "Fix each one on the technical design or the constraints without changing what they decide, or put it to your human partner when fixing it would"
 require rereading-a-technical-design "an undescribed behaviour always goes up" "A behaviour the design would make observable that no specification describes is always put to your human partner"
+require rereading-a-technical-design "a finding on a block goes to the human" "A finding on a block is not fixed: put it to your human partner, who leaves the block as it is, takes the batch back to its spec delta, which ends the reread, or has the ADR changed. This reread revises no block."
+require rereading-a-technical-design "a finding on an ADR goes to the human" "A finding on an ADR is not fixed either: put it to your human partner, and return it with what they ruled. Return the same way a finding on a block or on the design that they settle by having an ADR changed. This reread revises no ADR."
+require rereading-a-technical-design "the rulings applied are those on the design" "Then put to your human partner what you changed and what you could not settle, and apply their rulings on the design."
+require rereading-a-technical-design "red flag: fixing an ADR" "| \"The reader is right about this ADR, I'll fix its wording\" | This reread revises no ADR. Put the finding to your human partner, and return it with what they ruled. |"
+require rereading-a-technical-design "red flag: adjusting a block" "| \"This block contradicts an ADR, I'll adjust the block\" | This reread revises no block. Put the finding to your human partner. |"
+require rereading-a-technical-design "red flag: no design, nothing to reread" "| \"The batch has no design, so there is nothing to reread\" | A reading is dispatched when its object exists. An ADR the pull request writes is reread whatever the batch carries. |"
+require rereading-a-technical-design "the reading of the ADRs goes out once" "The reading of the ADRs to reread goes out in the first round only: no revision touches what it reads."
 require rereading-a-technical-design "a round runs on the revised text"  "A round runs on the revised text"
 require rereading-a-technical-design "the rounds have stop conditions"   "These stop the rounds"
 require rereading-a-technical-design "red flag: one more round"          "| \"One more round, the design can still improve\" | The third round is the last you open."
@@ -974,6 +1015,10 @@ require using-batches "no ADR binds the code already on main" \
         "No ADR binds the code already on \`main\`."
 require using-batches "the delivery gate carries the ADRs the review asks for" \
         "| Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |"
+require using-batches "the opening gate carries the ADRs changed with the batch document" \
+        "| Batch opening | the pull request carrying the batch document, and the ADRs written, rewritten or deleted with it |"
+require using-batches "the opening writes the ADRs the design decided" \
+        "On the architectural path, \`supercharlouze:writing-a-batch\` writes, rewrites or deletes at the opening the ADRs they decide."
 require using-batches "the bounded ceremony has an exception" \
         "**Bounded** — ceremony unchanged, except for the reading of \`docs/adr/\` stated below, with these rules:"
 require using-batches "the design steps have the same exception" \
