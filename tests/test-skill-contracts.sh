@@ -885,13 +885,27 @@ shared "both rereads spare the human a draft" \
 
 # The technical reread knows none of the skills that invoke it.
 absent "the technical reread names no skill that invokes it" \
-    "supercharlouze:|adopting-a-module|writing-a-batch|calling skill" \
+    "supercharlouze:|using-batches|adopting-a-module|writing-a-batch|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
+    rereading-a-technical-design
+
+# A reading is dispatched when its object exists: the sentence that gave every
+# batch every reading must survive nowhere, or a batch with no design would send
+# out readings that have nothing to read.
+absent "the technical reread no longer gives every batch every reading" \
+    "Every batch gets every reading" \
     rereading-a-technical-design
 
 # The readings of the technical reread live in its skill; the batch skill that
 # invokes it carries none of them.
 absent "the batch skill carries no technical reading of its own" \
-    "deliver what the batch promises|stand on the code as it is|hold as an architecture|modules this design draws deep|How does this design fail" \
+    "deliver what the batch promises|stand on the code as it is|hold as an architecture|modules this design draws deep|How does this design fail|blocks and the design hold the ADRs|stand with the specifications and the other ADRs" \
+    writing-a-batch
+
+# The opening invokes the technical reread for every batch, and the reread says
+# itself when it has nothing to reread: the former skip must survive nowhere, or
+# a batch with no design would open with its ADRs unread.
+absent "the opening no longer skips the technical reread" \
+    "skipped when the batch has neither|both read \`none\` skips this step" \
     writing-a-batch
 
 # The opening now places more than two rereads; the former count must not survive.

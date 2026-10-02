@@ -92,7 +92,7 @@ own; it puts its checkpoints where your flow already has them.
 | Gate | What you are reviewing |
 |---|---|
 | Module adoption | the spec and the gaps register, and the ADRs written with them, before any batch touches that module |
-| Batch opening | the exact text each spec will receive, before a line of code is written against it |
+| Batch opening | the exact text each spec will receive, before a line of code is written against it, and the ADRs written, rewritten or deleted with it |
 | Story delivery | a story's code, its spec change if it has one, and the ADRs the review asks for, in one diff |
 | Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch |
 | Batch closing | the consolidation, `status: closed` |
@@ -223,7 +223,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
 | `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |
-| `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design reread |
+| `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design, its blocks and its ADRs reread |
 | `supercharlouze:recording-a-decision` | Never directly — a building block the other skills invoke to have an ADR written or rewritten |
 
 ## Requirements

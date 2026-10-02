@@ -171,7 +171,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 | Gate | Artifact reviewed |
 |---|---|
 | Module adoption | the pull request carrying the spec and the gaps register, and the ADRs written with them |
-| Batch opening | the pull request carrying the batch document |
+| Batch opening | the pull request carrying the batch document, and the ADRs written, rewritten or deleted with it |
 | Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |
 | Batch closing | the pull request carrying the consolidation and `status: closed` |
 | Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag |
@@ -266,7 +266,7 @@ No batch, no user story: a bounded change is already a single pull request, and 
 
 **Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`, which stops the design outright when a module it touches has no spec. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**, except for the reading of `docs/adr/` stated below: that is the design work itself.
 
-**The design reads `docs/adr/`.** On the bounded path and on the architectural path, read every ADR in `docs/adr/` before proposing an approach, and put to your human partner each technical decision the design takes that meets the conditions of an ADR (`The Model`). An approach that breaks an ADR is one the code may not take, and only your human partner decides an ADR.
+**The design reads `docs/adr/`.** On the bounded path and on the architectural path, read every ADR in `docs/adr/` before proposing an approach, and put to your human partner each technical decision the design takes that meets the conditions of an ADR (`The Model`). An approach that breaks an ADR is one the code may not take, and only your human partner decides an ADR. On the architectural path, `supercharlouze:writing-a-batch` writes, rewrites or deletes at the opening the ADRs they decide.
 
 ## Declared Overrides
 
