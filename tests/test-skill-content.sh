@@ -811,16 +811,16 @@ require writing-a-user-story "the merge delivers the story"         "The story i
 require writing-a-user-story "abandoning removes the worktree too"  "remove its worktree and delete its branch, locally and on the remote"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
-require closing-a-batch "the preconditions read the design and its rulings" \
-    "the technical design rulings the rewrite starts from"
+require closing-a-batch "the preconditions read what closing consolidates" \
+    "The story documents carry what you are about to consolidate: the drift they observed and the open rulings their \`Rulings log\` leaves."
 require closing-a-batch "every duty lands in one pull request"  "Every duty lands in one pull request"
 require closing-a-batch "the flag check precedes the writers"  "it comes before the duties that write"
 require closing-a-batch "consolidates Observed drift"            "Observed drift"
 require closing-a-batch "reads both sections of a story"         "Two sections carry it"
 require closing-a-batch "names the Rulings log as a source"      "The **Rulings log** holds its \`Open ruling:\` lines"
 require closing-a-batch "consolidates the open rulings too"      "the ones classified as a violation or a gap are yours"
-require closing-a-batch "the Rulings log feeds the rewrite too" \
-    "its \`Technical design ruling:\` lines are what *Rewrite the technical design* starts from"
+require closing-a-batch "red flag: the Rulings log's open rulings are closing's" \
+    "| \"The Rulings log is the delivery review's business, not mine\" | Its open rulings classified as a violation or a gap are yours to consolidate. The review settled the rest. |"
 require closing-a-batch "releasing keeps the entry"  "removes the reservation annotation and leaves the entry"
 # This duty sorts what the stories brought back; it must not read as a definition
 # of either category. A fourth wording of "what a gap is" would sit outside the
@@ -867,23 +867,23 @@ case "$(body_flat "$REPO_ROOT/skills/closing-a-batch/SKILL.md")" in
     *)  pass "closing-a-batch: no duty is counted or numbered" ;;
 esac
 case "$(body_flat "$REPO_ROOT/skills/closing-a-batch/SKILL.md")" in
-    *"### Refuse to close on a flag"*"### Consolidate what the story documents left"*"### Release unconsumed reservations"*"### Withdraw the blocks no story delivered"*"### Rewrite the technical design"*"### Set status: closed"*)
+    *"### Refuse to close on a flag"*"### Consolidate what the story documents left"*"### Release unconsumed reservations"*"### Withdraw the blocks no story delivered"*"### Set status: closed"*)
         pass "closing-a-batch: the duties keep their order" ;;
     *)  fail "closing-a-batch: the duties keep their order" ;;
 esac
 require closing-a-batch "released entries are not re-filed"      "do not re-file the released entries as fresh gaps"
-# Closing rewrites the technical design into the mechanism delivered (spec
-# section "Closing a batch"), from the stories' departures and the code.
-require closing-a-batch "the design is rewritten into what was delivered" \
-    "When the batch document's \`Technical design\` is not \`none\`, rewrite it to describe the mechanism the batch delivered."
-require closing-a-batch "the rewrite starts from the stories' departures" \
-    "Start from the \`Technical design ruling:\` lines in the \`Rulings log\` of every merged story, and check them against the code on \`main\`."
-require closing-a-batch "the rewrite drops what served withdrawn blocks" \
-    "Drop what served only the blocks you just withdrew."
-require closing-a-batch "the code is the authority after closing" \
-    "The rewritten text is true at closing. After closing, the code is the authority"
-require closing-a-batch "the overview names the rewrite" \
-    "*Rewrite the technical design* brings its design in line with what was delivered"
+# Closing no longer rewrites the technical design (spec section "Closing a
+# batch"): nothing in closing-a-batch, its description included, says it does,
+# nor reads the `Technical design ruling:` lines that served only that rewrite.
+# The whole file is read, front matter included, because `require` and `absent`
+# read only the body.
+CLOSING_FILE="$REPO_ROOT/skills/closing-a-batch/SKILL.md"
+if [ ! -f "$CLOSING_FILE" ] || tr '\n' ' ' < "$CLOSING_FILE" | tr -s ' ' \
+    | grep -Eq "[Rr]ewrit[a-z]* (the|its) (batch's )?technical design|technical design you are about to rewrite|the rewrite starts from|mechanism the batch delivered|Technical design ruling"; then
+    fail "closing-a-batch: no longer rewrites the technical design"
+else
+    pass "closing-a-batch: no longer rewrites the technical design"
+fi
 
 # --- using-batches: preconditions for every pull request of this system ---
 require using-batches "the directory it runs in does not matter"    "Where you are standing does not matter"

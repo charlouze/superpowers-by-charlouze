@@ -836,11 +836,11 @@ absent "no constraint is judged against the stories" \
     "without breaking another" \
     writing-a-batch using-batches writing-a-user-story closing-a-batch recording-a-decision
 
-# A story writes its departures from the design in a form closing reads back,
-# and the batch document spells the same form.
-shared "the batch, the story and closing spell a technical design ruling alike" \
+# A story writes its departures from the design in the form the batch document
+# spells.
+shared "the batch and the story spell a technical design ruling alike" \
     "\`Technical design ruling:\`" \
-    writing-a-batch writing-a-user-story closing-a-batch
+    writing-a-batch writing-a-user-story
 
 # Both rereads dispatch their readers, gather them and close their rounds the
 # same way. One assertion per rule over both skills, so neither drifts alone.
