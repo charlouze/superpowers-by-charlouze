@@ -191,7 +191,7 @@ doit changer s'arrête.
 | Revue | Pull request examinée | Sa fusion |
 |---|---|---|
 | Adoption | la spec et le gaps register du module, et les ADR écrits avec eux | le module est adopté |
-| Ouverture | le document de lot | le lot est ouvert |
+| Ouverture | le document de lot, et les ADR écrits, réécrits ou supprimés avec lui | le lot est ouvert |
 | Livraison | le code d'une story, sa modification de spec s'il y en a une, et les ADR que la revue fait écrire | la story est livrée |
 | Amendement | la décision de changer le périmètre, le spec delta, la conception technique, les contraintes ou le flag d'un lot | le lot est amendé |
 | Clôture | la consolidation et `status: closed` | le lot est clos |
@@ -407,10 +407,17 @@ rien trouvé.
 
 ### The technical reread
 
-La relecture technique relit la conception technique et les contraintes d'un lot,
-contre les specs, blocs appliqués, et contre le code de `main`.
+La relecture technique relit :
 
-Un lot qui n'a ni conception technique ni contraintes s'en passe.
+- la conception technique et les contraintes du lot, contre les specs, blocs
+  appliqués, et contre le code de `main` ;
+- les blocs, la conception technique et les contraintes du lot, contre les ADR
+  tels que la pull request d'ouverture ou d'amendement les laisse ;
+- chaque ADR que cette pull request écrit ou réécrit, contre les specs, blocs
+  appliqués, et contre les autres ADR.
+
+Une ouverture s'en passe quand le lot n'a ni conception technique ni contraintes,
+et que sa pull request ne laisse aucun ADR dans `docs/adr/`.
 
 Elle n'est jamais conduite dans le contexte qui a écrit ce qu'elle relit.
 
@@ -423,11 +430,11 @@ L'ouverture :
 
 1. vérifie que chaque module touché est adopté, et s'arrête sinon ;
 2. attribue `NN` ;
-3. rédige le document de lot ;
+3. rédige le document de lot, puis écrit, réécrit ou supprime des ADR s'il y a
+   lieu ;
 4. réserve les entrées du gaps register que le lot prend en charge ;
 5. fait passer le spec delta par la relecture de cohérence ;
-6. fait passer la conception technique et les contraintes du lot par la
-   relecture technique ;
+6. fait passer le lot par la relecture technique ;
 7. relit le document de lot en entier ;
 8. ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
 
