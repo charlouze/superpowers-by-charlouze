@@ -581,13 +581,15 @@ require writing-a-user-story "an open ruling says what is left"   "ends with wha
 # technical design ruling (spec section "Delivering a story").
 require writing-a-user-story "the plan starts from the technical design" \
     "**The plan starts from the batch's \`Technical design\`**, and its \`Architecture:\` line derives from it."
-require writing-a-user-story "main's code wins where it departed" \
-    "Exception: where the code on \`main\` has departed from the design, as an earlier story of the batch may have, the plan starts from the code."
+require writing-a-user-story "an ADR wins over the design, then main's code" \
+    "Exceptions: where an ADR contradicts the design, the plan follows the ADR; elsewhere, where the code on \`main\` has departed from the design, as an earlier story of the batch may have, the plan starts from the code."
+require writing-a-user-story "the plan reads docs/adr in the story's worktree" \
+    "Read every ADR in \`docs/adr/\`, in this story's worktree, before writing the plan"
 require writing-a-user-story "no design, nothing to start from" \
     "A batch whose \`Technical design\` is \`none\` gives the plan nothing to start from."
 # Every departure, the plan's as well as the execution's, is recorded at Step 6.
 require writing-a-user-story "step 6 records every departure from the design" \
-    "Write as a \`Technical design ruling:\`, with the three parts of a \`Ruling:\`, every departure from the batch's \`Technical design\` that the plan or the execution took, except where the plan follows the code on \`main\`."
+    "Write as a \`Technical design ruling:\`, with the three parts of a \`Ruling:\`, every departure from the batch's \`Technical design\` that the plan or the execution took, except where the plan follows an ADR or the code on \`main\`."
 require writing-a-user-story "answers review feedback"            "review feedback"
 require writing-a-user-story "an open ruling needs a destination"  "A story does not merge leaving an open ruling without a destination"
 require writing-a-user-story "the review is the last place to act" "do not announce the pull request ready while an open ruling without a destination stands"
@@ -623,14 +625,64 @@ require writing-a-user-story "the concision block names what it covers" "These r
 require writing-a-user-story "GC carries the guarded-code rules"  "carries the rules for code under a flag, written out in full"
 require writing-a-user-story "GC carries the technical stop condition" "carries the stop condition proper to a technical story, written out in full"
 require writing-a-user-story "GC lists the technical stop condition" "- **in a technical story only**, the stop condition proper to a technical story"
-require writing-a-user-story "GC lists the constraint stop condition" \
-    "- **in a story whose batch declares constraints only**, the stop condition on a constraint that cannot be held."
-require writing-a-user-story "GC carries the constraint stop condition" \
-    "carries the stop condition on a constraint that cannot be held, written out in full"
+require writing-a-user-story "GC lists the stop condition on a constraint or an ADR" \
+    "- **only if the batch declares constraints or \`docs/adr/\` carries an ADR**, the stop condition on a constraint or an ADR that cannot be held"
+require writing-a-user-story "GC carries the stop condition on a constraint or an ADR" \
+    "**In a story whose batch declares constraints, or whose \`docs/adr/\` carries an ADR, \`Global Constraints\` carries the stop condition on a constraint or an ADR that cannot be held, written out in full.**"
 require writing-a-user-story "a batch declares constraints when they are not none" \
     "A batch declares constraints when its \`Constraints\` section is not \`none\`."
-require writing-a-user-story "the constraint condition leaves the branch as it is" \
-    "your human partner rules on the constraint, and until then the branch and the worktree stay as they are."
+require writing-a-user-story "docs/adr carries an ADR when a .md file sits in it" \
+    "\`docs/adr/\` carries an ADR when a \`.md\` file is placed directly in it, in this story's worktree."
+require writing-a-user-story "working around a constraint or an ADR breaks what the implementer cannot see" \
+    "A constraint is a decision another story of the batch relies on, and an ADR is a decision your human partner took for all the code to come, so an implementer who works around either breaks something they cannot see."
+require writing-a-user-story "the condition leaves the branch as it is" \
+    "your human partner rules on the constraint or the ADR, and until then the branch and the worktree stay as they are."
+require writing-a-user-story "step 5 names both triggers of the condition" \
+    "In a story whose batch declares constraints or whose \`docs/adr/\` carries an ADR: if, while conducting it, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner."
+require writing-a-user-story "step 5 sets aside the constraint the spec contradicts" \
+    "A constraint the spec contradicts is not this case, since the spec wins."
+require writing-a-user-story "the worktree carries the ADRs the code holds" \
+    "the worktree carries the ADRs \`main\` carried when the branch started, which are the ones this story's code holds."
+require writing-a-user-story "an implementer leaves the ADR to the review" \
+    "Only your human partner decides an ADR, so an implementer who takes such a decision reports it and leaves the file to the review."
+require writing-a-user-story "GC lists the ADRs the code holds" \
+    "- **only if \`docs/adr/\` carries an ADR**, the paths of the ADRs this story's code holds;"
+require writing-a-user-story "GC lists the conditions of an ADR" \
+    "- the conditions of an ADR, with the obligation to record as an \`Open ruling:\` the decision that meets them."
+require writing-a-user-story "GC carries the paths of the ADRs" \
+    "**When \`docs/adr/\` carries an ADR, \`Global Constraints\` lists the path of each one, under the sentence below.**"
+require writing-a-user-story "the sentence the paths sit under" \
+    "The code this story writes holds these ADRs."
+require writing-a-user-story "an ADR left out of the list binds nobody" \
+    "An implementer reads only this list, so an ADR whose path is missing from it binds nobody."
+require writing-a-user-story "GC carries the conditions of an ADR" \
+    "**In every story, \`Global Constraints\` carries the conditions of an ADR, written out in full, with the obligation to record the decision that meets them.**"
+require writing-a-user-story "a task records the decision as an open ruling" \
+    "When you take a technical decision that meets them, say so in your report: it is recorded as an \`Open ruling:\`, which asks your human partner whether they want it as an ADR. Write nothing in \`docs/adr/\`."
+require writing-a-user-story "no task writes in docs/adr" \
+    "No task writes in \`docs/adr/\`. The ADR a decision of this story deserves is written at the review (Step 7), once your human partner wants it."
+require writing-a-user-story "step 6 records the decision that meets the conditions" \
+    "Write as an \`Open ruling:\` every technical decision the plan or the execution took that meets the conditions of an ADR, its line ending with whether your human partner wants it as an ADR."
+require writing-a-user-story "the review settles the ADR" \
+    "If they want the ADR, invoke \`supercharlouze:recording-a-decision\` and commit the file it writes in a commit of its own."
+require writing-a-user-story "the human settles the open ruling on an ADR" \
+    "**Your human partner settles an open ruling on a decision that meets the conditions of an ADR.**"
+require writing-a-user-story "nothing written is recorded" \
+    "If nothing is written, record in the \`Rulings log\` what they ruled."
+require writing-a-user-story "a later correction of the ADR is a fixup" \
+    "A correction of the ADR's text asked for afterwards, which does not change its decision, is a \`fixup!\` of that commit."
+require writing-a-user-story "red flag: a departure left out surprises the review" \
+    "| \"My plan departs only slightly from the design, no ruling needed\" | Every departure is a \`Technical design ruling:\`. One left out reaches the delivery review as a surprise. |"
+require writing-a-user-story "red flag: the plan follows the ADR, then main's code" \
+    "| \"\`main\`'s code contradicts the design, so the design wins\" | The design only guides. Where an ADR contradicts it, the plan follows the ADR; elsewhere, where \`main\`'s code departed from it, the plan starts from the code. |"
+require writing-a-user-story "red flag: no task writes the ADR" \
+    "| \"This decision deserves an ADR, I'll write it with the code\" | No task writes in \`docs/adr/\`. Record an \`Open ruling:\`, and write the ADR at the review if your human partner wants it. |"
+require writing-a-user-story "an untenable ADR abandons the story" \
+    "If they rule an ADR untenable, the story is abandoned and a bounded change rewrites or deletes the ADR."
+require writing-a-user-story "what holds resumes the story" \
+    "Otherwise resume the story and hold the constraint or the ADR."
+require writing-a-user-story "red flag: a ruling replaces no stop condition" \
+    "| \"This constraint, or this ADR, cannot be held, I'll work around it and record a ruling\" | A ruling replaces no stop condition. Another story of the batch relies on that constraint, and your human partner decided that ADR: stop and put it to them. |"
 require writing-a-user-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
 require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
 
@@ -814,16 +866,24 @@ require using-batches "a technical story has a stop condition too" \
     "you discover that it changes something observable at the module's boundary, stop. The story is no longer technical."
 require using-batches "a ruling replaces no stop condition" \
     "A ruling replaces none of them"
-require using-batches "a story stops on a constraint it cannot hold" \
-    "If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner."
+require using-batches "a story stops on a constraint or an ADR it cannot hold" \
+    "If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner."
 require using-batches "a contradicted constraint is not this case" \
     "A constraint the spec contradicts does not fall under this condition: the spec wins."
-require using-batches "the human rules on the constraint" \
-    "When the constraint condition fires, your human partner rules on the constraint."
+require using-batches "a ruling would break a decision of the batch or of the human" \
+    "and the condition on a constraint or an ADR would break a decision another story of the batch relies on, or one your human partner took for all the code to come."
+require using-batches "the justification covers the ADR" \
+    "and an ADR is a decision your human partner took, so only they judge it untenable."
+require using-batches "the human rules on the constraint or the ADR" \
+    "When the condition on a constraint or an ADR fires, your human partner rules on the constraint or the ADR."
 require using-batches "an untenable constraint goes to an amendment" \
-    "If they rule it untenable, the story is abandoned and \`supercharlouze:writing-a-batch\` amends the constraint, under \`Amending a Batch\`; otherwise the story resumes and holds it."
+    "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:writing-a-batch\` amends the constraint, under \`Amending a Batch\`."
+require using-batches "an untenable ADR goes to a bounded change" \
+    "If they rule an ADR untenable, the story is abandoned and a bounded change rewrites or deletes the ADR."
+require using-batches "what holds resumes the story" \
+    "Otherwise the story resumes and holds the constraint or the ADR."
 require writing-a-user-story "an untenable constraint abandons the story" \
-    "If they rule it untenable, the story is abandoned and \`supercharlouze:writing-a-batch\` amends the constraint; otherwise resume the story and hold the constraint."
+    "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:writing-a-batch\` amends the constraint."
 
 # --- using-batches: the shape of a review's end ---
 require using-batches "the amendment gate covers the design and the constraints" "the decision to change its scope, its spec delta, its technical design, its constraints or its flag"
@@ -908,6 +968,38 @@ require using-batches "a bounded change writes, rewrites and deletes ADRs" \
         "**(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.**"
 require using-batches "a bounded change invokes recording-a-decision" \
         "Invoke \`supercharlouze:recording-a-decision\` to write or rewrite one. Delete yourself the one your human partner abandons, and correct yourself, on their decision, a text whose decision does not change."
+require using-batches "the code holds the ADRs main carries" \
+        "The code of a story or of a bounded change holds the ADRs \`main\` carries when its branch starts."
+require using-batches "no ADR binds the code already on main" \
+        "No ADR binds the code already on \`main\`."
+require using-batches "the delivery gate carries the ADRs the review asks for" \
+        "| Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |"
+require using-batches "the bounded ceremony has an exception" \
+        "**Bounded** — ceremony unchanged, except for the reading of \`docs/adr/\` stated below, with these rules:"
+require using-batches "the design steps have the same exception" \
+        "are **kept intact**, except for the reading of \`docs/adr/\` stated below"
+require using-batches "the design reads docs/adr before proposing an approach" \
+        "On the bounded path and on the architectural path, read every ADR in \`docs/adr/\` before proposing an approach"
+require using-batches "the design puts to the human the decision that meets the conditions" \
+        "put to your human partner each technical decision the design takes that meets the conditions of an ADR (\`The Model\`)"
+require using-batches "a bounded change holds the ADRs" \
+        "**(f) It holds the ADRs \`main\` carries when its branch starts.**"
+require using-batches "a bounded change rereads docs/adr once its branch exists" \
+        "Once \`bounded/<slug>\` is created, reread \`docs/adr/\` and hold what you find there"
+require using-batches "a bounded change puts to the human the ADR it cannot hold" \
+        "When you cannot hold an ADR, put it to your human partner: if they rule it untenable, rewrite or delete it under rule (e); otherwise hold it."
+require using-batches "a bounded change puts to the human the decision that meets the conditions" \
+        "**(g) It puts to your human partner the technical decision it takes that meets the conditions of an ADR (\`The Model\`).**"
+require using-batches "a bounded change writes the ADR the human wants" \
+        "If they want it as an ADR, write it under rule (e)."
+require using-batches "red flag: a decision is put to the human" \
+        "| \"This decision is technical, no need to bring it to my human partner\" | If it meets the conditions of an ADR, put it to them: only they decide an ADR. |"
+require using-batches "an approach that breaks an ADR is not taken" \
+        "An approach that breaks an ADR is one the code may not take, and only your human partner decides an ADR."
+require using-batches "a bounded change's decision along the way is put to the human too" \
+        "That holds for a decision taken along the way as for one taken at design."
+require using-batches "the design read may be stale" \
+        "the design read it where you stood, and the branch starts from \`main\` as the remote carries it"
 
 # --- using-batches: the glossary terms of the review (spec section "The model") ---
 require using-batches "defines the pull request" \

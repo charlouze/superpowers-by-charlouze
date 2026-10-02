@@ -93,7 +93,7 @@ own; it puts its checkpoints where your flow already has them.
 |---|---|
 | Module adoption | the spec and the gaps register, before any batch touches that module |
 | Batch opening | the exact text each spec will receive, before a line of code is written against it |
-| Story delivery | a story's code, and its spec change if it has one, in one diff |
+| Story delivery | a story's code, its spec change if it has one, and the ADRs the review asks for, in one diff |
 | Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch |
 | Batch closing | the consolidation, `status: closed` |
 
@@ -185,8 +185,11 @@ well-scoped change to code that already exists — keeps its own ceremony and it
 request whenever something observable at the module's boundary changes, and says
 nothing there only when nothing does; it declares the spec it targets and the
 sections it touches, like a story; it carries no flag, being complete on its own;
-it may write to a gaps register directly; and it may write, rewrite and delete
-ADRs, or carry nothing but ADRs. Only architectural work opens a batch.
+it may write to a gaps register directly; it may write, rewrite and delete ADRs,
+or carry nothing but ADRs; it holds the ADRs `main` carries when its branch
+starts, and puts to the human one it cannot hold; and it puts to the human the
+technical decision it takes that would earn an ADR. Only architectural work opens
+a batch.
 
 ### The four departures
 
@@ -199,9 +202,9 @@ places, each declared rather than improvised:
    spec wrong, a corrective batch is no longer corrective and must be
    requalified. If a story declared technical turns out to change something
    observable at its module's boundary, it is no longer technical. If a story
-   finds that a constraint of its batch cannot be held, it stops and puts the
-   constraint to the human. An agent may neither correct a spec, nor keep a
-   qualification it has lost, nor bend a constraint.
+   finds that a constraint of its batch or an ADR cannot be held, it stops and
+   puts it to the human. An agent may neither correct a spec, nor keep a
+   qualification it has lost, nor bend a constraint or an ADR.
 3. **The execution mode is imposed** — subagent-driven development, because
    repatriating its rulings depends on its ledger, and those rulings are the only
    record of where the spec was ambiguous.

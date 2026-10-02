@@ -177,12 +177,34 @@ shared "the technical stop condition is copied exactly as stated" \
     "If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical." \
     using-batches writing-a-user-story
 
-# The stop condition on a constraint that cannot be held travels the same way,
-# with the sentence that bounds it: an implementer who meets a constraint the
-# spec contradicts must find, in the same copy, that this is not the case.
-shared "the constraint stop condition is copied exactly as stated" \
-    "If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner. A constraint the spec contradicts does not fall under this condition: the spec wins." \
+# The stop condition on a constraint or an ADR that cannot be held travels the
+# same way, with the sentence that bounds it: an implementer who meets a
+# constraint the spec contradicts must find, in the same copy, that this is not
+# the case.
+shared "the stop condition on a constraint or an ADR is copied exactly as stated" \
+    "If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner. A constraint the spec contradicts does not fall under this condition: the spec wins." \
     using-batches writing-a-user-story
+
+# The condition no longer bears on a constraint alone, nor fires only in a batch
+# that declares constraints: the former wording must survive nowhere, or a story
+# with an ADR and no constraint would carry no stop condition.
+absent "the stop condition is no longer bounded to a constraint" \
+    "a constraint of its batch cannot be held|constraint condition|whose batch declares constraints only" \
+    using-batches writing-a-user-story
+
+# The conditions of an ADR are copied into every story's Global Constraints.
+# `using-batches` states them and `writing-a-user-story` has them copied: a
+# condition spelled differently in the copy is no longer the threshold the
+# human agreed to.
+shared "the conditions of an ADR are copied exactly as stated" \
+    "A technical decision is recorded as an ADR only if it meets these conditions: - undoing it is expensive; - it surprises whoever does not know its context; - it settles between real alternatives." \
+    using-batches writing-a-user-story
+
+# An unrecorded departure is answered by the delivery review, not by what
+# closing does with the design: the former red flag must survive nowhere.
+absent "an unrecorded departure no longer leaves the design false" \
+    "describing a mechanism nobody built" \
+    writing-a-user-story
 
 # The concision rules are copied into every story's Global Constraints.
 # `using-batches` states them and `writing-a-user-story` has them copied; a rule
