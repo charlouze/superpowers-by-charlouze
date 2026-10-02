@@ -298,4 +298,7 @@ bash ~/.config/github-app/as-agent.sh git -C <worktree> commit -m "feat: la clô
 
 ## Rulings log
 
+- Ruling: la première alternative de la garde neuve devient `[Rr]ewrit[a-z]* (the|its) (batch's )?technical design`, plus large que le texte du plan, et le plan n'est pas réécrit après son exécution — la relecture de la branche a trouvé des formes de réécriture que l'ancienne alternative laissait passer, alors que le commentaire de la garde dit que rien ne les dit — si c'est faux, la garde refuse une phrase légitime de la forme « rewrite … the technical design ».
+- Ruling: l'en-tête `# --- closing-a-batch (spec 4.1, 4.2, 5.4) ---` de `tests/test-skill-content.sh` reste tel quel — il précède cette story, et sept autres renvois numérotés à la spec subsistent dans `tests/`, qu'aucun bloc de ce lot ne vise — si c'est faux, ces huit renvois restent à réécrire par leurs titres de section.
+
 ## Observed drift
