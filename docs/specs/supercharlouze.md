@@ -6,7 +6,8 @@ Ce module couvre une extension de superpowers qui définit un flux de
 développement : une spec vivante par module, des lots de stories qui font grandir
 ces specs, des revues humaines tenues en pull request, les documents que ce flux
 produit, les conventions qu'il laisse dans le dépôt, ce qu'il exige du code
-applicatif tant qu'un flag le garde, et son installation sur un projet.
+applicatif qu'un flag garde ou qui doit tenir un ADR, et son installation sur un
+projet.
 
 Il ne couvre ni superpowers lui-même, ni l'outil qui exécute les agents.
 
@@ -140,10 +141,11 @@ L'emplacement des documents et ce que le flux ajoute à un plan ne sont pas des
   > chose d'observable à la frontière du module, arrête-toi. La story n'est plus
   > technique.
 
-  Dans une story dont le lot déclare des contraintes seulement :
+  Dans une story seulement si son lot déclare des contraintes ou si `main` porte
+  un ADR quand sa branche en part :
 
-  > Si, en conduisant une story, tu découvres qu'une contrainte de son lot ne peut
-  > pas être tenue, arrête-toi et soumets-la à l'humain.
+  > Si, en conduisant une story, tu découvres qu'une contrainte de son lot ou un
+  > ADR ne peut pas être tenu, arrête-toi et soumets-le à l'humain.
 
   Une contrainte que la spec contredit ne relève pas de cette condition, mais de
   `Authority and conflict rules`.
@@ -190,7 +192,7 @@ doit changer s'arrête.
 |---|---|---|
 | Adoption | la spec et le gaps register du module, et les ADR écrits avec eux | le module est adopté |
 | Ouverture | le document de lot | le lot est ouvert |
-| Livraison | le code d'une story, et sa modification de spec s'il y en a une | la story est livrée |
+| Livraison | le code d'une story, sa modification de spec s'il y en a une, et les ADR que la revue fait écrire | la story est livrée |
 | Amendement | la décision de changer le périmètre, le spec delta, la conception technique, les contraintes ou le flag d'un lot | le lot est amendé |
 | Clôture | la consolidation et `status: closed` | le lot est clos |
 
@@ -457,10 +459,9 @@ abandonnée.
 Si l'humain veut le changement observable qu'elle a révélé, un amendement ajoute
 son bloc, et le flag qu'il exige s'il en exige un (`Feature flags`).
 
-Quand la condition d'arrêt sur une contrainte qui ne peut pas être tenue se
-déclenche, l'humain juge la contrainte. S'il la juge intenable, la story est
-abandonnée et un amendement modifie ou retire la contrainte ; sinon, la story
-reprend en la tenant.
+Quand une story s'arrête sur une contrainte qu'elle ne peut pas tenir, l'humain
+juge la contrainte. S'il la juge intenable, la story est abandonnée et un
+amendement modifie ou retire la contrainte ; sinon, la story reprend en la tenant.
 
 Un amendement qui change le spec delta, la conception technique ou les contraintes
 d'un lot passe par la relecture technique.
@@ -551,9 +552,14 @@ qui l'accueille quand il en rejoint une.
    `Code under a feature flag`, quel que soit le lot qui déclare le flag ;
 7. dans une story technique seulement, sa condition d'arrêt
    (`Departures from superpowers`) ;
-8. dans une story dont le lot déclare des contraintes seulement, la condition
-   d'arrêt sur une contrainte qui ne peut pas être tenue
-   (`Departures from superpowers`).
+8. seulement si le lot déclare des contraintes ou si `main` porte un ADR quand la
+   branche de la story en part, la condition d'arrêt sur une contrainte ou un ADR
+   qui ne peut pas être tenu (`Departures from superpowers`) ;
+9. seulement si `main` porte un ADR quand la branche de la story en part,
+   l'obligation de tenir ces ADR (`Architecture decision records`) ;
+10. les conditions auxquelles une décision technique est consignée en ADR
+    (`Architecture decision records`), et l'obligation de soumettre comme
+    arbitrage ouvert la décision qui les réunit (`Delivering a story`).
 
 ### Concurrency detection
 
@@ -600,8 +606,9 @@ Précondition, vérifiée avant de créer la branche : le lot est ouvert.
 4. Écrire le plan dans le document de story, le commiter et le pousser avant
    l'exécution.
 
-   Le plan part de la conception technique du lot. Exception : là où le code de
-   `main` s'en est écarté, il part du code.
+   Le plan part de la conception technique du lot. Exceptions : là où un ADR la
+   contredit, il suit l'ADR ; ailleurs, là où le code de `main` s'en est écarté,
+   il part du code.
 
    Tout autre écart du plan à la conception technique est un arbitrage de
    conception technique, consigné dans le `Rulings log`.
@@ -619,6 +626,11 @@ clôture.
 
 Tout autre arbitrage ouvert est tranché à la revue de livraison, et le
 `Rulings log` porte ce qui a été tranché.
+
+Une story soumet comme arbitrage ouvert la décision technique qu'elle prend et qui
+réunit les conditions auxquelles elle serait consignée en ADR
+(`Architecture decision records`). Si l'humain la veut en ADR, la story l'écrit
+en réponse à la revue.
 
 ### Abandoning a story
 
@@ -699,6 +711,15 @@ Un ADR dont la décision est abandonnée est supprimé.
 
 Le commit qui réécrit ou supprime un ADR dit pourquoi.
 
+Le code d'une story ou d'un changement borné tient les ADR que `main` porte quand
+sa branche en part.
+
+Aucun ADR ne s'impose au code déjà sur `main`.
+
+Quand une story s'arrête sur un ADR qu'elle ne peut pas tenir, l'humain juge
+l'ADR. S'il le juge intenable, la story est abandonnée et un changement borné
+réécrit ou supprime l'ADR ; sinon, la story reprend en le tenant.
+
 ## Bounded change
 
 Un changement borné n'a ni lot ni story : c'est une pull request unique, sur une
@@ -719,6 +740,14 @@ Il peut ajouter et supprimer des entrées du gaps register.
 Il peut écrire, réécrire et supprimer des ADR.
 
 Il peut ne porter que des ADR.
+
+Quand un changement borné ne peut pas tenir un ADR, il le soumet à l'humain. Si
+l'humain juge l'ADR intenable, le changement borné le réécrit ou le supprime ;
+sinon, il le tient.
+
+Un changement borné soumet à l'humain la décision technique qu'il prend et qui
+réunit les conditions auxquelles elle serait consignée en ADR
+(`Architecture decision records`). Si l'humain la veut en ADR, il l'écrit.
 
 ## Installing on a project
 
