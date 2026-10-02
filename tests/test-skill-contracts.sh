@@ -670,6 +670,13 @@ absent "no skill bounds an amendment to scope, spec delta and flag" \
     "spec delta or (its |the |of )?flag" \
     using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
+# An amendment that writes or rewrites an ADR goes through the technical reread.
+# A leftover ending the trigger on the constraints would let an ADR written by an
+# amendment reach the review unread.
+absent "an amendment's technical reread is not bound to the batch document" \
+    "or the constraints goes through the technical reread" \
+    writing-a-batch
+
 # Everything that reaches `main` may ship to production. The flow presumes no
 # more of the project: a skill still requiring continuous deployment asks more
 # than the flow does.
