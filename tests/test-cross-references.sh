@@ -202,9 +202,33 @@ case "$README_FLAT" in
     *)  fail "the README says a human decides every ADR" ;;
 esac
 case "$README_FLAT" in
-    *"and it may write, rewrite and delete ADRs, or carry nothing but ADRs."*)
+    *"it may write, rewrite and delete ADRs, or carry nothing but ADRs;"*)
         pass "the README lets a bounded change write ADRs" ;;
     *)  fail "the README lets a bounded change write ADRs" ;;
+esac
+case "$README_FLAT" in
+    *"it holds the ADRs \`main\` carries when its branch starts, and puts to the human one it cannot hold;"*)
+        pass "the README makes a bounded change hold the ADRs" ;;
+    *)  fail "the README makes a bounded change hold the ADRs" ;;
+esac
+case "$README_FLAT" in
+    *"and it puts to the human the technical decision it takes that would earn an ADR."*)
+        pass "the README makes a bounded change put its decision to the human" ;;
+    *)  fail "the README makes a bounded change put its decision to the human" ;;
+esac
+# The delivery gate carries the ADRs the review asks for, in the README's gate
+# table too.
+case "$README_FLAT" in
+    *"| Story delivery | a story's code, its spec change if it has one, and the ADRs the review asks for, in one diff |"*)
+        pass "the README's delivery gate carries the ADRs the review asks for" ;;
+    *)  fail "the README's delivery gate carries the ADRs the review asks for" ;;
+esac
+
+# The README extends the stop condition on a constraint to an ADR.
+case "$README_FLAT" in
+    *"If a story finds that a constraint of its batch or an ADR cannot be held, it stops and puts it to the human. An agent may neither correct a spec, nor keep a qualification it has lost, nor bend a constraint or an ADR."*)
+        pass "the README's stop condition covers the ADR" ;;
+    *)  fail "the README's stop condition covers the ADR" ;;
 esac
 
 # 5. No shipped artifact cites a numbered section of the archived design
