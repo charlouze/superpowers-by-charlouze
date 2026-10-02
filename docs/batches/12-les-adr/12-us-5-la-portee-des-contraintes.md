@@ -159,4 +159,7 @@ Co-Authored-By: Charlouze <me@charlouze.com>"
 
 ## Rulings log
 
+- Ruling: la phrase de `## The Batch Document` dit seulement que les contraintes d'un lot ne lient que ses stories, sans envoyer vers un ADR la décision qui devrait durer au-delà du lot — l'humain a tranché que le seuil d'un ADR reste à trois conditions, sans critère de portée — si c'est faux, un agent qui veut qu'une décision dure au-delà du lot ne lit nulle part où l'écrire.
+- Ruling: la phrase n'est suivie ni d'une raison ni d'un exemple de ce qu'elle exclut — la raison qui borne les contraintes aux stories est déjà dite plus haut dans la section, où `writing-a-user-story` recopie `Constraints` dans les `Global Constraints` de chaque story, et un exemple enverrait vers un ADR la décision appelée à durer — si c'est faux, un agent lit la phrase sans savoir ce qu'elle exclut.
+
 ## Observed drift
