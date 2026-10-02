@@ -153,12 +153,20 @@ require writing-a-batch "a delta amendment is reviewed as an opening" "By except
 require writing-a-batch "its blocks are applied with every pending block" "apply its new or changed blocks together with every block no merged story has declared yet"
 require writing-a-batch "its applied copies go to the shared reread" "invoke \`supercharlouze:rereading-a-spec\` on each applied copy, with the path of the spec it applies to, as \`The Coherence Reread\` does"
 require writing-a-batch "its whole document goes through the document reread" "After its rereads, an amendment that changes the spec delta puts the whole document through the batch-document reread"
-require writing-a-batch "an amendment goes through the technical reread" "An amendment that changes the spec delta, the technical design or the constraints goes through the technical reread before its pull request opens, after the coherence reread when it runs one"
+require writing-a-batch "an amendment goes through the technical reread" "An amendment that changes the spec delta, the technical design or the constraints, or that writes or rewrites an ADR, goes through the technical reread before its pull request opens, after the coherence reread when it runs one"
 require writing-a-batch "its technical reread is the opening's" "Conduct it as \`The Technical Reread\` does"
 require writing-a-batch "its technical reread reads the pending blocks applied" "on the amended document and on each spec with every block no merged story has declared yet applied"
 require writing-a-batch "its technical reread builds the copies itself" "in a copy built as \`The Coherence Reread\` builds it"
-require writing-a-batch "a behaviour taken back makes a delta amendment" "A behaviour it returns as taken back to the spec delta makes the amendment one that changes the spec delta"
+require writing-a-batch "a behaviour or a block taken back makes a delta amendment" "A behaviour or a block it returns as taken back to the spec delta makes the amendment one that changes the spec delta"
 require writing-a-batch "its body carries what an opening body carries" "the exact text of every new or changed block, and what the coherence reread found"
+require writing-a-batch "an amendment writes, rewrites or deletes ADRs" "An amendment's pull request may also write, rewrite or delete the ADRs your human partner decided with the amendment."
+require writing-a-batch "its ADRs are written as the opening's" "Do it as \`The ADRs\` does, once the document is amended."
+require writing-a-batch "its ADRs meet the pending blocks of the amended document" "Where that section applies the batch's blocks, apply every block of the amended document that no merged story has declared yet."
+require writing-a-batch "its body states the ADRs" "The pull request body states each ADR it writes, rewrites or deletes."
+require writing-a-batch "a change of ADRs alone is a bounded change" "A change that touches nothing but ADRs is not an amendment: it goes through a bounded change, under \`supercharlouze:using-batches\`."
+require writing-a-batch "what is taken back sends the amendment through both rereads" "makes the amendment one that changes the spec delta: it goes through the coherence reread, then through the technical reread again."
+require writing-a-batch "red flag: an amendment for an ADR alone" "| \"My human partner wants this ADR rewritten, I'll amend the batch for it\" | An amendment changes the batch document. A change that touches nothing but ADRs goes through a bounded change. |"
+require writing-a-batch "red flag: an amendment's ADR is reread" "| \"This amendment only changes the scope, the ADR it writes needs no reread\" | An amendment that writes or rewrites an ADR goes through the technical reread, whatever else it changes. |"
 require writing-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
 require writing-a-batch "the human rules on a constraint a story cannot hold" "**When a story stops on a constraint it cannot hold, your human partner rules on the constraint.**"
 require writing-a-batch "an untenable constraint is amended" "If they rule it untenable, an amendment changes or removes the constraint and the story is abandoned"
@@ -996,7 +1004,7 @@ require using-batches "a replaced decision is rewritten in place" \
 require using-batches "the commit that rewrites or deletes an ADR says why" \
         "**The commit that rewrites or deletes an ADR says why.**"
 require using-batches "routing sends an ADR to a bounded change" \
-        "| Your human partner wants an ADR written, rewritten or deleted | A bounded change, under \`What Is Kept, What Is Rerouted\` below |"
+        "| Your human partner wants an ADR written, rewritten or deleted outside the opening or the amendment of a batch | A bounded change, under \`What Is Kept, What Is Rerouted\` below |"
 require using-batches "a decision with nothing observable has the ADR for outlet" \
         "Exception: a sentence that states a technical decision has an ADR for outlet, under the conditions \`The Model\` states."
 require using-batches "a decision housed outside the specs goes to an ADR" \
@@ -1017,6 +1025,8 @@ require using-batches "the delivery gate carries the ADRs the review asks for" \
         "| Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |"
 require using-batches "the opening gate carries the ADRs changed with the batch document" \
         "| Batch opening | the pull request carrying the batch document, and the ADRs written, rewritten or deleted with it |"
+require using-batches "the amendment gate carries the ADRs changed with the decision" \
+        "| Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag, and the ADRs written, rewritten or deleted with it |"
 require using-batches "the opening writes the ADRs the design decided" \
         "On the architectural path, \`supercharlouze:writing-a-batch\` writes, rewrites or deletes at the opening the ADRs they decide."
 require using-batches "the bounded ceremony has an exception" \

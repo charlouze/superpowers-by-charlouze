@@ -20,7 +20,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
 | A batch must change its scope, its spec delta, its technical design, its constraints or its flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
-| Your human partner wants an ADR written, rewritten or deleted | A bounded change, under `What Is Kept, What Is Rerouted` below |
+| Your human partner wants an ADR written, rewritten or deleted outside the opening or the amendment of a batch | A bounded change, under `What Is Kept, What Is Rerouted` below |
 | Spike or bounded work | Nothing is rerouted except what `What Is Kept, What Is Rerouted` states below |
 
 ## The Model
@@ -174,7 +174,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 | Batch opening | the pull request carrying the batch document, and the ADRs written, rewritten or deleted with it |
 | Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |
 | Batch closing | the pull request carrying the consolidation and `status: closed` |
-| Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag |
+| Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag, and the ADRs written, rewritten or deleted with it |
 
 **Preconditions for every pull request of this system**, checked before creating a branch: fetch, then start the branch from **`main` as the remote carries it**, never from another branch. That is what keeps a session chaining two pieces of work from stacking the second on the first one's branch, and what makes numbering and concurrency detection reason on the remote state. **Where you are standing does not matter**, and it must not: a session the harness launched inside a worktree cannot run git against the shared checkout at all, so a precondition on the directory would be unreachable exactly there. The starting point is reachable from anywhere — inside a reused workspace, `git fetch origin && git switch -c <branch> origin/main` satisfies it without leaving. `gh` is assumed available and authenticated; without it both degrade to a partial safety net and stop preventing anything.
 

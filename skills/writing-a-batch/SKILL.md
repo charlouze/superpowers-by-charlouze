@@ -556,6 +556,15 @@ and say in the pull request body what changed and why. An amendment is not
 mutable state flowing along: it is an explicit human decision that goes through
 a review.
 
+An amendment's pull request may also write, rewrite or delete the ADRs your
+human partner decided with the amendment. Do it as `The ADRs` does, once the
+document is amended. Where that section applies the batch's blocks, apply every
+block of the amended document that no merged story has declared yet. The pull
+request body states each ADR it writes, rewrites or deletes.
+
+A change that touches nothing but ADRs is not an amendment: it goes through a
+bounded change, under `supercharlouze:using-batches`.
+
 By exception, an amendment that changes the spec delta is reviewed as an
 opening. Before its pull request opens, apply its new or changed blocks together
 with every block no merged story has declared yet, and invoke
@@ -564,12 +573,14 @@ spec it applies to, as `The Coherence Reread` does. Its body states the exact
 text of every new or changed block, and what the coherence reread found.
 
 An amendment that changes the spec delta, the technical design or the
-constraints goes through the technical reread before its pull request opens,
-after the coherence reread when it runs one. Conduct it as
-`The Technical Reread` does, on the amended document and on each spec with every
-block no merged story has declared yet applied, in a copy built as
-`The Coherence Reread` builds it. A behaviour it returns as taken back to the
-spec delta makes the amendment one that changes the spec delta.
+constraints, or that writes or rewrites an ADR, goes through the technical
+reread before its pull request opens, after the coherence reread when it runs
+one. Conduct it as `The Technical Reread` does, on the amended document and on
+each spec with every block no merged story has declared yet applied, in a copy
+built as `The Coherence Reread` builds it. A behaviour or a block it returns as
+taken back to the spec delta makes the amendment one that changes the spec
+delta: it goes through the coherence reread, then through the technical reread
+again.
 
 After its rereads, an amendment that changes the spec delta puts the whole
 document through the batch-document reread.
@@ -716,3 +727,5 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "My human partner decided this ADR, I'll write the file myself" | Invoke `supercharlouze:recording-a-decision`. It confronts the decision with the specs, blocks applied, and with the other ADRs. |
 | "This design decision deserves an ADR, I'll write it with the batch" | Only your human partner decides an ADR. Put the decision to them, and write it once they want it. |
 | "I only corrected the ADR's wording, no need to reread again" | The corrected text is one no reader has read. Invoke the technical reread again. |
+| "My human partner wants this ADR rewritten, I'll amend the batch for it" | An amendment changes the batch document. A change that touches nothing but ADRs goes through a bounded change. |
+| "This amendment only changes the scope, the ADR it writes needs no reread" | An amendment that writes or rewrites an ADR goes through the technical reread, whatever else it changes. |
