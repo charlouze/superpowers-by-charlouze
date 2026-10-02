@@ -53,6 +53,10 @@ and that document — not this one — is the authority.
 - **Technical story** — a story that changes nothing observable at its module's
   boundary: a dependency bump, an internal rename, a preparatory refactor. It
   declares the qualification, and a stop condition catches it if it is false.
+- **ADR** — the document that records a technical decision of the project and
+  its reason, at `docs/adr/<slug>.md`. A decision earns one only if undoing it
+  is expensive, it surprises whoever does not know its context, and it settles
+  between real alternatives. A human decides every one.
 - **Feature flag** — what lets a story ship alone without exposing a half-built
   batch. It is a specified object, not an implementation detail: the spec states
   its name and its default.
@@ -181,8 +185,8 @@ well-scoped change to code that already exists — keeps its own ceremony and it
 request whenever something observable at the module's boundary changes, and says
 nothing there only when nothing does; it declares the spec it targets and the
 sections it touches, like a story; it carries no flag, being complete on its own;
-and it may write to a gaps register directly. Only architectural work opens a
-batch.
+it may write to a gaps register directly; and it may write, rewrite and delete
+ADRs, or carry nothing but ADRs. Only architectural work opens a batch.
 
 ### The four departures
 
@@ -217,6 +221,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
 | `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |
 | `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design reread |
+| `supercharlouze:recording-a-decision` | Never directly — a building block the other skills invoke to have an ADR written or rewritten |
 
 ## Requirements
 

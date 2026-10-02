@@ -53,6 +53,8 @@ d'observable à la frontière de son module.
 **Conception technique** (`technical design`) — le mécanisme prévu pour les
 stories d'un lot, dont chacune peut s'écarter.
 
+**ADR** (`adr`) — le document qui consigne une décision technique du projet.
+
 **Flag** (`feature flag`) — ce qui garde un comportement incomplet hors de portée
 des utilisateurs jusqu'à sa levée.
 
@@ -666,6 +668,33 @@ levée.
 
 Seule une story change le défaut qu'une mention de flag déclare.
 
+## Architecture decision records
+
+Un ADR vit dans `docs/adr/<slug>.md`.
+
+Il énonce une décision et sa raison.
+
+Un ADR que le flux écrit ou réécrit ne porte ni date ni statut.
+
+Une décision technique n'est consignée en ADR que si elle réunit ces conditions :
+
+- la défaire coûte cher ;
+- elle surprend qui n'en connaît pas le contexte ;
+- elle tranche entre de vraies alternatives.
+
+Un agent n'écrit, ne réécrit ni ne supprime un ADR sans que l'humain l'ait décidé.
+
+Ce qui s'observe à la frontière d'un module est une règle de sa spec, jamais un
+ADR.
+
+Un ADR ne contredit aucune spec ni aucun autre ADR.
+
+Un ADR dont la décision est remplacée est réécrit sur place.
+
+Un ADR dont la décision est abandonnée est supprimé.
+
+Le commit qui réécrit ou supprime un ADR dit pourquoi.
+
 ## Bounded change
 
 Un changement borné n'a ni lot ni story : c'est une pull request unique, sur une
@@ -682,6 +711,10 @@ Il subit la même détection de concurrence qu'une story.
 Il ne porte aucun flag.
 
 Il peut ajouter et supprimer des entrées du gaps register.
+
+Il peut écrire, réécrire et supprimer des ADR.
+
+Il peut ne porter que des ADR.
 
 ## Installing on a project
 

@@ -10,7 +10,7 @@ fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 
 echo "test-skill-frontmatter"
 
-EXPECTED_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design"
+EXPECTED_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design recording-a-decision"
 
 for skill in $EXPECTED_SKILLS; do
     f="$REPO_ROOT/skills/$skill/SKILL.md"
@@ -43,12 +43,12 @@ for skill in $EXPECTED_SKILLS; do
     fi
 done
 
-# The rereads are building blocks: only a skill invokes them. Each keeps its
+# The internal skills are building blocks: only a skill invokes them. Each keeps its
 # frontmatter, since a skill without one still loads and takes its first line as
 # its description. It is hidden from the slash menu, and its description asks
 # for an explicit call. `disable-model-invocation` would stop the calling skills
 # from invoking it too.
-for r in rereading-a-spec rereading-a-technical-design; do
+for r in rereading-a-spec rereading-a-technical-design recording-a-decision; do
     RFRONT="$(awk 'NR>1 && /^---$/{exit} NR>1{print}' "$REPO_ROOT/skills/$r/SKILL.md" 2>/dev/null || true)"
     case "$RFRONT" in
         *"user-invocable: false"*) pass "$r is hidden from the slash menu" ;;

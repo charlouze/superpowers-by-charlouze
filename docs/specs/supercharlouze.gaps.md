@@ -52,21 +52,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   un lecteur se fier à la mauvaise. Relevée puis parquée par la story
   `06-us-1-le-code-garde`.
 
-- **The spec document / The gaps register** — ce que le test de l'autre
-  implémentation éjecte d'une spec, et qui n'est le gap d'aucun module, n'a
-  aucune sortie. Une décision d'ingénierie qui vaut pour tout le projet et
-  qu'aucune frontière de module ne rend observable échoue au test, part donc au
-  gaps register, où la catégorie *Gaps* promet qu'un lot ordinaire « les spécifie
-  enfin » — lot qui réappliquerait le test et l'éjecterait de nouveau. La boucle
-  se referme : rien ne dit où une telle décision vit, ni ce qui l'en sort. Le
-  dépôt `charlouze/beacon-hosting`, qui consomme ce plugin, a tranché tout seul en
-  rangeant ce genre de décision dans son `CLAUDE.md`, hors de toute spec.
-  Constatée par la story `05-us-1-le-domicile-d-une-regle`, dont le lot a
-  explicitement laissé ce cas hors de son périmètre. **Gap et non violation :**
-  les deux règles sont implémentées fidèlement, c'est leur conjonction qui est
-  muette ; résorber veut dire décider ce que la spec doit dire, et cette décision
-  est humaine. `reserved by batch-12`
-
 - **The spec document** — la règle « un renvoi nomme la section qu'il vise » n'est
   écrite dans aucune spec, et rien n'attrape un renvoi par la position. Le lot 01
   a été ouvert sur ce principe et a livré deux gardes, mais celle qui traque les
