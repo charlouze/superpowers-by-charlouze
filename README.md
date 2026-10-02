@@ -94,7 +94,7 @@ own; it puts its checkpoints where your flow already has them.
 | Module adoption | the spec and the gaps register, before any batch touches that module |
 | Batch opening | the exact text each spec will receive, before a line of code is written against it, and the ADRs written, rewritten or deleted with it |
 | Story delivery | a story's code, its spec change if it has one, and the ADRs the review asks for, in one diff |
-| Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch |
+| Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch, and the ADRs written, rewritten or deleted with it |
 | Batch closing | the consolidation, `status: closed` |
 
 The opening gate is the one that pays. You read the wording of a spec at the

@@ -232,6 +232,14 @@ case "$README_FLAT" in
     *)  fail "the README's opening gate carries the ADRs changed with the batch document" ;;
 esac
 
+# The amendment gate carries the ADRs written, rewritten or deleted with the
+# amendment, in the README's gate table too.
+case "$README_FLAT" in
+    *"| Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch, and the ADRs written, rewritten or deleted with it |"*)
+        pass "the README's amendment gate carries the ADRs changed with the amendment" ;;
+    *)  fail "the README's amendment gate carries the ADRs changed with the amendment" ;;
+esac
+
 # The README extends the stop condition on a constraint to an ADR.
 case "$README_FLAT" in
     *"If a story finds that a constraint of its batch or an ADR cannot be held, it stops and puts it to the human. An agent may neither correct a spec, nor keep a qualification it has lost, nor bend a constraint or an ADR."*)
