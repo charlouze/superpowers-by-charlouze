@@ -772,7 +772,9 @@ Elle produit une pull request, sur la branche `chore/supercharlouze-init`, qui :
    de plan dans ce flux. Si ce bloc est déjà présent, elle le met à jour sur place,
    sans jamais le dupliquer ;
 4. liste les modules déjà adoptés, c'est-à-dire ceux dont une spec existe dans
-   `docs/specs/`.
+   `docs/specs/` ;
+5. soumet à l'humain les ADR que `docs/adr/` porte déjà, et supprime ceux qu'il
+   abandonne.
 
 Une fois ses documents déplacés, `docs/superpowers` est supprimé s'il est vide. S'il
 contient autre chose, l'installation le laisse en place sans y toucher.
