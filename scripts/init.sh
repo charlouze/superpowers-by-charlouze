@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Idempotent project setup for the supercharlouze plugin.
-# Creates the document tree, archives superpowers documents, and installs the
-# CLAUDE.md block from its canonical source. Adopts nothing, guesses nothing.
+# Creates the document tree, archives superpowers documents, installs the
+# CLAUDE.md block from its canonical source, and reports the adopted modules
+# and the ADRs docs/adr/ already carries. Adopts nothing, guesses nothing.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -141,5 +142,20 @@ if [ -z "$ADOPTED" ]; then
 else
     printf '%s\n' "$ADOPTED" | while IFS= read -r spec; do
         echo "  - $(basename "$spec" .md)"
+    done
+fi
+
+# An ADR is a .md file placed directly in docs/adr/. The directory is listed
+# only when it exists: installing never creates it.
+ADRS=""
+if [ -d "$PROJECT/docs/adr" ]; then
+    ADRS="$(find "$PROJECT/docs/adr" -maxdepth 1 -type f -name '*.md' -print | sort)"
+fi
+echo "existing ADRs:"
+if [ -z "$ADRS" ]; then
+    echo "  (none)"
+else
+    printf '%s\n' "$ADRS" | while IFS= read -r adr; do
+        echo "  - docs/adr/$(basename "$adr")"
     done
 fi

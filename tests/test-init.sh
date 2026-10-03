@@ -347,4 +347,47 @@ else
     fail "empty directories: docs/superpowers is gone once emptied"
 fi
 
+# --- Case 22: the report lists the ADRs docs/adr/ already carries ---
+# An ADR is a .md file placed directly in docs/adr/: another file, a directory
+# named *.md, or a .md file deeper down is not one.
+adr_list() { awk '/^existing ADRs:/ { f = 1; next } f && /^  / { print; next } f { exit }' "$1"; }
+P21="$TEST_ROOT/adrs"
+mkdir -p "$P21/docs/adr/drafts" "$P21/docs/adr/folder.md"
+printf '# A\n' > "$P21/docs/adr/a-decision.md"
+printf '# B\n' > "$P21/docs/adr/b decision.md"
+printf 'notes\n' > "$P21/docs/adr/notes.txt"
+printf '# C\n' > "$P21/docs/adr/drafts/c-decision.md"
+REPORT21="$TEST_ROOT/report21.txt"
+bash "$INIT" "$P21" > "$REPORT21"
+EXPECTED21="$(printf '  - docs/adr/a-decision.md\n  - docs/adr/b decision.md')"
+if [ "$(adr_list "$REPORT21")" = "$EXPECTED21" ]; then
+    pass "report: the ADRs listed are the .md files placed directly in docs/adr/"
+else
+    fail "report: the ADRs listed are the .md files placed directly in docs/adr/"
+fi
+
+# --- Case 23: a project without docs/adr/ has no ADR, and gets no docs/adr/ ---
+# Case 14 ran the script on P1, which has no docs/adr/.
+if [ "$(adr_list "$REPORT")" = "  (none)" ]; then
+    pass "report: no docs/adr/ lists the ADRs as none"
+else
+    fail "report: no docs/adr/ lists the ADRs as none"
+fi
+if [ ! -e "$P1/docs/adr" ]; then
+    pass "init does not create docs/adr/"
+else
+    fail "init does not create docs/adr/"
+fi
+
+# --- Case 24: an empty docs/adr/ has no ADR ---
+P22="$TEST_ROOT/adr-empty"
+mkdir -p "$P22/docs/adr"
+REPORT22="$TEST_ROOT/report22.txt"
+bash "$INIT" "$P22" > "$REPORT22"
+if [ "$(adr_list "$REPORT22")" = "  (none)" ]; then
+    pass "report: an empty docs/adr/ lists the ADRs as none"
+else
+    fail "report: an empty docs/adr/ lists the ADRs as none"
+fi
+
 exit $((FAILURES > 0))
