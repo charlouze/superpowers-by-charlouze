@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.8.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.7.0...v0.8.0) (2026-10-07)
+
+
+### Features
+
+* l'amendement d'un lot écrit les ADR que l'humain a décidés ([6e37f89](https://github.com/charlouze/superpowers-by-charlouze/commit/6e37f89ab52315f15f655820fe2b23825117f9e0))
+* l'installation fait trancher l'humain sur les ADR qu'un projet porte déjà ([e63c4a8](https://github.com/charlouze/superpowers-by-charlouze/commit/e63c4a8be8f088bba5eb3c92771079cba2a62c70))
+* l'ouverture d'un lot écrit les ADR que l'humain a décidés ([6ca6207](https://github.com/charlouze/superpowers-by-charlouze/commit/6ca6207119eedfd57bcfdff8b1f081f89343b5f1))
+* l'ouverture d'un lot fait relire sa conception technique hors du contexte qui l'a écrite ([7c8616a](https://github.com/charlouze/superpowers-by-charlouze/commit/7c8616a1009b226ea810ab5b9ae29a9ad42c82b9))
+* la clôture d'un lot laisse sa conception technique telle quelle ([026b3b8](https://github.com/charlouze/superpowers-by-charlouze/commit/026b3b87072531e6e645b435350cf05319299e81))
+* le code d'une story tient les ADR que main porte ([bca9653](https://github.com/charlouze/superpowers-by-charlouze/commit/bca965379c769573fe8acb44659c959be8261a23))
+* les contraintes d'un lot ne s'imposent qu'à ses stories ([e9e96fc](https://github.com/charlouze/superpowers-by-charlouze/commit/e9e96fc7d59861697e73862403057e7c7e57280f))
+* un lot ouvert s'amende dans sa conception technique ou ses contraintes ([c2e1f81](https://github.com/charlouze/superpowers-by-charlouze/commit/c2e1f81f18a3f18ea58e46450b9aa377149c29d0))
+* un lot porte la conception technique de ses stories ([86abc1d](https://github.com/charlouze/superpowers-by-charlouze/commit/86abc1df82e04a183bb33e7193a2cb2db2ebc61a))
+* une décision technique se consigne en ADR par un changement borné ([b0d5ced](https://github.com/charlouze/superpowers-by-charlouze/commit/b0d5cedc4f33394abcfa908b725510b7ac30a031))
+* une story soumet à l'humain la contrainte de son lot qu'elle ne peut pas tenir ([c1cc246](https://github.com/charlouze/superpowers-by-charlouze/commit/c1cc246e9c0ea070981e5d4b5bebdd540d711664))
+
+
+### Bug Fixes
+
+* un lecteur de relecture ne lance plus les tests ([9b54244](https://github.com/charlouze/superpowers-by-charlouze/commit/9b54244f2cd1f075fe358bb9bfb6103efb73075c))
+* une relecture ne tourne plus sans fin ([da1ad4c](https://github.com/charlouze/superpowers-by-charlouze/commit/da1ad4c6e1ec4d0d144c654543f2226a5e1c1d01))
+
 ## [0.7.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.6.0...v0.7.0) (2026-09-30)
 
 
