@@ -34,24 +34,25 @@ that carries it.
 2. **Allocate `NN`** and create the branch (`Allocating NN`).
 3. **Write the batch document**: `Scope`, `Spec delta`, `Technical design`,
    `Constraints`, `Feature flag` (`The Batch Document`,
-   `The Feature Flag Field`, `Flags Declared by Earlier Batches`).
+   `The Feature Flag Field`, `Flags Declared by Earlier Batches`), then write,
+   rewrite or delete the ADRs your human partner decided (`The ADRs`).
 4. **Reserve every gaps register entry this batch takes on.** No writing into
    the specs at this stage (`The Batch Document`).
 5. **Put the whole spec delta through the coherence reread** — skipped when the
    delta carries no block (`The Coherence Reread`).
-6. **Put the technical design and the constraints through the technical
-   reread** — skipped when the batch has neither (`The Technical Reread`).
+6. **Put the batch through the technical reread** (`The Technical Reread`).
 7. **Reread the whole batch document** (`Opening the Pull Request`).
 8. **Open the pull request** from `batch/NN-<slug>`, in the same section.
 
 **The rereads are steps 5, 6 and 7, and each has its own object.** The
 coherence reread bears on the blocks and on the state they produce, read whole.
-The technical reread bears on the technical design and the constraints, against
-the specs with the blocks applied and against the code on `main`. The
-batch-document reread bears on the whole document: `Scope`, `Spec delta`,
-`Technical design`, `Constraints`, `Feature flag`. Merge the batch-document
-reread into another and it disappears wherever that one is skipped, leaving a
-corrective batch, which has no blocks, without a reread of its document.
+The technical reread bears on the technical design and the constraints, on the
+blocks read against the ADRs, and on the ADRs this pull request writes or
+rewrites. The batch-document reread bears on the whole document: `Scope`,
+`Spec delta`, `Technical design`, `Constraints`, `Feature flag`. Merge the
+batch-document reread into another and it disappears wherever that one is
+skipped, leaving a corrective batch, which has no blocks, without a reread of
+its document.
 
 ## Preconditions
 
@@ -193,6 +194,8 @@ A technical decision goes in `Constraints` only if the rest of the technical
 design relies on it, such as a name or a format several parts of the design use.
 Every other technical decision goes in `Technical design`, where a story may
 depart from it.
+
+A batch's constraints bind only its stories.
 
 `Technical design` carries the design your human partner approved during
 `superpowers:brainstorming`, which this document replaces as the design doc.
@@ -380,6 +383,22 @@ story declared.
 A flag whose condition is met and that no batch takes on stays where it is: in
 the spec, with its condition, in front of whoever touches that section next.
 
+## The ADRs
+
+Write, rewrite or delete in this pull request, with the batch document, the ADRs
+your human partner decided during the brainstorming.
+
+Before writing or rewriting one, build a copy of each spec the batch touches
+with its blocks applied, as `The Coherence Reread` builds it. An ADR is
+confronted with the specs as the batch leaves them, and no block is in a spec
+yet.
+
+Invoke `supercharlouze:recording-a-decision` for each ADR to write or to
+rewrite, and hand it those copies.
+
+Delete yourself each ADR your human partner abandoned, in a commit that says
+why.
+
 ## The Coherence Reread
 
 Before opening, the whole spec delta goes through the **coherence reread**, which
@@ -387,8 +406,8 @@ reads each touched spec whole, on the state its blocks produce.
 
 **A delta that carries no block skips this step.** That is not a dispensation
 granted to a smaller batch: this reread reads blocks against the spec they will
-change, so with no block it has nothing to read and no state to build. What such a
-batch still owes, it owes at step 7 — the batch-document reread, which bears on
+change, so with no block it has nothing to read and no state to build. Such a
+batch still owes step 6, and step 7, the batch-document reread, which bears on
 whatever stands in the blocks' place.
 
 Build that state — a copy of each touched spec with its blocks applied —
@@ -415,29 +434,38 @@ reread nobody can see from the pull request is a practice again, not a rule.
 
 ## The Technical Reread
 
-After the coherence reread, the technical design and the constraints go through
-the **technical reread**, which reads them against the specs with the blocks
-applied and against the code on `main`.
+After the coherence reread, the batch goes through the **technical reread**.
 
 **Start it only once the coherence reread has closed its rounds.** Run side by
 side, each reread revises what the other is reading, and neither reads a state
 that holds.
 
-**A batch whose `Technical design` and `Constraints` both read `none` skips this
-step.**
+**Invoke it for every batch.** It returns that it has nothing to reread when
+that is so.
 
 Invoke `supercharlouze:rereading-a-technical-design` with the batch document and
 each spec the batch touches: the applied copy the coherence reread built, or the
-spec itself when no block targets it.
+spec itself when no block targets it. Hand it also `docs/specs/`, `docs/adr/`
+and the path of each ADR this pull request writes or rewrites. An ADR whose text
+you corrected on a finding counts among those it rewrites.
 
 Carry every revision it returns back into `Technical design` and `Constraints`.
 
 The technical reread never changes `Spec delta`, and sends nothing back through
 the coherence reread. A behaviour it returns as taken back to the spec delta
-sends the opening back to step 5, with the block your human partner rules.
+sends the opening back to step 5, with the block your human partner rules. A
+block it returns as taken back to the spec delta does the same, with the block
+as your human partner corrects it.
+
+It changes no ADR either. When your human partner has an ADR corrected on a
+finding it returns, invoke `supercharlouze:recording-a-decision` as `The ADRs`
+does if the correction changes the ADR's decision, and correct the text yourself
+if it does not. When they abandon the ADR, delete it. After a correction or a
+deletion, invoke the technical reread again.
 
 The body of the pull request that runs it, opening or amendment, says what it
-found, or that it found nothing.
+found, or that it found nothing. When it returned that it had nothing to reread,
+the body says that instead.
 
 ## Opening the Pull Request
 
@@ -455,8 +483,8 @@ takes on stated as a block. Revise the document on what it reports.
 Then open the pull request from `batch/NN-<slug>`. Its body states what the
 reviewer has to rule on: the exact text of every block, or the reason for the
 `none`; the technical design, or the reason for its `none`; the constraints;
-the flag decision; the scope, with the entries it takes on; and any flag
-lifting the delta announces.
+the flag decision; the scope, with the entries it takes on; any flag lifting
+the delta announces; and each ADR this pull request writes, rewrites or deletes.
 
 **The review of the batch pull request is the human gate.** Until it merges, no
 story is written and no spec is touched. It bears on the exact text of every
@@ -530,6 +558,15 @@ and say in the pull request body what changed and why. An amendment is not
 mutable state flowing along: it is an explicit human decision that goes through
 a review.
 
+An amendment's pull request may also write, rewrite or delete the ADRs your
+human partner decided with the amendment. Do it as `The ADRs` does, once the
+document is amended. Where that section applies the batch's blocks, apply every
+block of the amended document that no merged story has declared yet. The pull
+request body states each ADR it writes, rewrites or deletes.
+
+A change that touches nothing but ADRs is not an amendment: it goes through a
+bounded change, under `supercharlouze:using-batches`.
+
 By exception, an amendment that changes the spec delta is reviewed as an
 opening. Before its pull request opens, apply its new or changed blocks together
 with every block no merged story has declared yet, and invoke
@@ -538,12 +575,14 @@ spec it applies to, as `The Coherence Reread` does. Its body states the exact
 text of every new or changed block, and what the coherence reread found.
 
 An amendment that changes the spec delta, the technical design or the
-constraints goes through the technical reread before its pull request opens,
-after the coherence reread when it runs one. Conduct it as
-`The Technical Reread` does, on the amended document and on each spec with every
-block no merged story has declared yet applied, in a copy built as
-`The Coherence Reread` builds it. A behaviour it returns as taken back to the
-spec delta makes the amendment one that changes the spec delta.
+constraints, or that writes or rewrites an ADR, goes through the technical
+reread before its pull request opens, after the coherence reread when it runs
+one. Conduct it as `The Technical Reread` does, on the amended document and on
+each spec with every block no merged story has declared yet applied, in a copy
+built as `The Coherence Reread` builds it. A behaviour or a block it returns as
+taken back to the spec delta makes the amendment one that changes the spec
+delta: it goes through the coherence reread, then through the technical reread
+again.
 
 After its rereads, an amendment that changes the spec delta puts the whole
 document through the batch-document reread.
@@ -686,3 +725,9 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "The design is obvious from the delta, `Technical design` can say `none`" | An obvious design is still a design: write it. `none` is for a batch with no design to plan from, and it carries its reason; written `none`, it leaves each story to invent its own mechanism. |
 | "The story is right, this constraint cannot be held, I'll amend it" | Whether a constraint can be held is your human partner's ruling. Put it to them: the amendment follows a ruling of untenable, and the story resumes on any other. |
 | "This technical decision matters, so it goes in `Constraints`" | Only if the rest of the technical design relies on it. Otherwise it goes in `Technical design`, where a story may depart from it by a ruling. |
+| "The batch has no design and no constraints, I'll skip the technical reread" | Invoke it for every batch. It says itself when it has nothing to reread, and it rereads the ADRs this pull request writes. |
+| "My human partner decided this ADR, I'll write the file myself" | Invoke `supercharlouze:recording-a-decision`. It confronts the decision with the specs, blocks applied, and with the other ADRs. |
+| "This design decision deserves an ADR, I'll write it with the batch" | Only your human partner decides an ADR. Put the decision to them, and write it once they want it. |
+| "I only corrected the ADR's wording, no need to reread again" | The corrected text is one no reader has read. Invoke the technical reread again. |
+| "My human partner wants this ADR rewritten, I'll amend the batch for it" | An amendment changes the batch document. A change that touches nothing but ADRs goes through a bounded change. |
+| "This amendment only changes the scope, the ADR it writes needs no reread" | An amendment that writes or rewrites an ADR goes through the technical reread, whatever else it changes. |

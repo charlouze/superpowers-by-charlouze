@@ -94,7 +94,7 @@ absent() {
 # or a skill keeps asking for a section no batch document carries any more.
 absent "no skill keeps a Live flags section or its rulings" \
     "Live flags|carried by this batch|inherited by a ruling" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 
 # Number allocation and the concurrency scan both recognise a branch by its
@@ -177,12 +177,34 @@ shared "the technical stop condition is copied exactly as stated" \
     "If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical." \
     using-batches writing-a-user-story
 
-# The stop condition on a constraint that cannot be held travels the same way,
-# with the sentence that bounds it: an implementer who meets a constraint the
-# spec contradicts must find, in the same copy, that this is not the case.
-shared "the constraint stop condition is copied exactly as stated" \
-    "If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner. A constraint the spec contradicts does not fall under this condition: the spec wins." \
+# The stop condition on a constraint or an ADR that cannot be held travels the
+# same way, with the sentence that bounds it: an implementer who meets a
+# constraint the spec contradicts must find, in the same copy, that this is not
+# the case.
+shared "the stop condition on a constraint or an ADR is copied exactly as stated" \
+    "If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner. A constraint the spec contradicts does not fall under this condition: the spec wins." \
     using-batches writing-a-user-story
+
+# The condition no longer bears on a constraint alone, nor fires only in a batch
+# that declares constraints: the former wording must survive nowhere, or a story
+# with an ADR and no constraint would carry no stop condition.
+absent "the stop condition is no longer bounded to a constraint" \
+    "a constraint of its batch cannot be held|constraint condition|whose batch declares constraints only" \
+    using-batches writing-a-user-story
+
+# The conditions of an ADR are copied into every story's Global Constraints.
+# `using-batches` states them and `writing-a-user-story` has them copied: a
+# condition spelled differently in the copy is no longer the threshold the
+# human agreed to.
+shared "the conditions of an ADR are copied exactly as stated" \
+    "A technical decision is recorded as an ADR only if it meets these conditions: - undoing it is expensive; - it surprises whoever does not know its context; - it settles between real alternatives." \
+    using-batches writing-a-user-story
+
+# An unrecorded departure is answered by the delivery review, not by what
+# closing does with the design: the former red flag must survive nowhere.
+absent "an unrecorded departure no longer leaves the design false" \
+    "describing a mechanism nobody built" \
+    writing-a-user-story
 
 # The concision rules are copied into every story's Global Constraints.
 # `using-batches` states them and `writing-a-user-story` has them copied; a rule
@@ -253,7 +275,7 @@ absent "no routing gloss names a source of gaps" \
 # turn red on it and invite the writer to delete it.
 absent "no skill denies that the branch name matters" \
     "(nothing|Nothing|no mechanism|No mechanism)[^.]{0,40}depends on the (branch )?name" \
-    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches recording-a-decision
 
 # The spec delta is exact text, in blocks (spec section "The batch document"). A
 # skill that still calls what a batch announced an "intention" contradicts it.
@@ -263,7 +285,7 @@ absent "no skill denies that the branch name matters" \
 # other-implementation test, are true sentences and must stay green.
 absent "no skill calls the spec delta an intention" \
     "stated as intention|as intention only|like any other intention|an intention like any other|intentions? (the (batch|delta) )?announced|announced intention|announced no intention|an intention not delivered|carries the intention|(delta|announc)[^.]{0,60}[Ii]ntention|[Ii]ntention[^.]{0,60}(delta|announc)" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The `Blocks:` field is one coupling with two ends: a story document declares it
 # (spec section "The user story document"), and closing reads it to find the
@@ -288,7 +310,7 @@ shared "both ends spell the Blocks field alike" \
 # "specs" with "the delta", never with "main" or "shipped".
 absent "no skill finds undelivered blocks by reading or diffing the specs" \
     "[Cc]heck the specs on main|against what (actually )?shipped" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The end of a review is one norm with five ends. `shared` and not five `require`
 # calls: separate assertions would each stay green while one skill drifted away
@@ -323,7 +345,7 @@ shared "every review-ending skill acts on the merge announcement" \
 
 absent "no skill hands over the next step at the ready announcement" \
     "[Tt]he announcement (says so|names|therefore names)|announcing it ready is where|an announcement that names|when it announces the pull request ready" \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # The observation period was two stories "enable, then remove" before the
 # declared default and the effective state were told apart. Enabling is the
@@ -350,7 +372,7 @@ shared "adoption never shares the design's context" \
 # paragraph and a resurrected old one.
 absent "no skill carries the retired blocking-precondition wording" \
     "blocking precondition|Adoption is blocking|blocking; nothing starts" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The directory-does-not-matter justification belongs to using-batches, which
 # states the preconditions common to every pull request of this system. A
@@ -358,7 +380,7 @@ absent "no skill carries the retired blocking-precondition wording" \
 # second formulation is what drifts.
 absent "only using-batches justifies dropping the directory precondition" \
     "Where you are standing does not matter" \
-    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # One home per rule: the norm is stated in the four skills that write normative
 # text, and it is stated there word for word. One assertion, never one per file:
@@ -393,7 +415,7 @@ shared "the batch document's immutability is bounded at closing, spelled alike" 
 # closing", which is a drift from the one spelling the assertion above fixes.
 absent "no skill denies that the batch document changes at closing" \
     "batch modifies it( [^*]|[^ ])" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The first commit of a story that transcribes no block is described in two places —
 # the skill that prescribes it and the one that explains why it is the exception of
@@ -422,7 +444,7 @@ shared "the removal is not obligatory" \
 # names a batch kind it does not belong to.
 absent "no skill scopes the blockless first commit to a corrective story" \
     "\*\*Corrective story\.\*\*|A corrective story is the one exception" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # Removal leaves no trace in the register, so what a module already rejected is
 # readable only in the file's history. Both writers that add an entry — a
@@ -460,7 +482,7 @@ shared "both accounts of an abandonment name the same residue" \
 # in these five files, which is why the source inventory says "drop" instead.
 absent "no skill strikes a gaps register entry" \
     "[Ss]truck|[Ss]trik" \
-    adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch
+    adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # `addressable` justified an entry's shape and also read as "made to be pointed
 # at" — the reading under which one entry designates another. The spec dropped
@@ -470,7 +492,7 @@ absent "no skill strikes a gaps register entry" \
 # positively right after.
 absent "no skill calls an entry addressable" \
     "[Aa]ddressable" \
-    adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch
+    adopting-a-module using-batches writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # The word leaves, the rule stays: without this assertion, deleting the whole
 # sentence would pass green.
@@ -508,7 +530,7 @@ shared "the pairing is stated by the negation" \
 # obey — it is the shorter and the more emphatic of the two.
 absent "no skill pairs spec change and code unconditionally" \
     "ship together or not at all|\*both\* the spec change|the spec change and the code together" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The freeze is copied verbatim into the Global Constraints of every plan, so the
 # skill that states the norm and the skill that copies it must spell it identically.
@@ -525,7 +547,7 @@ shared "the freeze is spelled alike wherever it is stated" \
 # — so the term returning anywhere is the drift, not just the old freeze opening.
 absent "no skill anchors the freeze on a transcription commit" \
     "transcription commit" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # What an abandonment leaves on `main` is not a fixed count: a story that
 # transcribed no block announced no intention in the spec delta, so it leaves the
@@ -533,7 +555,7 @@ absent "no skill anchors the freeze on a transcription commit" \
 # length, and closing is the only skill that picks these up.
 absent "no skill counts what an abandonment leaves on main" \
     "Two residues|two residues|two things it never touched" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # Transcribing no block does not mean touching no spec: a teardown story removes
 # from the spec what no block announced, and its first commit carries that removal.
@@ -550,7 +572,7 @@ shared "both skills name the blockless story that still changes the spec" \
 # one says the spec is always updated, the other says it depends.
 absent "no skill says a bounded change never leaves the spec silent" \
        "never leaves the spec silent" \
-       using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+       using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # The old declaration named only the sections. Left standing beside the new one,
 # it would tell a bounded change that naming its sections is enough — and a
@@ -564,19 +586,19 @@ absent "no skill says a bounded change never leaves the spec silent" \
 # where the duty is laid on the bounded change itself.
 absent "no skill says a bounded change declares only its sections" \
        "therefore declares its sections" \
-       using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+       using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # Closing used to file every undelivered block as a gap on its own. The human
 # now decides, block by block; a leftover of the old duty would file them all.
 absent "no skill files an undelivered block as a gap on its own" \
     "Write the shortfall into the gaps register|inscribed in the gaps register as" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # A bounded change's branch is `bounded/<slug>`. A skill still naming the former
 # pattern would scan, or create, a branch nobody else reads as a claim.
 absent "no skill names the former bounded branch" \
     "\`fix/" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # A spec carries no date, no status and no work-in-progress marker, except the
 # gating sentence of a flag. Both skills that describe a spec say it alike.
@@ -593,17 +615,17 @@ absent "no skill denies a spec every marker" \
 # leftover of the old wording, so the old wording is hunted too.
 absent "no skill asks a batch why it happens now" \
     "why now|happens now" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 absent "no skill files reserved entries under the spec delta" \
     "gaps register entries it reserves, or|gaps register entries this batch reserves|replacing the reserved gaps entries|delivery perimeter|required ordering of the user stories" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # A block shows its change in the paragraph that contains it. The former form,
 # a quoted passage then its replacement, must survive nowhere.
 absent "no skill has a block quote a passage" \
     "quoted passage|quotes the current passage|passage a block quotes|Quote the passage|the passage it removes" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The coherence reread checks every block against `main` as it builds the applied
 # copy. A block check left in the batch-document reread would run it twice.
@@ -615,7 +637,7 @@ absent "the batch-document reread leaves the blocks to the coherence reread" \
 # can reach.
 absent "no skill rereads with fresh eyes" \
     "fresh eyes" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module rereading-a-spec rereading-a-technical-design
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module rereading-a-spec rereading-a-technical-design recording-a-decision
 
 # One skill rereads a spec, new or changed, and the skills that need a spec
 # reread invoke it rather than carrying readers of their own.
@@ -639,21 +661,28 @@ absent "no calling skill says what a reader gets" \
 # A leftover naming only scope and flag would send a spec delta change nowhere.
 absent "no skill bounds an amendment to scope and flag" \
     "scope or (its |the |of )?flag" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # An amendment also changes the technical design and the constraints. A leftover
 # ending the list on the spec delta would send a constraint ruled untenable
 # nowhere.
 absent "no skill bounds an amendment to scope, spec delta and flag" \
     "spec delta or (its |the |of )?flag" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
+
+# An amendment that writes or rewrites an ADR goes through the technical reread.
+# A leftover ending the trigger on the constraints would let an ADR written by an
+# amendment reach the review unread.
+absent "an amendment's technical reread is not bound to the batch document" \
+    "or the constraints goes through the technical reread" \
+    writing-a-batch
 
 # Everything that reaches `main` may ship to production. The flow presumes no
 # more of the project: a skill still requiring continuous deployment asks more
 # than the flow does.
 absent "no skill requires continuous deployment" \
     "[Cc]ontinuous" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # Within a batch, one pull request adds to a gaps register: the closing one.
 # Every skill on the batch path says so in the same words.
@@ -677,7 +706,7 @@ shared "the writers that append keep the entry format" \
 # entry at the end of a section.
 absent "no skill leaves the batch's adding writer unnamed" \
     "one writer per batch|single writer per batch|at the end of a section" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The gesture table of the adoption lists every writer, the closing that adds
 # included.
@@ -688,7 +717,7 @@ shared "the adoption's gesture table names the closing that adds" \
 # The batch-document reread is a step of its own, before the pull request opens.
 absent "no skill folds the document reread into opening the pull request" \
     "Reread the batch document, then open the pull request|these six steps" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The batch rules neither count their steps and choices nor designate one by its
 # rank: the list carries the count, and a rank goes false when a step is added.
@@ -709,13 +738,13 @@ fi
 # amendment releases them before closing does.
 absent "no skill merely revises reservations" \
     "reservations are revised|Revise the gaps register reservations|a scope revised mid-flight|and \`supercharlouze:closing-a-batch\` releases it\.|No other skill picks them up|A fresh \`NN\` only if|out of the scope releases it" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # A corrective story is abandoned once the requalification is ruled: no skill has
 # its pull request closed at the stop.
 absent "no skill closes a corrective story's pull request at the stop" \
     "Therefore: \*\*close the story's pull request|So: \*\*close the story's pull request|Abandon the story, closing its pull request|exactly as a requalified corrective story is abandoned" \
-    using-batches writing-a-batch writing-a-user-story
+    using-batches writing-a-batch writing-a-user-story recording-a-decision
 
 # using-batches routes a requalification to writing-a-batch: it neither opens on
 # what the requalification does not do nor copies its procedure.
@@ -727,7 +756,7 @@ absent "using-batches copies no requalification procedure" \
 # flag by default.
 absent "no skill makes a lost technical exemption declare a flag" \
     "declares one by that same amendment|a flag if the batch was exempted because all of its stories were technical" \
-    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module
+    using-batches writing-a-batch writing-a-user-story closing-a-batch adopting-a-module recording-a-decision
 
 # The mirror: a story states a flag only when its batch declares one for the
 # story's module. The former unconditional sentence must not survive.
@@ -749,7 +778,7 @@ absent "no skill keeps the former guarded-code rules" \
 # The spec no longer fixes the form of the gating sentence; a skill does.
 absent "no skill says the spec fixes the gating sentence's form" \
     "form the spec fixes|form fixed by the spec" \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # Each flag is independent of the others. The skills that declare a flag per
 # (batch, module) say it in the same words.
@@ -761,16 +790,16 @@ shared "each flag is independent of the others" \
 # left blank.
 absent "no skill says a corrective batch's spec delta is empty" \
     "spec delta is empty" \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # Drift is code that contradicts the spec, or behaviour no spec describes. A
 # divergence from a block is another matter and keeps its word.
 absent "no skill calls a divergence between spec and code drift" \
     "divergence between (the )?spec" \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 absent "no skill narrows drift to a contradiction" \
     "contradiction between (the )?spec" \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 shared "drift covers code that contradicts the spec and behaviour no spec describes" \
     "any code on \`main\` that contradicts the spec on \`main\`, and any behaviour on \`main\` that no spec describes, is drift" \
     using-batches
@@ -787,7 +816,7 @@ shared "the skills keep the form of a ruling line" \
 # projects the skills work on.
 absent "no skill states the plugin's own language" \
     "entirely English" \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design
+    using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design recording-a-decision
 
 # A batch's constraints now include its shared technical decisions, so the old
 # enumeration of what a batch carries must not survive beside the new one.
@@ -799,19 +828,19 @@ absent "a batch no longer lists only migration constraints" \
 # migration and compatibility, then the order — must not survive anywhere.
 absent "Constraints are no longer bounded to migration and order" \
     "migration and compatibility constraints,? and the required order" \
-    writing-a-batch using-batches writing-a-user-story closing-a-batch
+    writing-a-batch using-batches writing-a-user-story closing-a-batch recording-a-decision
 
 # A constraint is judged against the technical design, known at opening, never
 # against the stories, which do not exist yet.
 absent "no constraint is judged against the stories" \
     "without breaking another" \
-    writing-a-batch using-batches writing-a-user-story closing-a-batch
+    writing-a-batch using-batches writing-a-user-story closing-a-batch recording-a-decision
 
-# A story writes its departures from the design in a form closing reads back,
-# and the batch document spells the same form.
-shared "the batch, the story and closing spell a technical design ruling alike" \
+# A story writes its departures from the design in the form the batch document
+# spells.
+shared "the batch and the story spell a technical design ruling alike" \
     "\`Technical design ruling:\`" \
-    writing-a-batch writing-a-user-story closing-a-batch
+    writing-a-batch writing-a-user-story
 
 # Both rereads dispatch their readers, gather them and close their rounds the
 # same way. One assertion per rule over both skills, so neither drifts alone.
@@ -863,13 +892,27 @@ shared "both rereads spare the human a draft" \
 
 # The technical reread knows none of the skills that invoke it.
 absent "the technical reread names no skill that invokes it" \
-    "supercharlouze:|adopting-a-module|writing-a-batch|calling skill" \
+    "supercharlouze:|using-batches|adopting-a-module|writing-a-batch|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
+    rereading-a-technical-design
+
+# A reading is dispatched when its object exists: the sentence that gave every
+# batch every reading must survive nowhere, or a batch with no design would send
+# out readings that have nothing to read.
+absent "the technical reread no longer gives every batch every reading" \
+    "Every batch gets every reading" \
     rereading-a-technical-design
 
 # The readings of the technical reread live in its skill; the batch skill that
 # invokes it carries none of them.
 absent "the batch skill carries no technical reading of its own" \
-    "deliver what the batch promises|stand on the code as it is|hold as an architecture|modules this design draws deep|How does this design fail" \
+    "deliver what the batch promises|stand on the code as it is|hold as an architecture|modules this design draws deep|How does this design fail|blocks and the design hold the ADRs|stand with the specifications and the other ADRs" \
+    writing-a-batch
+
+# The opening invokes the technical reread for every batch, and the reread says
+# itself when it has nothing to reread: the former skip must survive nowhere, or
+# a batch with no design would open with its ADRs unread.
+absent "the opening no longer skips the technical reread" \
+    "skipped when the batch has neither|both read \`none\` skips this step" \
     writing-a-batch
 
 # The opening now places more than two rereads; the former count must not survive.
@@ -882,6 +925,38 @@ absent "the opening counts no rereads" \
 # condition joined the corrective and the technical ones.
 absent "no skill counts the stop conditions the flow adds" \
     "adds (two|three|four)( stop)? conditions|adds (two|three|four)[.,]|(both|either|neither) (stop )?conditions?" \
-    using-batches writing-a-user-story writing-a-batch
+    using-batches writing-a-user-story writing-a-batch recording-a-decision
+
+# The rules of a bounded change are listed, never counted: a count goes false
+# the day a rule is added, as it did when the ADR rule joined them.
+absent "no skill counts the rules of a bounded change" \
+    "with (four|five|six|seven) rules|the (four|five|six|seven) rules" \
+    using-batches
+
+# What an ADR is on disk, and what it does not carry, is said alike by the skill
+# that defines it and the skill that writes it.
+shared "an ADR is a file placed directly in docs/adr, on both ends" \
+    "a \`.md\` file placed directly in \`docs/adr/\`" \
+    using-batches recording-a-decision
+shared "an ADR this flow writes carries no date and no status, on both ends" \
+    "An ADR this flow writes or rewrites carries no date and no status." \
+    using-batches recording-a-decision
+
+# The dependency runs one way: recording-a-decision knows none of the skills
+# that invoke it, and says nothing they would have to keep in step with.
+absent "recording-a-decision names no skill that invokes it" \
+    "writing-a-batch|writing-a-user-story|adopting-a-module|calling skill" \
+    recording-a-decision
+
+# recording-a-decision is told not to commit, and not who does.
+absent "recording-a-decision does not say who commits" \
+    "invoked this one (does|commits)|invokes this one (does|commits)" \
+    recording-a-decision
+
+# The conditions of an ADR are written in using-batches alone: the adoption
+# points at them.
+absent "the adoption does not copy the conditions of an ADR" \
+    "undoing it is expensive|settles between real alternatives" \
+    adopting-a-module
 
 exit $((FAILURES > 0))

@@ -1,6 +1,6 @@
 ---
 name: closing-a-batch
-description: Use when every user story of a batch is merged or abandoned - consolidates what the story documents left, releases reservations, withdraws undelivered blocks, rewrites the technical design, checks flags and closes the batch
+description: Use when every user story of a batch is merged or abandoned - consolidates what the story documents left, releases reservations, withdraws undelivered blocks, checks flags and closes the batch
 ---
 
 # Closing a Batch
@@ -9,7 +9,7 @@ description: Use when every user story of a batch is merged or abandoned - conso
 
 A batch closes when every one of its user stories is merged or abandoned and the human judges the work finished. Closing is not bookkeeping. It is the only moment in the lifecycle where the residue left on `main` gets collected.
 
-It is also the only moment in a batch's normal course that touches the batch document itself. The batch document carries no mutable state: it is written once, by the opening pull request, and nothing in the normal course of the batch modifies it **until closing** — *Withdraw the blocks no story delivered* removes them from it, *Rewrite the technical design* brings its design in line with what was delivered, and *Set status: closed* flips its front matter. This closure is that exception and the only one: anything else that would edit the document goes through an amendment pull request of its own, which `supercharlouze:writing-a-batch` owns.
+It is also the only moment in a batch's normal course that touches the batch document itself. The batch document carries no mutable state: it is written once, by the opening pull request, and nothing in the normal course of the batch modifies it **until closing** — *Withdraw the blocks no story delivered* removes them from it, and *Set status: closed* flips its front matter. This closure is that exception and the only one: anything else that would edit the document goes through an amendment pull request of its own, which `supercharlouze:writing-a-batch` owns.
 
 Abandoning a story is almost free: closing its pull request without merging throws away its code, and its spec change if it had one — nothing to revoke, no spec left out of step. But what it never touched is still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the blocks the batch announced in its spec delta. Either may be absent — a batch with no blocks announced none, a batch that reserved nothing left nothing to release — so what closing owes here is a look at both, not a tally. **Nothing else picks them up**, except an amendment that takes a reserved entry out of `Scope` and releases it. If closing skips a duty, that duty is simply never done.
 
@@ -23,7 +23,7 @@ Every duty lands in one pull request, on a branch named `batch/NN-<slug>-close`.
 - **Your human partner judges the batch finished.** Every story being merged or closed is necessary and not sufficient. Closing records a human decision — that the batch delivered what it owed — and a batch is never closed because an agent judged the work to look finished.
 - **The close branch starts from `main` as the remote carries it.** Fetch, then branch from `origin/main`, never from another branch. Otherwise two things go wrong at once: `superpowers:finishing-a-development-branch` *preserves* the worktree on the pull request path, so from inside one `superpowers:using-git-worktrees` Step 0 sees `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses it, and this closure lands on the previous branch instead of its own; and a starting point behind the remote hides the very stories you are about to account for, so you would consolidate from an incomplete set.
 - **Create the branch and its workspace by invoking `superpowers:using-git-worktrees`.** The conventional name is `batch/NN-<slug>-close`, enforced by this plugin, not by that skill. If it lands on a differently named branch, a detached HEAD, or a starting point other than `origin/main`, restore the conventional name and the starting point before going on. **A named branch is not enough** — though here, unlike on a story branch, nothing is lost if you get it wrong: this batch's `NN` is already held by `docs/batches/NN-<slug>/` on `main`, since closing only runs on a batch whose opening pull request merged, so number allocation refuses it on that ground alone whatever this branch is called. The convention is uniform because one honoured only where a scan would catch you is not a convention at all.
-- **Read the batch document `docs/batches/NN-<slug>/README.md` and every story document in that directory.** The story documents carry what you are about to consolidate — the drift they observed, the open rulings their `Rulings log` leaves, and the technical design rulings the rewrite starts from; the batch document carries the blocks you are about to check against the `Blocks:` declarations of the story documents, and the technical design you are about to rewrite. "Every document in that directory" is every document that reached `main`: an abandoned story's document died with its branch, never merged, so it is not there — and neither is whatever it recorded under `Observed drift`. Nothing recovers it; that is part of what abandoning costs. Read what is on `main` and do not go hunting closed pull requests for documents that never landed.
+- **Read the batch document `docs/batches/NN-<slug>/README.md` and every story document in that directory.** The story documents carry what you are about to consolidate: the drift they observed and the open rulings their `Rulings log` leaves. The batch document carries the blocks you are about to check against the `Blocks:` declarations of the story documents. "Every document in that directory" is every document that reached `main`: an abandoned story's document died with its branch, never merged, so it is not there — and neither is whatever it recorded under `Observed drift`. Nothing recovers it; that is part of what abandoning costs. Read what is on `main` and do not go hunting closed pull requests for documents that never landed.
 
 ## The Duties
 
@@ -98,16 +98,6 @@ Whether an undelivered block is still wanted is your human partner's call. A blo
 
 **A corrective batch has nothing to compare here**, and that is not a gap in the duty. Its spec delta carries no block, so it announced none a spec could fall short of. What it announced instead were the gaps register entries it reserved, and an entry it never resolved is an unconsumed reservation: *Release unconsumed reservations* is the whole of this duty for a corrective batch. Do not invent a comparison, and do not re-file the released entries as fresh gaps — they are still in the register where they always were.
 
-### Rewrite the technical design
-
-When the batch document's `Technical design` is not `none`, rewrite it to describe the mechanism the batch delivered. Start from the `Technical design ruling:` lines in the `Rulings log` of every merged story, and check them against the code on `main`.
-
-Drop what served only the blocks you just withdrew.
-
-The rewritten text is true at closing. After closing, the code is the authority: no later batch keeps this field in step.
-
-The next design on this module reads this field, and a design the stories departed from would send it planning on a mechanism that does not exist.
-
 ### Set status: closed
 
 Set `status: closed` in the batch document's front matter. That is the whole duty, and it comes last: it is the record that the other duties were done, so it must not precede them.
@@ -138,5 +128,4 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "I'll flip the status now and file the gaps in a follow-up" | The status is the record that the duties were done. Flipping it first turns the record into a lie. |
 | "The batch document says it delivered X, so it delivered X" | Check the `Blocks:` declarations of the merged stories, not the promise made at opening. The whole point of *Withdraw the blocks no story delivered* is the difference. |
 | "No story reported drift, so there is nothing to consolidate" | Confirm by reading each story document. An empty Observed drift section and an unread one look identical from here. |
-| "The Rulings log is the delivery review's business, not mine" | Its open rulings classified as a violation or a gap are yours to consolidate, and its `Technical design ruling:` lines are what *Rewrite the technical design* starts from. The review settled the rest. |
-| "The technical design was only the plan, it can stay as written" | Then the batch document describes a mechanism the stories departed from, and the next design on this module starts from it. Rewrite it from the `Technical design ruling:` lines and the code. |
+| "The Rulings log is the delivery review's business, not mine" | Its open rulings classified as a violation or a gap are yours to consolidate. The review settled the rest. |

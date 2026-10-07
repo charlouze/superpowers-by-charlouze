@@ -53,6 +53,10 @@ and that document — not this one — is the authority.
 - **Technical story** — a story that changes nothing observable at its module's
   boundary: a dependency bump, an internal rename, a preparatory refactor. It
   declares the qualification, and a stop condition catches it if it is false.
+- **ADR** — the document that records a technical decision of the project and
+  its reason, at `docs/adr/<slug>.md`. A decision earns one only if undoing it
+  is expensive, it surprises whoever does not know its context, and it settles
+  between real alternatives. A human decides every one.
 - **Feature flag** — what lets a story ship alone without exposing a half-built
   batch. It is a specified object, not an implementation detail: the spec states
   its name and its default.
@@ -87,10 +91,10 @@ own; it puts its checkpoints where your flow already has them.
 
 | Gate | What you are reviewing |
 |---|---|
-| Module adoption | the spec and the gaps register, before any batch touches that module |
-| Batch opening | the exact text each spec will receive, before a line of code is written against it |
-| Story delivery | a story's code, and its spec change if it has one, in one diff |
-| Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch |
+| Module adoption | the spec and the gaps register, and the ADRs written with them, before any batch touches that module |
+| Batch opening | the exact text each spec will receive, before a line of code is written against it, and the ADRs written, rewritten or deleted with it |
+| Story delivery | a story's code, its spec change if it has one, and the ADRs the review asks for, in one diff |
+| Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch, and the ADRs written, rewritten or deleted with it |
 | Batch closing | the consolidation, `status: closed` |
 
 The opening gate is the one that pays. You read the wording of a spec at the
@@ -181,8 +185,11 @@ well-scoped change to code that already exists — keeps its own ceremony and it
 request whenever something observable at the module's boundary changes, and says
 nothing there only when nothing does; it declares the spec it targets and the
 sections it touches, like a story; it carries no flag, being complete on its own;
-and it may write to a gaps register directly. Only architectural work opens a
-batch.
+it may write to a gaps register directly; it may write, rewrite and delete ADRs,
+or carry nothing but ADRs; it holds the ADRs `main` carries when its branch
+starts, and puts to the human one it cannot hold; and it puts to the human the
+technical decision it takes that would earn an ADR. Only architectural work opens
+a batch.
 
 ### The four departures
 
@@ -195,9 +202,9 @@ places, each declared rather than improvised:
    spec wrong, a corrective batch is no longer corrective and must be
    requalified. If a story declared technical turns out to change something
    observable at its module's boundary, it is no longer technical. If a story
-   finds that a constraint of its batch cannot be held, it stops and puts the
-   constraint to the human. An agent may neither correct a spec, nor keep a
-   qualification it has lost, nor bend a constraint.
+   finds that a constraint of its batch or an ADR cannot be held, it stops and
+   puts it to the human. An agent may neither correct a spec, nor keep a
+   qualification it has lost, nor bend a constraint or an ADR.
 3. **The execution mode is imposed** — subagent-driven development, because
    repatriating its rulings depends on its ledger, and those rulings are the only
    record of where the spec was ambiguous.
@@ -216,7 +223,8 @@ There is never an undeclared fifth one.
 | `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
 | `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |
-| `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design reread |
+| `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design, its blocks and its ADRs reread |
+| `supercharlouze:recording-a-decision` | Never directly — a building block the other skills invoke to have an ADR written or rewritten |
 
 ## Requirements
 

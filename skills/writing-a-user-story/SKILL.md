@@ -395,8 +395,13 @@ says that something is still open, nor what — and whoever reads the log would
 have to recognise a category in prose.
 
 **The plan starts from the batch's `Technical design`**, and its `Architecture:`
-line derives from it. Exception: where the code on `main` has departed from the
+line derives from it. Exceptions: where an ADR contradicts the design, the plan
+follows the ADR; elsewhere, where the code on `main` has departed from the
 design, as an earlier story of the batch may have, the plan starts from the code.
+
+Read every ADR in `docs/adr/`, in this story's worktree, before writing the plan:
+the worktree carries the ADRs `main` carried when the branch started, which are
+the ones this story's code holds.
 
 A batch whose `Technical design` is `none` gives the plan nothing to start from.
 
@@ -413,8 +418,12 @@ part of every task's requirements — carries:
   under a flag;
 - **in a technical story only**, the stop condition proper to a technical
   story;
-- **in a story whose batch declares constraints only**, the stop condition on a
-  constraint that cannot be held.
+- **only if the batch declares constraints or `docs/adr/` carries an ADR**, the
+  stop condition on a constraint or an ADR that cannot be held;
+- **only if `docs/adr/` carries an ADR**, the paths of the ADRs this story's code
+  holds;
+- the conditions of an ADR, with the obligation to record as an `Open ruling:`
+  the decision that meets them.
 
 The batch's constraints are its `Constraints` section copied verbatim. The
 freeze of the spec file reads:
@@ -508,17 +517,46 @@ subagents, whose only channel to this skill's rules is this list — a stop
 condition stated to you and not written here never reaches the agent who has to
 obey it.
 
-**In a story whose batch declares constraints, `Global Constraints` carries the
-stop condition on a constraint that cannot be held, written out in full.** A
-batch declares constraints when its `Constraints` section is not `none`. Copy the
-block below verbatim, exactly as `supercharlouze:using-batches` states it:
+**In a story whose batch declares constraints, or whose `docs/adr/` carries an
+ADR, `Global Constraints` carries the stop condition on a constraint or an ADR
+that cannot be held, written out in full.** A batch declares constraints when its
+`Constraints` section is not `none`. `docs/adr/` carries an ADR when a `.md` file
+is placed directly in it, in this story's worktree. Copy the block below
+verbatim, exactly as `supercharlouze:using-batches` states it:
 
-> If, while conducting a story, you discover that a constraint of its batch cannot be held, stop and put the constraint to your human partner.
+> If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner.
 >
 > A constraint the spec contradicts does not fall under this condition: the spec wins.
 
-A constraint is a decision another story of the batch relies on, so an
-implementer who works around it breaks a story they cannot see.
+A constraint is a decision another story of the batch relies on, and an ADR is a
+decision your human partner took for all the code to come, so an implementer who
+works around either breaks something they cannot see.
+
+**When `docs/adr/` carries an ADR, `Global Constraints` lists the path of each
+one, under the sentence below.** Copy it verbatim:
+
+> The code this story writes holds these ADRs.
+
+An implementer reads only this list, so an ADR whose path is missing from it
+binds nobody.
+
+**In every story, `Global Constraints` carries the conditions of an ADR, written
+out in full, with the obligation to record the decision that meets them.** Copy
+the block below verbatim. Its conditions are those `supercharlouze:using-batches`
+states:
+
+> A technical decision is recorded as an ADR only if it meets these conditions:
+>
+> - undoing it is expensive;
+> - it surprises whoever does not know its context;
+> - it settles between real alternatives.
+>
+> When you take a technical decision that meets them, say so in your report: it
+> is recorded as an `Open ruling:`, which asks your human partner whether they
+> want it as an ADR. Write nothing in `docs/adr/`.
+
+Only your human partner decides an ADR, so an implementer who takes such a
+decision reports it and leaves the file to the review.
 
 **Commit the story document — header, the two empty sections and
 `Global Constraints` together — and push it immediately**, `git push`, before
@@ -598,18 +636,28 @@ worktree — the branch left on the remote would read as a live claim on its
 sections, and the worktree left behind is where a later session resumes work
 under a qualification the batch — or the story — no longer has.
 
-In a story whose batch declares constraints: if, while conducting it, you
-discover that a constraint of its batch cannot be held, stop and put the
-constraint to your human partner. A constraint the spec contradicts is not this
-case, since the spec wins. When you stop, your human partner rules on the
-constraint, and until then the branch and the worktree stay as they are. If they
-rule it untenable, the story is abandoned and `supercharlouze:writing-a-batch`
-amends the constraint; otherwise resume the story and hold the constraint.
+In a story whose batch declares constraints or whose `docs/adr/` carries an ADR:
+if, while conducting it, you discover that a constraint of its batch or an ADR
+cannot be held, stop and put it to your human partner. A constraint the spec
+contradicts is not this case, since the spec wins. When you stop, your human
+partner rules on the constraint or the ADR, and until then the branch and the
+worktree stay as they are.
+
+If they rule a constraint untenable, the story is abandoned and
+`supercharlouze:writing-a-batch` amends the constraint.
+
+If they rule an ADR untenable, the story is abandoned and a bounded change
+rewrites or deletes the ADR.
+
+Otherwise resume the story and hold the constraint or the ADR.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session
 under pressure. It reaches the implementers through `Global Constraints`
 (Step 4), which is the only channel they read.
+
+No task writes in `docs/adr/`. The ADR a decision of this story deserves is
+written at the review (Step 7), once your human partner wants it.
 
 ## Step 6 — Record Before the Merge
 
@@ -620,9 +668,12 @@ exist:
   the **Rulings log** of the story document. The list is exhaustive.
 - Write as a `Technical design ruling:`, with the three parts of a `Ruling:`,
   every departure from the batch's `Technical design` that the plan or the
-  execution took, except where the plan follows the code on `main`. The
-  design was approved at the opening gate, and a departure nobody recorded
+  execution took, except where the plan follows an ADR or the code on `main`.
+  The design was approved at the opening gate, and a departure nobody recorded
   reaches the delivery review as a surprise.
+- Write as an `Open ruling:` every technical decision the plan or the execution
+  took that meets the conditions of an ADR, its line ending with whether your
+  human partner wants it as an ADR.
 - Record under **Observed drift** the drift you noticed *outside* this story's
   scope: code that contradicts the spec, and behaviour no spec describes.
 
@@ -660,6 +711,16 @@ closing, the story is merged and its branch is gone: closing can note that a
 ruling was never taken up, it can no longer take it up. So do not announce the
 pull request ready while an open ruling without a destination stands — your human
 partner has the rulings in front of them here, and nowhere later.
+
+**Your human partner settles an open ruling on a decision that meets the
+conditions of an ADR.** If they want the ADR, invoke
+`supercharlouze:recording-a-decision` and commit the file it writes in a commit
+of its own.
+
+If nothing is written, record in the `Rulings log` what they ruled.
+
+A correction of the ADR's text asked for afterwards, which does not change its
+decision, is a `fixup!` of that commit.
 
 **Ending the review.** The agent never approves and never merges a pull request.
 Each correction is pushed as a `fixup!` commit of the commit it corrects — or as
@@ -786,6 +847,7 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |
 | "The batch says otherwise, and the batch is more recent" | The spec wins, without deliberation. Implement the spec, record a Ruling, continue. |
 | "The block's rule spills onto the next module — the spec wins, I record a Ruling" | No ruling puts a rule in two places. A rule belongs to exactly one spec, and a rule that reaches further signals the breakdown. Stop and put it to your human partner. |
-| "My plan departs only slightly from the design, no ruling needed" | Every departure is a `Technical design ruling:`. One left out leaves the batch's design describing a mechanism nobody built. |
-| "`main`'s code contradicts the design, so the design wins" | The design only guides. Where `main`'s code departed from it, the plan starts from the code. |
-| "This constraint cannot be held, I'll work around it and record a ruling" | A ruling replaces no stop condition. Another story of the batch relies on that constraint: stop and put it to your human partner. |
+| "My plan departs only slightly from the design, no ruling needed" | Every departure is a `Technical design ruling:`. One left out reaches the delivery review as a surprise. |
+| "`main`'s code contradicts the design, so the design wins" | The design only guides. Where an ADR contradicts it, the plan follows the ADR; elsewhere, where `main`'s code departed from it, the plan starts from the code. |
+| "This constraint, or this ADR, cannot be held, I'll work around it and record a ruling" | A ruling replaces no stop condition. Another story of the batch relies on that constraint, and your human partner decided that ADR: stop and put it to them. |
+| "This decision deserves an ADR, I'll write it with the code" | No task writes in `docs/adr/`. Record an `Open ruling:`, and write the ADR at the review if your human partner wants it. |

@@ -6,7 +6,8 @@ Ce module couvre une extension de superpowers qui définit un flux de
 développement : une spec vivante par module, des lots de stories qui font grandir
 ces specs, des revues humaines tenues en pull request, les documents que ce flux
 produit, les conventions qu'il laisse dans le dépôt, ce qu'il exige du code
-applicatif tant qu'un flag le garde, et son installation sur un projet.
+applicatif qu'un flag garde ou qui doit tenir un ADR, et son installation sur un
+projet.
 
 Il ne couvre ni superpowers lui-même, ni l'outil qui exécute les agents.
 
@@ -52,6 +53,8 @@ d'observable à la frontière de son module.
 
 **Conception technique** (`technical design`) — le mécanisme prévu pour les
 stories d'un lot, dont chacune peut s'écarter.
+
+**ADR** (`adr`) — le document qui consigne une décision technique du projet.
 
 **Flag** (`feature flag`) — ce qui garde un comportement incomplet hors de portée
 des utilisateurs jusqu'à sa levée.
@@ -138,10 +141,11 @@ L'emplacement des documents et ce que le flux ajoute à un plan ne sont pas des
   > chose d'observable à la frontière du module, arrête-toi. La story n'est plus
   > technique.
 
-  Dans une story dont le lot déclare des contraintes seulement :
+  Dans une story seulement si son lot déclare des contraintes ou si `main` porte
+  un ADR quand sa branche en part :
 
-  > Si, en conduisant une story, tu découvres qu'une contrainte de son lot ne peut
-  > pas être tenue, arrête-toi et soumets-la à l'humain.
+  > Si, en conduisant une story, tu découvres qu'une contrainte de son lot ou un
+  > ADR ne peut pas être tenu, arrête-toi et soumets-le à l'humain.
 
   Une contrainte que la spec contredit ne relève pas de cette condition, mais de
   `Authority and conflict rules`.
@@ -186,10 +190,10 @@ doit changer s'arrête.
 
 | Revue | Pull request examinée | Sa fusion |
 |---|---|---|
-| Adoption | la spec et le gaps register du module | le module est adopté |
-| Ouverture | le document de lot | le lot est ouvert |
-| Livraison | le code d'une story, et sa modification de spec s'il y en a une | la story est livrée |
-| Amendement | la décision de changer le périmètre, le spec delta, la conception technique, les contraintes ou le flag d'un lot | le lot est amendé |
+| Adoption | la spec et le gaps register du module, et les ADR écrits avec eux | le module est adopté |
+| Ouverture | le document de lot, et les ADR écrits, réécrits ou supprimés avec lui | le lot est ouvert |
+| Livraison | le code d'une story, sa modification de spec s'il y en a une, et les ADR que la revue fait écrire | la story est livrée |
+| Amendement | la décision de changer le périmètre, le spec delta, la conception technique, les contraintes ou le flag d'un lot, et les ADR écrits, réécrits ou supprimés avec elle | le lot est amendé |
 | Clôture | la consolidation et `status: closed` | le lot est clos |
 
 L'agent n'approuve ni ne fusionne jamais une pull request de revue.
@@ -222,7 +226,7 @@ L'humain délimite les modules. Un agent n'en propose aucun découpage de lui-m�
 ### Module adoption
 
 L'adoption produit une pull request portant la spec et le gaps register du module,
-et aucun code.
+les ADR qu'elle écrit, et aucun code.
 
 Ordre d'autorité des sources :
 
@@ -245,6 +249,10 @@ un document validé : elle vient d'un document validé ou de l'humain.
 3. Créer la branche `adopt/<module>`.
 4. Écrire la spec depuis ces seuls documents. Ce qui n'y est pas une règle devient
    un gap nommant son document.
+
+   Exception : une décision technique qui réunit les conditions d'un ADR
+   (`Architecture decision records`) est soumise à l'humain. S'il la veut en ADR,
+   l'adoption l'écrit ; sinon, elle devient un gap.
 
    Quand deux documents validés se contredisent, le plus récent l'emporte par
    défaut, et cet arbitrage figure dans le corps de la pull request.
@@ -366,6 +374,8 @@ ces champs :
   sa portée et, si elle dépasse le lot, sa condition de levée ; ou `none` suivi de
   la raison de l'exemption.
 
+Les contraintes d'un lot ne lient que ses stories.
+
 Chaque bloc porte un identifiant unique dans le lot, et nomme la spec et la section
 qu'il vise.
 
@@ -399,10 +409,17 @@ rien trouvé.
 
 ### The technical reread
 
-La relecture technique relit la conception technique et les contraintes d'un lot,
-contre les specs, blocs appliqués, et contre le code de `main`.
+La relecture technique relit :
 
-Un lot qui n'a ni conception technique ni contraintes s'en passe.
+- la conception technique et les contraintes du lot, contre les specs, blocs
+  appliqués, et contre le code de `main` ;
+- les blocs, la conception technique et les contraintes du lot, contre les ADR
+  tels que la pull request d'ouverture ou d'amendement les laisse ;
+- chaque ADR que cette pull request écrit ou réécrit, contre les specs, blocs
+  appliqués, et contre les autres ADR.
+
+Une ouverture s'en passe quand le lot n'a ni conception technique ni contraintes,
+et que sa pull request ne laisse aucun ADR dans `docs/adr/`.
 
 Elle n'est jamais conduite dans le contexte qui a écrit ce qu'elle relit.
 
@@ -415,11 +432,11 @@ L'ouverture :
 
 1. vérifie que chaque module touché est adopté, et s'arrête sinon ;
 2. attribue `NN` ;
-3. rédige le document de lot ;
+3. rédige le document de lot, puis écrit, réécrit ou supprime des ADR s'il y a
+   lieu ;
 4. réserve les entrées du gaps register que le lot prend en charge ;
 5. fait passer le spec delta par la relecture de cohérence ;
-6. fait passer la conception technique et les contraintes du lot par la
-   relecture technique ;
+6. fait passer le lot par la relecture technique ;
 7. relit le document de lot en entier ;
 8. ouvre la pull request du lot, sur la branche `batch/NN-<slug>`.
 
@@ -429,6 +446,8 @@ Rien n'est écrit dans les specs à l'ouverture.
 
 Un amendement change le périmètre, le spec delta, la conception technique, les
 contraintes ou le flag d'un lot ouvert, par une pull request sur son document.
+
+La pull request d'un amendement peut aussi écrire, réécrire ou supprimer des ADR.
 
 Exception à la revue d'amendement : un amendement qui change le spec delta est revu
 comme une ouverture.
@@ -451,13 +470,12 @@ abandonnée.
 Si l'humain veut le changement observable qu'elle a révélé, un amendement ajoute
 son bloc, et le flag qu'il exige s'il en exige un (`Feature flags`).
 
-Quand la condition d'arrêt sur une contrainte qui ne peut pas être tenue se
-déclenche, l'humain juge la contrainte. S'il la juge intenable, la story est
-abandonnée et un amendement modifie ou retire la contrainte ; sinon, la story
-reprend en la tenant.
+Quand une story s'arrête sur une contrainte qu'elle ne peut pas tenir, l'humain
+juge la contrainte. S'il la juge intenable, la story est abandonnée et un
+amendement modifie ou retire la contrainte ; sinon, la story reprend en la tenant.
 
 Un amendement qui change le spec delta, la conception technique ou les contraintes
-d'un lot passe par la relecture technique.
+d'un lot, ou qui écrit ou réécrit un ADR, passe par la relecture technique.
 
 ### Closing a batch
 
@@ -484,8 +502,6 @@ La pull request de clôture porte :
 - la libération des réservations non consommées ;
 - le retrait du document de lot des blocs qu'aucune story fusionnée n'a livrés.
   L'humain décide si chacun rejoint le gaps register ;
-- la conception technique du document de lot, quand elle n'est pas `none`,
-  réécrite pour décrire le mécanisme que le lot a livré ;
 - le statut `closed` du document de lot.
 
 ## Story
@@ -545,9 +561,14 @@ qui l'accueille quand il en rejoint une.
    `Code under a feature flag`, quel que soit le lot qui déclare le flag ;
 7. dans une story technique seulement, sa condition d'arrêt
    (`Departures from superpowers`) ;
-8. dans une story dont le lot déclare des contraintes seulement, la condition
-   d'arrêt sur une contrainte qui ne peut pas être tenue
-   (`Departures from superpowers`).
+8. seulement si le lot déclare des contraintes ou si `main` porte un ADR quand la
+   branche de la story en part, la condition d'arrêt sur une contrainte ou un ADR
+   qui ne peut pas être tenu (`Departures from superpowers`) ;
+9. seulement si `main` porte un ADR quand la branche de la story en part,
+   l'obligation de tenir ces ADR (`Architecture decision records`) ;
+10. les conditions auxquelles une décision technique est consignée en ADR
+    (`Architecture decision records`), et l'obligation de soumettre comme
+    arbitrage ouvert la décision qui les réunit (`Delivering a story`).
 
 ### Concurrency detection
 
@@ -594,8 +615,9 @@ Précondition, vérifiée avant de créer la branche : le lot est ouvert.
 4. Écrire le plan dans le document de story, le commiter et le pousser avant
    l'exécution.
 
-   Le plan part de la conception technique du lot. Exception : là où le code de
-   `main` s'en est écarté, il part du code.
+   Le plan part de la conception technique du lot. Exceptions : là où un ADR la
+   contredit, il suit l'ADR ; ailleurs, là où le code de `main` s'en est écarté,
+   il part du code.
 
    Tout autre écart du plan à la conception technique est un arbitrage de
    conception technique, consigné dans le `Rulings log`.
@@ -613,6 +635,11 @@ clôture.
 
 Tout autre arbitrage ouvert est tranché à la revue de livraison, et le
 `Rulings log` porte ce qui a été tranché.
+
+Une story soumet comme arbitrage ouvert la décision technique qu'elle prend et qui
+réunit les conditions auxquelles elle serait consignée en ADR
+(`Architecture decision records`). Si l'humain la veut en ADR, la story l'écrit
+en réponse à la revue.
 
 ### Abandoning a story
 
@@ -666,6 +693,42 @@ levée.
 
 Seule une story change le défaut qu'une mention de flag déclare.
 
+## Architecture decision records
+
+Un ADR vit dans `docs/adr/<slug>.md`.
+
+Il énonce une décision et sa raison.
+
+Un ADR que le flux écrit ou réécrit ne porte ni date ni statut.
+
+Une décision technique n'est consignée en ADR que si elle réunit ces conditions :
+
+- la défaire coûte cher ;
+- elle surprend qui n'en connaît pas le contexte ;
+- elle tranche entre de vraies alternatives.
+
+Un agent n'écrit, ne réécrit ni ne supprime un ADR sans que l'humain l'ait décidé.
+
+Ce qui s'observe à la frontière d'un module est une règle de sa spec, jamais un
+ADR.
+
+Un ADR ne contredit aucune spec ni aucun autre ADR.
+
+Un ADR dont la décision est remplacée est réécrit sur place.
+
+Un ADR dont la décision est abandonnée est supprimé.
+
+Le commit qui réécrit ou supprime un ADR dit pourquoi.
+
+Le code d'une story ou d'un changement borné tient les ADR que `main` porte quand
+sa branche en part.
+
+Aucun ADR ne s'impose au code déjà sur `main`.
+
+Quand une story s'arrête sur un ADR qu'elle ne peut pas tenir, l'humain juge
+l'ADR. S'il le juge intenable, la story est abandonnée et un changement borné
+réécrit ou supprime l'ADR ; sinon, la story reprend en le tenant.
+
 ## Bounded change
 
 Un changement borné n'a ni lot ni story : c'est une pull request unique, sur une
@@ -682,6 +745,18 @@ Il subit la même détection de concurrence qu'une story.
 Il ne porte aucun flag.
 
 Il peut ajouter et supprimer des entrées du gaps register.
+
+Il peut écrire, réécrire et supprimer des ADR.
+
+Il peut ne porter que des ADR.
+
+Quand un changement borné ne peut pas tenir un ADR, il le soumet à l'humain. Si
+l'humain juge l'ADR intenable, le changement borné le réécrit ou le supprime ;
+sinon, il le tient.
+
+Un changement borné soumet à l'humain la décision technique qu'il prend et qui
+réunit les conditions auxquelles elle serait consignée en ADR
+(`Architecture decision records`). Si l'humain la veut en ADR, il l'écrit.
 
 ## Installing on a project
 
@@ -701,7 +776,9 @@ Elle produit une pull request, sur la branche `chore/supercharlouze-init`, qui :
    de plan dans ce flux. Si ce bloc est déjà présent, elle le met à jour sur place,
    sans jamais le dupliquer ;
 4. liste les modules déjà adoptés, c'est-à-dire ceux dont une spec existe dans
-   `docs/specs/`.
+   `docs/specs/` ;
+5. soumet à l'humain les ADR que `docs/adr/` porte déjà, et supprime ceux qu'il
+   abandonne.
 
 Une fois ses documents déplacés, `docs/superpowers` est supprimé s'il est vide. S'il
 contient autre chose, l'installation le laisse en place sans y toucher.
