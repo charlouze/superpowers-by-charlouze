@@ -188,7 +188,7 @@ doit changer s'arrête.
 
 | Revue | Pull request examinée | Sa fusion |
 |---|---|---|
-| Adoption | la spec et le gaps register du module | le module est adopté |
+| Adoption | la spec et le gaps register du module, et les ADR écrits avec eux | le module est adopté |
 | Ouverture | le document de lot | le lot est ouvert |
 | Livraison | le code d'une story, et sa modification de spec s'il y en a une | la story est livrée |
 | Amendement | la décision de changer le périmètre, le spec delta, la conception technique, les contraintes ou le flag d'un lot | le lot est amendé |
@@ -224,7 +224,7 @@ L'humain délimite les modules. Un agent n'en propose aucun découpage de lui-m�
 ### Module adoption
 
 L'adoption produit une pull request portant la spec et le gaps register du module,
-et aucun code.
+les ADR qu'elle écrit, et aucun code.
 
 Ordre d'autorité des sources :
 
@@ -247,6 +247,10 @@ un document validé : elle vient d'un document validé ou de l'humain.
 3. Créer la branche `adopt/<module>`.
 4. Écrire la spec depuis ces seuls documents. Ce qui n'y est pas une règle devient
    un gap nommant son document.
+
+   Exception : une décision technique qui réunit les conditions d'un ADR
+   (`Architecture decision records`) est soumise à l'humain. S'il la veut en ADR,
+   l'adoption l'écrit ; sinon, elle devient un gap.
 
    Quand deux documents validés se contredisent, le plus récent l'emporte par
    défaut, et cet arbitrage figure dans le corps de la pull request.
