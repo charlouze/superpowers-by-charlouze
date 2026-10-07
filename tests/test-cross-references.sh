@@ -10,7 +10,7 @@ fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
 
 echo "test-cross-references"
 
-KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design"
+KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design recording-a-decision"
 # Commands share the plugin namespace with the skills: /supercharlouze:init is a
 # command, not a skill, so it resolves against commands/<name>.md instead.
 KNOWN_COMMANDS="init"
@@ -84,7 +84,7 @@ for needle in "if and only if nothing observable" "bounded/" "no feature flag"; 
     fi
 done
 
-# The README states the same four rules for a human reader who has read nothing
+# The README states the same rules for a human reader who has read nothing
 # else. It is the one shipped artifact that paraphrases them, so it is also the
 # one that can keep asserting the unconditional version after the skill stopped.
 # The needle carries "no change" so it cannot match the true rule, which reads
@@ -120,6 +120,19 @@ esac
 case "$TROW" in
     *"Never directly"*) pass "the README row of rereading-a-technical-design rules out direct use" ;;
     *)                  fail "the README row of rereading-a-technical-design rules out direct use" ;;
+esac
+
+# The README row of recording-a-decision, like the rereads', says it is not for
+# direct use and names none of the skills that invoke it.
+DROW="$(grep -F '`supercharlouze:recording-a-decision`' "$REPO_ROOT/README.md" || true)"
+case "$DROW" in
+    *"writing-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+        fail "the README row of recording-a-decision names no caller" ;;
+    *)  pass "the README row of recording-a-decision names no caller" ;;
+esac
+case "$DROW" in
+    *"Never directly"*) pass "the README row of recording-a-decision rules out direct use" ;;
+    *)                  fail "the README row of recording-a-decision rules out direct use" ;;
 esac
 
 # The rereads use three skills when they are installed; the README recommends
@@ -169,6 +182,36 @@ case "$README_FLAT" in
         pass "the README defines drift as the spec does" ;;
     *)
         fail "the README defines drift as the spec does" ;;
+esac
+
+# The README defines the ADR in its model, and states what a bounded change may
+# do with one.
+case "$README_FLAT" in
+    *"- **ADR** — the document that records a technical decision of the project and its reason, at \`docs/adr/<slug>.md\`."*)
+        pass "the README defines the ADR" ;;
+    *)  fail "the README defines the ADR" ;;
+esac
+case "$README_FLAT" in
+    *"A decision earns one only if undoing it is expensive, it surprises whoever does not know its context, and it settles between real alternatives."*)
+        pass "the README states the conditions of an ADR" ;;
+    *)  fail "the README states the conditions of an ADR" ;;
+esac
+case "$README_FLAT" in
+    *"A human decides every one."*)
+        pass "the README says a human decides every ADR" ;;
+    *)  fail "the README says a human decides every ADR" ;;
+esac
+case "$README_FLAT" in
+    *"and it may write, rewrite and delete ADRs, or carry nothing but ADRs."*)
+        pass "the README lets a bounded change write ADRs" ;;
+    *)  fail "the README lets a bounded change write ADRs" ;;
+esac
+# The adoption gate reviews the ADRs the adoption wrote, in the README's gate
+# table too.
+case "$README_FLAT" in
+    *"| Module adoption | the spec and the gaps register, and the ADRs written with them, before any batch touches that module |"*)
+        pass "the README's adoption gate covers the ADRs" ;;
+    *)  fail "the README's adoption gate covers the ADRs" ;;
 esac
 
 # 5. No shipped artifact cites a numbered section of the archived design

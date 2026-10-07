@@ -12,8 +12,8 @@ that every review, every batch and every drift ruling in this system depends on.
 It is the most delicate operation here, because everything downstream inherits
 whatever it gets wrong, and nothing downstream can detect the mistake.
 
-It produces one pull request carrying two documents and no code: the spec at
-`docs/specs/<module>.md`, and the gaps register at `docs/specs/<module>.gaps.md`.
+It produces one pull request carrying the spec at `docs/specs/<module>.md`, the
+gaps register at `docs/specs/<module>.gaps.md`, the ADRs it writes, and no code.
 Until that pull request is merged the module is not adopted, and no batch may
 start on it.
 
@@ -168,6 +168,11 @@ descriptive.
   authority rule of `Source Authority` above holds while you write: a mechanism
   the document prescribes is no more admissible here than one you read in the
   code.
+- Exception: put to your human partner a technical decision the test ejects
+  that meets the conditions of an ADR, which `The Model` of
+  `supercharlouze:using-batches` states. If they want it as an ADR, invoke
+  `supercharlouze:recording-a-decision`, and the ADR travels in the adoption
+  pull request. Otherwise it becomes a gap.
 
 **A rule belongs to exactly one spec.** If a rule you are about to write would
 constrain behaviour observable at the boundary of more than one module, stop
@@ -326,15 +331,19 @@ spec.
 File each sentence it returns as a mechanism in the gaps register, as a gap
 naming the document the sentence came from when it came from one.
 
+Exception: a technical decision among them that meets the conditions of an ADR
+is handled as the step `Write the spec from those documents only` says.
+
 A rule it returns as reaching past this module's boundary stops the adoption: the
 breakdown goes back to your human partner.
 
 ### 8. Open the adoption pull request
 
-The branch already exists — you created it at step 3. Commit both documents on
-it, push, and open the pull request.
+The branch already exists — you created it at step 3. Commit the spec, the gaps
+register and the ADRs you wrote on it, push, and open the pull request.
 
-The pull request carries the spec and the gaps register, and no code. Its body
+The pull request carries the spec, the gaps register and the ADRs you wrote, and
+no code. Its body
 carries what a reviewer needs to disagree with you: the boundary as your partner
 drew it, the retained inventory, the rulings from step 4, and the declared
 coverage. **The pull request body is where an adoption's inventory and rulings
