@@ -1025,7 +1025,7 @@ require using-batches "the commit that rewrites or deletes an ADR says why" \
 require using-batches "the adoption gate reviews the ADRs written with the spec" \
         "| Module adoption | the pull request carrying the spec and the gaps register, and the ADRs written with them |"
 require using-batches "routing sends an ADR to a bounded change" \
-        "| Your human partner wants an ADR written, rewritten or deleted outside the opening or the amendment of a batch | A bounded change, under \`What Is Kept, What Is Rerouted\` below |"
+        "| Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | A bounded change, under \`What Is Kept, What Is Rerouted\` below |"
 require using-batches "a decision with nothing observable has the ADR for outlet" \
         "Exception: a sentence that states a technical decision has an ADR for outlet, under the conditions \`The Model\` states."
 require using-batches "a decision housed outside the specs goes to an ADR" \

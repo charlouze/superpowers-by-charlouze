@@ -20,7 +20,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
 | A batch must change its scope, its spec delta, its technical design, its constraints or its flag, or a corrective batch must be requalified | `supercharlouze:writing-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
-| Your human partner wants an ADR written, rewritten or deleted outside the opening or the amendment of a batch | A bounded change, under `What Is Kept, What Is Rerouted` below |
+| Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | A bounded change, under `What Is Kept, What Is Rerouted` below |
 | Spike or bounded work | Nothing is rerouted except what `What Is Kept, What Is Rerouted` states below |
 
 ## The Model
