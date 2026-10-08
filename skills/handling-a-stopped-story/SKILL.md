@@ -67,7 +67,7 @@ its consequences, then execute what is ruled.
 ## Requalifying a Technical Story
 
 **Trigger — the stop condition of a technical story.** `supercharlouze:following-the-rules`
-states it and `supercharlouze:writing-a-user-story` copies it into the
+states it and `supercharlouze:delivering-a-story` copies it into the
 `Global Constraints` of every technical story: a story that discovers it changes
 something observable at its module's boundary is no longer technical. It reaches
 you already stopped, from inside `superpowers:subagent-driven-development`.
@@ -108,7 +108,7 @@ their row gives, each with the skill that conducts it:
 | The spec is corrected, and the batch stays corrective on a reduced scope | The corrected spec ships through its own pull request, and `supercharlouze:amending-a-batch` reduces the `Scope`. |
 | The corrective batch is rewritten as an ordinary batch | `supercharlouze:amending-a-batch` rewrites it. |
 | The remaining work is a different batch | `supercharlouze:closing-a-batch` closes this batch, then `supercharlouze:opening-a-batch` opens the fresh one. |
-| The observable change of a technical story is wanted | `supercharlouze:amending-a-batch` adds its block. Once that pull request merges, `supercharlouze:writing-a-user-story` rewrites the work as an ordinary story of the amended batch. |
+| The observable change of a technical story is wanted | `supercharlouze:amending-a-batch` adds its block. Once that pull request merges, `supercharlouze:delivering-a-story` rewrites the work as an ordinary story of the amended batch. |
 | A constraint is untenable | `supercharlouze:amending-a-batch` changes or removes it. |
 | An ADR is untenable | A bounded change, under `supercharlouze:making-a-bounded-change`, rewrites or deletes it. |
 

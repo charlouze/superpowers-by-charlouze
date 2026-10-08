@@ -50,9 +50,9 @@ Refusing is not a dead end. Report the surviving flag and present the **three ex
 
 | Exit | What it does | Form |
 |---|---|---|
-| Lift | Ships what exists: removes the branching in the code and the gating sentence in the spec | A lifting story, written with `supercharlouze:writing-a-user-story` — one per guarded module |
+| Lift | Ships what exists: removes the branching in the code and the gating sentence in the spec | A lifting story, written with `supercharlouze:delivering-a-story` — one per guarded module |
 | Extend the scope | Defers the decision to a later batch by declaring the flag's extended scope and its lifting condition | An amendment pull request on the batch document, written with `supercharlouze:amending-a-batch` and reviewed like any other |
-| Tear down | Removes the guarded code and the corresponding spec change | A teardown story, written with `supercharlouze:writing-a-user-story` |
+| Tear down | Removes the guarded code and the corresponding spec change | A teardown story, written with `supercharlouze:delivering-a-story` |
 
 Then stop and wait. Do not close the batch under an undeclared surviving flag "to be tidied up later" — that is the outcome this duty exists to prevent. And do not leave the batch open indefinitely either: without these three exits, the refusal would manufacture exactly the dead flagged code it is meant to prevent.
 

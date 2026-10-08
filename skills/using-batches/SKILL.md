@@ -19,7 +19,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | Architectural work on adopted modules | `supercharlouze:opening-a-batch` |
 | Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:opening-a-batch`, as a corrective batch — never straight to the code |
 | A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:opening-a-batch`, as an ordinary batch that finally specifies them |
-| A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
+| A batch is open and its next story must be written | `supercharlouze:delivering-a-story` |
 | A story has stopped on a stop condition this flow adds | `supercharlouze:handling-a-stopped-story` |
 | A batch must change its scope, its spec delta, its technical design, its constraints or its flag | `supercharlouze:amending-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
@@ -41,7 +41,7 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
 
 ## Declared Overrides
 
-superpowers states several of its rules as closed. An implicit exception to a rule marked "and only these" will not survive a session under pressure, so each one is **named as an override**, here and in the CLAUDE.md block, with its justification. There are four of them, and there must never be an undeclared **fifth**. If you find yourself wanting one, stop and take it to the human: an undeclared override is indistinguishable from an agent quietly ignoring superpowers.
+superpowers states several of its rules as closed. An implicit exception to a rule marked "and only these" will not survive a session under pressure, so each one is **named as an override**, here and in the CLAUDE.md block, and written in full, with its justification, here or in the skill this section names. There are four of them, and there must never be an undeclared **fifth**. If you find yourself wanting one, stop and take it to the human: an undeclared override is indistinguishable from an agent quietly ignoring superpowers.
 
 The CLAUDE.md block opens on a fifth clause — *"it relocates specs and plans"* — and that one is **not** an override, which is why the count still reads four. `superpowers:writing-plans` grants the plan location as an explicit concession, *"(User preferences for plan location override this default)"*, so relocating them overrides no closed rule; and the spec location needs no concession at all, because Override 1 replaces the step that would have written a dated design doc, leaving nothing to relocate.
 
@@ -55,45 +55,31 @@ The architectural checklist of `superpowers:brainstorming` ends with four steps:
 
 **The substitute stops rather than chaining.** When a module the work touches has no spec, `supercharlouze:opening-a-batch` does not run `supercharlouze:adopting-a-module` and come back: **the design stops**, your human partner abandons it or sets it aside, and it resumes in a fresh context once the adoption pull request is merged. That skill's `Preconditions` carry the full rule and the reason it rests on — **adoption is never conducted in the same context as a design**. Said here because a post-brainstorming path that ends anywhere other than `supercharlouze:opening-a-batch` is exactly what an unnamed exception looks like, and this one ends nowhere at all — it stops. It widens nothing: the override still covers steps 6 to 9 and nothing else, and the resumed design re-enters the checklist at the same step.
 
-Justification: `supercharlouze:opening-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its reread before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
+Justification: `supercharlouze:opening-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:delivering-a-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its reread before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
 
 ### Override 2 — the stop conditions the flow adds
 
-`superpowers:subagent-driven-development` states *"Four things stop you, and only these"*. This plugin adds the stop conditions `supercharlouze:following-the-rules` writes in full: one for corrective batches only, one for a technical story only, and one for a story only if its batch declares constraints or `main` carries an ADR when its branch starts.
-
-Justification: the four native conditions assume a valid authority exists, assume the story is the story it says it is, and know nothing of the stories beside it. A corrective batch puts the authority in question; a technical story puts its own qualification in question — "purely technical" is otherwise the door through which behaviour enters with no gate behind it, since a story that transcribes no block passes no opening review; a constraint is what the other stories of its batch rely on, so a story that cannot hold one cannot settle it alone; and an ADR is a decision your human partner took, so only they judge it untenable.
+`superpowers:subagent-driven-development` states *"Four things stop you, and only these"*. This plugin adds the stop conditions `supercharlouze:following-the-rules` writes in full: one for corrective batches only, one for a technical story only, and one for a story only if its batch declares constraints or `main` carries an ADR when its branch starts. `supercharlouze:delivering-a-story` writes this override in full.
 
 When one of them fires, you stop, and `supercharlouze:handling-a-stopped-story` conducts what follows.
 
 ### Override 3 — imposed execution mode
 
-`superpowers:writing-plans` ends by offering the human a choice between subagent-driven-development and executing-plans. This plugin imposes SDD as the execution mode, and does not present the choice.
-
-Justification: repatriating the rulings depends on SDD's ledger. `superpowers:executing-plans` keeps none, so the trace of every arbitration made during the story would be lost — and those arbitrations are the only record of where the spec was ambiguous.
+`superpowers:writing-plans` ends by offering the human a choice between subagent-driven-development and executing-plans. This plugin imposes SDD as the execution mode, and does not present the choice. `supercharlouze:delivering-a-story` writes this override in full.
 
 ### Override 4 — finishing-a-development-branch is constrained to the pull request
 
-`superpowers:finishing-a-development-branch` presents three options — merge locally, open a pull request, keep the branch — and waits for a human choice. On the story path this plugin constrains the choice to **"Push and create a Pull Request"**.
+`superpowers:finishing-a-development-branch` presents three options — merge locally, open a pull request, keep the branch — and waits for a human choice. On the story path this plugin constrains the choice to **"Push and create a Pull Request"**. `supercharlouze:delivering-a-story` writes this override in full.
 
-Justification, stated exactly, because the other two options are not equivalent.
-
-**"Merge back locally" is actively destructive.** It merges into the **local** `main`, runs the tests, then **deletes the worktree and the branch**. It never pushes, so nothing fails at the time: the work ends up in a local commit that can never reach the remote, and the branch that would have carried a pull request no longer exists. Repatriating the rulings never happens either, since that is done on the branch before the merge.
-
-**"Keep the branch as-is" is not destructive** and stays compatible with a protected `main` — it is simply outside the flow: without a pull request the story has no observable state and will never be delivered. It is ruled out for that reason, not because it breaks anything.
-
-This override removes one choice that cannot succeed, and one that leads nowhere.
-
-**Deliberately not an override:** SDD's terminal state. Nothing is interposed between SDD and `superpowers:finishing-a-development-branch` — what is constrained is what the latter offers, which is Override 4 and nothing else. The reuse of an existing worktree by `superpowers:using-git-worktrees` is not one either: it is the documented behaviour of its Step 0.
+**Deliberately not an override:** the reuse of an existing worktree by `superpowers:using-git-worktrees`, which is the documented behaviour of its Step 0.
 
 ## Red Flags
 
 | Thought | Reality |
 |---------|---------|
-| "I'll transcribe the whole spec delta now, it's more efficient" | One spec change per story. A full delta makes the spec describe behaviour nobody delivered yet, and SDD's reviewers will report it as missing. |
 | "Only writing-plans may follow brainstorming, so I must write the design doc" | Override 1 is declared: steps 6 to 9 are replaced by `supercharlouze:opening-a-batch`. A dated design doc is precisely what this plugin removes. |
 | "This batch is refactor-only, the Feature flag field can stay empty" | The field is never empty. "none" plus its reason is a decision the opening gate reviews; a blank is an omission nobody can review. |
 | "The flag is still there but the batch is done, I'll clean it up later" | A flag surviving without a declared scope and lifting condition is the classic silent failure. Write the lifting story, declare extended scope by amendment, or write a teardown story. |
-| "A local merge is quicker than opening a pull request" | It deletes the worktree and the branch after merging into a `main` that can never be pushed. The work and the un-repatriated rulings go with them. |
 | "This case needs one more exception to a superpowers rule" | There is no undeclared fifth override. Stop and take it to the human. |
 | "The module has no spec but the change is small, I'll just code it" | Without an adopted spec there is no authority to review against, and the change becomes drift the moment it merges. The design stops until the module is adopted. |
 | "The module has no spec, I'll adopt it now and carry on designing" | Adoption is never conducted in the same context as a design. Stop, and resume in a fresh context once the adoption merges. |

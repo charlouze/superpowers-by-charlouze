@@ -1,9 +1,9 @@
 ---
-name: writing-a-user-story
+name: delivering-a-story
 description: Use when writing the next user story of an open batch - transcribes the spec change, then hands off to superpowers:writing-plans and subagent-driven-development
 ---
 
-# Writing a User Story
+# Delivering a Story
 
 ## Overview
 
@@ -15,7 +15,7 @@ may carry code alone, as a corrective batch's story does. That is what gives
 code does.** No intermediate state to signal, no marker, no exception to the
 drift rule.
 
-**Announce at start:** "I'm using the writing-a-user-story skill to write this
+**Announce at start:** "I'm using the delivering-a-story skill to deliver this
 story."
 
 **Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
@@ -62,31 +62,9 @@ decide on the unread declaration.
 
 ## Step 2 — Allocate us-N and Create the Branch
 
-`us-N` is the smallest integer **not used in the batch directory on `main`**,
-**not claimed by an open pull request**, *and* **not claimed by a pushed
-`story/*` branch that carries no pull request yet**:
-
-```bash
-git fetch origin
-git ls-tree --name-only origin/main docs/batches/NN-<slug>/
-gh pr list --state open --limit 100 --json number,headRefName
-git ls-remote --heads origin 'story/*'
-```
-
-Each is necessary. The remote ones are the sources the concurrency scan reads,
-one idea applied twice and not a coincidence. The listing of `main` is the one
-that scan never reads, because concurrency is a question about work
-in flight and allocation is also a question about work already landed. An
-artifact only reaches `main` when its pull request merges, so that listing
-knows nothing about what is in flight; and a story's pull request opens only
-at the very end of Step 5, so from its first commit until then a branch holds
-its number without ever appearing in
-`gh pr list`. The branch name carries the number — `story/NN-us-N-<slug>` — so
-the remote listing answers on its own, with nothing to fetch and no file to
-read. Going by that listing alone gives the same number to two stories written
-while a third is in review; adding only the pull requests still gives it to two
-stories written while a third is being implemented, and that window is the
-longer of the two.
+Allocate `us-N` as `skills/delivering-a-story/references/allocating-us-n.md`
+says: it fetches, then reads `main`, the open pull requests and the pushed
+`story/*` branches.
 
 Branch name, enforced by this plugin and not by superpowers:
 
@@ -455,7 +433,8 @@ ends by offering a choice between subagent-driven development and
 `superpowers:executing-plans`. Do not present that choice: this plugin requires
 `superpowers:subagent-driven-development`. Reason: repatriating the rulings
 depends on SDD's ledger; `superpowers:executing-plans` keeps none, and the
-trace of every arbitration made on your human partner's behalf would be lost.
+trace of every arbitration made on your human partner's behalf would be lost —
+and those arbitrations are the only record of where the spec was ambiguous.
 
 **Override 4 — the exit of `superpowers:finishing-a-development-branch` is
 constrained.** SDD concludes on that skill, which presents three options and
@@ -476,27 +455,37 @@ reason is exact:
 So this override removes one choice that cannot succeed, and one that leads
 nowhere.
 
+**Deliberately not an override:** SDD's terminal state. Nothing is interposed
+between SDD and `superpowers:finishing-a-development-branch` — what is
+constrained is what the latter offers, which is Override 4 and nothing else.
+
 **Override 2 — the stop conditions the flow adds.** SDD states that four things
 stop you and only these. This plugin adds its own. **When one of them fires,
 stop: `supercharlouze:handling-a-stopped-story` conducts what follows.**
 
 In a corrective batch: if, while bringing code into conformity with the spec, you
 discover that the **spec** is wrong and the code is right, stop. The batch is no
-longer corrective and must be requalified. The four native conditions assume a
-valid authority exists; here the authority itself is in question, and an agent may
-not correct a spec.
+longer corrective and must be requalified. An agent may not correct a spec.
 
 In a technical story, whatever its batch: if, while conducting it, you discover
 that it changes something observable at the module's boundary, stop. The story is
-no longer technical. The four native conditions also assume the story is the story
-it says it is; here the qualification it was written under is what is in question,
-and only your human partner may rule what follows: a block for the observable
-change, and the flag that block requires, if it requires one.
+no longer technical. Only your human partner may rule what follows: a block for
+the observable change, and the flag that block requires, if it requires one.
 
 In a story whose batch declares constraints or whose `docs/adr/` carries an ADR:
 if, while conducting it, you discover that a constraint of its batch or an ADR
 cannot be held, stop and put it to your human partner. A constraint the spec
 contradicts is not this case, since the spec wins.
+
+Justification: the four native conditions assume a valid authority exists,
+assume the story is the story it says it is, and know nothing of the stories
+beside it. A corrective batch puts the authority in question; a technical story
+puts its own qualification in question — "purely technical" is otherwise the
+door through which behaviour enters with no gate behind it, since a story that
+transcribes no block passes no opening review; a constraint is what the other
+stories of its batch rely on, so a story that cannot hold one cannot settle it
+alone; and an ADR is a decision your human partner took, so only they judge it
+untenable.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session
@@ -572,7 +561,7 @@ decision, is a `fixup!` of that commit.
 condition: no `Open ruling:` without a destination stands in the `Rulings log`.**
 
 Give it this next step: the next story, conducted by
-`supercharlouze:writing-a-user-story` from the batch document, with a prompt
+`supercharlouze:delivering-a-story` from the batch document, with a prompt
 that says to choose from the blocks no merged story has declared.
 
 If this story took the batch's last undelivered blocks, give it

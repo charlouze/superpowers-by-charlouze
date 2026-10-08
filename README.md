@@ -223,7 +223,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:opening-a-batch` | Opening a batch |
 | `supercharlouze:amending-a-batch` | Amending an open batch |
 | `supercharlouze:handling-a-stopped-story` | A story has stopped on a stop condition the flow adds |
-| `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
+| `supercharlouze:delivering-a-story` | Writing the next story of an open batch |
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
 | `supercharlouze:making-a-bounded-change` | A well-scoped change that needs no batch, or an ADR to write, rewrite or delete outside a batch |
 | `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |

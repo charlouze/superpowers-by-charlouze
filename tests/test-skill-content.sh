@@ -6,12 +6,12 @@ source "$(dirname "$0")/lib.sh"
 echo "test-skill-content"
 
 # Every document-producing skill states the language rule (Global Constraints, spec 10).
-for s in adopting-a-module opening-a-batch writing-a-batch-document writing-a-user-story closing-a-batch recording-a-decision; do
+for s in adopting-a-module opening-a-batch writing-a-batch-document delivering-a-story closing-a-batch recording-a-decision; do
     require "$s" "states the language rule" "English skeleton"
 done
 
 # Every document-producing skill sends its writer to the concision rules.
-for s in adopting-a-module opening-a-batch amending-a-batch writing-a-batch-document writing-a-user-story closing-a-batch recording-a-decision; do
+for s in adopting-a-module opening-a-batch amending-a-batch writing-a-batch-document delivering-a-story closing-a-batch recording-a-decision; do
     require "$s" "points at the concision rules" "follows \`Concision\` in \`supercharlouze:following-the-rules\`"
 done
 
@@ -159,7 +159,7 @@ require amending-a-batch "red flag: an amendment's ADR is reread" "| \"This amen
 require amending-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
 require writing-a-batch-document "an obvious design is still written" "An obvious design is still a design: write it."
 require closing-a-batch "an amendment already released what it dropped" "An entry an amendment took out of \`Scope\` is not among them: that amendment released it."
-require writing-a-user-story "an abandonment leaves closing the reservation no amendment released" "unless an amendment took its entry out of \`Scope\` and released it"
+require delivering-a-story "an abandonment leaves closing the reservation no amendment released" "unless an amendment took its entry out of \`Scope\` and released it"
 require closing-a-batch "an amendment's release is the one exception" "except an amendment that takes a reserved entry out of \`Scope\` and releases it"
 # What follows a stop lives in handling-a-stopped-story; using-batches only routes to it.
 require using-batches "a fired stop condition routes to handling-a-stopped-story" "When one of them fires, you stop, and \`supercharlouze:handling-a-stopped-story\` conducts what follows."
@@ -173,7 +173,7 @@ require amending-a-batch "the exemption question is asked again" \
     "Ask the exemption criterion again of the batch with its new block"
 require amending-a-batch "a stopped story is ruled on before it is amended for" \
     "**When a story has stopped and nothing is ruled yet, go to \`supercharlouze:handling-a-stopped-story\` first**"
-require writing-a-user-story "the human rules the block and its flag" \
+require delivering-a-story "the human rules the block and its flag" \
     "a block for the observable change, and the flag that block requires, if it requires one"
 require opening-a-batch "branch naming convention"                "batch/NN"
 
@@ -222,7 +222,7 @@ require handling-a-stopped-story "a rewritten batch goes to an amendment" \
 require handling-a-stopped-story "a different batch closes this one first" \
     "| The remaining work is a different batch | \`supercharlouze:closing-a-batch\` closes this batch, then \`supercharlouze:opening-a-batch\` opens the fresh one. |"
 require handling-a-stopped-story "a wanted change goes to an amendment, then to an ordinary story" \
-    "| The observable change of a technical story is wanted | \`supercharlouze:amending-a-batch\` adds its block. Once that pull request merges, \`supercharlouze:writing-a-user-story\` rewrites the work as an ordinary story of the amended batch. |"
+    "| The observable change of a technical story is wanted | \`supercharlouze:amending-a-batch\` adds its block. Once that pull request merges, \`supercharlouze:delivering-a-story\` rewrites the work as an ordinary story of the amended batch. |"
 require handling-a-stopped-story "an untenable constraint goes to an amendment" \
     "| A constraint is untenable | \`supercharlouze:amending-a-batch\` changes or removes it. |"
 require handling-a-stopped-story "an untenable ADR goes to a bounded change" \
@@ -563,180 +563,180 @@ done
 
 # --- opening-a-batch: ending the opening and amendment reviews ---
 require opening-a-batch "an opening ends its review with no condition and the first story as next step" \
-    "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: \`supercharlouze:writing-a-user-story\`, which starts from the batch document, with a prompt that says to choose the blocks from those the document still carries.**"
+    "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: \`supercharlouze:delivering-a-story\`, which starts from the batch document, with a prompt that says to choose the blocks from those the document still carries.**"
 require opening-a-batch "the merged document carries the design too" \
     "the exact text of every block and the technical design, which is what the design conversation was for"
 require amending-a-batch "an amendment ends its review with no condition and hands back to the batch" \
     "**To end the review of an amendment, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: whatever the batch was doing when it stopped, with the skill that conducts it, starting from the amended batch document.**"
 require opening-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
-# --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
-require writing-a-user-story "concurrency via declared Sections"  "Sections:"
-require writing-a-user-story "transcription is the first commit"  "first commit on the branch"
-require writing-a-user-story "freeze travels in Global Constraints" "Global Constraints"
-require writing-a-user-story "freeze ends when the PR opens"      "freeze is lifted when the pull request opens"
-require writing-a-user-story "hands off to writing-plans"         "superpowers:writing-plans"
-require writing-a-user-story "requires SDD"                       "superpowers:subagent-driven-development"
-require writing-a-user-story "constrains finishing to the PR"     "Push and create a Pull Request"
-require writing-a-user-story "records rulings before the merge"   "Rulings log"
-require writing-a-user-story "records observed drift"             "Observed drift"
-require writing-a-user-story "an open ruling has its own form"    "An open ruling is written \`Open ruling:\`"
-require writing-a-user-story "an open ruling says what is left"   "ends with what is left to settle, then with the gaps register category"
+# --- delivering-a-story (spec 3, 4.4, 5.1, 5.3) ---
+require delivering-a-story "concurrency via declared Sections"  "Sections:"
+require delivering-a-story "transcription is the first commit"  "first commit on the branch"
+require delivering-a-story "freeze travels in Global Constraints" "Global Constraints"
+require delivering-a-story "freeze ends when the PR opens"      "freeze is lifted when the pull request opens"
+require delivering-a-story "hands off to writing-plans"         "superpowers:writing-plans"
+require delivering-a-story "requires SDD"                       "superpowers:subagent-driven-development"
+require delivering-a-story "constrains finishing to the PR"     "Push and create a Pull Request"
+require delivering-a-story "records rulings before the merge"   "Rulings log"
+require delivering-a-story "records observed drift"             "Observed drift"
+require delivering-a-story "an open ruling has its own form"    "An open ruling is written \`Open ruling:\`"
+require delivering-a-story "an open ruling says what is left"   "ends with what is left to settle, then with the gaps register category"
 # The plan starts from the batch's technical design, and every departure is a
 # technical design ruling (spec section "Delivering a story").
-require writing-a-user-story "the plan starts from the technical design" \
+require delivering-a-story "the plan starts from the technical design" \
     "**The plan starts from the batch's \`Technical design\`**, and its \`Architecture:\` line derives from it."
-require writing-a-user-story "an ADR wins over the design, then main's code" \
+require delivering-a-story "an ADR wins over the design, then main's code" \
     "Exceptions: where an ADR contradicts the design, the plan follows the ADR; elsewhere, where the code on \`main\` has departed from the design, as an earlier story of the batch may have, the plan starts from the code."
-require writing-a-user-story "the plan reads docs/adr in the story's worktree" \
+require delivering-a-story "the plan reads docs/adr in the story's worktree" \
     "Read every ADR in \`docs/adr/\`, in this story's worktree, before writing the plan"
-require writing-a-user-story "no design, nothing to start from" \
+require delivering-a-story "no design, nothing to start from" \
     "A batch whose \`Technical design\` is \`none\` gives the plan nothing to start from."
 # Every departure, the plan's as well as the execution's, is recorded at Step 6.
-require writing-a-user-story "step 6 records every departure from the design" \
+require delivering-a-story "step 6 records every departure from the design" \
     "Write as a \`Technical design ruling:\`, with the three parts of a \`Ruling:\`, every departure from the batch's \`Technical design\` that the plan or the execution took, except where the plan follows an ADR or the code on \`main\`."
-require writing-a-user-story "answers review feedback"            "review feedback"
-require writing-a-user-story "an open ruling needs a destination"  "A story does not merge leaving an open ruling without a destination"
-require writing-a-user-story "the review is the last place to act" \
+require delivering-a-story "answers review feedback"            "review feedback"
+require delivering-a-story "an open ruling needs a destination"  "A story does not merge leaving an open ruling without a destination"
+require delivering-a-story "the review is the last place to act" \
     "Your human partner has the rulings in front of them here, and nowhere later."
-require writing-a-user-story "ends its review on the condition of its open rulings" \
+require delivering-a-story "ends its review on the condition of its open rulings" \
     "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it this condition: no \`Open ruling:\` without a destination stands in the \`Rulings log\`.**"
-require writing-a-user-story "story branch naming convention"     "story/NN"
-require writing-a-user-story "spec change states flag and default" "states the flag and its default"
-require writing-a-user-story "the gating sentence follows the story's module" "If the batch declares a feature flag for this story's module"
-require writing-a-user-story "one lifting story per module"       "one lifting story per guarded module"
-require writing-a-user-story "teardown story exists"              "teardown story"
-require writing-a-user-story "a technical story declares itself" \
+require delivering-a-story "story branch naming convention"     "story/NN"
+require delivering-a-story "spec change states flag and default" "states the flag and its default"
+require delivering-a-story "the gating sentence follows the story's module" "If the batch declares a feature flag for this story's module"
+require delivering-a-story "one lifting story per module"       "one lifting story per guarded module"
+require delivering-a-story "teardown story exists"              "teardown story"
+require delivering-a-story "a technical story declares itself" \
     "**A technical story carries \`Technical: yes\` in its header**"
-require writing-a-user-story "a technical story touches no section" \
+require delivering-a-story "a technical story touches no section" \
     "its \`Sections:\` is \`none\`"
-require writing-a-user-story "no other story carries that field" \
+require delivering-a-story "no other story carries that field" \
     "No other story carries that field"
-require writing-a-user-story "a fired stop condition routes to handling-a-stopped-story" \
+require delivering-a-story "a fired stop condition routes to handling-a-stopped-story" \
     "**When one of them fires, stop: \`supercharlouze:handling-a-stopped-story\` conducts what follows.**"
-require writing-a-user-story "a rule belongs to exactly one spec" "A rule belongs to exactly one spec."
-require writing-a-user-story "no ruling houses a rule twice"      "no ruling puts a rule in two places"
+require delivering-a-story "a rule belongs to exactly one spec" "A rule belongs to exactly one spec."
+require delivering-a-story "no ruling houses a rule twice"      "no ruling puts a rule in two places"
 
-# --- writing-a-user-story: what Global Constraints carries (spec section "The user story document") ---
-require writing-a-user-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
-require writing-a-user-story "GC carries the spec freeze"         "freeze of the spec file"
-require writing-a-user-story "GC carries the authority rule"      "That rule is the authority rule \`Global Constraints\` carries"
-require writing-a-user-story "the authority rule is stated in full" "the spec wins — without exception and without deliberation"
-require writing-a-user-story "GC carries the corrective stop condition" "the stop condition proper to a corrective batch, written out in full"
-require writing-a-user-story "GC lists the concision rules"       "- the concision rules;"
-require writing-a-user-story "GC carries the concision rules"     "In every story, \`Global Constraints\` carries the concision rules, written out in full"
-require writing-a-user-story "the concision block names what it covers" "These rules hold for every document, pull request body and commit message this story writes"
-require writing-a-user-story "GC carries the guarded-code rules"  "carries the rules for code under a flag, written out in full"
-require writing-a-user-story "GC carries the technical stop condition" "carries the stop condition proper to a technical story, written out in full"
-require writing-a-user-story "GC lists the technical stop condition" "- **in a technical story only**, the stop condition proper to a technical story"
-require writing-a-user-story "GC lists the stop condition on a constraint or an ADR" \
+# --- delivering-a-story: what Global Constraints carries (spec section "The user story document") ---
+require delivering-a-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
+require delivering-a-story "GC carries the spec freeze"         "freeze of the spec file"
+require delivering-a-story "GC carries the authority rule"      "That rule is the authority rule \`Global Constraints\` carries"
+require delivering-a-story "the authority rule is stated in full" "the spec wins — without exception and without deliberation"
+require delivering-a-story "GC carries the corrective stop condition" "the stop condition proper to a corrective batch, written out in full"
+require delivering-a-story "GC lists the concision rules"       "- the concision rules;"
+require delivering-a-story "GC carries the concision rules"     "In every story, \`Global Constraints\` carries the concision rules, written out in full"
+require delivering-a-story "the concision block names what it covers" "These rules hold for every document, pull request body and commit message this story writes"
+require delivering-a-story "GC carries the guarded-code rules"  "carries the rules for code under a flag, written out in full"
+require delivering-a-story "GC carries the technical stop condition" "carries the stop condition proper to a technical story, written out in full"
+require delivering-a-story "GC lists the technical stop condition" "- **in a technical story only**, the stop condition proper to a technical story"
+require delivering-a-story "GC lists the stop condition on a constraint or an ADR" \
     "- **only if the batch declares constraints or \`docs/adr/\` carries an ADR**, the stop condition on a constraint or an ADR that cannot be held"
-require writing-a-user-story "GC carries the stop condition on a constraint or an ADR" \
+require delivering-a-story "GC carries the stop condition on a constraint or an ADR" \
     "**In a story whose batch declares constraints, or whose \`docs/adr/\` carries an ADR, \`Global Constraints\` carries the stop condition on a constraint or an ADR that cannot be held, written out in full.**"
-require writing-a-user-story "a batch declares constraints when they are not none" \
+require delivering-a-story "a batch declares constraints when they are not none" \
     "A batch declares constraints when its \`Constraints\` section is not \`none\`."
-require writing-a-user-story "docs/adr carries an ADR when a .md file sits in it" \
+require delivering-a-story "docs/adr carries an ADR when a .md file sits in it" \
     "\`docs/adr/\` carries an ADR when a \`.md\` file is placed directly in it, in this story's worktree."
-require writing-a-user-story "working around a constraint or an ADR breaks what the implementer cannot see" \
+require delivering-a-story "working around a constraint or an ADR breaks what the implementer cannot see" \
     "A constraint is a decision another story of the batch relies on, and an ADR is a decision your human partner took for all the code to come, so an implementer who works around either breaks something they cannot see."
-require writing-a-user-story "step 5 names both triggers of the condition" \
+require delivering-a-story "step 5 names both triggers of the condition" \
     "In a story whose batch declares constraints or whose \`docs/adr/\` carries an ADR: if, while conducting it, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner."
-require writing-a-user-story "step 5 sets aside the constraint the spec contradicts" \
+require delivering-a-story "step 5 sets aside the constraint the spec contradicts" \
     "A constraint the spec contradicts is not this case, since the spec wins."
-require writing-a-user-story "the worktree carries the ADRs the code holds" \
+require delivering-a-story "the worktree carries the ADRs the code holds" \
     "the worktree carries the ADRs \`main\` carried when the branch started, which are the ones this story's code holds."
-require writing-a-user-story "an implementer leaves the ADR to the review" \
+require delivering-a-story "an implementer leaves the ADR to the review" \
     "Only your human partner decides an ADR, so an implementer who takes such a decision reports it and leaves the file to the review."
-require writing-a-user-story "GC lists the ADRs the code holds" \
+require delivering-a-story "GC lists the ADRs the code holds" \
     "- **only if \`docs/adr/\` carries an ADR**, the paths of the ADRs this story's code holds;"
-require writing-a-user-story "GC lists the conditions of an ADR" \
+require delivering-a-story "GC lists the conditions of an ADR" \
     "- the conditions of an ADR, with the obligation to record as an \`Open ruling:\` the decision that meets them."
-require writing-a-user-story "GC carries the paths of the ADRs" \
+require delivering-a-story "GC carries the paths of the ADRs" \
     "**When \`docs/adr/\` carries an ADR, \`Global Constraints\` lists the path of each one, under the sentence below.**"
-require writing-a-user-story "the sentence the paths sit under" \
+require delivering-a-story "the sentence the paths sit under" \
     "The code this story writes holds these ADRs."
-require writing-a-user-story "an ADR left out of the list binds nobody" \
+require delivering-a-story "an ADR left out of the list binds nobody" \
     "An implementer reads only this list, so an ADR whose path is missing from it binds nobody."
-require writing-a-user-story "GC carries the conditions of an ADR" \
+require delivering-a-story "GC carries the conditions of an ADR" \
     "**In every story, \`Global Constraints\` carries the conditions of an ADR, written out in full, with the obligation to record the decision that meets them.**"
-require writing-a-user-story "a task records the decision as an open ruling" \
+require delivering-a-story "a task records the decision as an open ruling" \
     "When you take a technical decision that meets them, say so in your report: it is recorded as an \`Open ruling:\`, which asks your human partner whether they want it as an ADR. Write nothing in \`docs/adr/\`."
-require writing-a-user-story "no task writes in docs/adr" \
+require delivering-a-story "no task writes in docs/adr" \
     "No task writes in \`docs/adr/\`. The ADR a decision of this story deserves is written at the review (Step 7), once your human partner wants it."
-require writing-a-user-story "step 6 records the decision that meets the conditions" \
+require delivering-a-story "step 6 records the decision that meets the conditions" \
     "Write as an \`Open ruling:\` every technical decision the plan or the execution took that meets the conditions of an ADR, its line ending with whether your human partner wants it as an ADR."
-require writing-a-user-story "the review settles the ADR" \
+require delivering-a-story "the review settles the ADR" \
     "If they want the ADR, invoke \`supercharlouze:recording-a-decision\` and commit the file it writes in a commit of its own."
-require writing-a-user-story "the human settles the open ruling on an ADR" \
+require delivering-a-story "the human settles the open ruling on an ADR" \
     "**Your human partner settles an open ruling on a decision that meets the conditions of an ADR.**"
-require writing-a-user-story "nothing written is recorded" \
+require delivering-a-story "nothing written is recorded" \
     "If nothing is written, record in the \`Rulings log\` what they ruled."
-require writing-a-user-story "a later correction of the ADR is a fixup" \
+require delivering-a-story "a later correction of the ADR is a fixup" \
     "A correction of the ADR's text asked for afterwards, which does not change its decision, is a \`fixup!\` of that commit."
-require writing-a-user-story "red flag: a departure left out surprises the review" \
+require delivering-a-story "red flag: a departure left out surprises the review" \
     "| \"My plan departs only slightly from the design, no ruling needed\" | Every departure is a \`Technical design ruling:\`. One left out reaches the delivery review as a surprise. |"
-require writing-a-user-story "red flag: the plan follows the ADR, then main's code" \
+require delivering-a-story "red flag: the plan follows the ADR, then main's code" \
     "| \"\`main\`'s code contradicts the design, so the design wins\" | The design only guides. Where an ADR contradicts it, the plan follows the ADR; elsewhere, where \`main\`'s code departed from it, the plan starts from the code. |"
-require writing-a-user-story "red flag: no task writes the ADR" \
+require delivering-a-story "red flag: no task writes the ADR" \
     "| \"This decision deserves an ADR, I'll write it with the code\" | No task writes in \`docs/adr/\`. Record an \`Open ruling:\`, and write the ADR at the review if your human partner wants it. |"
-require writing-a-user-story "red flag: a ruling replaces no stop condition" \
+require delivering-a-story "red flag: a ruling replaces no stop condition" \
     "| \"This constraint, or this ADR, cannot be held, I'll work around it and record a ruling\" | A ruling replaces no stop condition. Another story of the batch relies on that constraint, and your human partner decided that ADR: stop and put it to them. |"
-require writing-a-user-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
-require writing-a-user-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
+require delivering-a-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
+require delivering-a-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
 
-# --- writing-a-user-story: the rules a guarded story copies into Global
+# --- delivering-a-story: the rules a guarded story copies into Global
 # Constraints (spec section "Code under a feature flag") ---
-require writing-a-user-story "guarded code holds up in every situation" "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off:"
-require writing-a-user-story "both states work on the same data" "The two states work on the same data: what one produces, the other reads and uses, with no error and no data loss."
-require writing-a-user-story "flag off restores the former behaviour" "With the flag off, the user finds the behaviour from before the batch."
-require writing-a-user-story "both states and their coexistence are tested" "The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence."
-require writing-a-user-story "lifting only removes"               "Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new."
+require delivering-a-story "guarded code holds up in every situation" "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off:"
+require delivering-a-story "both states work on the same data" "The two states work on the same data: what one produces, the other reads and uses, with no error and no data loss."
+require delivering-a-story "flag off restores the former behaviour" "With the flag off, the user finds the behaviour from before the batch."
+require delivering-a-story "both states and their coexistence are tested" "The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence."
+require delivering-a-story "lifting only removes"               "Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new."
 require following-the-rules "the foundation states the rules for code under a flag" "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off:"
 
-# --- writing-a-user-story: Lifting and Teardown Stories ---
-require writing-a-user-story "an observation period is two stories" "the first moves the declared default of the gating sentence from \`off\` to \`on\`"
-require writing-a-user-story "declared default is not the effective state" "The declared default and the effective state are two different things"
-require writing-a-user-story "only a story changes the declared default" "Only a story changes the declared default"
+# --- delivering-a-story: Lifting and Teardown Stories ---
+require delivering-a-story "an observation period is two stories" "the first moves the declared default of the gating sentence from \`off\` to \`on\`"
+require delivering-a-story "declared default is not the effective state" "The declared default and the effective state are two different things"
+require delivering-a-story "only a story changes the declared default" "Only a story changes the declared default"
 
-# --- writing-a-user-story: the story's blocks (spec sections "Story",
+# --- delivering-a-story: the story's blocks (spec sections "Story",
 # "The user story document", "Delivering a story") ---
-require writing-a-user-story "a story knows its batch's stories"   "each knowing the stories of its batch already written"
-require writing-a-user-story "each story chooses its own blocks"  "chooses, as it is written, the blocks of the spec delta it transcribes"
-require writing-a-user-story "a block is never shared"            "a block is never shared between two stories"
-require writing-a-user-story "the header carries extra fields"     "extend the standard header with the fields below"
-require writing-a-user-story "the header template declares Blocks"  "**Blocks:** D3, D7"
+require delivering-a-story "a story knows its batch's stories"   "each knowing the stories of its batch already written"
+require delivering-a-story "each story chooses its own blocks"  "chooses, as it is written, the blocks of the spec delta it transcribes"
+require delivering-a-story "a block is never shared"            "a block is never shared between two stories"
+require delivering-a-story "the header carries extra fields"     "extend the standard header with the fields below"
+require delivering-a-story "the header template declares Blocks"  "**Blocks:** D3, D7"
 # A section title is skeleton, so the example header names English sections.
-require writing-a-user-story "the header example names English sections" "**Sections:** Subscription > Renewal, Subscription > Proration"
-require writing-a-user-story "Blocks is what closing reads"         "reads to find the blocks nobody delivered"
-require writing-a-user-story "Blocks is none when none is taken"    "\`none\` for a story that transcribes none"
-require writing-a-user-story "three properties are load-bearing"    "Three properties are load-bearing"
-require writing-a-user-story "transcription is word for word"       "exactly as the opening review read it"
-require writing-a-user-story "a diff block yields its paragraph"    "is transcribed as the paragraph it produces"
-require writing-a-user-story "main moved under a block's paragraph" "the paragraph a block changes no longer reads in \`main\` as the block shows it"
-require writing-a-user-story "a divergence is named in the PR"      "Every divergence from a block is named in the body of the pull request"
-require writing-a-user-story "main moved: fit the block"            "When \`main\` moved under a block, fit the block to what \`main\` now carries"
-require writing-a-user-story "a problematic block goes to the human" "When the block's text is a problem, stop and put it to your human partner before transcribing it"
-require writing-a-user-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
-require writing-a-user-story "no divergence amends the batch document" "Neither case amends the batch document"
-require writing-a-user-story "hands over to the next story" \
-    "Give it this next step: the next story, conducted by \`supercharlouze:writing-a-user-story\` from the batch document, with a prompt that says to choose from the blocks no merged story has declared."
-require writing-a-user-story "hands over to the closing after the last blocks" \
+require delivering-a-story "the header example names English sections" "**Sections:** Subscription > Renewal, Subscription > Proration"
+require delivering-a-story "Blocks is what closing reads"         "reads to find the blocks nobody delivered"
+require delivering-a-story "Blocks is none when none is taken"    "\`none\` for a story that transcribes none"
+require delivering-a-story "three properties are load-bearing"    "Three properties are load-bearing"
+require delivering-a-story "transcription is word for word"       "exactly as the opening review read it"
+require delivering-a-story "a diff block yields its paragraph"    "is transcribed as the paragraph it produces"
+require delivering-a-story "main moved under a block's paragraph" "the paragraph a block changes no longer reads in \`main\` as the block shows it"
+require delivering-a-story "a divergence is named in the PR"      "Every divergence from a block is named in the body of the pull request"
+require delivering-a-story "main moved: fit the block"            "When \`main\` moved under a block, fit the block to what \`main\` now carries"
+require delivering-a-story "a problematic block goes to the human" "When the block's text is a problem, stop and put it to your human partner before transcribing it"
+require delivering-a-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
+require delivering-a-story "no divergence amends the batch document" "Neither case amends the batch document"
+require delivering-a-story "hands over to the next story" \
+    "Give it this next step: the next story, conducted by \`supercharlouze:delivering-a-story\` from the batch document, with a prompt that says to choose from the blocks no merged story has declared."
+require delivering-a-story "hands over to the closing after the last blocks" \
     "If this story took the batch's last undelivered blocks, give it \`supercharlouze:closing-a-batch\` instead, from the same document."
-require writing-a-user-story "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
+require delivering-a-story "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
-# --- writing-a-user-story: what the spec leaves to the skill (sections
+# --- delivering-a-story: what the spec leaves to the skill (sections
 # "The user story document", "Delivering a story", "Abandoning a story") ---
 # The spec states the rules; these details are the method, and the skill is the
 # only place that still carries them.
-require writing-a-user-story "the NN- prefix keeps basenames unique" "The \`NN-\` prefix keeps basenames unique across batches"
-require writing-a-user-story "Spec: is the binding authority"       "\`Spec:\` is the field \`subagent-driven-development\` already reads as the binding authority"
-require writing-a-user-story "never the batch's whole delta"        "and never the batch's whole delta"
-require writing-a-user-story "an open batch has its opening merged" "Its opening pull request is merged and its document says \`status: open\`"
-require writing-a-user-story "the plan goes into the first commit's document" "Step 4 then writes the plan into that document rather than creating it"
-require writing-a-user-story "the plan is pushed immediately"       "and push it immediately"
-require writing-a-user-story "the records are pushed"               "Commit both on the branch and push, so they merge with it"
-require writing-a-user-story "the merge delivers the story"         "The story is delivered when its pull request is merged"
-require writing-a-user-story "abandoning goes through abandoning-a-story" "**To abandon a story, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch.**"
+require delivering-a-story "the NN- prefix keeps basenames unique" "The \`NN-\` prefix keeps basenames unique across batches"
+require delivering-a-story "Spec: is the binding authority"       "\`Spec:\` is the field \`subagent-driven-development\` already reads as the binding authority"
+require delivering-a-story "never the batch's whole delta"        "and never the batch's whole delta"
+require delivering-a-story "an open batch has its opening merged" "Its opening pull request is merged and its document says \`status: open\`"
+require delivering-a-story "the plan goes into the first commit's document" "Step 4 then writes the plan into that document rather than creating it"
+require delivering-a-story "the plan is pushed immediately"       "and push it immediately"
+require delivering-a-story "the records are pushed"               "Commit both on the branch and push, so they merge with it"
+require delivering-a-story "the merge delivers the story"         "The story is delivered when its pull request is merged"
+require delivering-a-story "abandoning goes through abandoning-a-story" "**To abandon a story, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch.**"
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "the preconditions read what closing consolidates" \
@@ -1341,7 +1341,7 @@ require following-the-rules "a contradicted constraint is not this case" \
     "A constraint the spec contradicts does not fall under this condition: the spec wins."
 require following-the-rules "a ruling would break a decision of the batch or of the human" \
     "and the condition on a constraint or an ADR would break a decision another story of the batch relies on, or one your human partner took for all the code to come."
-require using-batches "the justification covers the ADR" \
+require delivering-a-story "the justification covers the ADR" \
     "and an ADR is a decision your human partner took, so only they judge it untenable."
 
 # --- following-the-rules: the shape of a review's end ---
@@ -1359,7 +1359,7 @@ require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers s
 require making-a-bounded-change "a bounded change adds and removes entries"  "add an entry and delete one"
 require following-the-rules "the prompt waits for the merge"      "The prompt waits for the merge announcement, not for the announcement that the pull request is ready"
 
-# --- following-the-rules: guarded code rules (referencing writing-a-user-story) ---
+# --- following-the-rules: guarded code rules (referencing delivering-a-story) ---
 # The rules for code under a flag are written in full in the foundation, and
 # no other skill restates them in part: a partial gloss drifts from its text
 # with nothing to signal it.
@@ -1400,7 +1400,7 @@ require making-a-bounded-change "a bounded change carries no flag" \
 require making-a-bounded-change "red flag: a small fix that leaves the spec silent" \
         "| \"This is a small fix, the spec can stay silent about it\" | Only if nothing observable at the module's boundary changes."
 
-require writing-a-user-story "the story skill sends its transcription to the forms of the gating sentence" \
+require delivering-a-story "the story skill sends its transcription to the forms of the gating sentence" \
         "states the flag and its default in a gating sentence, in the form \`supercharlouze:following-the-rules\` fixes."
 require following-the-rules "the gating sentence names its variable parts" \
         "The flag's name, its default and its lifting condition vary; the rest of each form is fixed."
@@ -1490,7 +1490,7 @@ require following-the-rules "defines the gate" \
 require following-the-rules "defines the reread" \
         "**Reread** — an agent's check of a piece of work. A reread is not a gate."
 
-require writing-a-user-story "the cases of Blocks: none are examples" \
+require delivering-a-story "the cases of Blocks: none are examples" \
         "\`none\` for a story that transcribes none, such as a corrective batch's story, a technical story or a teardown story."
 
 # --- following-the-rules, the foundation ---

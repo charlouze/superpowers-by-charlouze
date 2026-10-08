@@ -15,7 +15,7 @@ absent_everywhere "no skill keeps a Live flags section or its rulings" \
 
 # A branch is started in one place, `starting-a-branch`. A skill that creates a
 # branch invokes it and passes the name of the branch.
-for s in adopting-a-module opening-a-batch amending-a-batch writing-a-user-story closing-a-batch making-a-bounded-change; do
+for s in adopting-a-module opening-a-batch amending-a-batch delivering-a-story closing-a-batch making-a-bounded-change; do
     require "$s" "invokes starting-a-branch with the name of the branch" \
         "nvoke \`supercharlouze:starting-a-branch\` and give it the name"
 done
@@ -27,7 +27,7 @@ require amending-a-batch "an amendment passes the name it chose" \
     "Invoke \`supercharlouze:starting-a-branch\` and give it the name you chose."
 require closing-a-batch "a closing passes batch/NN-<slug>-close" \
     "**Invoke \`supercharlouze:starting-a-branch\` and give it the name \`batch/NN-<slug>-close\`.**"
-require writing-a-user-story "a story passes story/NN-us-N-<slug>" \
+require delivering-a-story "a story passes story/NN-us-N-<slug>" \
     "Invoke \`supercharlouze:starting-a-branch\` and give it the name \`story/NN-us-N-<slug>\`."
 require making-a-bounded-change "a bounded change passes bounded/<slug>" \
     "invoke \`supercharlouze:starting-a-branch\` and give it the name \`bounded/<slug>\`"
@@ -45,11 +45,19 @@ case "$(body_flat "$REPO_ROOT/skills/opening-a-batch/SKILL.md")" in
 esac
 require opening-a-batch "the opening allocates NN from its reference" \
     "Allocate \`NN\` as \`skills/opening-a-batch/references/allocating-nn.md\` says"
-case "$(body_flat "$REPO_ROOT/skills/writing-a-user-story/SKILL.md")" in
+# A story keeps its allocation in a reference too, read at that step.
+case "$(body_flat "$REPO_ROOT/skills/delivering-a-story/references/allocating-us-n.md" 2>/dev/null || true)" in
     *"git fetch origin git ls-tree --name-only origin/main docs/batches/NN-<slug>/"*)
-        pass "writing-a-user-story: allocation fetches before it reads the remote" ;;
-    *)  fail "writing-a-user-story: allocation fetches before it reads the remote" ;;
+        pass "delivering-a-story: allocation fetches before it reads the remote" ;;
+    *)  fail "delivering-a-story: allocation fetches before it reads the remote" ;;
 esac
+case "$(body_flat "$REPO_ROOT/skills/delivering-a-story/SKILL.md")" in
+    *"git ls-tree"*|*"smallest integer"*)
+        fail "delivering-a-story: the allocation is written in its reference alone" ;;
+    *)  pass "delivering-a-story: the allocation is written in its reference alone" ;;
+esac
+require delivering-a-story "the story allocates us-N from its reference" \
+    "Allocate \`us-N\` as \`skills/delivering-a-story/references/allocating-us-n.md\` says"
 # How a branch is started is spelled there and nowhere else. Walks the declared
 # skills, so one declared later is covered.
 # shellcheck disable=SC2046
@@ -59,15 +67,15 @@ absent "no other skill restates the start of a branch" \
 
 # The concurrency scan lives in one place, `detecting-concurrency`. A skill
 # whose work claims sections invokes it, passes what varies and stops on what it
-# returns: `writing-a-user-story` for a story, `making-a-bounded-change` for the
+# returns: `delivering-a-story` for a story, `making-a-bounded-change` for the
 # bounded change.
-require writing-a-user-story "a story invokes detecting-concurrency with its spec and its sections" \
+require delivering-a-story "a story invokes detecting-concurrency with its spec and its sections" \
     "invoke \`supercharlouze:detecting-concurrency\` and give it the story's spec and those sections"
 require making-a-bounded-change "a bounded change invokes detecting-concurrency before creating its branch" \
     "Invoke \`supercharlouze:detecting-concurrency\` before creating \`bounded/<slug>\`, and give it that spec and those sections"
 require making-a-bounded-change "a redone detection receives the branch" \
     "invoke it again, and give it \`bounded/<slug>\` as well"
-for s in writing-a-user-story making-a-bounded-change; do
+for s in delivering-a-story making-a-bounded-change; do
     require "$s" "stops on what detecting-concurrency returns" \
         "Stop if it returns a conflict or a declaration it could not read"
 done
@@ -100,11 +108,11 @@ absent_everywhere "a branch with no declaration yet is not an unknown" \
 # writes a text a spec receives invokes it and restates nothing: a second
 # formulation of the same rule is what drifts. `adopting-a-module` writes a
 # spec's first version, `writing-a-batch-document` the blocks a spec will receive,
-# `writing-a-user-story` their transcription, and `making-a-bounded-change` the
+# `delivering-a-story` their transcription, and `making-a-bounded-change` the
 # spec update of a bounded change. `closing-a-batch` writes into no spec file.
 require writing-in-a-spec "states the question of the other-implementation test" \
     "read this sentence as true of their code"
-for s in making-a-bounded-change adopting-a-module writing-a-batch-document writing-a-user-story; do
+for s in making-a-bounded-change adopting-a-module writing-a-batch-document delivering-a-story; do
     require "$s" "invokes writing-in-a-spec before writing a text a spec receives" \
         "nvoke \`supercharlouze:writing-in-a-spec\` before"
 done
@@ -127,8 +135,8 @@ shared "the other-implementation test bears one name" \
 # invokes it and restates nothing: `adopting-a-module` creates the file and
 # removes the entry of a gap it promotes, `closing-a-batch` adds and releases,
 # `making-a-bounded-change` carries the bounded change, `opening-a-batch` reserves, `amending-a-batch`
-# releases, `writing-a-user-story` removes the entry its story resolves.
-for s in adopting-a-module closing-a-batch making-a-bounded-change opening-a-batch amending-a-batch writing-a-user-story; do
+# releases, `delivering-a-story` removes the entry its story resolves.
+for s in adopting-a-module closing-a-batch making-a-bounded-change opening-a-batch amending-a-batch delivering-a-story; do
     require "$s" "invokes writing-in-a-gaps-register before writing in a gaps register" \
         "nvoke \`supercharlouze:writing-in-a-gaps-register\` before"
 done
@@ -149,7 +157,7 @@ require adopting-a-module "the adoption writes the coverage from its audit" \
     "Write the register's \`Coverage\` from this audit"
 require adopting-a-module "a promotion gives the removal its reason" \
     "that is the reason the commit that removes it gives"
-require writing-a-user-story "a story adds no entry itself" \
+require delivering-a-story "a story adds no entry itself" \
     "Do not add those observations to the gaps register yourself"
 require closing-a-batch "the consolidation is written into each entry" \
     "write \"consolidated by batch NN\" into each entry that needs it, never above them"
@@ -159,20 +167,20 @@ require closing-a-batch "an undelivered block joins the register through the ges
     "invoke \`supercharlouze:writing-in-a-gaps-register\` and add it under **Gaps**"
 
 # The corrective batch's stop condition is copied "in full" into a story's
-# Global Constraints. `following-the-rules` states it and `writing-a-user-story` has it
+# Global Constraints. `following-the-rules` states it and `delivering-a-story` has it
 # copied; a copy that adds or drops a sentence is no longer the condition the
 # spec names. One assertion over both ends.
 shared "the corrective stop condition is copied exactly as stated" \
     "you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified." \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # The technical story's stop condition travels the same way: `following-the-rules`
-# states it and `writing-a-user-story` has it copied into a story's Global
+# states it and `delivering-a-story` has it copied into a story's Global
 # Constraints. Same argument as above — a copy that adds or drops a sentence is no
 # longer the condition the spec names. One assertion over both ends.
 shared "the technical stop condition is copied exactly as stated" \
     "If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical." \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # The stop condition on a constraint or an ADR that cannot be held travels the
 # same way, with the sentence that bounds it: an implementer who meets a
@@ -180,31 +188,31 @@ shared "the technical stop condition is copied exactly as stated" \
 # the case.
 shared "the stop condition on a constraint or an ADR is copied exactly as stated" \
     "If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner. A constraint the spec contradicts does not fall under this condition: the spec wins." \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # The condition no longer bears on a constraint alone, nor fires only in a batch
 # that declares constraints: the former wording must survive nowhere, or a story
 # with an ADR and no constraint would carry no stop condition.
 absent "the stop condition is no longer bounded to a constraint" \
     "a constraint of its batch cannot be held|constraint condition|whose batch declares constraints only" \
-    using-batches following-the-rules writing-a-user-story
+    using-batches following-the-rules delivering-a-story
 
 # The conditions of an ADR are copied into every story's Global Constraints.
-# `following-the-rules` states them and `writing-a-user-story` has them copied: a
+# `following-the-rules` states them and `delivering-a-story` has them copied: a
 # condition spelled differently in the copy is no longer the threshold the
 # human agreed to.
 shared "the conditions of an ADR are copied exactly as stated" \
     "A technical decision is recorded as an ADR only if it meets these conditions: - undoing it is expensive; - it surprises whoever does not know its context; - it settles between real alternatives." \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # An unrecorded departure is answered by the delivery review, not by what
 # closing does with the design: the former red flag must survive nowhere.
 absent "an unrecorded departure no longer leaves the design false" \
     "describing a mechanism nobody built" \
-    writing-a-user-story
+    delivering-a-story
 
 # The concision rules are copied into every story's Global Constraints.
-# `following-the-rules` states them and `writing-a-user-story` has them copied; a rule
+# `following-the-rules` states them and `delivering-a-story` has them copied; a rule
 # spelled differently in the copy is no longer the rule the implementers obey.
 # Only each rule's first sentence is pinned: the copy adapts the exception and
 # the gloss on relief for an implementer who reads nothing else.
@@ -215,19 +223,19 @@ for rule in \
     "A text says what it delivers or decides, without telling how it got there or why." \
     "No sentence is set in relief"; do
     shared "the concision rule is copied as stated: $rule" "$rule" \
-        following-the-rules writing-a-user-story
+        following-the-rules delivering-a-story
 done
 
 # The mirror: an item of Global Constraints is named, never counted or numbered.
 # An ordinal goes false in every paragraph the day an item is added or removed.
 absent "no Global Constraints item is counted or numbered" \
     "(first|second|third|fourth|fifth|sixth|seventh|eighth) thing|[0-9]\. the (constraints|freeze|authority|concision)|[0-9]\. \*\*in a " \
-    writing-a-user-story
+    delivering-a-story
 
 # The mirror: the story header does not count its fields.
 absent "the story header does not count its fields" \
     "(two|three|four|five|six|seven) fields|five on a technical story" \
-    writing-a-user-story
+    delivering-a-story
 
 # The three families that answer the exemption criterion by construction are
 # listed in the foundation. The skill that writes the `Feature flag` field
@@ -242,7 +250,7 @@ absent "no other skill spells the exemption families" \
     $(declared_skills | grep -vx following-the-rules)
 
 # `following-the-rules` fixes the forms of the gating sentence, and
-# `writing-a-user-story` points at it. Two spellings of the same sentence is how
+# `delivering-a-story` points at it. Two spellings of the same sentence is how
 # a live flag stops being found, so the forms are written out in one place only.
 require following-the-rules "the gating sentence is spelled in its fixed form" \
     "🔒 \`billing.recurring\`, off by default"
@@ -251,7 +259,7 @@ require following-the-rules "the gating sentence is spelled in its fixed form" \
 # rank: the one with a lifting condition is recognised by that condition.
 absent "no skill counts or ranks the forms of the gating sentence" \
     "gating sentence of the first form|or of the second when|one of the two forms" \
-    using-batches following-the-rules writing-a-user-story
+    using-batches following-the-rules delivering-a-story
 
 # A gap's *category* does not depend on where you stand; only its sources do. So
 # the skills that gloss it to route say what a gap is and never where it comes
@@ -290,7 +298,7 @@ absent_everywhere "no skill calls the spec delta an intention" \
 # field, which is the whole failure this locks out.
 shared "both ends spell the Blocks field alike" \
     "\`Blocks:\`" \
-    writing-a-user-story closing-a-batch
+    delivering-a-story closing-a-batch
 
 # The withdrawal duty reads the `Blocks:` declarations, not the specs: a block
 # fitted to a `main` that moved since the batch opened is delivered even though
@@ -325,7 +333,7 @@ absent "no other skill restates the form of a batch document" \
 # The end of a review is conducted in one place, `finishing-a-pr`. A skill whose
 # pull request is reviewed invokes it, and passes its conditions and its next
 # step.
-for s in adopting-a-module opening-a-batch amending-a-batch writing-a-user-story closing-a-batch; do
+for s in adopting-a-module opening-a-batch amending-a-batch delivering-a-story closing-a-batch; do
     require "$s" "ends its review by invoking finishing-a-pr" \
         "nvoke \`supercharlouze:finishing-a-pr\` and give it"
 done
@@ -350,7 +358,7 @@ absent_everywhere "no skill hands over the next step at the ready announcement" 
 # restored old one, so the old phrasing is what has to be absent.
 absent "the observation period is not described as enable-then-remove" \
     "split it into two stories" \
-    writing-a-user-story
+    delivering-a-story
 
 # Adoption never sharing the design's context is one coupling with two ends:
 # `opening-a-batch` states it as the reason its Preconditions stop, and
@@ -375,7 +383,7 @@ absent_everywhere "no skill carries the retired blocking-precondition wording" \
 # second formulation is what drifts.
 absent "only following-the-rules justifies dropping the directory precondition" \
     "Where you are standing does not matter" \
-    adopting-a-module opening-a-batch amending-a-batch writing-a-user-story closing-a-batch recording-a-decision
+    adopting-a-module opening-a-batch amending-a-batch delivering-a-story closing-a-batch recording-a-decision
 
 # One home per rule: `writing-in-a-spec` states that a rule belongs to exactly
 # one spec, and the skills that invoke it keep only what their own step does
@@ -384,7 +392,7 @@ require writing-in-a-spec "a rule belongs to exactly one spec, stated where it l
     "**A rule belongs to exactly one spec.** A rule that would constrain behaviour observable at the boundary of more than one module is not a rule looking for a home"
 
 # Each skill that invokes it names the rule where its own step stops on it.
-for s in adopting-a-module writing-a-batch-document writing-a-user-story; do
+for s in adopting-a-module writing-a-batch-document delivering-a-story; do
     require "$s" "names the rule its step stops on" "**A rule belongs to exactly one spec.**"
 done
 
@@ -426,13 +434,13 @@ absent_everywhere "no skill denies that the batch document changes at closing" \
 # calls would each stay green while one end drifted back to striking the entry.
 shared "a story with no block still deletes its entry that way" \
     "deletes the gaps register entry it resolves" \
-    writing-a-user-story following-the-rules
+    delivering-a-story following-the-rules
 
 # What that first commit carries besides the removal, so the branch holds a document
 # from its first commit and the plan has somewhere to be written at Step 4.
 shared "that first commit carries the story document's header" \
     "the header of the story document and its empty \`Rulings log\` and \`Observed drift\` sections" \
-    writing-a-user-story following-the-rules
+    delivering-a-story following-the-rules
 
 # The removal is not obligatory: a technical story removes nothing, so that first
 # commit carries the header alone. Both skills enumerate the removals, and an
@@ -440,7 +448,7 @@ shared "that first commit carries the story document's header" \
 # which would send a technical story looking for something to strike.
 shared "the removal is not obligatory" \
     "removes, if it removes anything" \
-    writing-a-user-story following-the-rules
+    delivering-a-story following-the-rules
 
 # The mirror: the case is no longer the corrective batch's alone, and a skill that
 # still scopes it there sends any other blockless story looking for a rule that
@@ -461,7 +469,7 @@ require writing-in-a-gaps-register "a removal says why in its commit" \
 
 # The gesture that abandons a story lives in one place, `abandoning-a-story`. A
 # skill that abandons a story invokes it and passes the story's branch.
-for s in handling-a-stopped-story writing-a-user-story; do
+for s in handling-a-stopped-story delivering-a-story; do
     require "$s" "invokes abandoning-a-story with the story's branch" \
         "invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
 done
@@ -555,7 +563,7 @@ require writing-in-a-gaps-register "entries do not point at each other" \
 # here is exactly how an agent ends up believing a story owes the spec a sentence.
 shared "the pairing is stated by the negation" \
     "never carries its spec change without the code that implements it" \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # The mirror. The positive assertion above stays green on a file that carries both
 # the negation and the old unconditional claim, and it is the old one an agent would
@@ -569,7 +577,7 @@ absent_everywhere "no skill pairs spec change and code unconditionally" \
 # from the stated one, and the implementers only ever read the copy.
 shared "the freeze is spelled alike wherever it is stated" \
     "Between the first commit of the branch and the opening of the pull request, no task modifies the spec file" \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # The mirror. A skill carrying both anchors would leave the positive assertion
 # green while still handing implementers the old one. The needle is the bare term:
@@ -593,7 +601,7 @@ absent_everywhere "no skill counts what an abandonment leaves on main" \
 # ends drifted into claiming a blockless story never touches the spec.
 shared "both skills name the blockless story that still changes the spec" \
     "teardown story removes from the spec what no block announced" \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # The unconditional claim the spec change removed: a bounded change used to be
 # said never to leave the spec silent. The positive assertion above would stay
@@ -749,7 +757,7 @@ absent_everywhere "no skill merely revises reservations" \
 # its pull request closed at the stop.
 absent "no skill closes a corrective story's pull request at the stop" \
     "Therefore: \*\*close the story's pull request|So: \*\*close the story's pull request|Abandon the story, closing its pull request|exactly as a requalified corrective story is abandoned" \
-    using-batches following-the-rules opening-a-batch amending-a-batch writing-a-user-story recording-a-decision handling-a-stopped-story
+    using-batches following-the-rules opening-a-batch amending-a-batch delivering-a-story recording-a-decision handling-a-stopped-story
 
 # using-batches routes a stopped story to handling-a-stopped-story: it neither
 # opens on what a requalification does not do nor copies its procedure.
@@ -761,7 +769,7 @@ absent "using-batches copies no requalification procedure" \
 # a skill that routes to it says nothing of the ruling nor of the abandonment.
 absent "no routing skill restates what follows a stop" \
     "conducts the requalification|rule a constraint untenable|rule an ADR untenable|requalification is ruled|decision goes to|or a corrective batch must be requalified" \
-    using-batches writing-a-user-story
+    using-batches delivering-a-story
 
 # A requalified technical story brings the flag its block requires, if any, not a
 # flag by default.
@@ -772,18 +780,18 @@ absent_everywhere "no skill makes a lost technical exemption declare a flag" \
 # story's module. The former unconditional sentence must not survive.
 absent "no story states a flag its module does not carry" \
     "If the batch declares a feature flag, the transcribed" \
-    writing-a-user-story
+    delivering-a-story
 
 # The mirror: the divergence rule says what to do, and no longer lists causes.
 absent "no story skill lists the causes of a divergence" \
     "legitimate cause" \
-    writing-a-user-story
+    delivering-a-story
 
 # The rules for code under a flag were rewritten. The former wording must survive
 # nowhere: the positive needles would stay green beside it.
 absent "no skill keeps the former guarded-code rules" \
     "Whatever way the project switches its flags|Switching off stays possible at all times|It holds four rules|coexisting on the same data|switching off is always possible|save for the data produced with the flag on" \
-    using-batches following-the-rules writing-a-user-story
+    using-batches following-the-rules delivering-a-story
 
 # The spec no longer fixes the form of the gating sentence; a skill does.
 absent_everywhere "no skill says the spec fixes the gating sentence's form" \
@@ -817,7 +825,7 @@ shared "drift covers code that contradicts the spec and behaviour no spec descri
     following-the-rules
 shared "observed drift takes both kinds of drift" \
     "Record under **Observed drift** the drift you noticed *outside* this story's scope: code that contradicts the spec, and behaviour no spec describes." \
-    writing-a-user-story
+    delivering-a-story
 
 # The spec names what a ruling carries; the skills keep the form of its line.
 shared "the skills keep the form of a ruling line" \
@@ -839,19 +847,19 @@ absent "a batch no longer lists only migration constraints" \
 # migration and compatibility, then the order — must not survive anywhere.
 absent "Constraints are no longer bounded to migration and order" \
     "migration and compatibility constraints,? and the required order" \
-    opening-a-batch amending-a-batch writing-a-batch-document using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
+    opening-a-batch amending-a-batch writing-a-batch-document using-batches following-the-rules delivering-a-story closing-a-batch recording-a-decision
 
 # A constraint is judged against the technical design, known at opening, never
 # against the stories, which do not exist yet.
 absent "no constraint is judged against the stories" \
     "without breaking another" \
-    opening-a-batch amending-a-batch writing-a-batch-document using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
+    opening-a-batch amending-a-batch writing-a-batch-document using-batches following-the-rules delivering-a-story closing-a-batch recording-a-decision
 
 # A story writes its departures from the design in the form the batch document
 # spells.
 shared "the batch and the story spell a technical design ruling alike" \
     "\`Technical design ruling:\`" \
-    writing-a-batch-document writing-a-user-story
+    writing-a-batch-document delivering-a-story
 
 # Both rereads dispatch their readers the same way. One assertion per rule over
 # both skills, so neither drifts alone.
@@ -884,7 +892,7 @@ absent "no reread reopens on every unread state" \
 
 # The technical reread knows none of the skills that invoke it.
 absent "the technical reread names no skill that invokes it" \
-    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|opening-a-batch|amending-a-batch|handling-a-stopped-story|making-a-bounded-change|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
+    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|opening-a-batch|amending-a-batch|handling-a-stopped-story|making-a-bounded-change|delivering-a-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
     rereading-a-technical-design
 
 # A reading is dispatched when its object exists: the sentence that gave every
@@ -917,7 +925,7 @@ absent "the opening counts no rereads" \
 # condition joined the corrective and the technical ones.
 absent "no skill counts the stop conditions the flow adds" \
     "adds (two|three|four)( stop)? conditions|adds (two|three|four)[.,]|(both|either|neither) (stop )?conditions?" \
-    using-batches following-the-rules writing-a-user-story opening-a-batch amending-a-batch recording-a-decision handling-a-stopped-story
+    using-batches following-the-rules delivering-a-story opening-a-batch amending-a-batch recording-a-decision handling-a-stopped-story
 
 # The rules of a bounded change are listed, never counted: a count goes false
 # the day a rule is added, as it did when the ADR rule joined them.
@@ -950,7 +958,7 @@ shared "an ADR this flow writes carries no date and no status, on both ends" \
 # The dependency runs one way: recording-a-decision knows none of the skills
 # that invoke it, and says nothing they would have to keep in step with.
 absent "recording-a-decision names no skill that invokes it" \
-    "opening-a-batch|amending-a-batch|writing-a-user-story|adopting-a-module|calling skill" \
+    "opening-a-batch|amending-a-batch|delivering-a-story|adopting-a-module|calling skill" \
     recording-a-decision
 
 # recording-a-decision is told not to commit, and not who does.
@@ -965,26 +973,26 @@ absent "the adoption does not copy the conditions of an ADR" \
     adopting-a-module
 
 # The rules for code under a flag are written in full in the foundation, and
-# `writing-a-user-story` has them copied into a story's Global Constraints. A
+# `delivering-a-story` has them copied into a story's Global Constraints. A
 # copy that adds or drops a rule is no longer what the foundation states. One
 # assertion over both ends.
 shared "the rules for code under a flag are copied exactly as stated" \
     "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off: - The two states work on the same data: what one produces, the other reads and uses, with no error and no data loss. - With the flag off, the user finds the behaviour from before the batch. - The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence. - Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new." \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # The story skill says where each text it has copied is stated.
-require writing-a-user-story "copies the rules for code under a flag as the foundation states them" \
+require delivering-a-story "copies the rules for code under a flag as the foundation states them" \
     "Copy the block below verbatim, exactly as \`supercharlouze:following-the-rules\` states it"
-require writing-a-user-story "takes the form of the gating sentence from the foundation" \
+require delivering-a-story "takes the form of the gating sentence from the foundation" \
     "in the form \`supercharlouze:following-the-rules\` fixes"
 absent "the story skill no longer claims to be where the rules for code under a flag are written" \
     "the only place those rules are written out" \
-    writing-a-user-story
+    delivering-a-story
 
 # No copied text is said to be stated by using-batches any more.
 absent "no copied text is attributed to using-batches" \
     "exactly as \`supercharlouze:using-batches\` states it|those \`supercharlouze:using-batches\` states" \
-    writing-a-user-story
+    delivering-a-story
 
 # What holds at every moment lives in the foundation, and an agent reads only
 # the skill it invoked: every entry skill starts by invoking it. Walks the
@@ -1002,7 +1010,7 @@ absent_everywhere "no skill points at using-batches for a rule the foundation ca
 # stated in the foundation and copied into a story's Global Constraints.
 shared "the open ruling obligation is copied exactly as stated" \
     "it is recorded as an \`Open ruling:\`, which asks your human partner whether they want it as an ADR. Write nothing in \`docs/adr/\`." \
-    following-the-rules writing-a-user-story
+    following-the-rules delivering-a-story
 
 # The prompt of the batch-document reader is pasted into the dispatch of a
 # subagent that loads no skill, so it copies what it needs from the skills that
@@ -1038,5 +1046,11 @@ absent "using-batches keeps no section the bounded path is sent to" \
 # A skill that sends work to a bounded change names the skill that carries it.
 absent_everywhere "no skill sends a bounded change to using-batches" \
     "bounded change, under .supercharlouze:using-batches"
+
+# The red flags of the story path live in delivering-a-story: using-batches
+# routes, and keeps none of them.
+absent "using-batches keeps no red flag of the story path" \
+    "local merge is quicker|transcribe the whole spec delta now" \
+    using-batches
 
 exit $((FAILURES > 0))

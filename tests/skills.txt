@@ -7,7 +7,7 @@ adopting-a-module entry
 opening-a-batch entry
 amending-a-batch entry
 handling-a-stopped-story entry
-writing-a-user-story entry
+delivering-a-story entry
 closing-a-batch entry
 making-a-bounded-change entry
 rereading-a-spec internal
