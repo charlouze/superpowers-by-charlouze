@@ -172,6 +172,9 @@ whose branch is `story/*` or `bounded/*`, and from every pushed `story/*` or
 not declared yet is read by the sections it has already changed. The branch
 name is the filter: only those branches claim sections, so a pull request that touches no spec at all is seen like any other.
 
+A piece of work about to touch one more section before its pull request opens
+runs the detection again for that section.
+
 Git is a partial net here, not the net. It conflicts on lines, not on sections,
 so two edits far apart inside one section merge cleanly — exactly the case worth
 catching.
