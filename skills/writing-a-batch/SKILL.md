@@ -16,6 +16,8 @@ pull request's review is the human gate: until it merges, no story is written.
 
 **Announce at start:** "I'm using the writing-a-batch skill to open batch NN."
 
+**Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
+
 Three entry points, all landing in a pull request:
 
 | Entry point | Section |
@@ -658,7 +660,7 @@ its consequences, then execute what is ruled.
 
 ## Requalifying a Technical Story
 
-**Trigger — the stop condition of a technical story.** `supercharlouze:using-batches`
+**Trigger — the stop condition of a technical story.** `supercharlouze:following-the-rules`
 states it and `supercharlouze:writing-a-user-story` copies it into the
 `Global Constraints` of every technical story: a story that discovers it changes
 something observable at its module's boundary is no longer technical. It reaches
@@ -698,7 +700,7 @@ project speaks. The prose is in the project's language: the scope, the
 spec delta, the justification of the flag decision. Slugs name business
 objects, so they follow the project's language too.
 
-Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+Every text this skill writes follows `Concision` in `supercharlouze:following-the-rules`.
 
 ## Red Flags
 

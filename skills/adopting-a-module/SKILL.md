@@ -27,6 +27,8 @@ adoption, or directly when your human partner asks for a module to be adopted.
 **Announce at start:** "I'm using the adopting-a-module skill to adopt the
 <module> module."
 
+**Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
+
 ## Source Authority
 
 Three ranks, and they never trade places:
@@ -169,8 +171,8 @@ descriptive.
   the document prescribes is no more admissible here than one you read in the
   code.
 - Exception: put to your human partner a technical decision the test ejects
-  that meets the conditions of an ADR, which `The Model` of
-  `supercharlouze:using-batches` states. If they want it as an ADR, invoke
+  that meets the conditions of an ADR, which
+  `supercharlouze:following-the-rules` states. If they want it as an ADR, invoke
   `supercharlouze:recording-a-decision`, and the ADR travels in the adoption
   pull request. Otherwise it becomes a gap.
 
@@ -429,7 +431,7 @@ headers, front matter values and path patterns are English, while requirement
 bodies, descriptions, rationale and the slugs naming business objects follow the
 project's language. The spec and the gaps register you write obey this rule.
 
-Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+Every text this skill writes follows `Concision` in `supercharlouze:following-the-rules`.
 
 ## Red Flags
 

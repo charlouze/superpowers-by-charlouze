@@ -39,19 +39,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Gaps
 
-- **Code under a feature flag / The user story document** — les quatre règles sont
-  écrites en entier à un seul endroit, `writing-a-user-story`, et trois
-  reformulations partielles en circulent ailleurs sans que rien ne les y rattache :
-  le renvoi de la doctrine du flag dans `using-batches`, une ligne `Red Flags` de la
-  même skill, et une troisième formulation de la règle du registre des flags. Aucune
-  spec ne dit ce qu'une glose doit à son texte canonique, ni combien de
-  reformulations partielles d'une même règle un module tolère. La division « écrit
-  en entier à un seul endroit, désigné ailleurs » tient aujourd'hui parce qu'aucune
-  de ces gloses n'est une reformulation complète, mais rien ne la soutient : une
-  glose peut dériver de son texte canonique sans que quoi que ce soit le signale, et
-  un lecteur se fier à la mauvaise. Relevée puis parquée par la story
-  `06-us-1-le-code-garde`. `reserved by batch-13`
-
 - **The spec document** — la règle « un renvoi nomme la section qu'il vise » n'est
   écrite dans aucune spec, et rien n'attrape un renvoi par la position. Le lot 01
   a été ouvert sur ce principe et a livré deux gardes, mais celle qui traque les

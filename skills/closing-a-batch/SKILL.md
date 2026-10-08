@@ -17,6 +17,8 @@ Every duty lands in one pull request, on a branch named `batch/NN-<slug>-close`.
 
 **Announce at start:** "I'm using the closing-a-batch skill to close batch NN."
 
+**Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
+
 ## Preconditions
 
 - **Every story is merged or its pull request is closed.** `gh pr list` is the authority. A story's state *is* its pull request's state — there is no checklist anywhere to reconcile against.
@@ -112,7 +114,7 @@ Then push and open the pull request. The **review of the closing pull request** 
 
 **English skeleton, project-language prose.** Section titles, field names, table headers, front matter values (`status: closed`), path patterns and branch patterns are English, everywhere and always. The prose you write — the body of a gaps register entry, an amended scope paragraph — follows the project's language, as do the slugs, which name business objects. This skill and every message it produces are English; the documents it writes carry both.
 
-Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+Every text this skill writes follows `Concision` in `supercharlouze:following-the-rules`.
 
 ## Red Flags
 

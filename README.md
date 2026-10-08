@@ -217,7 +217,8 @@ There is never an undeclared fifth one.
 
 | Skill | Use it when |
 |---|---|
-| `supercharlouze:using-batches` | Entry point — routing, authority rules, declared overrides |
+| `supercharlouze:using-batches` | Entry point — routing, what a spec says, declared overrides |
+| `supercharlouze:following-the-rules` | Never directly — the rules that hold at every moment of the flow, which the other skills and a story's plan invoke |
 | `supercharlouze:adopting-a-module` | A module has no living spec yet |
 | `supercharlouze:writing-a-batch` | Opening, amending or requalifying a batch |
 | `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
