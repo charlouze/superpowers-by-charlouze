@@ -100,11 +100,3 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   doit tenir et sur sa concision. `rereading-a-spec` lui pose aussi la question
   « Where does this sit in the model? », que l'étape 7 ne cite pas. Constatée par
   la story `11-us-4-le-module`, consolidée par la clôture du lot 11.
-
-- **Amending a batch** — la spec dit « Quand la condition d'arrêt d'une story
-  technique se déclenche, la story est abandonnée », donc dès l'arrêt. Abandonner
-  une story est pourtant une décision humaine : `writing-a-batch` et
-  `writing-a-user-story` gardent la branche et le worktree jusqu'à ce que l'humain
-  tranche. C'est la spec qui a tort, et la corriger est un acte humain. Constatée
-  par la story `11-us-5-le-lot`, consolidée par la clôture du lot 11.
-  `reserved by batch-13`

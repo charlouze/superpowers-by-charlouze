@@ -212,8 +212,13 @@ La fusion d'une revue est le moment de vider le contexte.
 Quand l'humain annonce une fusion et qu'une étape suivante existe, l'agent la nomme
 et donne le prompt qui la lance dans un contexte vide.
 
-Ce prompt nomme la skill à invoquer et le document d'où repartir, et ne renvoie
-jamais à la conversation.
+Quand une story arrêtée par une condition d'arrêt (`Departures from superpowers`)
+est abandonnée et que la décision de l'humain demande une étape suivante, l'agent
+la nomme et donne le prompt qui la lance dans un contexte vide, et ce prompt
+énonce cette décision.
+
+Chacun de ces prompts nomme la skill à invoquer et le document d'où repartir, et
+ne renvoie jamais à la conversation.
 
 ## Module
 
@@ -465,7 +470,8 @@ La story en cours est abandonnée une fois la requalification tranchée.
 Les entrées du gaps register que le lot ne prend plus en charge sont libérées.
 
 Quand la condition d'arrêt d'une story technique se déclenche, la story est
-abandonnée.
+abandonnée une fois que l'humain a tranché si le changement observable qu'elle a
+révélé est voulu.
 
 Si l'humain veut le changement observable qu'elle a révélé, un amendement ajoute
 son bloc, et le flag qu'il exige s'il en exige un (`Feature flags`).
