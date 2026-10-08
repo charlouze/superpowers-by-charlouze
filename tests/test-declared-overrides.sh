@@ -84,6 +84,44 @@ check_verb "finishing is constrained to the pull request option" \
     "this plugin constrains the choice to" \
     "constrains superpowers:finishing-a-development-branch to the pull request option"
 
+# using-batches writes in full the override on steps 6 to 9 alone. For each of
+# the others it declares the override and names the skill that writes it in
+# full: delivering-a-story.
+STORY_FLAT="$(tr '\n' ' ' < "$REPO_ROOT/skills/delivering-a-story/SKILL.md" | tr -s ' ')"
+POINTERS="$(grep -o "\`supercharlouze:delivering-a-story\` writes this override in full\." "$SKILL" | wc -l | tr -d ' ' || true)"
+if [ "$POINTERS" = "3" ]; then
+    pass "using-batches says where each of the three other overrides is written in full"
+else
+    fail "using-batches says where each of the three other overrides is written in full ($POINTERS found)"
+fi
+for needle in \
+    "this plugin requires \`superpowers:subagent-driven-development\`" \
+    "repatriating the rulings depends on SDD's ledger" \
+    "those arbitrations are the only record of where the spec was ambiguous" \
+    "the choice is constrained to **\"Push and create a Pull Request\"**" \
+    "**\"Merge back locally\" is actively destructive.**" \
+    "**\"Keep the branch as-is\" is not destructive**" \
+    "**Deliberately not an override:** SDD's terminal state." \
+    "know nothing of the stories beside it"; do
+    if has "$needle" "$STORY_FLAT"; then
+        pass "delivering-a-story writes the override in full: $needle"
+    else
+        fail "delivering-a-story writes the override in full: $needle"
+    fi
+done
+for needle in \
+    "Justification, stated exactly" \
+    "actively destructive" \
+    "keeps none" \
+    "know nothing of the stories beside it" \
+    "SDD's terminal state"; do
+    if has "$needle" "$SKILL_FLAT"; then
+        fail "using-batches no longer writes in full: $needle"
+    else
+        pass "using-batches no longer writes in full: $needle"
+    fi
+done
+
 if has "before any design work" "$BLOCK_FLAT" && has "before executing any plan" "$BLOCK_FLAT"; then
     pass "block requires invocation before design and before execution"
 else
