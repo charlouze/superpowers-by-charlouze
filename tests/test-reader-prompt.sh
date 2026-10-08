@@ -120,4 +120,11 @@ case "$FLAT" in
     *)  pass "the prompt neither counts the readings nor ranks a step" ;;
 esac
 
+# A reader loads no skill of the plugin: the prompt does not name the one that
+# runs the rounds.
+case "$FLAT" in
+    *"running-reread-rounds"*) fail "the prompt does not name the skill that runs the rounds" ;;
+    *)                         pass "the prompt does not name the skill that runs the rounds" ;;
+esac
+
 exit $((FAILURES > 0))

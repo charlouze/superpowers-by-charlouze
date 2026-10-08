@@ -138,14 +138,13 @@ that the skill is not available, so they can install it.
 
 ## Findings and Rounds
 
-Every reader returns before anything goes up. Wait for all of them and gather
-their findings, never a running report: a partial report gets findings ruled on
-that the next reader displaces, and asks for the same ruling twice.
+Once the first round is dispatched, invoke
+`supercharlouze:running-reread-rounds` and give it:
 
-You instruct the findings; you do not forward them. Fix each one on the
-technical design or the constraints without changing what they decide, or put it
-to your human partner when fixing it would: they approved what the design
-decides.
+- the technical design and the constraints, as the text the rounds revise;
+- the reading of the ADRs to reread, as a reading that goes out in the first
+  round only: no revision touches what it reads;
+- what becomes of each finding, stated below.
 
 A behaviour the design would make observable that no specification describes is
 always put to your human partner. It leaves the design, or your human partner
@@ -161,36 +160,9 @@ return it with what they ruled. Return the same way a finding on a block or on
 the design that they settle by having an ADR changed. This reread revises no
 ADR.
 
-Then put to your human partner what you changed and what you could not settle,
-and apply their rulings on the design. Forwarding raw findings makes your human
-partner arbitrate a draft, which is the work the review exists to spare them.
-
-A round runs on the revised text. Keep a copy of the state each round read: the
-next round's readers are handed it. These stop the rounds, and without them they
-chain indefinitely:
-
-- **A revision retouches.** Change only the sentences a finding names. A section
-  rewritten whole is a section no reader has read, and it sends every reading
-  out again.
-- **A later round reads the revision, and nothing else.** What a revision adds,
-  moves or rewords is unread; what it takes out reopens only what leaned on it,
-  coherence being a property of the state and not of the text that remains. A
-  revision that leaves nothing unread opens no round. Dispatch only the readings
-  the revision bears on: a reworded sentence goes back to the reading that found
-  it wanting, an added one to every reading. Hand each reader the state the
-  round before read, next to the revised one. The reading of the ADRs to reread
-  goes out in the first round only: no revision touches what it reads.
-- **A problem that comes back goes to your human partner.** Keep a ledger from
-  round to round: each finding's problem, the round that returned it, and what
-  you did with it. Recognise a finding by its problem, not by its words: a
-  reworded clause still carries the problem a reader found in it. When a second
-  round returns the same problem, put it to your human partner with the option
-  you recommend, and do not reword it a third time.
-- **The third round is the last you open.** After it, stop and put to your human
-  partner what is still open, with your recommendation. A further round runs
-  only on their decision.
-- **The reread prepares the review of the pull request that carries the design,
-  it does not replace it.**
+Any other finding is fixed on the technical design or the constraints without
+changing what they decide, or put to your human partner when fixing it would:
+they approved what the design decides.
 
 ## Red Flags
 
@@ -199,13 +171,9 @@ chain indefinitely:
 | "I wrote this design, I can reread it myself" | The context that wrote it rereads its intentions, not its text. Dispatch readers outside it. |
 | "One reader can take every reading, it is cheaper" | A reader holding several readings does the cheapest and returns. One reader per reading. |
 | "The reading is long, I'll summarise it in the prompt" | The reader has nothing else. Paste it word for word. |
-| "This reader is done, I'll put its findings up now" | The next reader may displace them. Wait for every reader. |
 | "This finding is right, I'll rework the design around it" | Your human partner approved what the design decides. Fix the wording, or put the change to them. |
 | "This behaviour is small, the design can carry it without a block" | What a user or a neighbouring module would observe needs a block. Put it to your human partner. |
 | "The design needs this rule, I'll write the block" | This reread writes no block. Put the behaviour to your human partner. |
-| "One more round, the design can still improve" | The third round is the last you open. After it, your human partner decides whether another runs. |
-| "This section reads better rewritten whole" | A rewritten section is unread, and sends every reading out again. Retouch the sentences a finding names. |
-| "I reworded the clause, so this finding is a new one" | A finding is its problem, not its words. Returned by a second round, it goes to your human partner. |
 | "The reader is right about this ADR, I'll fix its wording" | This reread revises no ADR. Put the finding to your human partner, and return it with what they ruled. |
 | "This block contradicts an ADR, I'll adjust the block" | This reread revises no block. Put the finding to your human partner. |
 | "The batch has no design, so there is nothing to reread" | A reading is dispatched when its object exists. An ADR the pull request writes is reread whatever the batch carries. |
