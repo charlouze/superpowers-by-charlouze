@@ -73,12 +73,39 @@ require delivering-a-story "a story invokes detecting-concurrency with its spec 
     "invoke \`supercharlouze:detecting-concurrency\` and give it the story's spec and those sections"
 require making-a-bounded-change "a bounded change invokes detecting-concurrency before creating its branch" \
     "Invoke \`supercharlouze:detecting-concurrency\` before creating \`bounded/<slug>\`, and give it that spec and those sections"
-require making-a-bounded-change "a redone detection receives the branch" \
-    "invoke it again, and give it \`bounded/<slug>\` as well"
+require making-a-bounded-change "a redone detection receives the section and the branch" \
+    "invoke it again, and give it that section and \`bounded/<slug>\` as well"
 for s in delivering-a-story making-a-bounded-change; do
     require "$s" "stops on what detecting-concurrency returns" \
         "Stop if it returns a conflict or a declaration it could not read"
 done
+# A story about to touch a section the detection was not run for detects again,
+# and passes its branch, which the scan leaves out. The rule is written in
+# `Step 1`; the steps where one more section turns up point at it.
+require delivering-a-story "a story detects again before it touches one more section" \
+    "**Detect again before the story touches a section the detection was not run for**, as long as its pull request is not open: invoke \`supercharlouze:detecting-concurrency\` again, and give it the story's spec, that section and the story's branch."
+require delivering-a-story "a section detected again joins the declaration before it is touched" \
+    "add the section to it, then commit and push before touching it"
+require delivering-a-story "the transcription waits for the detection of one more section" \
+    "**A block or a removal that reaches a section the detection was not run for is not written yet:** detect again first (Step 1)."
+require delivering-a-story "the plan's sections go through the detection before the story document is committed" \
+    "One the detection was not run for goes through it before the story document is committed (Step 1)."
+require delivering-a-story "a section a task reveals is detected before anything else is dispatched" \
+    "shows the story reaching a section \`Sections:\` does not name, detect again before dispatching anything else"
+# Both pieces of work stop a redone detection in the same words, and answer the
+# same excuse.
+for s in delivering-a-story making-a-bounded-change; do
+    require "$s" "stops on what a redone detection returns" \
+        "Stop again if it returns a conflict or a declaration it could not read"
+done
+shared "red flag: the first detection does not cover one more section" \
+    "| \"It's one more section of the same spec, the detection already ran\" | It ran for the sections it was given, and never looked at this one. Detect again before touching it, and stop if it is held or a declaration cannot be read. |" \
+    delivering-a-story making-a-bounded-change
+# The detection is redone for a section the work is about to touch, not for a
+# declaration that changed: a bounded change has no declaration before its pull
+# request opens.
+absent_everywhere "no skill redoes the detection on a changed declaration" \
+    "declaration that changes before the pull request opens|still cheap to undo"
 # What it carries is spelled there and nowhere else. Walks the declared skills,
 # so one declared later is covered.
 # shellcheck disable=SC2046
