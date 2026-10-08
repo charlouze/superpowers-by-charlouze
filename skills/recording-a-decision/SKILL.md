@@ -62,7 +62,7 @@ An ADR carries an English skeleton and prose in the project's language. The
 section titles `Considered options` and `Consequences` are skeleton. The title,
 the sentences and the file's slug are prose.
 
-Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+Every text this skill writes follows `Concision` in `supercharlouze:following-the-rules`.
 
 ## Red Flags
 

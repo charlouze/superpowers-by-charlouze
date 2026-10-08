@@ -12,25 +12,25 @@ done
 
 # Every document-producing skill sends its writer to the concision rules.
 for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision; do
-    require "$s" "points at the concision rules" "follows \`Concision\` in \`supercharlouze:using-batches\`"
+    require "$s" "points at the concision rules" "follows \`Concision\` in \`supercharlouze:following-the-rules\`"
 done
 
-# --- using-batches: concision ---
-require using-batches "concision covers every text the flow writes" "hold for every text this flow writes: its documents, its pull request bodies and its commit messages"
-require using-batches "one exact thing, once"              "Every sentence says one exact thing, once, and stands on its own"
-require using-batches "one rule per paragraph"             "Every paragraph carries one rule"
-require using-batches "a rule states its reach"            "A rule says how far it holds, and an exception presents itself as one"
-require using-batches "what, not how or why"               "A text says what it delivers or decides, without telling how it got there or why"
-require using-batches "the requested reason is the exception" "Exception: the reason this flow explicitly asks for"
-require using-batches "nothing set in relief"              "No sentence is set in relief"
-require using-batches "the cut test"                       "would a reader who never saw the previous version lose anything if this sentence went?"
-require using-batches "too little is as wrong as too much" "Too little is as wrong as too much"
-require using-batches "a list does not announce its count" "A list does not announce how many items it holds"
+# --- following-the-rules: concision ---
+require following-the-rules "concision covers every text the flow writes" "hold for every text this flow writes: its documents, its pull request bodies and its commit messages"
+require following-the-rules "one exact thing, once"              "Every sentence says one exact thing, once, and stands on its own"
+require following-the-rules "one rule per paragraph"             "Every paragraph carries one rule"
+require following-the-rules "a rule states its reach"            "A rule says how far it holds, and an exception presents itself as one"
+require following-the-rules "what, not how or why"               "A text says what it delivers or decides, without telling how it got there or why"
+require following-the-rules "the requested reason is the exception" "Exception: the reason this flow explicitly asks for"
+require following-the-rules "nothing set in relief"              "No sentence is set in relief"
+require following-the-rules "the cut test"                       "would a reader who never saw the previous version lose anything if this sentence went?"
+require following-the-rules "too little is as wrong as too much" "Too little is as wrong as too much"
+require following-the-rules "a list does not announce its count" "A list does not announce how many items it holds"
 
-# --- using-batches: conversation ---
-require using-batches "conversation follows concision"     "What the agent says to the human follows \`Concision\`"
-require using-batches "named by section and change"        "is named by the section it targets and what it changes there, never by its identifier alone"
-require using-batches "the identifier may follow"          "The identifier may follow in parentheses"
+# --- following-the-rules: conversation ---
+require following-the-rules "conversation follows concision"     "What the agent says to the human follows \`Concision\`"
+require following-the-rules "named by section and change"        "is named by the section it targets and what it changes there, never by its identifier alone"
+require following-the-rules "the identifier may follow"          "The identifier may follow in parentheses"
 
 # --- adopting-a-module (spec 6) ---
 require adopting-a-module "asks for the human's breakdown first" "Their breakdown comes before any of yours"
@@ -78,7 +78,7 @@ require adopting-a-module "promoting a gap removes its entry"        "an adoptio
 # --- adopting-a-module: the technical decision that meets the conditions of an
 # ADR (spec section "Module adoption") ---
 require adopting-a-module "step 4 puts such a decision to the human" \
-        "- Exception: put to your human partner a technical decision the test ejects that meets the conditions of an ADR, which \`The Model\` of \`supercharlouze:using-batches\` states."
+        "- Exception: put to your human partner a technical decision the test ejects that meets the conditions of an ADR, which \`supercharlouze:following-the-rules\` states."
 require adopting-a-module "the adoption has the ADR written" \
         "If they want it as an ADR, invoke \`supercharlouze:recording-a-decision\`, and the ADR travels in the adoption pull request. Otherwise it becomes a gap."
 require adopting-a-module "the reread's mechanisms follow the same exception" \
@@ -729,8 +729,7 @@ require writing-a-user-story "both states work on the same data" "The two states
 require writing-a-user-story "flag off restores the former behaviour" "With the flag off, the user finds the behaviour from before the batch."
 require writing-a-user-story "both states and their coexistence are tested" "The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence."
 require writing-a-user-story "lifting only removes"               "Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new."
-require using-batches "the guarded-code summary follows the rules" "both states working on the same data, the behaviour from before the batch with the flag off, each state and their coexistence tested, and a lifting that only removes"
-require using-batches "the guarded-code red flag follows the rules" "both states work on the same data, the flag off gives back the behaviour from before the batch, the pull request tests each state and their coexistence, and lifting only removes"
+require following-the-rules "the foundation states the rules for code under a flag" "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off:"
 
 # --- writing-a-user-story: Lifting and Teardown Stories ---
 require writing-a-user-story "an observation period is two stories" "the first moves the declared default of the gating sentence from \`off\` to \`on\`"
@@ -814,7 +813,7 @@ require closing-a-batch "names the merge a clear moment"      "is a moment to cl
 # Closing clears like every gate; what it lacks is a next step, so it alone hands
 # over no prompt. Two assertions because they are two claims: a skill that dropped
 # the second would send an agent inventing a step the model does not have. This is
-# the only place either claim is stated — the spec and `using-batches` carry the
+# the only place either claim is stated — the spec and `following-the-rules` carry the
 # general rule ("where a next step exists…"), which already implies the negative.
 require closing-a-batch "has no next step to name"            "no next step to name"
 require closing-a-batch "therefore hands over no prompt"      "hands over no prompt"
@@ -853,14 +852,14 @@ else
     pass "closing-a-batch: no longer rewrites the technical design"
 fi
 
-# --- using-batches: preconditions for every pull request of this system ---
-require using-batches "the directory it runs in does not matter"    "Where you are standing does not matter"
-require using-batches "a batch carries only what a spec cannot" "Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, its constraints and its technical design."
-require using-batches "defines the technical design" \
+# --- following-the-rules: preconditions for every pull request of this system ---
+require following-the-rules "the directory it runs in does not matter"    "Where you are standing does not matter"
+require following-the-rules "a batch carries only what a spec cannot" "Besides its spec delta, a batch carries only what a spec cannot carry: its scope, its flags, its constraints and its technical design."
+require following-the-rules "defines the technical design" \
         "**Technical design** — the mechanism a batch plans for its stories, each of which may depart from it."
-require using-batches "the spec binds, the design guides" \
+require following-the-rules "the spec binds, the design guides" \
         "the spec binds a story, the technical design only guides it"
-require using-batches "defines the technical design ruling" \
+require following-the-rules "defines the technical design ruling" \
         "**Technical design ruling** — a ruling by which a story departs from its batch's technical design."
 
 # --- using-batches: what a spec says (spec section "The spec document") ---
@@ -882,31 +881,31 @@ require using-batches "states the content rule itself"          "business rules 
 require using-batches "corollary: a rule outlives a mechanism"  "A rule does not move when a mechanism moves"
 require using-batches "corollary: no legislating on quality"    "does not legislate on code quality"
 require using-batches "carries the section it points at"        "## What a Spec Says"
-require using-batches "the glossary points at that section"     "see \`What a Spec Says\` below"
+require following-the-rules "the glossary states the content property" "it carries **business rules and intentions; the mechanism stays in the code**"
 require using-batches "a rule belongs to exactly one spec"  "A rule belongs to exactly one spec."
 require using-batches "a shared rule signals the breakdown" "it is a module breakdown asking to be revisited"
 require using-batches "a rule outside the specs binds nobody"  "sits beyond everything that makes a spec binding"
 
-# --- using-batches: the delta block (spec section "The model") ---
-require using-batches "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
-require using-batches "a block is transcribed word for word" "the exact text it must receive, transcribed word for word by a story"
+# --- following-the-rules: the delta block (spec section "The model") ---
+require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
+require following-the-rules "a block is transcribed word for word" "the exact text it must receive, transcribed word for word by a story"
 
-# --- using-batches: the technical story (spec section "The model") ---
-require using-batches "defines the technical story" \
+# --- following-the-rules: the technical story (spec section "The model") ---
+require following-the-rules "defines the technical story" \
     "**Technical story** — a story that changes nothing observable at its module's boundary."
-require using-batches "the qualification is declared" \
+require following-the-rules "the qualification is declared" \
     "a declared qualification, caught by its stop condition if it turns out to be false"
-require using-batches "a batch no longer promises behaviour" \
+require following-the-rules "a batch no longer promises behaviour" \
     "It groups several user stories, and targets one or more modules, hence one or more specs."
-require using-batches "a technical story has a stop condition too" \
+require following-the-rules "a technical story has a stop condition too" \
     "you discover that it changes something observable at the module's boundary, stop. The story is no longer technical."
-require using-batches "a ruling replaces no stop condition" \
+require following-the-rules "a ruling replaces no stop condition" \
     "A ruling replaces none of them"
-require using-batches "a story stops on a constraint or an ADR it cannot hold" \
+require following-the-rules "a story stops on a constraint or an ADR it cannot hold" \
     "If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner."
-require using-batches "a contradicted constraint is not this case" \
+require following-the-rules "a contradicted constraint is not this case" \
     "A constraint the spec contradicts does not fall under this condition: the spec wins."
-require using-batches "a ruling would break a decision of the batch or of the human" \
+require following-the-rules "a ruling would break a decision of the batch or of the human" \
     "and the condition on a constraint or an ADR would break a decision another story of the batch relies on, or one your human partner took for all the code to come."
 require using-batches "the justification covers the ADR" \
     "and an ADR is a decision your human partner took, so only they judge it untenable."
@@ -921,24 +920,28 @@ require using-batches "what holds resumes the story" \
 require writing-a-user-story "an untenable constraint abandons the story" \
     "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:writing-a-batch\` amends the constraint."
 
-# --- using-batches: the shape of a review's end ---
-require using-batches "the amendment gate covers the design and the constraints" "the decision to change its scope, its spec delta, its technical design, its constraints or its flag"
+# --- following-the-rules: the shape of a review's end ---
+require following-the-rules "the amendment gate covers the design and the constraints" "the decision to change its scope, its spec delta, its technical design, its constraints or its flag"
 require using-batches "routing names the design and the constraints" "A batch must change its scope, its spec delta, its technical design, its constraints or its flag"
-require using-batches "forbids the agent approving or merging" "never approves and never merges a pull request"
-require using-batches "pushes corrections as fixups"           "pushed as a \`fixup!\` commit"
-require using-batches "the agreement is given in conversation" "The human gives their agreement in the conversation"
-require using-batches "names the merge a clear moment"      "a moment to clear the context"
-require using-batches "the rule covers every gate"          "Merging any review is a moment to clear the context"
-require using-batches "the handover is conditional"         "Where a next step exists"
-require using-batches "the handover prompt stands alone"    "That prompt stands on its own"
+require following-the-rules "forbids the agent approving or merging" "never approves and never merges a pull request"
+require following-the-rules "pushes corrections as fixups"           "pushed as a \`fixup!\` commit"
+require following-the-rules "the agreement is given in conversation" "The human gives their agreement in the conversation"
+require following-the-rules "names the merge a clear moment"      "a moment to clear the context"
+require following-the-rules "the rule covers every gate"          "Merging any review is a moment to clear the context"
+require following-the-rules "the handover is conditional"         "Where a next step exists"
+require following-the-rules "the handover prompt stands alone"    "That prompt stands on its own"
 require using-batches "an unadopted module stops the design"     "the design stops"
 require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers steps 6 to 9 and nothing else"
 require using-batches "a bounded change adds and removes entries"  "add an entry and delete one"
-require using-batches "the prompt waits for the merge"      "The prompt waits for the merge announcement, not for the announcement that the pull request is ready"
+require following-the-rules "the prompt waits for the merge"      "The prompt waits for the merge announcement, not for the announcement that the pull request is ready"
 
-# --- using-batches: guarded code rules (referencing writing-a-user-story) ---
-require using-batches "guarded code has rules of its own" "Guarded code has rules of its own, and they travel into the plan"
-require using-batches "the guarded-code rules are written in one place" "a second copy of a rule is exactly what drifts"
+# --- following-the-rules: guarded code rules (referencing writing-a-user-story) ---
+# The rules for code under a flag are written in full in the foundation, and
+# no other skill restates them in part: a partial gloss drifts from its text
+# with nothing to signal it.
+require following-the-rules "the red flag on a flag that is just an if points at the rules" "on for everyone, and off, under the rules of \`Code Under a Feature Flag\`"
+absent_everywhere "no skill glosses the rules for code under a flag" \
+    "both states working on the same data|both states work on the same data|a lifting that only removes|lifting only removes"
 
 # `Refactor and infrastructure` named a family no `Spec delta` field could carry:
 # a batch of that kind has no block, and nothing said what its field held. Nothing
@@ -963,39 +966,39 @@ require using-batches "a bounded change touching no section declares none" \
 require using-batches "a changed declaration redoes the detection" \
         "redoes the detection"
 
-require writing-a-user-story "the story skill fixes the forms of the gating sentence" \
-        "states the flag and its default in a gating sentence, which adds its lifting condition when the declared scope reaches beyond the batch: \`\`\`markdown 🔒 \`billing.recurring\`, off by default 🔒 \`billing.recurring\`, off by default — lifted when"
-require writing-a-user-story "the gating sentence names its variable parts" \
+require writing-a-user-story "the story skill sends its transcription to the forms of the gating sentence" \
+        "states the flag and its default in a gating sentence, in the form \`supercharlouze:following-the-rules\` fixes."
+require following-the-rules "the gating sentence names its variable parts" \
         "The flag's name, its default and its lifting condition vary; the rest of each form is fixed."
-require using-batches "the form of the gating sentence comes from the story skill" \
-        "in one of the forms \`supercharlouze:writing-a-user-story\` fixes"
+require following-the-rules "the foundation gives the forms of the gating sentence" \
+        "as a gating sentence in one of these forms, which adds its lifting condition when the declared scope reaches beyond the batch:"
 
-require using-batches "a corrective batch's delta carries no block" \
+require following-the-rules "a corrective batch's delta carries no block" \
         "**Corrective batch** — a batch that brings existing code back into conformance with a spec that is already true. Its spec delta carries no block."
 
 # --- using-batches: the ADR (spec sections "The model", "Architecture decision
 # records" and "Bounded change") ---
-require using-batches "defines the ADR" \
+require following-the-rules "defines the ADR" \
         "**ADR** — the document that records a technical decision of the project and its reason: a \`.md\` file placed directly in \`docs/adr/\`, at \`docs/adr/<slug>.md\`."
 # The reference text of the conditions. Word for word: another skill copies it.
-require using-batches "the conditions of an ADR, word for word" \
+require following-the-rules "the conditions of an ADR, word for word" \
         "A technical decision is recorded as an ADR only if it meets these conditions: - undoing it is expensive; - it surprises whoever does not know its context; - it settles between real alternatives."
-require using-batches "the human decides every ADR" \
+require following-the-rules "the human decides every ADR" \
         "**Your human partner decides every ADR.** An agent neither writes, rewrites nor deletes one unless they have decided it."
-require using-batches "what is observable is a spec rule, never an ADR" \
+require following-the-rules "what is observable is a spec rule, never an ADR" \
         "What is observable at a module's boundary is a rule of that module's spec, never an ADR."
-require using-batches "an ADR contradicts no spec and no other ADR" \
+require following-the-rules "an ADR contradicts no spec and no other ADR" \
         "An ADR contradicts no spec and no other ADR."
-require using-batches "a replaced decision is rewritten in place" \
+require following-the-rules "a replaced decision is rewritten in place" \
         "An ADR whose decision is replaced is rewritten in place, and one whose decision is abandoned is deleted."
-require using-batches "the commit that rewrites or deletes an ADR says why" \
+require following-the-rules "the commit that rewrites or deletes an ADR says why" \
         "**The commit that rewrites or deletes an ADR says why.**"
-require using-batches "the adoption gate reviews the ADRs written with the spec" \
+require following-the-rules "the adoption gate reviews the ADRs written with the spec" \
         "| Module adoption | the pull request carrying the spec and the gaps register, and the ADRs written with them |"
 require using-batches "routing sends an ADR to a bounded change" \
         "| Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | A bounded change, under \`What Is Kept, What Is Rerouted\` below |"
 require using-batches "a decision with nothing observable has the ADR for outlet" \
-        "Exception: a sentence that states a technical decision has an ADR for outlet, under the conditions \`The Model\` states."
+        "Exception: a sentence that states a technical decision has an ADR for outlet, under the conditions \`supercharlouze:following-the-rules\` states."
 require using-batches "a decision housed outside the specs goes to an ADR" \
         "A technical decision that no module boundary makes observable is not a rule: its outlet is an ADR."
 require using-batches "the scope paragraph names both outlets" \
@@ -1006,15 +1009,15 @@ require using-batches "a bounded change writes, rewrites and deletes ADRs" \
         "**(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.**"
 require using-batches "a bounded change invokes recording-a-decision" \
         "Invoke \`supercharlouze:recording-a-decision\` to write or rewrite one. Delete yourself the one your human partner abandons, and correct yourself, on their decision, a text whose decision does not change."
-require using-batches "the code holds the ADRs main carries" \
+require following-the-rules "the code holds the ADRs main carries" \
         "The code of a story or of a bounded change holds the ADRs \`main\` carries when its branch starts."
-require using-batches "no ADR binds the code already on main" \
+require following-the-rules "no ADR binds the code already on main" \
         "No ADR binds the code already on \`main\`."
-require using-batches "the delivery gate carries the ADRs the review asks for" \
+require following-the-rules "the delivery gate carries the ADRs the review asks for" \
         "| Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |"
-require using-batches "the opening gate carries the ADRs changed with the batch document" \
+require following-the-rules "the opening gate carries the ADRs changed with the batch document" \
         "| Batch opening | the pull request carrying the batch document, and the ADRs written, rewritten or deleted with it |"
-require using-batches "the amendment gate carries the ADRs changed with the decision" \
+require following-the-rules "the amendment gate carries the ADRs changed with the decision" \
         "| Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag, and the ADRs written, rewritten or deleted with it |"
 require using-batches "the opening writes the ADRs the design decided" \
         "On the architectural path, \`supercharlouze:writing-a-batch\` writes, rewrites or deletes at the opening the ADRs they decide."
@@ -1025,7 +1028,7 @@ require using-batches "the design steps have the same exception" \
 require using-batches "the design reads docs/adr before proposing an approach" \
         "On the bounded path and on the architectural path, read every ADR in \`docs/adr/\` before proposing an approach"
 require using-batches "the design puts to the human the decision that meets the conditions" \
-        "put to your human partner each technical decision the design takes that meets the conditions of an ADR (\`The Model\`)"
+        "put to your human partner each technical decision the design takes that meets the conditions of an ADR \`supercharlouze:following-the-rules\` states"
 require using-batches "a bounded change holds the ADRs" \
         "**(f) It holds the ADRs \`main\` carries when its branch starts.**"
 require using-batches "a bounded change rereads docs/adr once its branch exists" \
@@ -1033,10 +1036,10 @@ require using-batches "a bounded change rereads docs/adr once its branch exists"
 require using-batches "a bounded change puts to the human the ADR it cannot hold" \
         "When you cannot hold an ADR, put it to your human partner: if they rule it untenable, rewrite or delete it under rule (e); otherwise hold it."
 require using-batches "a bounded change puts to the human the decision that meets the conditions" \
-        "**(g) It puts to your human partner the technical decision it takes that meets the conditions of an ADR (\`The Model\`).**"
+        "**(g) It puts to your human partner the technical decision it takes that meets the conditions of an ADR \`supercharlouze:following-the-rules\` states.**"
 require using-batches "a bounded change writes the ADR the human wants" \
         "If they want it as an ADR, write it under rule (e)."
-require using-batches "red flag: a decision is put to the human" \
+require following-the-rules "red flag: a decision is put to the human" \
         "| \"This decision is technical, no need to bring it to my human partner\" | If it meets the conditions of an ADR, put it to them: only they decide an ADR. |"
 require using-batches "an approach that breaks an ADR is not taken" \
         "An approach that breaks an ADR is one the code may not take, and only your human partner decides an ADR."
@@ -1045,15 +1048,59 @@ require using-batches "a bounded change's decision along the way is put to the h
 require using-batches "the design read may be stale" \
         "the design read it where you stood, and the branch starts from \`main\` as the remote carries it"
 
-# --- using-batches: the glossary terms of the review (spec section "The model") ---
-require using-batches "defines the pull request" \
+# --- following-the-rules: the glossary terms of the review (spec section "The model") ---
+require following-the-rules "defines the pull request" \
         "**Pull request** — a change proposed for \`main\`, which the human reviews before it reaches \`main\`."
-require using-batches "defines the gate" \
+require following-the-rules "defines the gate" \
         "**Gate** — the human's review of a pull request, whose merge moves a module, a batch or a story forward."
-require using-batches "defines the reread" \
+require following-the-rules "defines the reread" \
         "**Reread** — an agent's check of a piece of work. A reread is not a gate."
 
 require writing-a-user-story "the cases of Blocks: none are examples" \
         "\`none\` for a story that transcribes none, such as a corrective batch's story, a technical story or a teardown story."
+
+# --- following-the-rules, the foundation ---
+
+# The foundation is loaded by whoever executes a task of a plan, who loads no
+# other skill: a skill it named would be a text that reader never opens.
+foundation_skill_names="supercharlouze:|superpowers:|brainstorming|writing-plans|subagent-driven-development|executing-plans|finishing-a-development-branch|using-git-worktrees|receiving-code-review"
+for declared in $(declared_skills); do
+    [ "$declared" = "following-the-rules" ] && continue
+    foundation_skill_names="$foundation_skill_names|$declared"
+done
+absent "the foundation names no skill" "$foundation_skill_names" following-the-rules
+
+# Each execution rule has a name a story's Global Constraints can cite.
+for rule in "spec freeze" "spec authority" "concision" "corrective stop condition" \
+    "code under a feature flag" "technical stop condition" \
+    "untenable constraint or ADR" "held ADRs" "decision worth an ADR"; do
+    require following-the-rules "names the execution rule: $rule" "| \`$rule\` |"
+done
+
+# The rules for code under a flag are written in full in the foundation.
+require following-the-rules "guarded code holds up in the three states of the flag" \
+    "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off:"
+require following-the-rules "the two states work on the same data" \
+    "The two states work on the same data: what one produces, the other reads and uses, with no error and no data loss."
+require following-the-rules "the flag off gives back the behaviour from before the batch" \
+    "With the flag off, the user finds the behaviour from before the batch."
+require following-the-rules "the pull request tests each state and their coexistence" \
+    "The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence."
+require following-the-rules "lifting only removes" \
+    "Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new."
+
+# The foundation fixes the forms of the gating sentence.
+require following-the-rules "the gating sentence with a lifting condition" \
+    "🔒 \`billing.recurring\`, off by default — lifted when the \`facturation\` module is fully delivered"
+require following-the-rules "what varies in a gating sentence" \
+    "The flag's name, its default and its lifting condition vary; the rest of each form is fixed."
+
+# The foundation fixes the form of a prompt that starts a step in a fresh context.
+require following-the-rules "a next-step prompt stands on its own" \
+    "it names the skill to invoke and the document to start from, and never refers back to the conversation"
+
+# A decision that meets the conditions of an ADR is reported, never written.
+require following-the-rules "a decision worth an ADR is reported as an open ruling" \
+    "say so in your report: it is recorded as an \`Open ruling:\`, which asks your human partner whether they want it as an ADR. Write nothing in \`docs/adr/\`."
 
 exit $((FAILURES > 0))

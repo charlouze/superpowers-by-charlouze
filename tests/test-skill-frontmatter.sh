@@ -55,6 +55,35 @@ else
     fail "every skill declared internal has the form of one, and no other skill has ($OFFENDERS)"
 fi
 
+# The foundation is invoked by a skill or by a plan, never from the slash menu.
+# Its description asks for that call, and it stays invocable by the model:
+# whoever executes a task of a plan invokes it without a skill telling it to.
+FOUNDATIONS="$(declared_skills foundation | tr '\n' ' ')"
+if [ "$FOUNDATIONS" = "following-the-rules " ]; then
+    pass "following-the-rules is the one declared foundation"
+else
+    fail "following-the-rules is the one declared foundation (got: $FOUNDATIONS)"
+fi
+
+front="$(skill_front following-the-rules)"
+if printf '%s\n' "$front" | grep -qx 'user-invocable: false'; then
+    pass "following-the-rules is hidden from the slash menu"
+else
+    fail "following-the-rules is hidden from the slash menu"
+fi
+
+desc="$(printf '%s\n' "$front" | sed -n 's/^description:[[:space:]]*//p' | head -1)"
+case "$desc" in
+    "Use when a skill or a plan tells you to invoke following-the-rules"*)
+        pass "following-the-rules asks to be invoked when a skill or a plan says so" ;;
+    *)  fail "following-the-rules asks to be invoked when a skill or a plan says so" ;;
+esac
+
+case "$front" in
+    *"disable-model-invocation"*) fail "following-the-rules stays invocable by the model" ;;
+    *)                            pass "following-the-rules stays invocable by the model" ;;
+esac
+
 actual="$(ls "$SKILLS_DIR" | sort | tr '\n' ' ')"
 expected="$(declared_skills | sort | tr '\n' ' ')"
 if [ "$actual" = "$expected" ]; then

@@ -18,6 +18,8 @@ drift rule.
 **Announce at start:** "I'm using the writing-a-user-story skill to write this
 story."
 
+**Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
+
 This skill runs the whole cycle in one place — preconditions, concurrency
 detection, branch, spec change, plan, execution, records, review — because the
 pull request carries the story's state. There is nothing to repatriate
@@ -263,16 +265,8 @@ transcription against. The divergence lives in the pull request, where it is
 visible and gets ruled on.
 
 If the batch declares a feature flag for this story's module, the transcribed spec
-change states the flag and its default in a gating sentence, which adds its
-lifting condition when the declared scope reaches beyond the batch:
-
-```markdown
-🔒 `billing.recurring`, off by default
-🔒 `billing.recurring`, off by default — lifted when the `facturation` module is fully delivered
-```
-
-The flag's name, its default and its lifting condition vary; the rest of each form
-is fixed.
+change states the flag and its default in a gating sentence, in the form
+`supercharlouze:following-the-rules` fixes.
 
 The code you write next is guarded by that flag. Without this sentence a story
 merged behind a flag would make the spec false as users read it, and would
@@ -468,7 +462,7 @@ full. Copy the block below verbatim:
 
 **In a corrective batch, `Global Constraints` carries the stop condition proper
 to a corrective batch, written out in full.** Copy it verbatim,
-exactly as `supercharlouze:using-batches` states it:
+exactly as `supercharlouze:following-the-rules` states it:
 
 > If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
 
@@ -484,7 +478,7 @@ has to obey it.
 carries the rules for code under a flag, written out in full.**
 This holds whether the flag was declared by this story's batch or by another one:
 what decides is that this story writes guarded code, not which batch owns the
-flag. Copy the block below verbatim:
+flag. Copy the block below verbatim, exactly as `supercharlouze:following-the-rules` states it:
 
 > Code guarded by a feature flag holds up when the flag is on for some users
 > only, on for everyone, and off:
@@ -497,14 +491,13 @@ flag. Copy the block below verbatim:
 > - Lifting the flag comes down to deleting the branching and the behaviour
 >   from before the batch, without writing anything new.
 
-This block is the only place those rules are written out, and copying it is what
-puts them in front of the implementer — a norm nobody reads while writing the
-code bites on nothing. They travel the way the freeze does, through the only
-channel SDD's subagents read.
+Copying this block is what puts those rules in front of the implementer — a norm
+nobody reads while writing the code bites on nothing. They travel the way the
+freeze does, through the only channel SDD's subagents read.
 
 **In a technical story, `Global Constraints` carries the stop condition proper to
 a technical story, written out in full.** Copy it verbatim,
-exactly as `supercharlouze:using-batches` states it:
+exactly as `supercharlouze:following-the-rules` states it:
 
 > If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical.
 
@@ -522,7 +515,7 @@ ADR, `Global Constraints` carries the stop condition on a constraint or an ADR
 that cannot be held, written out in full.** A batch declares constraints when its
 `Constraints` section is not `none`. `docs/adr/` carries an ADR when a `.md` file
 is placed directly in it, in this story's worktree. Copy the block below
-verbatim, exactly as `supercharlouze:using-batches` states it:
+verbatim, exactly as `supercharlouze:following-the-rules` states it:
 
 > If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner.
 >
@@ -542,7 +535,7 @@ binds nobody.
 
 **In every story, `Global Constraints` carries the conditions of an ADR, written
 out in full, with the obligation to record the decision that meets them.** Copy
-the block below verbatim. Its conditions are those `supercharlouze:using-batches`
+the block below verbatim. Its conditions are those `supercharlouze:following-the-rules`
 states:
 
 > A technical decision is recorded as an ADR only if it meets these conditions:
@@ -819,7 +812,7 @@ documents.
   `Global Constraints`, `Files`, `Interfaces` — are that same rule already at
   work, not an exception you tolerate.
 
-Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+Every text this skill writes follows `Concision` in `supercharlouze:following-the-rules`.
 
 ## Red Flags
 

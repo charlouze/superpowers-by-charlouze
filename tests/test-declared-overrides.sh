@@ -23,6 +23,7 @@ fi
 # Flatten both files: a phrase must match regardless of how the prose is wrapped.
 SKILL_FLAT="$(tr '\n' ' ' < "$SKILL")"
 BLOCK_FLAT="$(tr '\n' ' ' < "$BLOCK")"
+FOUNDATION_FLAT="$(tr '\n' ' ' < "$REPO_ROOT/skills/following-the-rules/SKILL.md")"
 
 has() { case "$2" in *"$1"*) return 0 ;; *) return 1 ;; esac }
 
@@ -66,15 +67,15 @@ check_verb "steps 6 to 9 are replaced by writing-a-batch" \
     "are replaced by \`supercharlouze:writing-a-batch\`" \
     "replaces steps 6 to 9 of the architectural checklist"
 check_verb "the stop conditions are extended, not restated" \
-    "This plugin adds the conditions below. For corrective batches only:" \
+    "This plugin adds the stop conditions \`supercharlouze:following-the-rules\` writes in full" \
     "extends the stop conditions of superpowers:subagent-driven-development"
 
 # The condition on a constraint is introduced with both of its triggers: a batch
 # that declares constraints, or an ADR on `main`.
-if has "For a story only if its batch declares constraints or \`main\` carries an ADR when its branch starts:" "$SKILL_FLAT"; then
-    pass "using-batches introduces the stop condition on a constraint or an ADR"
+if has "For a story only if its batch declares constraints or \`main\` carries an ADR when its branch starts:" "$FOUNDATION_FLAT"; then
+    pass "following-the-rules introduces the stop condition on a constraint or an ADR"
 else
-    fail "using-batches introduces the stop condition on a constraint or an ADR"
+    fail "following-the-rules introduces the stop condition on a constraint or an ADR"
 fi
 check_verb "SDD is imposed as the execution mode" \
     "This plugin imposes SDD as the execution mode" \
@@ -110,13 +111,21 @@ else
     fail "using-batches forbids an undeclared fifth override"
 fi
 
-# The git model lives here and nowhere else (spec 5.1).
-for needle in "same pull request" "may ship to production" "feature flag" "drift"; do
-    if has "$needle" "$SKILL_FLAT"; then
-        pass "using-batches states: $needle"
+# The git model lives in following-the-rules and nowhere else (spec 5.1).
+for needle in "may ship to production" "feature flag" "drift"; do
+    if has "$needle" "$FOUNDATION_FLAT"; then
+        pass "following-the-rules states: $needle"
     else
-        fail "using-batches states: $needle"
+        fail "following-the-rules states: $needle"
     fi
 done
+
+# The bounded change's rule on updating the spec in the same pull request stays
+# in using-batches.
+if has "same pull request" "$SKILL_FLAT"; then
+    pass "using-batches states: same pull request"
+else
+    fail "using-batches states: same pull request"
+fi
 
 exit $((FAILURES > 0))
