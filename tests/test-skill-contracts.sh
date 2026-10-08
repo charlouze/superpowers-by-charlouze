@@ -1,92 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-FAILURES=0
-
-pass() { echo "  [PASS] $1"; }
-fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
+source "$(dirname "$0")/lib.sh"
 
 echo "test-skill-contracts"
-
-# Body only: everything after the closing --- of the frontmatter, flattened so a
-# phrase matches regardless of wrapping.
-# `tr -s ' '` squeezes runs of spaces to one, so a needle stays matchable when the
-# prose it targets is re-wrapped: without it, a wrapped line whose continuation is
-# indented flattens to several spaces where the needle has one, and the guard turns
-# red on text that is correct. No needle in this suite contains two consecutive
-# spaces, so squeezing changes nothing else.
-# The `sed` drops a leading blockquote marker, so a norm written as a block quote
-# flattens like any other prose and a needle may span two of its lines. Kept
-# identical to the helper in test-skill-content.sh: two flatteners of the same
-# name behaving differently is a trap for whoever writes the next needle.
-body_flat() {
-    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" \
-        | sed 's/^>[[:space:]]\{0,1\}//' | tr '\n' ' ' | tr -s ' '
-}
-
-# A coupling between two skills only holds if both ends spell it identically.
-# One assertion over several files, never one per file: two separate assertions
-# would both stay green while one end drifted away from the other.
-shared() {
-    local label="$1" needle="$2"
-    shift 2
-    local missing=""
-    local s f b
-    for s in "$@"; do
-        f="$REPO_ROOT/skills/$s/SKILL.md"
-        b=""
-        [ -f "$f" ] && b="$(body_flat "$f")"
-        case "$b" in
-            *"$needle"*) ;;
-            *) missing="$missing $s" ;;
-        esac
-    done
-    if [ -z "$missing" ]; then
-        pass "$label"
-    else
-        fail "$label (missing in:$missing)"
-    fi
-}
-
-# The mirror of `shared`: a claim that must survive nowhere. Used for a sentence
-# a spec change removed, which is otherwise guarded by nothing — the positive
-# assertions would stay green on a file that carried both the new phrasing and
-# the old, contradicting one.
-#
-# Matches an extended regular expression against the flattened body, not a
-# literal substring: the claim this test hunts is a denial ("nothing depends
-# on the branch name"), and the doctrine this branch establishes is written in
-# the same words, affirmatively ("Number allocation depends on the branch
-# name"). A literal match cannot tell the two apart and would turn red on the
-# true sentence, inviting the writer to delete it.
-#
-# Fails explicitly, naming the file, when a listed skill does not exist: an
-# empty body from a missing file never matches, and a silent pass there would
-# mean the assertion inspected nothing.
-absent() {
-    local label="$1" needle="$2"
-    shift 2
-    local found=""
-    local s f b
-    for s in "$@"; do
-        f="$REPO_ROOT/skills/$s/SKILL.md"
-        if [ ! -f "$f" ]; then
-            fail "$label (no such skill: $s)"
-            return
-        fi
-        b="$(body_flat "$f")"
-        if echo "$b" | grep -Eq "$needle"; then
-            found="$found $s"
-        fi
-    done
-    if [ -z "$found" ]; then
-        pass "$label"
-    else
-        fail "$label (present in:$found)"
-    fi
-}
 
 # The specs are the registry of flags: a batch that lifts a flag declared by
 # another says so in its spec delta, and nothing copies flags into the batch
@@ -726,7 +643,7 @@ absent "the batch rules neither count nor rank their steps and choices" \
     using-batches writing-a-batch
 
 # The specs carry no changelog any more. No shipped skill file names one:
-# frontmatter and references included, which `body_flat` would skip.
+# frontmatter included, which the content guards skip.
 CHANGELOG_HITS="$(grep -rli 'changelog' "$REPO_ROOT/skills" || true)"
 if [ -z "$CHANGELOG_HITS" ]; then
     pass "no skill file names a changelog"

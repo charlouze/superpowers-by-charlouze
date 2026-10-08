@@ -103,4 +103,29 @@ write_skill alpha "description: Use only when a skill tells you to invoke alpha,
 is "another skill carrying the description of an internal skill is reported" \
     "alpha carries the description of an internal skill" "$(internal_form_offenders)"
 
+# --- the reading tool ---
+build_fixture
+is "a reference is read whole, its --- lines included" \
+    "First line of the reference. --- A template field kept in the reference. " \
+    "$(body_flat "$SKILLS_DIR/alpha/references/note.md")"
+is "a skill is read after its front matter, block quotes flattened" \
+    " Alpha states its rule. a quoted norm that wraps over two lines " \
+    "$(body_flat "$SKILLS_DIR/alpha/SKILL.md")"
+
+# --- the content guards ---
+has "require finds a phrase in the skill's body" "[PASS]" \
+    "$(require alpha "body" "a quoted norm that wraps over two lines")"
+has "require finds a phrase in a reference of the skill" "[PASS]" \
+    "$(require alpha "reference" "A template field kept in the reference.")"
+has "require fails on a phrase the skill does not state" "[FAIL]" \
+    "$(require beta "reference of another skill" "A template field kept in the reference.")"
+has "shared names the skill that misses the phrase" "(missing in: beta)" \
+    "$(shared "coupling" "Alpha states its rule." alpha beta)"
+has "absent finds a claim in a reference of the skill" "(present in: alpha)" \
+    "$(absent "claim" "template field kept in the ref[a-z]+" alpha beta)"
+has "absent passes when no listed skill carries the claim" "[PASS]" \
+    "$(absent "claim" "retired wording" alpha beta)"
+has "absent fails on a skill that does not exist" "(no such skill: delta)" \
+    "$(absent "claim" "retired wording" alpha delta)"
+
 exit $((FAILURES > 0))

@@ -1,41 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-FAILURES=0
-
-pass() { echo "  [PASS] $1"; }
-fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
+source "$(dirname "$0")/lib.sh"
 
 echo "test-skill-content"
-
-# Body only: everything after the closing --- of the frontmatter, flattened so a
-# phrase matches regardless of wrapping.
-# `tr -s ' '` squeezes runs of spaces to one, so a needle stays matchable when the
-# prose it targets is re-wrapped: without it, a wrapped line whose continuation is
-# indented flattens to several spaces where the needle has one, and the guard turns
-# red on text that is correct. No needle in this suite contains two consecutive
-# spaces, so squeezing changes nothing else.
-# The `sed` drops a leading blockquote marker for the same reason: a norm written
-# as a block quote — the readings of `rereading-a-spec` are — would
-# otherwise flatten with a stray `>` at every line break, and a needle spanning
-# two of its lines could never match. No needle in this suite contains `>`.
-body_flat() {
-    awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$1" \
-        | sed 's/^>[[:space:]]\{0,1\}//' | tr '\n' ' ' | tr -s ' '
-}
-
-require() {
-    local skill="$1" label="$2" needle="$3"
-    local f="$REPO_ROOT/skills/$skill/SKILL.md"
-    local b=""
-    [ -f "$f" ] && b="$(body_flat "$f")"
-    case "$b" in
-        *"$needle"*) pass "$skill: $label" ;;
-        *)           fail "$skill: $label" ;;
-    esac
-}
 
 # Every document-producing skill states the language rule (Global Constraints, spec 10).
 for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision; do
