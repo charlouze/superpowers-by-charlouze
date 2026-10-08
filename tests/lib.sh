@@ -181,3 +181,12 @@ absent() {
         fail "$label (present in:$found)"
     fi
 }
+
+# `absent` over every declared skill. A negative guard that holds for all the
+# skills uses it, so a skill declared later is covered without touching the
+# guard.
+absent_everywhere() {
+    local label="$1" needle="$2"
+    # shellcheck disable=SC2046
+    absent "$label" "$needle" $(declared_skills)
+}

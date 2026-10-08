@@ -127,5 +127,9 @@ has "absent passes when no listed skill carries the claim" "[PASS]" \
     "$(absent "claim" "retired wording" alpha beta)"
 has "absent fails on a skill that does not exist" "(no such skill: delta)" \
     "$(absent "claim" "retired wording" alpha delta)"
+has "absent_everywhere reaches every declared skill" "(present in: gamma)" \
+    "$(absent_everywhere "claim" "retired wording")"
+has "absent_everywhere passes when no declared skill carries the claim" "[PASS]" \
+    "$(absent_everywhere "claim" "a claim nobody makes")"
 
 exit $((FAILURES > 0))
