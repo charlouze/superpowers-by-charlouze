@@ -9,7 +9,7 @@ description: Use when every user story of a batch is merged or abandoned - conso
 
 A batch closes when every one of its user stories is merged or abandoned and the human judges the work finished. Closing is not bookkeeping. It is the only moment in the lifecycle where the residue left on `main` gets collected.
 
-It is also the only moment in a batch's normal course that touches the batch document itself: *Withdraw the blocks no story delivered* removes them from it, and *Set status: closed* flips its front matter. Anything else that would edit the document goes through an amendment pull request of its own, which `supercharlouze:writing-a-batch` owns.
+It is also the only moment in a batch's normal course that touches the batch document itself: *Withdraw the blocks no story delivered* removes them from it, and *Set status: closed* flips its front matter. Anything else that would edit the document goes through an amendment pull request of its own, which `supercharlouze:amending-a-batch` owns.
 
 Abandoning a story is almost free: closing its pull request without merging throws away its code, and its spec change if it had one — nothing to revoke, no spec left out of step. But what it never touched is still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the blocks the batch announced in its spec delta. Either may be absent — a batch with no blocks announced none, a batch that reserved nothing left nothing to release — so what closing owes here is a look at both, not a tally. **Nothing else picks them up**, except an amendment that takes a reserved entry out of `Scope` and releases it. If closing skips a duty, that duty is simply never done.
 
@@ -51,7 +51,7 @@ Refusing is not a dead end. Report the surviving flag and present the **three ex
 | Exit | What it does | Form |
 |---|---|---|
 | Lift | Ships what exists: removes the branching in the code and the gating sentence in the spec | A lifting story, written with `supercharlouze:writing-a-user-story` — one per guarded module |
-| Extend the scope | Defers the decision to a later batch by declaring the flag's extended scope and its lifting condition | An amendment pull request on the batch document, written with `supercharlouze:writing-a-batch` — its *Amending a Batch* section owns this path — and reviewed like any other |
+| Extend the scope | Defers the decision to a later batch by declaring the flag's extended scope and its lifting condition | An amendment pull request on the batch document, written with `supercharlouze:amending-a-batch` and reviewed like any other |
 | Tear down | Removes the guarded code and the corresponding spec change | A teardown story, written with `supercharlouze:writing-a-user-story` |
 
 Then stop and wait. Do not close the batch under an undeclared surviving flag "to be tidied up later" — that is the outcome this duty exists to prevent. And do not leave the batch open indefinitely either: without these three exits, the refusal would manufacture exactly the dead flagged code it is meant to prevent.
