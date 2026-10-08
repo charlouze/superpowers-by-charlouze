@@ -92,7 +92,7 @@ esac
 
 # The prompt names no skill of the plugin.
 case "$FLAT" in
-    *"supercharlouze:"*|*"using-batches"*|*"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"handling-a-stopped-story"*|*"making-a-bounded-change"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"rereading-a-spec"*|*"recording-a-decision"*|*"running-reread-rounds"*)
+    *"supercharlouze:"*|*"using-batches"*|*"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"handling-a-stopped-story"*|*"making-a-bounded-change"*|*"delivering-a-story"*|*"closing-a-batch"*|*"rereading-a-spec"*|*"recording-a-decision"*|*"running-reread-rounds"*)
         fail "the prompt names no skill of the plugin" ;;
     *)  pass "the prompt names no skill of the plugin" ;;
 esac

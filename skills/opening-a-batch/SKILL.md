@@ -77,7 +77,7 @@ and give it this batch's `NN` and its slug.
 
 This pull request does **no writing into the specs**. No block is transcribed at
 opening: each one is transcribed by a story, in that story's own pull request
-(`supercharlouze:writing-a-user-story`). Transcribing the whole delta now would
+(`supercharlouze:delivering-a-story`). Transcribing the whole delta now would
 put behaviour into the spec that no code delivers — drift by definition, and the
 reviewers of a story would then report as missing what is merely not built yet.
 
@@ -167,7 +167,7 @@ the written spec becomes this pull request review. The human review is not
 removed; it changes tool, into the one where you already review everything else.
 
 **To end the review, invoke `supercharlouze:finishing-a-pr` and give it no
-condition, and this next step: `supercharlouze:writing-a-user-story`, which
+condition, and this next step: `supercharlouze:delivering-a-story`, which
 starts from the batch document, with a prompt that says to choose the blocks
 from those the document still carries.**
 

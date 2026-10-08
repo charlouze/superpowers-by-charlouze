@@ -120,7 +120,7 @@ esac
 # direct use and names none of the skills that invoke it.
 DROW="$(grep -F '`supercharlouze:recording-a-decision`' "$REPO_ROOT/README.md" || true)"
 case "$DROW" in
-    *"making-a-bounded-change"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"adopting-a-module"*|*"invoked by"*)
         fail "the README row of recording-a-decision names no caller" ;;
     *)  pass "the README row of recording-a-decision names no caller" ;;
 esac
@@ -133,7 +133,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 WROW="$(grep -F '`supercharlouze:writing-in-a-spec`' "$REPO_ROOT/README.md" || true)"
 case "$WROW" in
-    *"making-a-bounded-change"*|*"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"adopting-a-module"*|*"invoked by"*)
         fail "the README row of writing-in-a-spec names no caller" ;;
     *)  pass "the README row of writing-in-a-spec names no caller" ;;
 esac
@@ -147,7 +147,7 @@ esac
 # invoke it.
 GROW="$(grep -F '`supercharlouze:writing-in-a-gaps-register`' "$REPO_ROOT/README.md" || true)"
 case "$GROW" in
-    *"making-a-bounded-change"*|*"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"closing-a-batch"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"adopting-a-module"*|*"closing-a-batch"*|*"invoked by"*)
         fail "the README row of writing-in-a-gaps-register names no caller" ;;
     *)  pass "the README row of writing-in-a-gaps-register names no caller" ;;
 esac
@@ -160,7 +160,7 @@ esac
 # says it is not for direct use and names none of the skills that invoke it.
 CROW="$(grep -F '`supercharlouze:detecting-concurrency`' "$REPO_ROOT/README.md" || true)"
 case "$CROW" in
-    *"making-a-bounded-change"*|*"using-batches"*|*"writing-a-user-story"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"using-batches"*|*"delivering-a-story"*|*"invoked by"*)
         fail "the README row of detecting-concurrency names no caller" ;;
     *)  pass "the README row of detecting-concurrency names no caller" ;;
 esac
@@ -173,7 +173,7 @@ esac
 # it is not for direct use and names none of the skills that invoke it.
 AROW="$(grep -F '`supercharlouze:abandoning-a-story`' "$REPO_ROOT/README.md" || true)"
 case "$AROW" in
-    *"opening-a-batch"*|*"amending-a-batch"*|*"handling-a-stopped-story"*|*"writing-a-user-story"*|*"invoked by"*)
+    *"opening-a-batch"*|*"amending-a-batch"*|*"handling-a-stopped-story"*|*"delivering-a-story"*|*"invoked by"*)
         fail "the README row of abandoning-a-story names no caller" ;;
     *)  pass "the README row of abandoning-a-story names no caller" ;;
 esac
@@ -228,7 +228,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 BROW="$(grep -F '`supercharlouze:starting-a-branch`' "$REPO_ROOT/README.md" || true)"
 case "$BROW" in
-    *"making-a-bounded-change"*|*"using-batches"*|*"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"using-batches"*|*"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"closing-a-batch"*|*"invoked by"*)
         fail "the README row of starting-a-branch names no caller" ;;
     *)  pass "the README row of starting-a-branch names no caller" ;;
 esac
@@ -241,7 +241,7 @@ esac
 # not for direct use and names none of the skills that invoke it.
 FROW="$(grep -F '`supercharlouze:finishing-a-pr`' "$REPO_ROOT/README.md" || true)"
 case "$FROW" in
-    *"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
+    *"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"closing-a-batch"*|*"invoked by"*)
         fail "the README row of finishing-a-pr names no caller" ;;
     *)  pass "the README row of finishing-a-pr names no caller" ;;
 esac
@@ -468,6 +468,15 @@ if [ "$FORMER" = "0" ]; then
     pass "no skill, no command and not the README names writing-a-batch"
 else
     fail "no skill, no command and not the README names writing-a-batch ($FORMER found)"
+fi
+
+# 10. `writing-a-user-story` was renamed `delivering-a-story`. The former name
+#     survives in no skill, in no command and not in the README.
+FORMER_STORY="$(grep -rn 'writing-a-user-story' "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/README.md" 2>/dev/null | wc -l | tr -d ' ' || true)"
+if [ "$FORMER_STORY" = "0" ]; then
+    pass "no skill, no command and not the README names writing-a-user-story"
+else
+    fail "no skill, no command and not the README names writing-a-user-story ($FORMER_STORY found)"
 fi
 
 exit $((FAILURES > 0))

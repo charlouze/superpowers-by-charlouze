@@ -30,7 +30,7 @@ pull request states it.
 
 Both patterns are scanned because both spell `NN`, but they do not carry the
 same weight. On the nominal path the `story/*` half finds nothing new:
-`supercharlouze:writing-a-user-story` requires the batch's opening pull request
+`supercharlouze:delivering-a-story` requires the batch's opening pull request
 to be **merged** before any story is written, so wherever a `story/NN-us-N-`
 branch exists, `docs/batches/NN-<slug>/` is already on `main` and that
 listing above sees it. Scan it anyway — it is one line and it is the only thing
