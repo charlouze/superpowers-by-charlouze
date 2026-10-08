@@ -375,4 +375,13 @@ bash ~/.config/github-app/as-agent.sh git commit -m "feat: un changement borné 
 
 ## Rulings log
 
+- Ruling: `Global Constraints` ne porte rien sur la section de plus, et l'étape 5 demande à qui conduit l'exécution de la chercher dans les rapports et les relectures — la spec énumère ce que `Global Constraints` porte, et son fichier est gelé — une tâche peut avoir touché la section avant que la détection soit refaite.
+- Ruling: l'étape 5 ne dit pas ce que devient le travail d'une tâche qui a déjà touché la section quand la détection refaite arrête la story — l'arrêt remet la question à l'humain, comme à la première détection — l'humain doit dire lui-même si ce travail est défait.
+- Ruling: la seconde détection d'une story reçoit la section de plus, et non toutes ses sections — la spec fait faire la détection pour la section qui ne l'a pas eue — un conflit né depuis sur une section déjà détectée n'est pas relu.
+- Ruling: la seconde détection d'un changement borné reçoit « that section » sans que la phrase renomme la spec, que la story, elle, repasse — la règle (b) nomme la spec une phrase plus haut et « as well » y renvoie — un changement borné qui déborde sur une autre spec peut passer un titre de section seul.
+- Ruling: dans `making-a-bounded-change`, la phrase « the opening is the last point where the widening is still cheap to undo » est retirée, et une garde refuse son retour — elle justifiait une détection refaite après coup, alors que la règle la place avant de toucher la section — aucun.
+- Ruling: le `README` reçoit une phrase dans `Two stories at once`, sans garde — il décrit la détection à l'utilisateur, et aucune garde ne tient ce paragraphe — la phrase peut dériver de la règle.
+- Ruling: la ligne de `Red Flags` est la même dans les deux skills, tenue par un contrat `shared` — c'est la même excuse, et une ligne de table ne vaut pas une skill interne — deux copies à retoucher ensemble.
+- Ruling: les constats mineurs des relectures restent en l'état : le red flag dit « held » là où le texte dit « conflict », le renvoi de l'étape 4 ne redit pas l'arrêt, les phrases de raison n'ont pas de garde, et la phrase du `README` sépare deux paragraphes qui se suivaient — aucun ne change ce que fait un agent — une formulation moins uniforme.
+
 ## Observed drift
