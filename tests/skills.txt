@@ -13,4 +13,5 @@ recording-a-decision internal
 writing-in-a-spec internal
 writing-in-a-gaps-register internal
 detecting-concurrency internal
+abandoning-a-story internal
 following-the-rules foundation

@@ -596,11 +596,9 @@ document through the batch-document reread.
 
 **When a story stops on a constraint it cannot hold, your human partner rules on
 the constraint.** If they rule it untenable, an amendment changes or removes the
-constraint and the story is abandoned: close its pull request without merging it
-if one is open, delete its branch locally and on the remote, and remove its
-worktree, since a branch left on the remote reads as a live claim on its
-sections. Otherwise the story resumes and holds the constraint, and nothing is
-amended.
+constraint and the story is abandoned: invoke
+`supercharlouze:abandoning-a-story` and give it the story's branch. Otherwise
+the story resumes and holds the constraint, and nothing is amended.
 
 An amendment that takes a gaps register entry out of `Scope` releases its
 reservation in the same pull request: invoke
@@ -627,20 +625,9 @@ may correct a spec.
 **Procedure.**
 
 1. **Leave the story as it stands until the choice below is ruled, then abandon
-   it.** A pull request already open stays open until then. Override 2 fires *inside*
-   `superpowers:subagent-driven-development`, mid-implementation, and a story's
-   pull request is opened only at the very end of its Step 5, by
-   `superpowers:finishing-a-development-branch`, so the usual situation is a
-   branch and a worktree and **no pull request at all**. Once the choice is
-   ruled, close the story's pull request without merging it if one is open,
-   delete the story branch locally and on the remote and remove its worktree, so
-   no later session resumes work under a qualification the batch no longer has:
-   a branch left on the remote is read as a live claim on its sections by every
-   sibling's concurrency scan.
-   Nothing has to be revoked, because nothing reached `main`: the spec change, or
-   the deleted gaps-register entry, travels with the code and dies with the
-   branch. Abandoning the story leaves the gaps-register reservations untouched:
-   they live on `main`, posted by the opening pull request.
+   it.** A pull request already open stays open until then. Once the choice is
+   ruled, invoke `supercharlouze:abandoning-a-story` and give it the story's
+   branch.
 2. **Put the choice to the human**, who alone may rule:
    - **Correct the spec**: the batch stays corrective, on a reduced scope,
      and the corrected spec ships through its own pull request;
@@ -673,13 +660,10 @@ you already stopped, from inside `superpowers:subagent-driven-development`.
 
 **Procedure.**
 
-1. **Abandon the story.** This fires mid-implementation, so the usual situation
-   is a branch and a worktree and **no pull request at all**. Close one without
-   merging it only if it is already open; the branch and its worktree stay until
-   the choice below is ruled, and go once it is — deleted locally and on the
-   remote, worktree removed.
-   Nothing reached `main`, so nothing has to be revoked, and a branch left on the
-   remote reads as a live claim on its sections.
+1. **Abandon the story.** Close its pull request without merging it if one is
+   already open; the branch and its worktree stay until the choice below is
+   ruled. Once it is ruled, invoke `supercharlouze:abandoning-a-story` and give
+   it the story's branch.
 2. **Put the choice to the human**, who alone may rule. If they judge the
    observable change wanted, it needs a block, and a block is acquired by an
    amendment that goes back through the opening review — the exact text of a block
@@ -721,7 +705,7 @@ Every text this skill writes follows `Concision` in `supercharlouze:following-th
 | "The module has no spec, I'll adopt it right now and come back" | Adoption is never conducted in the same context. It would carry the mechanisms it read in the code into the design that follows. Stop, and resume in a fresh context after the merge. |
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
 | "This batch is ordinary, reservations are a corrective-batch thing" | Any batch taking on gaps register entries reserves them at opening — a Gaps entry as much as a Violations one. Otherwise two batches specify the same behaviour. |
-| "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open; otherwise discard the branch, locally and on the remote, and its worktree — a branch left on the remote reads as a live claim on its sections. |
+| "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: before closing, it moves only through an amendment pull request of its own. |
 | "I'll call the amendment branch `batch/NN-<slug>-amend`, it says what it is" | A name under one of this plugin's branch patterns claims what that pattern claims — a number, sections — and an amendment holds neither. Its branch follows none of them. |
 | "The flag will obviously be removed at the end, no need to say when" | A flag outliving its batch without a stated lifting condition is indistinguishable from a forgotten one, and blocks closing. |

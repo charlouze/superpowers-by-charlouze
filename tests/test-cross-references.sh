@@ -169,6 +169,19 @@ case "$CROW" in
     *)                  fail "the README row of detecting-concurrency rules out direct use" ;;
 esac
 
+# The README row of abandoning-a-story, like the other internal skills', says
+# it is not for direct use and names none of the skills that invoke it.
+AROW="$(grep -F '`supercharlouze:abandoning-a-story`' "$REPO_ROOT/README.md" || true)"
+case "$AROW" in
+    *"writing-a-batch"*|*"writing-a-user-story"*|*"invoked by"*)
+        fail "the README row of abandoning-a-story names no caller" ;;
+    *)  pass "the README row of abandoning-a-story names no caller" ;;
+esac
+case "$AROW" in
+    *"Never directly"*) pass "the README row of abandoning-a-story rules out direct use" ;;
+    *)                  fail "the README row of abandoning-a-story rules out direct use" ;;
+esac
+
 # The rereads use three skills when they are installed; the README recommends
 # them all, since nothing else tells a user they exist. Anchored on the
 # recommendation itself: a skill named anywhere else in the README proves nothing.
