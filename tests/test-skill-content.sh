@@ -202,6 +202,8 @@ require handling-a-stopped-story "a corrective story is abandoned once ruled" "1
 require handling-a-stopped-story "an open pull request waits for the ruling" "A pull request already open stays open until then."
 require handling-a-stopped-story "a corrective story goes through abandoning-a-story once ruled" "Once the choice is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
 require handling-a-stopped-story "requalification offers a different batch" "**Rule the remaining work a different batch**"
+require handling-a-stopped-story "requalification offers a spec correction carried by a bounded change" \
+    "- **Correct the spec**: a bounded change carries the correction they decide, and an amendment reduces the scope of the batch, which stays corrective;"
 require handling-a-stopped-story "the steps the ruling asks for release what the batch drops" "The steps the ruling asks for release the reservations of the entries the batch no longer takes on; this session releases none. A reduced or rewritten scope releases them in the amendment pull request that changes \`Scope\`."
 require handling-a-stopped-story "the substance of a requalification is the human's" \
     "Never carry out a requalification by deciding the substance yourself."
@@ -228,11 +230,11 @@ require handling-a-stopped-story "asks for a clear context once the story is aba
 require handling-a-stopped-story "the prompt takes its form from the foundation" \
     "2. **Give the prompt that starts the next steps**, in the form \`The Git Model\` in \`supercharlouze:following-the-rules\` fixes."
 require handling-a-stopped-story "the prompt states the ruling, then each step with its skill and its document" \
-    "It states the ruling, then the steps of its row below, in their order, each with the skill to invoke and the document it starts from, by its path. A step the row gives to your human partner is named as theirs."
+    "It states the ruling, then the steps of its row below, in their order, each with the skill to invoke and the document it starts from, by its path. State the ruling as your human partner gave it"
 require handling-a-stopped-story "the ruling is stated with the story and what it revealed" \
     "State the ruling as your human partner gave it, and name the story and what it revealed. Not: \"Carry on with the requalification.\" Good: \"Technical story \`07-us-4-renommer-les-echeances\` was abandoned: it changes how a prorated amount is rounded, and that change is wanted.\""
 require handling-a-stopped-story "a corrected spec comes with a reduced scope" \
-    "| The spec is corrected, and the batch stays corrective on a reduced scope | Your human partner corrects the spec, through a pull request of its own. Then \`supercharlouze:amending-a-batch\` reduces the \`Scope\`, from the batch document. |"
+    "| The spec is corrected, and the batch stays corrective on a reduced scope | \`supercharlouze:amending-a-batch\` reduces the \`Scope\`, from the batch document. Then \`supercharlouze:making-a-bounded-change\` carries the correction your human partner decides, from the spec. |"
 require handling-a-stopped-story "a rewritten batch goes to an amendment" \
     "| The corrective batch is rewritten as an ordinary batch | \`supercharlouze:amending-a-batch\` rewrites it, from the batch document. |"
 require handling-a-stopped-story "a different batch closes this one first" \
@@ -249,6 +251,8 @@ require handling-a-stopped-story "red flag: only the human corrects a spec" \
     "| \"The spec is wrong here, I'll fix it and keep the batch corrective\" | Only the human corrects a spec. Stop the story, present the requalification choice. |"
 require handling-a-stopped-story "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | The story stays as it stands until your human partner has ruled. A pull request already open is closed with the story, once it is abandoned. |"
 require handling-a-stopped-story "the red flag keeps the ruling with the human" "Whether a constraint can be held is your human partner's ruling."
+absent_everywhere "no step of a ruling is left to the human" \
+    "named as theirs|ships through its own pull request|corrects the spec, through a pull request of its own"
 
 # --- writing-a-batch-document: the batch document contract (spec section "The batch document") ---
 # The guards that stay on opening-a-batch here hold what its reread and its pull
@@ -1423,6 +1427,25 @@ require making-a-bounded-change "a bounded change carries no flag" \
         "**(c) It carries no feature flag.**"
 require making-a-bounded-change "red flag: a small fix that leaves the spec silent" \
         "| \"This is a small fix, the spec can stay silent about it\" | Only if nothing observable at the module's boundary changes."
+require making-a-bounded-change "a bounded change carries the correction of a spec the human judges wrong" \
+        "**Exception: when your human partner judges that a spec is wrong and the code is right, it carries the spec correction they decide, and touches no code.**"
+require making-a-bounded-change "the judgment and the correction are the human's" \
+        "Both the judgment and the correction are your human partner's: a correction you derive from the code alone canonises the drift it describes."
+require making-a-bounded-change "a correction removes the gaps register entry it settles" \
+        "When the correction settles a gaps register entry, remove that entry under rule (d)."
+require making-a-bounded-change "the invocation of writing-in-a-spec follows the exception" \
+        "remove that entry under rule (d). When it updates a spec, invoke \`supercharlouze:writing-in-a-spec\` before writing in it."
+require making-a-bounded-change "none is the declaration of a change that writes in no spec" \
+        "it is what a bounded change that writes in no spec has to say"
+require making-a-bounded-change "red flag: the agent does not judge a spec wrong" \
+        "| \"The code is right and the spec is plainly wrong, I'll correct the spec\" | Only your human partner judges a spec wrong, and they decide the correction. Put it to them, and write nothing in the spec until they have decided. |"
+require making-a-bounded-change "red flag: a spec correction touches no code" \
+        "| \"While I correct the spec, I'll tidy the code it describes\" | A spec correction touches no code: the code is what your human partner judged right. A code change is another bounded change. |"
+case "$(skill_front making-a-bounded-change)" in
+    *"a spec your human partner judges wrong where the code is right"*)
+        pass "making-a-bounded-change: the description names the spec judged wrong" ;;
+    *)  fail "making-a-bounded-change: the description names the spec judged wrong" ;;
+esac
 
 require delivering-a-story "the story skill sends its transcription to the forms of the gating sentence" \
         "states the flag and its default in a gating sentence, in the form \`supercharlouze:following-the-rules\` fixes."

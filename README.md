@@ -183,13 +183,14 @@ is. A spike is an answer, and leaves no artifact. A **bounded change** — a
 well-scoped change to code that already exists — keeps its own ceremony and its
 `bounded/<slug>` branch, under these rules: it updates the spec in the same pull
 request whenever something observable at the module's boundary changes, and says
-nothing there only when nothing does; it declares the spec it targets and the
-sections it touches, like a story; it carries no flag, being complete on its own;
-it may write to a gaps register directly; it may write, rewrite and delete ADRs,
-or carry nothing but ADRs; it holds the ADRs `main` carries when its branch
-starts, and puts to the human one it cannot hold; and it puts to the human the
-technical decision it takes that would earn an ADR. Only architectural work opens
-a batch.
+nothing there only when nothing does; it carries, without touching the code, the
+correction of a spec the human judges wrong where the code is right; it declares
+the spec it targets and the sections it touches, like a story; it carries no
+flag, being complete on its own; it may write to a gaps register directly; it
+may write, rewrite and delete ADRs, or carry nothing but ADRs; it holds the ADRs
+`main` carries when its branch starts, and puts to the human one it cannot hold;
+and it puts to the human the technical decision it takes that would earn an ADR.
+Only architectural work opens a batch.
 
 ### The four departures
 
@@ -225,7 +226,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:handling-a-stopped-story` | A story has stopped on a stop condition the flow adds |
 | `supercharlouze:delivering-a-story` | Writing the next story of an open batch |
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
-| `supercharlouze:making-a-bounded-change` | A well-scoped change that needs no batch, or an ADR to write, rewrite or delete outside a batch |
+| `supercharlouze:making-a-bounded-change` | A well-scoped change that needs no batch, a spec the human judges wrong where the code is right, or an ADR to write, rewrite or delete outside a batch |
 | `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |
 | `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design, its blocks and its ADRs reread |
 | `supercharlouze:recording-a-decision` | Never directly — a building block the other skills invoke to have an ADR written or rewritten |
