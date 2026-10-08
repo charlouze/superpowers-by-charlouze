@@ -107,10 +107,10 @@ alone hands the same number to two batches opened in parallel — and the second
 one discovers it at merge time, after review.
 
 **The third source closes the same window, by the same argument, as the
-concurrency scan of `supercharlouze:writing-a-user-story`** — read it as one
-idea applied twice, not as two coincidences. A branch is on the remote as soon
-as it has a commit, while its pull request may not open for a long while, so for
-that whole stretch it claims its number and `gh pr list` shows nothing at all.
+scan of `supercharlouze:detecting-concurrency`** — read it as one idea applied
+twice, not as two coincidences. A branch is on the remote as soon as it has a
+commit, while its pull request may not open for a long while, so for that whole
+stretch it claims its number and `gh pr list` shows nothing at all.
 The branch name already carries the number — `batch/NN-<slug>` and
 `story/NN-us-N-<slug>` — so the remote listing answers on its own, with nothing
 to fetch and no file to read. That is also why the pull request query asks for

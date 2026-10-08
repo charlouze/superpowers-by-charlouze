@@ -62,103 +62,13 @@ of this system, not only to stories.
 
 ## Step 1 — Detect Concurrency
 
-Two stories, or a story and a bounded change, touching the same section of the
-same spec are a conflict. Decide which sections this story will touch, then
-check that nobody else holds them.
+Decide which sections this story will touch, then invoke
+`supercharlouze:detecting-concurrency` and give it the story's spec and those
+sections.
 
-1. **List the open pull requests together with their head ref**, and keep those
-   whose branch is `story/*` or `bounded/*`. Bare `gh pr list` does not print the
-   head ref, so ask for it explicitly:
-
-   ```bash
-   gh pr list --state open --limit 100 --json number,headRefName
-   gh pr view <n> --json number,headRefName   # one pull request at a time
-   ```
-
-   **The filter is the branch name, not the files the pull request touches.**
-   Only those branches claim sections, so the head ref
-   answers on its own — nothing to fetch and no file to read. And a pull request
-   that touches no spec at all still holds its sections: a corrective story's
-   first commit deletes a gaps register entry, so a filter on the spec file made
-   it invisible to every sibling for its whole life.
-
-2. **For each of those, read its declaration — wherever that pull request
-   keeps it.** A story keeps it in its story document, which lives on the
-   *other* pull request's head branch and not in your worktree, so read it at
-   the head ref: `Spec:` names the spec, `Sections:` the sections. A **bounded
-   change** (`bounded/<slug>`) has no story document at all: it names both in the
-   body of its pull request, so read the body. Look in the place that kind of
-   pull request actually uses — demanding a story document from a bounded
-   change would find nothing, and "nothing found" is the unknown of point 6,
-   so every story would stop for as long as any bounded pull request stayed
-   open. That is a false stop, and a false stop jams the nominal path instead
-   of protecting it.
-
-   ```bash
-   gh api "repos/{owner}/{repo}/contents/<path>?ref=<headRefName>" --jq .content | base64 -d
-   git fetch origin <headRefName> && git show FETCH_HEAD:<path>   # local alternative
-   gh pr view <n> --json body --jq .body                          # bounded change: bounded/<slug>
-   ```
-
-   **A declaration naming a spec other than yours holds nothing against you.**
-   The branch name says who claims sections; the declaration says in which spec.
-   That is why the filter of point 1 can be as wide as it is — it lets in every
-   claimant, and the declaration sorts them.
-
-3. **Read the same declaration on every remote `story/*` or `bounded/*` branch
-   that carries no pull request yet.** A story's pull request opens only at the
-   end of Step 5, so a sibling holds its sections for the whole length of an
-   implementation without appearing in point 1 above. Its branch, however, is on
-   the remote from its very first commit (Step 3), so the remote sees it:
-
-   ```bash
-   git ls-remote --heads origin 'story/*' 'bounded/*'
-   git fetch origin
-   git show origin/<branch>:docs/batches/NN-<slug>/NN-us-N-<slug>.md
-   git diff -U0 origin/main...origin/<branch> -- docs/specs/<module>.md   # no declaration yet
-   ```
-
-   Skip the branches already covered by a pull request in point 1, and skip
-   your own.
-
-   A pushed branch that carries no declaration yet is read by the sections it
-   has already changed. That is a story branch between its spec commit and its
-   plan commit, or a bounded change before its pull request opens. Diff it
-   against `main` on your spec file, and take as claimed every section a hunk
-   touches, named by the heading path it falls under in the branch's version,
-   or in `main`'s for a removed section. A branch that changed nothing in your
-   spec file claims nothing against you.
-4. Intersect all of those with the sections this story will touch.
-5. **Stop if the intersection is not empty.** Report which pull request or
-   branch holds the section, and let your human partner sequence the two.
-6. **Stop if you could not read a declaration**: fetch failed, story document
-   without its `Sections:` field, pull request body silent on a bounded change.
-   An unread declaration is an unknown, not a pass. Name the pull request or the
-   branch and say why, and let your human partner decide. Silently treating it
-   as empty turns the one real net into "found nothing". A pushed branch that has
-   not declared yet is not an unknown: point 3 reads it by what it changed. Nor
-   is a bounded change having no story document: its declaration is in its pull
-   request body, read per point 2.
-
-**Name the blind spot rather than trusting the net.** What this check sees is
-what is on the remote: open pull requests, and pushed `story/*` and `bounded/*`
-branches. A story that has created its branch but not yet pushed it is
-invisible to every sibling, and no amount of care at this step finds it. That
-window runs from Step 2 to the push at the end of Step 3, which is precisely
-why the push happens there and not at the end of the run — it turns a window
-as long as an implementation into one as long as writing a single commit. Read
-this step as complete for work already on the remote, and as blind to
-everything else.
-
-Sections are declared, not derived, wherever a declaration exists: reading a
-diff to guess which sections a story touches is fragile, whereas the story's
-author knows them. The diff stands in only for a pushed branch that has not
-declared yet, and it shows only what that branch has already changed.
-
-Do not fall back on git. A merge conflict is only a **partial safety net** —
-git conflicts on lines, not on sections, so two stories editing the same
-section in distant places merge cleanly. Relying on it lets through exactly the
-case this check exists to catch.
+**Stop if it returns a conflict or a declaration it could not read.** Report
+what it returned, and let your human partner sequence the two pieces of work or
+decide on the unread declaration.
 
 ## Step 2 — Allocate us-N and Create the Branch
 
@@ -172,9 +82,9 @@ gh pr list --state open --limit 100 --json number,headRefName
 git ls-remote --heads origin 'story/*'
 ```
 
-Each is necessary. The remote ones are the sources Step 1 reads, one idea
-applied twice and not a coincidence. The listing of `main` is the one Step 1
-never reads, because concurrency is a question about work
+Each is necessary. The remote ones are the sources the concurrency scan reads,
+one idea applied twice and not a coincidence. The listing of `main` is the one
+that scan never reads, because concurrency is a question about work
 in flight and allocation is also a question about work already landed. An
 artifact only reaches `main` when its pull request merges, so that listing
 knows nothing about what is in flight; and a story's pull request opens only
@@ -205,7 +115,7 @@ restore the conventional name and the starting point before going on:
 `story/NN-us-N-<slug>`, from `origin/main`. `git merge-base --is-ancestor
 origin/main HEAD` answers the second, and `git switch -c story/NN-us-N-<slug>
 origin/main` inside the workspace puts it right. **A named branch is not
-enough.** Step 1's third source and this step's allocation both read
+enough.** The concurrency scan and this step's allocation both read
 `story/*` on the remote, so a branch under any other name is invisible to
 every sibling for the whole length of an implementation — it holds neither
 its `us-N` nor its sections, and the push at the end of Step 3 buys nothing.
@@ -317,9 +227,9 @@ announced, and that removal is this same commit.
 
 **Push the branch as soon as this commit exists** — `git push -u origin
 story/NN-us-N-<slug>`. Nothing depends on it for this story; it is what makes
-this story *visible*, since a sibling running Step 1 reads pushed `story/*`
+this story *visible*, since a sibling's concurrency scan reads pushed `story/*`
 branches and the pull request does not exist for a long while yet. Pushing here
-rather than at the end shrinks the blind spot named in Step 1 from the length of
+rather than at the end shrinks the blind spot of that scan from the length of
 an implementation to the length of a single commit.
 
 ## Step 4 — Write the Plan
@@ -337,7 +247,7 @@ into the batch directory, and extend the standard header with the fields below.
 `Spec:` is the field `subagent-driven-development` already reads as the binding
 authority — pointing it at the living module spec is what makes this
 integration work without modifying superpowers. `Sections:` is what the *next*
-story's Step 1 reads.
+story's concurrency scan reads.
 
 `Blocks:` declares the blocks of the spec delta this story transcribes — the
 `D<n>` identifiers the batch document defines — and it is what
@@ -551,9 +461,9 @@ decision reports it and leaves the file to the review.
 
 **Commit the story document — header, the two empty sections and
 `Global Constraints` together — and push it immediately**, `git push`, before
-anything else in Step 5 starts. Before this push, a sibling's Step 1 reads this
-branch only by the sections it has already changed; after it, by every section
-this story will touch.
+anything else in Step 5 starts. Before this push, a sibling's concurrency scan
+reads this branch only by the sections it has already changed; after it, by
+every section this story will touch.
 
 ## Step 5 — Execute
 
@@ -748,10 +658,10 @@ nothing in the spec delta and leaves the reservation alone.
 
 **Clean up after an abandoned or requalified story: remove its worktree and
 delete its branch, locally and on the remote.** This is not tidiness. A pushed
-`story/*` branch with no pull request is exactly what every sibling's Step 1
-reads as a live claim on its sections, so an abandoned branch left on the remote
-holds those sections against every story that follows, and nothing ever releases
-them.
+`story/*` branch with no pull request is exactly what every sibling's
+concurrency scan reads as a live claim on its sections, so an abandoned branch
+left on the remote holds those sections against every story that follows, and
+nothing ever releases them.
 
 ## Lifting and Teardown Stories
 
@@ -820,10 +730,7 @@ Every text this skill writes follows `Concision` in `supercharlouze:following-th
 | "This block's wording is off, I'll improve it as I transcribe" | The opening gate ruled on that exact text. Transcribe it word for word, or stop and put the problem to your human partner. |
 | "`main` moved, so I'll amend the batch document to match" | Fit the block to `main` without changing its meaning, and name the divergence in the pull request. The batch document records what the review read. |
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
-| "No merge conflict, so no one else is on this section" | Git conflicts on lines, not sections. Check the open pull requests. |
-| "No open pull request touches this spec, so the section is free" | The filter is the branch name, not the files: a pull request that touches no spec holds its sections all the same. And a story holds them from Step 1 until its pull request opens at the end of Step 5 — read the pushed `story/*` and `bounded/*` branches too. |
 | "No open pull request uses us-3, so us-3 is free" | A branch claims its number from its first commit until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too — same argument as the concurrency scan. |
-| "This pull request has no story document, so I must stop" | Not if it is a `bounded/<slug>`: a bounded change declares its sections in its pull request body. Read it there. Stopping would halt every story for as long as one bounded pull request stays open. |
 | "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-change commit. |
 | "The story is abandoned, the branch can stay" | A pushed `story/*` branch with no pull request reads as a live claim on its sections. Delete it, locally and on the remote. |
 | "I'm already in a worktree, that's fine" | It is, as a place to work. A branch that starts there is not: this story's code would land on the previous story's branch. Branch from `origin/main`, wherever you stand. |

@@ -28,42 +28,44 @@ shared "and each says a named branch is not enough" \
     "named branch is not enough" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
 
-# The concurrency scan's filter is the branch name, and both ends must spell it
-# the same: the one that scans (`writing-a-user-story`) and the one that states
-# the rule (`following-the-rules`). One assertion over both files — two separate ones
-# would each stay green while one end reworded away from the other.
-shared "the concurrency filter is the branch name on both ends" \
-    "filter is the branch name" \
-    following-the-rules writing-a-user-story
+# The concurrency scan lives in one place, `detecting-concurrency`. A skill
+# whose work claims sections invokes it, passes what varies and stops on what it
+# returns: `writing-a-user-story` for a story, `using-batches` for the bounded
+# change.
+require writing-a-user-story "a story invokes detecting-concurrency with its spec and its sections" \
+    "invoke \`supercharlouze:detecting-concurrency\` and give it the story's spec and those sections"
+require using-batches "a bounded change invokes detecting-concurrency before creating its branch" \
+    "Invoke \`supercharlouze:detecting-concurrency\` before creating \`bounded/<slug>\`, and give it that spec and those sections"
+require using-batches "a redone detection receives the branch" \
+    "invoke it again, and give it \`bounded/<slug>\` as well"
+for s in writing-a-user-story using-batches; do
+    require "$s" "stops on what detecting-concurrency returns" \
+        "Stop if it returns a conflict or a declaration it could not read"
+done
+# What it carries is spelled there and nowhere else. Walks the declared skills,
+# so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates the concurrency scan" \
+    "filter is the branch name|carries no declaration yet|or .bounded/[*]. branch that carries no pull request yet|unread declaration is an unknown|Sections are declared, not derived|conflicts on lines, not|names both in the body of its pull request|Step 1 of .supercharlouze" \
+    $(declared_skills | grep -vx detecting-concurrency)
+# `following-the-rules` keeps what a conflict is and what a claimant declares.
+require following-the-rules "a conflict is judged on a section of one spec" \
+    "touching the same section of the same spec are a conflict"
+require following-the-rules "each claimant declares its spec and its sections" \
+    "Each claimant declares its spec and its sections"
 
 # The former filter — keep only the pull requests and the branches whose diff
 # touches the spec file — made invisible every story whose pull request touches
 # no spec at all. It must survive nowhere, or the scan regains the blind spot
 # this one closes.
-absent "no skill filters the concurrency scan by the spec file a diff touches" \
-    "touches this story's spec file|touches this spec file|touch this spec file|files include this story's spec file" \
-    using-batches following-the-rules writing-a-user-story
-
-# The branch name says who claims sections; the declaration says in which spec.
-# A pushed branch that carries no declaration yet has only its diff to say so,
-# and both ends must state it the same way: the one that scans and the one that
-# states the rule.
-shared "a branch with no declaration yet is read by what it changed" \
-    "A pushed branch that carries no declaration yet is read by the sections it has already changed" \
-    following-the-rules writing-a-user-story
-
-# Pushed branches with no pull request are read under both patterns that claim
-# sections. A scan of `story/*` alone misses a pushed bounded change.
-shared "both claiming patterns are read before their pull request" \
-    "every remote \`story/*\` or \`bounded/*\` branch that carries no pull request yet" \
-    following-the-rules writing-a-user-story
+absent_everywhere "no skill filters the concurrency scan by the spec file a diff touches" \
+    "touches this story's spec file|touches this spec file|touch this spec file|files include this story's spec file"
 
 # A branch that has not declared yet used to stop a story as soon as it had
 # changed the story's spec file. The sections it changed now stand in for its
 # declaration, so that stop must survive nowhere.
-absent "a branch with no declaration yet is not an unknown" \
-    "concerns the spec it has already changed|it is an unknown and stops you|stop on an unknown" \
-    using-batches following-the-rules writing-a-user-story
+absent_everywhere "a branch with no declaration yet is not an unknown" \
+    "concerns the spec it has already changed|it is an unknown and stops you|stop on an unknown"
 
 # What a spec contains lives in one place, `writing-in-a-spec`. A skill that
 # writes a text a spec receives invokes it and restates nothing: a second
@@ -514,7 +516,7 @@ absent_everywhere "no skill says a bounded change never leaves the spec silent" 
 # reader comparing sections against the wrong spec finds conflicts that are not
 # there, or misses the one that is.
 #
-# The needle carries "therefore" on purpose. Step 1 of writing-a-user-story
+# The needle carries "therefore" on purpose. detecting-concurrency
 # tells a *reader* where a bounded change keeps its declaration, in words that
 # overlap this one; that sentence belongs to the concurrency detection rule and
 # is not what this guard hunts. "therefore declares its sections" appears only

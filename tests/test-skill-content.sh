@@ -595,9 +595,6 @@ require writing-a-batch "allocation reads main on the remote" "git ls-tree --nam
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "branches from main as the remote carries it" "starts from \`main\` as the remote carries it"
 require writing-a-user-story "concurrency via declared Sections"  "Sections:"
-require writing-a-user-story "a declaration names its spec as well"  "\`Spec:\` names the spec"
-require writing-a-user-story "a bounded change names both in its body" "names both in the body of its pull request"
-require writing-a-user-story "git conflict is only a partial net" "partial safety net"
 require writing-a-user-story "transcription is the first commit"  "first commit on the branch"
 require writing-a-user-story "freeze travels in Global Constraints" "Global Constraints"
 require writing-a-user-story "freeze ends when the PR opens"      "freeze is lifted when the pull request opens"
@@ -763,7 +760,6 @@ require writing-a-user-story "allocation reads main on the remote" "git ls-tree 
 # only place that still carries them.
 require writing-a-user-story "the NN- prefix keeps basenames unique" "The \`NN-\` prefix keeps basenames unique across batches"
 require writing-a-user-story "Spec: is the binding authority"       "\`Spec:\` is the field \`subagent-driven-development\` already reads as the binding authority"
-require writing-a-user-story "sections are declared, not derived"   "Sections are declared, not derived"
 require writing-a-user-story "never the batch's whole delta"        "and never the batch's whole delta"
 require writing-a-user-story "an open batch has its opening merged" "Its opening pull request is merged and its document says \`status: open\`"
 require writing-a-user-story "the plan goes into the first commit's document" "Step 4 then writes the plan into that document rather than creating it"
@@ -931,6 +927,33 @@ esac
 # An internal skill names the skills it invokes, never those that invoke it.
 # Walks the declared entry skills, so one declared later is covered.
 absent "writing-in-a-gaps-register names no skill that invokes it" "${entry_names%|}" writing-in-a-gaps-register
+
+# --- detecting-concurrency: the scan (spec section "Concurrency detection") ---
+require detecting-concurrency "says what the invoking skill passes" \
+    "The skill that invokes it gives the spec the work targets, the sections it will touch and, when the work already has one, its branch."
+require detecting-concurrency "fetches first" "git fetch origin"
+require detecting-concurrency "leaves the work's own branch out" \
+    "When the work has a branch, leave that branch and its pull request out of everything below."
+require detecting-concurrency "the concurrency filter is the branch name" "filter is the branch name"
+require detecting-concurrency "a declaration names its spec as well" "\`Spec:\` names the spec"
+require detecting-concurrency "a bounded change names both in its body" "names both in the body of its pull request"
+require detecting-concurrency "a branch with no declaration yet is read by what it changed" \
+    "A pushed branch that carries no declaration yet is read by the sections it has already changed"
+require detecting-concurrency "both claiming patterns are read before their pull request" \
+    "every remote \`story/*\` or \`bounded/*\` branch that carries no pull request yet"
+require detecting-concurrency "returns each conflict with who holds it" \
+    "**Each conflict:** the section, and the pull request or the branch that holds it."
+require detecting-concurrency "returns each declaration it could not read" \
+    "**Each declaration you could not read:** the pull request or the branch, and why"
+require detecting-concurrency "an unread declaration is no pass" "An unread declaration is an unknown, not a pass."
+require detecting-concurrency "names its blind spot" "Name the blind spot rather than trusting the net."
+require detecting-concurrency "sections are declared, not derived" "Sections are declared, not derived"
+require detecting-concurrency "git conflict is only a partial net" "partial safety net"
+require detecting-concurrency "says when to go back to the step that invoked it" \
+    "Once you have them, go on with the step that invoked this skill."
+# An internal skill names the skills it invokes, never those that invoke it, nor
+# a numbered step of one of them.
+absent "detecting-concurrency names no skill that invokes it" "${entry_names%|}|Step [0-9]" detecting-concurrency
 
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"

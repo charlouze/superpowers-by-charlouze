@@ -156,11 +156,9 @@ way nobody notices until the context is already gone.
 
 **Every conflict is recorded for the human.** Reuse the existing mechanism rather than inventing one: the execution of a plan by subagents keeps a ledger whose decisions take the form `Ruling: <decision> — <why> — <what it costs if it is wrong>`, presented under "Rulings I made" before it deletes its workspace. Copy those lines into the story document, on the story's branch, before the merge — they are perishable, and the workspace is already gone.
 
-**Concurrency.** Two stories, or a story and a bounded change, touching the same section of the same spec are a conflict. Only `story/*` and `bounded/*` branches claim sections, so the filter is the branch name. Filtering instead on the spec file a pull request touches would make a corrective story invisible, since its pull request touches no spec at all.
+**Concurrency.** Two stories, or a story and a bounded change, touching the same section of the same spec are a conflict. Only `story/*` and `bounded/*` branches claim sections.
 
-Each claimant declares its spec and its sections: a story in its story document, where `Spec:` names the spec and `Sections:` the sections; a bounded change in its pull request body. A starting story reads the declarations of the open pull requests on those branches, and of every remote `story/*` or `bounded/*` branch that carries no pull request yet. A pushed branch that carries no declaration yet is read by the sections it has already changed. Both sources are needed: a story's pull request opens only at the very end of its implementation, and for that whole stretch its pushed branch is the only thing that shows it holds its sections.
-
-The git merge conflict is only a partial safety net. Git conflicts on lines, not on sections, so two stories editing the same section far apart merge cleanly.
+Each claimant declares its spec and its sections: a story in its story document, where `Spec:` names the spec and `Sections:` the sections; a bounded change in its pull request body.
 
 ## Language
 
@@ -272,7 +270,6 @@ When you take a technical decision that meets the conditions of an ADR (`The Mod
 |---------|---------|
 | "The spec is wrong here, I'll fix it and move on" | Correcting a spec is a human act. Implement what the spec says, record the `Ruling:`, and carry on. |
 | "The batch is newer than the spec, so the batch wins" | The spec is the binding authority, without exception and without deliberation. The batch carries scope and order, never behaviour that contradicts a spec. |
-| "Git will conflict if two stories touch the same section" | Git conflicts on lines, not sections; two edits far apart in one section merge cleanly. Compare the declared `Sections:` fields against the open pull requests whose branch is `story/*` or `bounded/*`, and against every remote `story/*` or `bounded/*` branch that carries no pull request yet. The filter is the branch name, and a pull request that touches no spec holds its sections all the same. |
 | "The flag is just an `if`, the guarded code can do as it likes" | Guarded code holds up when the flag is on for some users, on for everyone, and off, under the rules of `Code Under a Feature Flag`. |
 | "The flag is on for everyone, so it is lifted" | The declared default and the effective state are two different things. A flag exists as long as its gating sentence stands in the spec, and only a story removes it. |
 | "I'm already in the previous story's worktree, I'll start the next one here" | Working there is fine; branching from there is not. Fetch, and start `story/NN-us-N-<slug>` from `main` as the remote carries it, or the new story's code lands on the previous story's branch. |

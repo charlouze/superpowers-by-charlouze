@@ -228,6 +228,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:recording-a-decision` | Never directly — a building block the other skills invoke to have an ADR written or rewritten |
 | `supercharlouze:writing-in-a-spec` | Never directly — a building block the other skills invoke before writing into a spec |
 | `supercharlouze:writing-in-a-gaps-register` | Never directly — a building block the other skills invoke before writing into a gaps register |
+| `supercharlouze:detecting-concurrency` | Never directly — a building block the other skills invoke to check that nobody else holds the sections a piece of work will touch |
 
 ## Requirements
 
