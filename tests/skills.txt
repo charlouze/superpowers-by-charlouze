@@ -14,4 +14,5 @@ writing-in-a-spec internal
 writing-in-a-gaps-register internal
 detecting-concurrency internal
 abandoning-a-story internal
+applying-a-spec-delta internal
 following-the-rules foundation

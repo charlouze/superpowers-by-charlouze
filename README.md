@@ -230,6 +230,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:writing-in-a-gaps-register` | Never directly — a building block the other skills invoke before writing into a gaps register |
 | `supercharlouze:detecting-concurrency` | Never directly — a building block the other skills invoke to check that nobody else holds the sections a piece of work will touch |
 | `supercharlouze:abandoning-a-story` | Never directly — a building block the other skills invoke to close an abandoned story's pull request, delete its branch and remove its worktree |
+| `supercharlouze:applying-a-spec-delta` | Never directly — a building block the other skills invoke to build, outside the repository, a copy of each spec with a batch's blocks applied |
 
 ## Requirements
 

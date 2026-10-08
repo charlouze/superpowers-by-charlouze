@@ -129,18 +129,18 @@ require writing-a-batch "the entry point names the design and the constraints" "
 require writing-a-batch "a design or a constraint that must change is a dead end" "**A batch whose technical design or constraints must change**"
 require writing-a-batch "an amendment branch follows no pattern"  "follows none of this plugin's branch patterns"
 require writing-a-batch "a delta amendment is reviewed as an opening" "By exception, an amendment that changes the spec delta is reviewed as an opening"
-require writing-a-batch "its blocks are applied with every pending block" "apply its new or changed blocks together with every block no merged story has declared yet"
-require writing-a-batch "its applied copies go to the shared reread" "invoke \`supercharlouze:rereading-a-spec\` on each applied copy, with the path of the spec it applies to, as \`The Coherence Reread\` does"
+require writing-a-batch "its blocks are applied with every pending block" "invoke \`supercharlouze:applying-a-spec-delta\` and give it the amended document and its new or changed blocks together with every block no merged story has declared yet"
+require writing-a-batch "its applied copies go to the shared reread" "then invoke \`supercharlouze:rereading-a-spec\` on each applied copy, with the path of the spec it applies to, as \`The Coherence Reread\` does"
 require writing-a-batch "its whole document goes through the document reread" "After its rereads, an amendment that changes the spec delta puts the whole document through the batch-document reread"
 require writing-a-batch "an amendment goes through the technical reread" "An amendment that changes the spec delta, the technical design or the constraints, or that writes or rewrites an ADR, goes through the technical reread before its pull request opens, after the coherence reread when it runs one"
 require writing-a-batch "its technical reread is the opening's" "Conduct it as \`The Technical Reread\` does"
 require writing-a-batch "its technical reread reads the pending blocks applied" "on the amended document and on each spec with every block no merged story has declared yet applied"
-require writing-a-batch "its technical reread builds the copies itself" "in a copy built as \`The Coherence Reread\` builds it"
+require writing-a-batch "its technical reread has the pending blocks applied" "invoke \`supercharlouze:applying-a-spec-delta\` and give it the amended document and those blocks"
 require writing-a-batch "a behaviour or a block taken back makes a delta amendment" "A behaviour or a block it returns as taken back to the spec delta makes the amendment one that changes the spec delta"
 require writing-a-batch "its body carries what an opening body carries" "the exact text of every new or changed block, and what the coherence reread found"
 require writing-a-batch "an amendment writes, rewrites or deletes ADRs" "An amendment's pull request may also write, rewrite or delete the ADRs your human partner decided with the amendment."
 require writing-a-batch "its ADRs are written as the opening's" "Do it as \`The ADRs\` does, once the document is amended."
-require writing-a-batch "its ADRs meet the pending blocks of the amended document" "Where that section applies the batch's blocks, apply every block of the amended document that no merged story has declared yet."
+require writing-a-batch "its ADRs meet the pending blocks of the amended document" "Where that section gives \`supercharlouze:applying-a-spec-delta\` every block of the spec delta, give it every block of the amended document that no merged story has declared yet."
 require writing-a-batch "its body states the ADRs" "The pull request body states each ADR it writes, rewrites or deletes."
 require writing-a-batch "a change of ADRs alone is a bounded change" "A change that touches nothing but ADRs is not an amendment: it goes through a bounded change, under \`supercharlouze:using-batches\`."
 require writing-a-batch "what is taken back sends the amendment through both rereads" "makes the amendment one that changes the spec delta: it goes through the coherence reread, then through the technical reread again."
@@ -289,10 +289,9 @@ require writing-a-batch "the document reread is conducted outside this context" 
 require writing-a-batch "merging them strands a corrective batch" "leaving a corrective batch, which has no blocks, without a reread of its document"
 
 # --- writing-a-batch: the coherence reread (spec section "The coherence reread") ---
-# The step exists, the applied state is built outside the repository, the rule it
-# must not suspend to get there, what building it catches for free, the
-# independence of the context, and the declaration that makes the whole thing
-# observable. Drop any one and the section still reads whole while doing less.
+# The step exists, the applied state comes from `applying-a-spec-delta`, and the
+# declaration makes the whole thing observable. Drop any one and the section
+# still reads whole while doing less.
 require writing-a-batch "the delta goes through the coherence reread" "Before opening, the whole spec delta goes through the **coherence reread**"
 # A delta with no block skips this reread (spec section "The coherence reread").
 # Not a dispensation: this reread reads blocks against the spec they will change,
@@ -302,13 +301,7 @@ require writing-a-batch "a blockless delta skips this reread"    "A delta that c
 require writing-a-batch "the skip is not a dispensation"         "it has nothing to read and no state to build"
 require writing-a-batch "a blockless batch still owes the rereads that follow" "Such a batch still owes step 6, and step 7, the batch-document reread, which bears on whatever stands in the blocks' place."
 require writing-a-batch "step 5 states the skip where it is ordered" "skipped when the delta carries no block"
-require writing-a-batch "the applied state is built outside the repository" "**outside the repository**"
-require writing-a-batch "no block reaches a spec before a story"      "no block is written into a spec before a story transcribes it"
-# Building the applied copy checks every block, so that check belongs to the
-# coherence reread; the batch-document reread bears on the fields.
-require writing-a-batch "building the copy checks every block"     "Building that copy checks every block: it carries its \`D<n>\`, it names the spec and section it targets"
-require writing-a-batch "a block matches main or the block before it" "its unchanged and removed lines match \`main\`, or the text the block ordered before it leaves"
-require writing-a-batch "a stale block will not apply"                "A block that fails this check does not apply"
+require writing-a-batch "the coherence reread has every block applied" "Invoke \`supercharlouze:applying-a-spec-delta\` and give it the batch document and every block of its spec delta. Then invoke \`supercharlouze:rereading-a-spec\` on each applied copy"
 # The readers, their readings and the rounds live in `supercharlouze:rereading-a-spec`.
 # The coherence reread hands over each applied copy, and carries back what the
 # reread returns. What a reader gets is the reread's business, not this skill's.
@@ -328,7 +321,7 @@ require writing-a-batch "the technical reread changes no ADR" "It changes no ADR
 require writing-a-batch "an ADR corrected on a finding goes back through the reread" "When your human partner has an ADR corrected on a finding it returns, invoke \`supercharlouze:recording-a-decision\` as \`The ADRs\` does if the correction changes the ADR's decision, and correct the text yourself if it does not. When they abandon the ADR, delete it. After a correction or a deletion, invoke the technical reread again."
 require writing-a-batch "a corrected ADR is handed to the reread" "An ADR whose text you corrected on a finding counts among those it rewrites."
 require writing-a-batch "the reread is handed the batch document and its specs" "Invoke \`supercharlouze:rereading-a-technical-design\` with the batch document and each spec the batch touches"
-require writing-a-batch "a spec no block targets goes as it is" "the applied copy the coherence reread built, or the spec itself when no block targets it"
+require writing-a-batch "a spec no block targets goes as it is" "the applied copy the coherence reread read, or the spec itself when no block targets it"
 require writing-a-batch "revisions go back into the design"     "Carry every revision it returns back into \`Technical design\` and \`Constraints\`"
 # The technical reread reads the delta and never writes into it: a block is a
 # design decision, and it goes back through the opening from the delta on.
@@ -343,7 +336,7 @@ require writing-a-batch "the red flag sends the design to the reread" "Invoke \`
 
 # --- writing-a-batch: the ADRs of an opening (spec section "Opening a batch") ---
 require writing-a-batch "the ADRs change in the opening pull request" "Write, rewrite or delete in this pull request, with the batch document, the ADRs your human partner decided during the brainstorming."
-require writing-a-batch "the applied copies are built before an ADR is written" "Before writing or rewriting one, build a copy of each spec the batch touches with its blocks applied, as \`The Coherence Reread\` builds it."
+require writing-a-batch "the blocks are applied before an ADR is written" "Before writing or rewriting one, invoke \`supercharlouze:applying-a-spec-delta\` and give it the batch document and every block of its spec delta: it returns the copies of the specs, blocks applied."
 require writing-a-batch "an ADR is confronted with the specs as the batch leaves them" "An ADR is confronted with the specs as the batch leaves them, and no block is in a spec yet."
 require writing-a-batch "an ADR is written by the shared skill" "Invoke \`supercharlouze:recording-a-decision\` for each ADR to write or to rewrite, and hand it those copies."
 require writing-a-batch "an abandoned ADR is deleted" "Delete yourself each ADR your human partner abandoned, in a commit that says why."
@@ -989,6 +982,38 @@ require abandoning-a-story "says when to go back to the step that invoked it" \
 # An internal skill names the skills it invokes, never those that invoke it, nor
 # a numbered step of one of them.
 absent "abandoning-a-story names no skill that invokes it" "${entry_names%|}|Step [0-9]" abandoning-a-story
+
+# --- applying-a-spec-delta: the specs with a batch's blocks applied ---
+require applying-a-spec-delta "says what the invoking skill passes" \
+    "The skill that invokes it gives the batch document and the blocks to apply."
+require applying-a-spec-delta "the copies are built outside the repository" \
+    "**outside the repository**, in a scratch directory"
+require applying-a-spec-delta "no block reaches a spec before a story" \
+    "no block is written into a spec before a story transcribes it"
+require applying-a-spec-delta "only the given blocks are applied" \
+    "Apply the given blocks and no other"
+require applying-a-spec-delta "a spec no given block targets gets no copy" \
+    "A spec none of them targets gets no copy."
+# The check is made while applying, so it lives with the copies.
+require applying-a-spec-delta "building a copy checks every block" \
+    "Check every block as you apply it: it carries its \`D<n>\`, it names the spec and section it targets"
+require applying-a-spec-delta "a block matches main or the block before it" \
+    "its unchanged and removed lines match \`main\`, or the text the block ordered before it leaves"
+require applying-a-spec-delta "a stale block will not apply" \
+    "A block that fails this check does not apply"
+require applying-a-spec-delta "returns the path of each copy" \
+    "Return the path of each copy, with the path of the spec it copies."
+require applying-a-spec-delta "returns the blocks that did not apply" \
+    "Return each block that did not apply, with the check it failed."
+require applying-a-spec-delta "red flag: applying the blocks in the worktree" \
+    "| \"Editing the spec in the worktree is quicker, I'll revert it after\" |"
+require applying-a-spec-delta "red flag: fitting a block that does not apply" \
+    "| \"This block almost applies, I'll fit it as I go\" |"
+require applying-a-spec-delta "says when to go back to the step that invoked it" \
+    "Once you have the paths, go on with the step that invoked this skill."
+# An internal skill names the skills it invokes, never those that invoke it, nor
+# a numbered step of one of them.
+absent "applying-a-spec-delta names no skill that invokes it" "${entry_names%|}|Step [0-9]" applying-a-spec-delta
 
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
