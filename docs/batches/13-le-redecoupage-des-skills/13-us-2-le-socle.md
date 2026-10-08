@@ -724,4 +724,34 @@ bash ~/.config/github-app/as-agent.sh git commit -m "docs: CONTRIBUTING dit que 
 
 ## Rulings log
 
+Technical design ruling: cette story d'extraction n'est pas technique, et déclare les sections que désigne l'entrée du gaps register qu'elle supprime — une story technique ne retire rien, et les `Constraints` du lot lui font résorber cette entrée — une story sans la condition d'arrêt d'une story technique, alors que la conception technique dit techniques les stories d'extraction.
+
+Ruling: `using-batches` ne garde des conditions d'arrêt que leur déclaration comme override, sa justification et ce qui suit leur déclenchement ; leurs textes et le paragraphe « A ruling replaces none of them » vivent dans le socle — ce sont des règles d'exécution, et une extraction réécrit la skill qui portait une copie — un agent qui lit l'override sans avoir chargé le socle n'a plus le texte des conditions.
+
+Ruling: neuf lignes de `Red Flags` de `using-batches` suivent au socle les règles qu'elles défendent, celles sur l'autorité de la spec, la concurrence, le flag, le point de départ d'une branche, la concision, la conversation et l'ADR — une excuse se réfute dans la skill qui porte la règle — une ligne rangée du mauvais côté, que personne ne lit au bon moment.
+
+Ruling: les règles d'exécution portent les noms `spec freeze`, `spec authority`, `concision`, `corrective stop condition`, `code under a feature flag`, `technical stop condition`, `untenable constraint or ADR`, `held ADRs` et `decision worth an ADR`, dans une table qui renvoie chacune à la section du socle qui l'écrit — la conception technique demande un nom par règle sans le fixer, et une règle déjà écrite dans le socle ne s'y recopie pas — la story qui transcrit le bloc sur `Global Constraints` renomme ce qu'elle juge mal nommé.
+
+Ruling: `writing-a-user-story` garde chaque bloc que `Global Constraints` recopie, règles du code gardé comprises, et dit que le socle l'énonce ; seule la forme de la mention de flag y devient un renvoi — les `Constraints` du lot gardent ces copies jusqu'à la story qui transcrit le bloc sur `Global Constraints`, et la mention de flag n'en fait pas partie — deux exemplaires de chaque bloc, que des contrats `shared` tiennent identiques.
+
+Ruling: la résorption de l'entrée du gaps register retire les deux reformulations partielles des règles du code gardé que `using-batches` portait, et une garde les interdit dans toute skill ; la règle du registre des flags, que `writing-a-batch` et `closing-a-batch` énoncent, reste en l'état — elle n'est pas une règle du code gardé, et ces deux skills ont leur story — une formulation de plus à rapprocher du socle par ces stories.
+
+Ruling: la garde « the guarded-code rules are written in one place » est supprimée avec les deux que le plan nommait — son needle tenait une phrase du paragraphe retiré, et la garde négative sur les gloses la remplace — une copie complète qui réapparaîtrait sous d'autres mots ne serait pas attrapée.
+
+Ruling: la garde « the glossary points at that section » devient « the glossary states the content property », et une garde s'ajoute sur la ligne de `Red Flags` du flag qui n'est qu'un `if` — le renvoi que la première tenait nommait une section restée dans `using-batches`, que le socle ne peut pas nommer — plus rien ne tient un renvoi de la définition de la spec vers ce qu'une spec contient.
+
+Ruling: les tâches 3, 4 et 5 du plan sont parties chez un seul exécutant et ont été relues en une fois, un commit par tâche — trois petites retouches de même nature sur des fichiers voisins — une relecture par tâche moins fine.
+
+Ruling: la relecture finale de la branche a tourné sur le modèle et l'effort que l'utilisateur a fixés pour tous les sous-agents du lot, pas sur le modèle le plus capable que demande l'exécution par sous-agents — décision de l'utilisateur — une relecture finale moins profonde.
+
+Ruling: la garde « the foundation names no skill » chasse aussi le nom nu de chaque skill déclarée et de sept skills de superpowers, au-delà des deux préfixes que la conception technique nomme — constat de la relecture finale : le socle ne nomme aucune skill, préfixée ou non — un mot courant comme « brainstorming » écrit dans le socle fait échouer la garde.
+
+Ruling: un contrat `shared` tient identique, entre le socle et `writing-a-user-story`, l'obligation de signaler une décision qui réunit les conditions d'un ADR — constat de la relecture finale : les deux textes l'énonçaient sans garde — aucun.
+
+Ruling: `CONTRIBUTING.md` dit dès cette story que la suite ne teste pas qu'un sous-agent charge le socle, alors que rien ne le lui demande avant la story qui transcrit le bloc sur `Global Constraints` — la conception technique place cette phrase ici — une phrase en avance sur le comportement jusqu'à cette story.
+
+Ruling: deux constats mineurs de la relecture finale restent en l'état : aucune garde ne tient la colonne « Holds for » de la table des règles d'exécution, et la ligne de `Red Flags` sur le flag qui n'est qu'un `if` ne dit plus que ces règles vont dans `Global Constraints` — la story qui écrit le gabarit de `Global Constraints` tient cette colonne, et la table du socle dit déjà où vont ces règles — une colonne qui dérive de `writing-a-user-story` d'ici là.
+
 ## Observed drift
+
+- `docs/specs/supercharlouze.gaps.md`, `Coverage` : la liste des fichiers audités nomme « les cinq `skills/*/SKILL.md` », alors que le module en porte neuf.
