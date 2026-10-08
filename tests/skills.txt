@@ -9,6 +9,7 @@ amending-a-batch entry
 handling-a-stopped-story entry
 writing-a-user-story entry
 closing-a-batch entry
+making-a-bounded-change entry
 rereading-a-spec internal
 rereading-a-technical-design internal
 recording-a-decision internal

@@ -67,8 +67,8 @@ else
     fail "the CLAUDE.md block exists in exactly one file (found $COPIES)"
 fi
 
-# 4. The bounded path is spelled out (spec 8.2) — it has no skill of its own.
-UB="$(awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$REPO_ROOT/skills/using-batches/SKILL.md" | tr '\n' ' ')"
+# 4. The bounded path is spelled out (spec 8.2), in the skill that carries it.
+UB="$(awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$REPO_ROOT/skills/making-a-bounded-change/SKILL.md" | tr '\n' ' ')"
 has() { case "$2" in *"$1"*) return 0 ;; *) return 1 ;; esac }
 for needle in "if and only if nothing observable" "bounded/" "no feature flag"; do
     if has "$needle" "$UB"; then
@@ -120,7 +120,7 @@ esac
 # direct use and names none of the skills that invoke it.
 DROW="$(grep -F '`supercharlouze:recording-a-decision`' "$REPO_ROOT/README.md" || true)"
 case "$DROW" in
-    *"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
         fail "the README row of recording-a-decision names no caller" ;;
     *)  pass "the README row of recording-a-decision names no caller" ;;
 esac
@@ -133,7 +133,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 WROW="$(grep -F '`supercharlouze:writing-in-a-spec`' "$REPO_ROOT/README.md" || true)"
 case "$WROW" in
-    *"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
         fail "the README row of writing-in-a-spec names no caller" ;;
     *)  pass "the README row of writing-in-a-spec names no caller" ;;
 esac
@@ -147,7 +147,7 @@ esac
 # invoke it.
 GROW="$(grep -F '`supercharlouze:writing-in-a-gaps-register`' "$REPO_ROOT/README.md" || true)"
 case "$GROW" in
-    *"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"closing-a-batch"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"closing-a-batch"*|*"invoked by"*)
         fail "the README row of writing-in-a-gaps-register names no caller" ;;
     *)  pass "the README row of writing-in-a-gaps-register names no caller" ;;
 esac
@@ -160,7 +160,7 @@ esac
 # says it is not for direct use and names none of the skills that invoke it.
 CROW="$(grep -F '`supercharlouze:detecting-concurrency`' "$REPO_ROOT/README.md" || true)"
 case "$CROW" in
-    *"using-batches"*|*"writing-a-user-story"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"using-batches"*|*"writing-a-user-story"*|*"invoked by"*)
         fail "the README row of detecting-concurrency names no caller" ;;
     *)  pass "the README row of detecting-concurrency names no caller" ;;
 esac
@@ -188,6 +188,14 @@ case "$HROW" in
     *"A story has stopped on a stop condition the flow adds"*)
         pass "the README row of handling-a-stopped-story says when it is used" ;;
     *)  fail "the README row of handling-a-stopped-story says when it is used" ;;
+esac
+
+# The README row of making-a-bounded-change says when the skill is used.
+MROW="$(grep -F '`supercharlouze:making-a-bounded-change`' "$REPO_ROOT/README.md" || true)"
+case "$MROW" in
+    *"A well-scoped change that needs no batch, or an ADR to write, rewrite or delete outside a batch"*)
+        pass "the README row of making-a-bounded-change says when it is used" ;;
+    *)  fail "the README row of making-a-bounded-change says when it is used" ;;
 esac
 
 # The README row of applying-a-spec-delta, like the other internal skills', says
@@ -220,7 +228,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 BROW="$(grep -F '`supercharlouze:starting-a-branch`' "$REPO_ROOT/README.md" || true)"
 case "$BROW" in
-    *"using-batches"*|*"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"using-batches"*|*"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
         fail "the README row of starting-a-branch names no caller" ;;
     *)  pass "the README row of starting-a-branch names no caller" ;;
 esac

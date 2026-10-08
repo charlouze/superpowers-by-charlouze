@@ -120,12 +120,13 @@ for needle in "may ship to production" "feature flag" "drift"; do
     fi
 done
 
-# The bounded change's rule on updating the spec in the same pull request stays
-# in using-batches.
-if has "same pull request" "$SKILL_FLAT"; then
-    pass "using-batches states: same pull request"
+# The bounded change's rule on updating the spec in the same pull request lives
+# in making-a-bounded-change.
+BOUNDED_FLAT="$(tr '\n' ' ' < "$REPO_ROOT/skills/making-a-bounded-change/SKILL.md")"
+if has "same pull request" "$BOUNDED_FLAT"; then
+    pass "making-a-bounded-change states: same pull request"
 else
-    fail "using-batches states: same pull request"
+    fail "making-a-bounded-change states: same pull request"
 fi
 
 exit $((FAILURES > 0))
