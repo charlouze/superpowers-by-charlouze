@@ -32,11 +32,19 @@ require writing-a-user-story "a story passes story/NN-us-N-<slug>" \
 require using-batches "a bounded change passes bounded/<slug>" \
     "invoke \`supercharlouze:starting-a-branch\` and give it the name \`bounded/<slug>\`"
 # Allocation reads `origin/main` before the branch exists, so it fetches itself.
-case "$(body_flat "$REPO_ROOT/skills/opening-a-batch/SKILL.md")" in
+# The opening keeps its allocation in a reference, read at that step.
+case "$(body_flat "$REPO_ROOT/skills/opening-a-batch/references/allocating-nn.md" 2>/dev/null || true)" in
     *"git fetch origin git ls-tree --name-only origin/main docs/batches/"*)
         pass "opening-a-batch: allocation fetches before it reads the remote" ;;
     *)  fail "opening-a-batch: allocation fetches before it reads the remote" ;;
 esac
+case "$(body_flat "$REPO_ROOT/skills/opening-a-batch/SKILL.md")" in
+    *"git ls-tree"*|*"smallest integer"*)
+        fail "opening-a-batch: the allocation is written in its reference alone" ;;
+    *)  pass "opening-a-batch: the allocation is written in its reference alone" ;;
+esac
+require opening-a-batch "the opening allocates NN from its reference" \
+    "Allocate \`NN\` as \`skills/opening-a-batch/references/allocating-nn.md\` says"
 case "$(body_flat "$REPO_ROOT/skills/writing-a-user-story/SKILL.md")" in
     *"git fetch origin git ls-tree --name-only origin/main docs/batches/NN-<slug>/"*)
         pass "writing-a-user-story: allocation fetches before it reads the remote" ;;
