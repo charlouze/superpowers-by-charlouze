@@ -37,7 +37,9 @@ session, and asserting them from a shell would only assert a paraphrase of them:
 - whether `finishing-a-development-branch` is really kept to the pull-request
   option on a story;
 - whether an agent that invokes an internal skill comes back to the next step
-  of the skill that invoked it.
+  of the skill that invoked it;
+- whether a subagent that executes or reviews a task of a plan loads
+  `supercharlouze:following-the-rules`.
 
 Read that list as the shape of the net, not as a to-do: these are the properties
 the human gates exist for.
