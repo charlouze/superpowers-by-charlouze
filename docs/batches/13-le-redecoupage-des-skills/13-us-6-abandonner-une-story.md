@@ -571,4 +571,20 @@ Sujet : `feat: writing-a-user-story invoque abandoning-a-story`
 
 ## Rulings log
 
+Ruling: la story reste technique alors que `writing-a-batch` et `writing-a-user-story` se mettent à invoquer une skill là où elles portaient le texte — la spec ne dit pas quelle skill porte une règle, et l'humain l'a déjà arbitré ainsi sur l'extraction de `writing-in-a-spec` — si c'est faux, la story aurait dû s'arrêter sur sa condition d'arrêt et passer par un amendement.
+
+Ruling: la fermeture de la pull request d'une story technique dès l'arrêt reste écrite dans `writing-a-batch` et `writing-a-user-story`, hors de `abandoning-a-story` — c'est le moment d'abandon que ces skills portent aujourd'hui, que change le bloc sur `Amending a batch`, transcrit par une story ultérieure ; `abandoning-a-story` ne ferme une pull request que s'il y en a une d'ouverte, donc l'invoquer ensuite ne refait rien — si c'est faux, une phrase du geste reste recopiée chez deux appelantes jusqu'à cette story.
+
+Ruling: `abandoning-a-story` retire l'espace de travail avant de supprimer la branche, à l'inverse de l'ordre que le plan écrit — git refuse de supprimer une branche qu'un espace de travail a en checkout, `writing-a-user-story` écrivait déjà « remove its worktree and delete its branch », et la spec ne fixe pas d'ordre — si c'est faux, deux points de la skill et la garde qui tient leur ordre sont à inverser.
+
+Ruling: `writing-a-user-story` garde la phrase qui attribue à `closing-a-batch` ce qu'un abandon laisse sur `main`, et `abandoning-a-story` dit seulement de ne rien changer sur `main` — une skill interne ne nomme pas une skill d'entrée, et la phrase dit à qui abandonne de ne pas compter ce résidu — si c'est faux, la phrase décrit ce que fait une autre skill et se retire de `writing-a-user-story` avec ses deux gardes.
+
+Ruling: `writing-a-user-story` invoque `abandoning-a-story` à deux endroits, après une requalification tranchée à l'étape 5 et dans la règle générale de l'étape 7, et `writing-a-batch` à trois — chaque passage qui écrivait le geste devient une invocation, et l'abandon sur une contrainte ou un ADR intenable s'appuie comme avant sur la règle générale de l'étape 7 — si c'est faux, un agent arrêté sur une contrainte ne trouve l'invocation qu'en lisant l'étape 7.
+
+Ruling: la ligne `Red Flags` « The story is abandoned, the branch can stay » quitte `writing-a-user-story` pour `abandoning-a-story` — l'excuse porte sur le geste, et une garde interdit désormais sa réponse hors de la skill qui le porte — si c'est faux, un agent qui n'invoque pas la skill ne lit plus cette réponse.
+
+Ruling: une garde négative interdit le geste d'abandon dans toute skill déclarée autre que `abandoning-a-story`, en plus des deux gardes que `Technical design` demande — sans elle, une appelante qui regagnerait une copie laisserait toutes les gardes vertes — si c'est faux, une skill future qui parle légitimement de supprimer une branche de story devra reformuler ou la garde s'affiner.
+
+Ruling: les commits des trois tâches sont fondus en un seul avant l'ouverture de la pull request — une story livre une idée, et le commit de la deuxième tâche laissait rouge le contrat `shared` que la troisième remplace — si c'est faux, le détail par tâche n'est plus lisible dans l'historique.
+
 ## Observed drift
