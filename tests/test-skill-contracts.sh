@@ -1047,4 +1047,10 @@ absent "using-batches keeps no section the bounded path is sent to" \
 absent_everywhere "no skill sends a bounded change to using-batches" \
     "bounded change, under .supercharlouze:using-batches"
 
+# The red flags of the story path live in delivering-a-story: using-batches
+# routes, and keeps none of them.
+absent "using-batches keeps no red flag of the story path" \
+    "local merge is quicker|transcribe the whole spec delta now" \
+    using-batches
+
 exit $((FAILURES > 0))

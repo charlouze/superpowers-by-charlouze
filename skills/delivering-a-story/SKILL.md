@@ -433,7 +433,8 @@ ends by offering a choice between subagent-driven development and
 `superpowers:executing-plans`. Do not present that choice: this plugin requires
 `superpowers:subagent-driven-development`. Reason: repatriating the rulings
 depends on SDD's ledger; `superpowers:executing-plans` keeps none, and the
-trace of every arbitration made on your human partner's behalf would be lost.
+trace of every arbitration made on your human partner's behalf would be lost —
+and those arbitrations are the only record of where the spec was ambiguous.
 
 **Override 4 — the exit of `superpowers:finishing-a-development-branch` is
 constrained.** SDD concludes on that skill, which presents three options and
@@ -454,27 +455,37 @@ reason is exact:
 So this override removes one choice that cannot succeed, and one that leads
 nowhere.
 
+**Deliberately not an override:** SDD's terminal state. Nothing is interposed
+between SDD and `superpowers:finishing-a-development-branch` — what is
+constrained is what the latter offers, which is Override 4 and nothing else.
+
 **Override 2 — the stop conditions the flow adds.** SDD states that four things
 stop you and only these. This plugin adds its own. **When one of them fires,
 stop: `supercharlouze:handling-a-stopped-story` conducts what follows.**
 
 In a corrective batch: if, while bringing code into conformity with the spec, you
 discover that the **spec** is wrong and the code is right, stop. The batch is no
-longer corrective and must be requalified. The four native conditions assume a
-valid authority exists; here the authority itself is in question, and an agent may
-not correct a spec.
+longer corrective and must be requalified. An agent may not correct a spec.
 
 In a technical story, whatever its batch: if, while conducting it, you discover
 that it changes something observable at the module's boundary, stop. The story is
-no longer technical. The four native conditions also assume the story is the story
-it says it is; here the qualification it was written under is what is in question,
-and only your human partner may rule what follows: a block for the observable
-change, and the flag that block requires, if it requires one.
+no longer technical. Only your human partner may rule what follows: a block for
+the observable change, and the flag that block requires, if it requires one.
 
 In a story whose batch declares constraints or whose `docs/adr/` carries an ADR:
 if, while conducting it, you discover that a constraint of its batch or an ADR
 cannot be held, stop and put it to your human partner. A constraint the spec
 contradicts is not this case, since the spec wins.
+
+Justification: the four native conditions assume a valid authority exists,
+assume the story is the story it says it is, and know nothing of the stories
+beside it. A corrective batch puts the authority in question; a technical story
+puts its own qualification in question — "purely technical" is otherwise the
+door through which behaviour enters with no gate behind it, since a story that
+transcribes no block passes no opening review; a constraint is what the other
+stories of its batch rely on, so a story that cannot hold one cannot settle it
+alone; and an ADR is a decision your human partner took, so only they judge it
+untenable.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session

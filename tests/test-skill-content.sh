@@ -1341,7 +1341,7 @@ require following-the-rules "a contradicted constraint is not this case" \
     "A constraint the spec contradicts does not fall under this condition: the spec wins."
 require following-the-rules "a ruling would break a decision of the batch or of the human" \
     "and the condition on a constraint or an ADR would break a decision another story of the batch relies on, or one your human partner took for all the code to come."
-require using-batches "the justification covers the ADR" \
+require delivering-a-story "the justification covers the ADR" \
     "and an ADR is a decision your human partner took, so only they judge it untenable."
 
 # --- following-the-rules: the shape of a review's end ---
