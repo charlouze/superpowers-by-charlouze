@@ -6,12 +6,12 @@ source "$(dirname "$0")/lib.sh"
 echo "test-skill-content"
 
 # Every document-producing skill states the language rule (Global Constraints, spec 10).
-for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision; do
+for s in adopting-a-module writing-a-batch writing-a-batch-document writing-a-user-story closing-a-batch recording-a-decision; do
     require "$s" "states the language rule" "English skeleton"
 done
 
 # Every document-producing skill sends its writer to the concision rules.
-for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision; do
+for s in adopting-a-module writing-a-batch writing-a-batch-document writing-a-user-story closing-a-batch recording-a-decision; do
     require "$s" "points at the concision rules" "follows \`Concision\` in \`supercharlouze:following-the-rules\`"
 done
 
@@ -111,17 +111,25 @@ require writing-a-batch "preconditions come before any branch"   "Check them all
 require writing-a-batch "the human abandons or sets the design aside" "abandon the design or set it aside"
 require writing-a-batch "the design resumes in a fresh context"   "resumes in a fresh context"
 require writing-a-batch "NN accounts for open pull requests"      "open pull request"
-require writing-a-batch "batch document carries no mutable state" "no mutable state"
-require writing-a-batch "no story list in the batch document"     "list of stories"
-require writing-a-batch "the story list counts pushed branches" "completed by the open pull requests and by the pushed \`story/*\` branches that carry no pull request yet"
+require writing-a-batch-document "batch document carries no mutable state" "no mutable state"
+require writing-a-batch-document "no story list in the batch document"     "list of stories"
+require writing-a-batch-document "the story list counts pushed branches" "completed by the open pull requests and by the pushed \`story/*\` branches that carry no pull request yet"
 require writing-a-batch "writes no spec at opening"               "no writing into the specs"
+require writing-a-batch "the opening has the document written by the shared skill" \
+    "To write the batch document, invoke \`supercharlouze:writing-a-batch-document\` and give it this batch's \`NN\` and its slug."
+require writing-a-batch "an amendment has the document amended by the shared skill" \
+    "To amend the document, invoke \`supercharlouze:writing-a-batch-document\` and give it the batch document and what the amendment changes in it."
+require writing-a-batch "no block is transcribed at opening" \
+    "No block is transcribed at opening: each one is transcribed by a story, in that story's own pull request"
+require writing-a-batch "an amendment says in its body what changed" \
+    "Say in the pull request body what changed and why."
 require writing-a-batch "PR review is the human gate"             "review of the batch pull request"
-require writing-a-batch "declares the Feature flag field"         "Feature flag"
-require writing-a-batch "flag field is never left empty"          "never left empty"
-require writing-a-batch "flag is per batch and module"            "per (batch, module)"
-require writing-a-batch "extended scope names its lifting condition" "lifting condition"
-require writing-a-batch "the specs are the registry of flags"     "The specs are the registry of flags"
-require writing-a-batch "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
+require writing-a-batch-document "declares the Feature flag field"         "Feature flag"
+require writing-a-batch-document "flag field is never left empty"          "never left empty"
+require writing-a-batch-document "flag is per batch and module"            "per (batch, module)"
+require writing-a-batch-document "extended scope names its lifting condition" "lifting condition"
+require writing-a-batch-document "the specs are the registry of flags"     "The specs are the registry of flags"
+require writing-a-batch-document "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
 require writing-a-batch "amendment pull request exists"           "amendment pull request"
 require writing-a-batch "an amendment covers the design and the constraints" "An amendment changes the scope, the spec delta, the technical design, the constraints or the flag of an open batch"
 require writing-a-batch "the entry point names the design and the constraints" "Changing the scope, the spec delta, the technical design, the constraints or the flag of an existing batch"
@@ -151,7 +159,7 @@ require writing-a-batch "an untenable constraint is amended" "If they rule it un
 require writing-a-batch "a story abandoned on a constraint goes through abandoning-a-story" "the story is abandoned: invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
 require writing-a-batch "a constraint that holds resumes the story" "Otherwise the story resumes and holds the constraint, and nothing is amended."
 require writing-a-batch "the red flag keeps the ruling with the human" "Whether a constraint can be held is your human partner's ruling."
-require writing-a-batch "an obvious design is still written" "An obvious design is still a design: write it."
+require writing-a-batch-document "an obvious design is still written" "An obvious design is still a design: write it."
 require writing-a-batch "requalification offers a different batch" "**Rule the remaining work a different batch**"
 require writing-a-batch "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
 require closing-a-batch "an amendment already released what it dropped" "An entry an amendment took out of \`Scope\` is not among them: that amendment released it."
@@ -181,48 +189,50 @@ require writing-a-user-story "the human rules the block and its flag" \
     "a block for the observable change, and the flag that block requires, if it requires one"
 require writing-a-batch "branch naming convention"                "batch/NN"
 
-# --- writing-a-batch: the batch document contract (spec section "The batch document") ---
-require writing-a-batch "template declares the Constraints section" "## Constraints"
-require writing-a-batch "Constraints are copied verbatim to stories" "copies this section **verbatim** into"
-require writing-a-batch "Constraints carry nothing normative"       "Nothing normative goes in \`Constraints\`"
-require writing-a-batch "Constraints keep shared decisions from being reinvented" \
+# --- writing-a-batch-document: the batch document contract (spec section "The batch document") ---
+# The guards that stay on writing-a-batch here hold what its reread and its pull
+# request body say of the document.
+require writing-a-batch-document "template declares the Constraints section" "## Constraints"
+require writing-a-batch-document "Constraints are copied verbatim to stories" "Every story's \`Global Constraints\` copies this section **verbatim**"
+require writing-a-batch-document "Constraints carry nothing normative"       "Nothing normative goes in \`Constraints\`"
+require writing-a-batch-document "Constraints keep shared decisions from being reinvented" \
     "and its own version of a decision the rest of the design relies on"
 
-require writing-a-batch "the delta is exact text, in blocks"        "written here as **exact text, in blocks**"
-require writing-a-batch "a block carries a unique D<n>"             "Each one carries an identifier \`D<n>\`, unique within the batch"
-require writing-a-batch "a block shows its change in its paragraph" "A block shows what it changes in the paragraph that contains it"
-require writing-a-batch "the paragraph is given as a diff"           "Give the paragraph in a \`diff\` fence"
-require writing-a-batch "the paragraph is taken from main"           "take the paragraph from \`main\` as it stands"
-require writing-a-batch "no block is attached to a story"           "No block is attached to a story"
-require writing-a-batch "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
-require writing-a-batch "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
-require writing-a-batch "the batch document faces several specs" "the one document that faces several specs at once"
-require writing-a-batch "twin blocks are not a delta"        "two blocks writing the same rule into two specs"
+require writing-a-batch-document "the delta is exact text, in blocks"        "written here as **exact text, in blocks**"
+require writing-a-batch-document "a block carries a unique D<n>"             "Each one carries an identifier \`D<n>\`, unique within the batch"
+require writing-a-batch-document "a block shows its change in its paragraph" "A block shows what it changes in the paragraph that contains it"
+require writing-a-batch-document "the paragraph is given as a diff"           "Give the paragraph in a \`diff\` fence"
+require writing-a-batch-document "the paragraph is taken from main"           "take the paragraph from \`main\` as it stands"
+require writing-a-batch-document "no block is attached to a story"           "No block is attached to a story"
+require writing-a-batch-document "two changes to a section are two blocks"   "carries two blocks, and \`Constraints\` states their order"
+require writing-a-batch-document "a lifting is a block removing the sentence" "as a block that removes its gating sentence"
+require writing-a-batch-document "the batch document faces several specs" "the one document that faces several specs at once"
+require writing-a-batch-document "twin blocks are not a delta"        "two blocks writing the same rule into two specs"
 # Closing finds an undelivered block from the `Blocks:` declarations, not from what
 # reached the specs (spec section "Closing a batch"). The two coincide on the nominal
 # path and part exactly where a block was fitted to a `main` that had moved: it was
 # transcribed and it was declared, but its text no longer matches the delta.
-require writing-a-batch "undelivered means nobody declared it"      "the delta announced and no story declared"
+require writing-a-batch-document "undelivered means nobody declared it"      "the delta announced and no story declared"
 
 # The `Spec delta` field is never blank: it carries blocks, or `none` and the
 # reason (spec section "The batch document"). A blank is an omission nobody
 # can review, exactly as an omitted `Feature flag` would be; the `none` and
 # its reason make "no block" a statable decision rather than a silence.
-require writing-a-batch "the delta field is never left blank"       "The \`Spec delta\` field is never left blank"
-require writing-a-batch "the field carries blocks or none"          "It carries the blocks, or \`none\` and the reason"
-require writing-a-batch "a corrective batch lists its entries in Scope" "Its \`Spec delta\` reads \`none\` with that reason, and its \`Scope\` lists the *Violations* entries it takes on"
-require writing-a-batch "the template forbids a blank delta"        "Never left blank: with no block, \`none\` and the reason"
-require writing-a-batch "the template's Scope names the entries"    "<What this batch delivers, including every gaps register entry it takes on.>"
-require writing-a-batch "the template's Constraints are bounded"    "<Only the migration and compatibility constraints, the technical decisions the rest of the technical design relies on, and the required order of the stories and of the blocks."
+require writing-a-batch-document "the delta field is never left blank"       "The \`Spec delta\` field is never left blank"
+require writing-a-batch-document "the field carries blocks or none"          "It carries the blocks, or \`none\` and the reason"
+require writing-a-batch-document "a corrective batch lists its entries in Scope" "Its \`Spec delta\` reads \`none\` with that reason, and its \`Scope\` lists the *Violations* entries it takes on"
+require writing-a-batch-document "the template forbids a blank delta"        "Never left blank: with no block, \`none\` and the reason"
+require writing-a-batch-document "the template's Scope names the entries"    "<What this batch delivers, including every gaps register entry it takes on.>"
+require writing-a-batch-document "the template's Constraints are bounded"    "<Only the migration and compatibility constraints, the technical decisions the rest of the technical design relies on, and the required order of the stories and of the blocks."
 # A technical decision is a constraint only when the rest of the technical design
 # relies on it (spec section "The batch document"); every other one is design.
-require writing-a-batch "a decision is a constraint only if the design relies on it" \
+require writing-a-batch-document "a decision is a constraint only if the design relies on it" \
     "A technical decision goes in \`Constraints\` only if the rest of the technical design relies on it"
-require writing-a-batch "every other decision is design" \
+require writing-a-batch-document "every other decision is design" \
     "Every other technical decision goes in \`Technical design\`, where a story may depart from it."
 # A batch's constraints bind only its stories (spec section "The batch document"):
 # neither another batch nor the code that comes after the batch has to hold them.
-require writing-a-batch "a batch's constraints bind only its stories" \
+require writing-a-batch-document "a batch's constraints bind only its stories" \
     "A batch's constraints bind only its stories."
 require writing-a-batch "the document reread checks the widened Constraints" \
     "\`Constraints\` carrying only migration and compatibility constraints, the technical decisions the rest of the technical design relies on, and the required order of stories and blocks, or \`none\`"
@@ -231,17 +241,17 @@ require writing-a-batch "the PR body puts the constraints to the reviewer" \
 require writing-a-batch "the document reread checks the field"      "\`Spec delta\` filled"
 # The batch document carries the technical design of its stories (spec section
 # "The batch document"): between the delta and the constraints, never blank.
-require writing-a-batch "the template places the design after the delta" \
+require writing-a-batch-document "the template places the design after the delta" \
     "with no block, \`none\` and the reason.> ## Technical design <The design your human partner approved during the brainstorming"
-require writing-a-batch "the template places the design before the constraints" \
+require writing-a-batch-document "the template places the design before the constraints" \
     "with no design, \`none\` and the reason.> ## Constraints"
-require writing-a-batch "the design field is never left blank" \
+require writing-a-batch-document "the design field is never left blank" \
     "Never left blank: with no design, \`none\` and the reason"
-require writing-a-batch "the design comes from the brainstorming" \
+require writing-a-batch-document "the design comes from the brainstorming" \
     "\`Technical design\` carries the design your human partner approved during \`superpowers:brainstorming\`"
-require writing-a-batch "a story may depart from the design" \
+require writing-a-batch-document "a story may depart from the design" \
     "a story may depart from it by recording a \`Technical design ruling:\`"
-require writing-a-batch "an observable behaviour is a block, not design" \
+require writing-a-batch-document "an observable behaviour is a block, not design" \
     "What a user or a neighbouring module would observe goes in a block, never in \`Technical design\`."
 require writing-a-batch "the document reread checks the design field" \
     "\`Technical design\` filled, with the design or with \`none\` and the reason"
@@ -1151,6 +1161,33 @@ require finishing-a-pr "says when to go back to the step that invoked it" \
 # a numbered step of one of them.
 absent "finishing-a-pr names no skill that invokes it" "${entry_names%|}|Step [0-9]" finishing-a-pr
 
+# --- writing-a-batch-document: the form of a batch document ---
+require writing-a-batch-document "says what the invoking skill gives" \
+    "The skill that invokes it gives the batch's \`NN\` and its slug for a document to write, or the batch document and what changes in it for a document to amend."
+require writing-a-batch-document "a new document is written whole" \
+    "Write a new document whole, from the template below."
+require writing-a-batch-document "an amended document keeps no history" \
+    "Amend a document in place, in the fields the change touches, and keep in it no history of what it said before."
+require writing-a-batch-document "says when to go back to the step that invoked it" \
+    "Once the document is written, go on with the step that invoked this skill."
+require writing-a-batch-document "the document lives in the batch directory" \
+    "Write \`docs/batches/NN-<slug>/README.md\`"
+require writing-a-batch-document "the flag decision follows the model of the foundation" \
+    "Decide it by \`The Model\` in \`supercharlouze:following-the-rules\`"
+require writing-a-batch-document "the field has three shapes" \
+    "Three shapes of the field, and there are no others"
+require writing-a-batch-document "a cross-module batch writes one line per guarded module" \
+    "one line per guarded module"
+require writing-a-batch-document "the gating sentence is left to the story" \
+    "do not write it into the spec yourself"
+require writing-a-batch-document "a block is written under the rules of a spec" \
+    "**Invoke \`supercharlouze:writing-in-a-spec\` before writing a block.**"
+# An internal skill names the skills it invokes, never those that invoke it, nor
+# a numbered step of one of them. Its own name starts with the name of an entry
+# skill, which the pattern lets through.
+document_callers="$(printf '%s' "${entry_names%|}" | sed 's/writing-a-batch/writing-a-batch([^-]|$)/')"
+absent "writing-a-batch-document names no skill that invokes it" "$document_callers|Step [0-9]" writing-a-batch-document
+
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
 require following-the-rules "a block is transcribed word for word" "the exact text it must receive, transcribed word for word by a story"
@@ -1212,7 +1249,7 @@ absent_everywhere "no skill glosses the rules for code under a flag" \
 # a batch of that kind has no block, and nothing said what its field held. Nothing
 # may name it again — an assertion on the new family alone would stay green beside
 # a leftover copy of the old one.
-for s in using-batches writing-a-batch; do
+for s in using-batches writing-a-batch writing-a-batch-document; do
     case "$(body_flat "$REPO_ROOT/skills/$s/SKILL.md")" in
         *"Refactor and infrastructure"*) fail "$s: the old exemption family is gone" ;;
         *)                               pass "$s: the old exemption family is gone" ;;

@@ -234,6 +234,21 @@ case "$FROW" in
     *)                  fail "the README row of finishing-a-pr rules out direct use" ;;
 esac
 
+# The README row of writing-a-batch-document, like the other internal skills',
+# says it is not for direct use and names none of the skills that invoke it. Its
+# own name starts with the name of the skill that invokes it, so the name is
+# taken out before the row is read.
+NROW="$(grep -F '`supercharlouze:writing-a-batch-document`' "$REPO_ROOT/README.md" || true)"
+case "${NROW//writing-a-batch-document/}" in
+    *"writing-a-batch"*|*"invoked by"*)
+        fail "the README row of writing-a-batch-document names no caller" ;;
+    *)  pass "the README row of writing-a-batch-document names no caller" ;;
+esac
+case "$NROW" in
+    *"Never directly"*) pass "the README row of writing-a-batch-document rules out direct use" ;;
+    *)                  fail "the README row of writing-a-batch-document rules out direct use" ;;
+esac
+
 # The rereads use three skills when they are installed; the README recommends
 # them all, since nothing else tells a user they exist. Anchored on the
 # recommendation itself: a skill named anywhere else in the README proves nothing.
