@@ -221,6 +221,19 @@ case "$BROW" in
     *)                  fail "the README row of starting-a-branch rules out direct use" ;;
 esac
 
+# The README row of finishing-a-pr, like the other internal skills', says it is
+# not for direct use and names none of the skills that invoke it.
+FROW="$(grep -F '`supercharlouze:finishing-a-pr`' "$REPO_ROOT/README.md" || true)"
+case "$FROW" in
+    *"adopting-a-module"*|*"writing-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
+        fail "the README row of finishing-a-pr names no caller" ;;
+    *)  pass "the README row of finishing-a-pr names no caller" ;;
+esac
+case "$FROW" in
+    *"Never directly"*) pass "the README row of finishing-a-pr rules out direct use" ;;
+    *)                  fail "the README row of finishing-a-pr rules out direct use" ;;
+esac
+
 # The rereads use three skills when they are installed; the README recommends
 # them all, since nothing else tells a user they exist. Anchored on the
 # recommendation itself: a skill named anywhere else in the README proves nothing.
