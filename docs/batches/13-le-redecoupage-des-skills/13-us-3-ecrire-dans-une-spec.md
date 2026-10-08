@@ -498,4 +498,16 @@ bash ~/.config/github-app/as-agent.sh git commit -m "feat: les skills qui écriv
 
 ## Rulings log
 
+Ruling: `writing-a-batch` invoque `writing-in-a-spec` avant d'écrire un bloc, alors qu'elle ne renvoyait à aucune règle de contenu — jusqu'à cette story le texte vivait dans `using-batches`, que celui qui ouvre un lot a chargée, et un bloc est le texte exact qu'une spec reçoit — si c'est faux, l'ouverture d'un lot charge une skill de trop et un paragraphe de `writing-a-batch` est à retirer.
+
+Ruling: la story reste technique — la spec dit ce qu'une spec contient et ne dit pas quelle skill le porte, donc déplacer ce texte et l'invoquer ne change rien de ce qu'elle décrit — si c'est faux, la story est à requalifier et le lot à amender.
+
+Ruling: les paragraphes de `adopting-a-module`, `writing-a-batch` et `writing-a-user-story` qui s'ouvrent sur « A rule belongs to exactly one spec. » restent — chacun porte ce que fait son étape quand une règle déborde d'un module, et la règle est écrite en entier dans `writing-in-a-spec` — si c'est faux, trois reformulations partielles de la règle continuent de dériver jusqu'aux stories qui extraient ces skills.
+
+Ruling: la lecture de `rereading-a-spec` sur ce qu'une spécification doit tenir reste telle quelle, tenue à `writing-in-a-spec` par le seul nom du test — elle est écrite pour un lecteur qui ne charge aucune skill et n'a jamais été une copie mot pour mot du texte extrait — si c'est faux, la lecture et la skill dérivent sans qu'une garde le montre.
+
+Ruling: la phrase « It is invoked by another skill, never on a request of your human partner. » de `writing-in-a-spec` reste, bien qu'elle redise la description — les autres skills internes portent la même — si c'est faux, une phrase est à couper.
+
+Ruling: la ligne de `Red Flags` déplacée dans `writing-in-a-spec` garde « record a `Ruling:` », qui ne désigne rien dans une adoption ni dans un changement borné — une extraction déplace un texte sans le changer — si c'est faux, un agent qui adopte un module lit une consigne qu'il ne peut pas suivre.
+
 ## Observed drift
