@@ -123,7 +123,7 @@ unchanged lines and its added lines, without their prefix.
 **First.** Not for visibility — the file would be readable in the worktree even
 uncommitted — but because this is what makes the norm **prior and binding** on
 the code. It is already in the branch's history when implementation starts, it
-travels in the pull request, and the freeze of Step 4 gets an identifiable
+travels in the pull request, and the freeze of the spec file gets an identifiable
 starting point.
 
 **Named in the pull request.** Every divergence from a block is named in the body
@@ -246,8 +246,9 @@ technical", and the qualification is visible wherever it is claimed.
 ```
 
 The qualification is yours to declare and nobody else's to check at this point:
-what catches a false one is the stop condition, in `Global Constraints` below,
-and it fires during the implementation rather than here.
+what catches a false one is the `technical stop condition`, which
+`Global Constraints` names, and it fires during the implementation rather than
+here.
 
 Then create, at the end of the document, the two sections Step 6 fills — empty
 now, and left empty if nothing turns up:
@@ -283,156 +284,16 @@ the ones this story's code holds.
 A batch whose `Technical design` is `none` gives the plan nothing to start from.
 
 `Global Constraints` — which `superpowers:writing-plans` defines as implicitly
-part of every task's requirements — carries:
+part of every task's requirements — is written from
+`skills/delivering-a-story/references/global-constraints.md`. It carries the
+batch's `Constraints` section copied verbatim, the name of each execution rule
+that holds for this story, and the path of each ADR this story's code holds, or
+`none`.
 
-- the constraints the batch imposes;
-- the freeze of the spec file;
-- the authority rule;
-- the concision rules;
-- **in a corrective batch only**, the stop condition proper to a corrective
-  batch;
-- **in a story that writes code guarded by a flag only**, the rules for code
-  under a flag;
-- **in a technical story only**, the stop condition proper to a technical
-  story;
-- **only if the batch declares constraints or `docs/adr/` carries an ADR**, the
-  stop condition on a constraint or an ADR that cannot be held;
-- **only if `docs/adr/` carries an ADR**, the paths of the ADRs this story's code
-  holds;
-- the conditions of an ADR, with the obligation to record as an `Open ruling:`
-  the decision that meets them.
-
-The batch's constraints are its `Constraints` section copied verbatim. The
-freeze of the spec file reads:
-
-> Between the first commit of the branch and the opening of the pull request, no
-> task modifies the spec file. A story that discovers the spec must change stops.
-
-The freeze exists because the spec file now travels in the same branch as the
-code, so SDD's tasks can physically edit it — which was not true when it lived
-elsewhere. Putting it in `Global Constraints` puts it in front of every
-implementer and every reviewer.
-
-The freeze has a bound: the **freeze is lifted when the pull request opens**.
-Review requests are human decisions, including on the wording of the spec
-change, and they apply on the story's branch (Step 7). An unbounded freeze would
-make it literally impossible to answer a review — or to resolve a merge
-conflict on the spec file.
-
-**When the batch and the spec contradict each other, the spec wins — without
-exception and without deliberation.** Implement what the spec says, record a
-`Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an
-agent's.** That rule is the authority rule `Global Constraints` carries.
-
-In every story, `Global Constraints` carries the concision rules, written out in
-full. Copy the block below verbatim:
-
-> These rules hold for every document, pull request body and commit message
-> this story writes.
->
-> Every sentence says one exact thing, once, and stands on its own.
->
-> Every paragraph carries one rule.
->
-> A rule says how far it holds, and an exception presents itself as one.
->
-> A text says what it delivers or decides, without telling how it got there or
-> why. Exception: a reason that is explicitly asked for, such as the why of a
-> ruling.
->
-> No sentence is set in relief: no bold that ranks one sentence above its
-> neighbours.
-
-**In a corrective batch, `Global Constraints` carries the stop condition proper
-to a corrective batch, written out in full.** Copy it verbatim,
-exactly as `supercharlouze:following-the-rules` states it:
-
-> If, while bringing code into conformance with a spec, you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified.
-
-The freeze above already stops a task that finds the spec must change, but it
-stops it and says nothing more. The consequence — that the batch has lost the
-qualification it was opened under — is what makes this a requalification rather
-than a question to ask and move on from. And the discovery happens inside SDD's
-implementer subagents, whose only channel to this skill's rules is this list: a
-stop condition stated to you and not written here never reaches the agent who
-has to obey it.
-
-**In a story that writes code guarded by a feature flag, `Global Constraints`
-carries the rules for code under a flag, written out in full.**
-This holds whether the flag was declared by this story's batch or by another one:
-what decides is that this story writes guarded code, not which batch owns the
-flag. Copy the block below verbatim, exactly as `supercharlouze:following-the-rules` states it:
-
-> Code guarded by a feature flag holds up when the flag is on for some users
-> only, on for everyone, and off:
->
-> - The two states work on the same data: what one produces, the other reads
->   and uses, with no error and no data loss.
-> - With the flag off, the user finds the behaviour from before the batch.
-> - The story's pull request tests the flag-on behaviour, the flag-off
->   behaviour, and their coexistence.
-> - Lifting the flag comes down to deleting the branching and the behaviour
->   from before the batch, without writing anything new.
-
-Copying this block is what puts those rules in front of the implementer — a norm
-nobody reads while writing the code bites on nothing. They travel the way the
-freeze does, through the only channel SDD's subagents read.
-
-**In a technical story, `Global Constraints` carries the stop condition proper to
-a technical story, written out in full.** Copy it verbatim,
-exactly as `supercharlouze:following-the-rules` states it:
-
-> If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical.
-
-The freeze above stops a task that finds the spec must change, and it is not this.
-A technical story was written on the claim that nothing needed changing at all, so
-nobody is looking at the spec when the claim fails: what fails is the
-qualification the story carries, and losing it sends the work back to the opening
-gate rather than forward. And the discovery happens inside SDD's implementer
-subagents, whose only channel to this skill's rules is this list — a stop
-condition stated to you and not written here never reaches the agent who has to
-obey it.
-
-**In a story whose batch declares constraints, or whose `docs/adr/` carries an
-ADR, `Global Constraints` carries the stop condition on a constraint or an ADR
-that cannot be held, written out in full.** A batch declares constraints when its
-`Constraints` section is not `none`. `docs/adr/` carries an ADR when a `.md` file
-is placed directly in it, in this story's worktree. Copy the block below
-verbatim, exactly as `supercharlouze:following-the-rules` states it:
-
-> If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner.
->
-> A constraint the spec contradicts does not fall under this condition: the spec wins.
-
-A constraint is a decision another story of the batch relies on, and an ADR is a
-decision your human partner took for all the code to come, so an implementer who
-works around either breaks something they cannot see.
-
-**When `docs/adr/` carries an ADR, `Global Constraints` lists the path of each
-one, under the sentence below.** Copy it verbatim:
-
-> The code this story writes holds these ADRs.
-
-An implementer reads only this list, so an ADR whose path is missing from it
-binds nobody.
-
-**In every story, `Global Constraints` carries the conditions of an ADR, written
-out in full, with the obligation to record the decision that meets them.** Copy
-the block below verbatim. Its conditions are those `supercharlouze:following-the-rules`
-states:
-
-> A technical decision is recorded as an ADR only if it meets these conditions:
->
-> - undoing it is expensive;
-> - it surprises whoever does not know its context;
-> - it settles between real alternatives.
->
-> When you take a technical decision that meets them, say so in your report: it
-> is recorded as an `Open ruling:`, which asks your human partner whether they
-> want it as an ADR. Write nothing in `docs/adr/`.
-
-Only your human partner decides an ADR, so an implementer who takes such a
-decision reports it and leaves the file to the review.
+**It names the execution rules and copies none.** Whoever executes or reviews a
+task reads them in `supercharlouze:following-the-rules`, which
+`Global Constraints` tells them to invoke; a rule copied into a plan drifts from
+the one written there.
 
 **Commit the story document — header, the two empty sections and
 `Global Constraints` together — and push it immediately**, `git push`, before
@@ -507,7 +368,8 @@ untenable.
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session
 under pressure. It reaches the implementers through `Global Constraints`
-(Step 4), which is the only channel they read.
+(Step 4), which names it and sends them to
+`supercharlouze:following-the-rules`, where it is written.
 
 **When a task report or a review shows the story reaching a section `Sections:`
 does not name, detect again before dispatching anything else** (Step 1).
@@ -681,7 +543,7 @@ Every text this skill writes follows `Concision` in `supercharlouze:following-th
 | "This drift is small, I'll just add it to the gaps register" | Within a batch, only the closing pull request adds entries. Record it under Observed drift. |
 | "Every ruling is recorded, the log is done" | An open ruling also needs a destination. A violation or a gap goes to the register through closing; anything else is settled at the review, before the merge. |
 | "The flag is an implementation detail, the spec need not mention it" | Then the spec is false for users. The spec change states the flag, its default, and its lifting condition if the scope is extended. |
-| "This story writes guarded code, but the flag is another batch's" | The rules for code under a flag go into `Global Constraints` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |
+| "This story writes guarded code, but the flag is another batch's" | `Global Constraints` names `code under a feature flag` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |
 | "The batch says otherwise, and the batch is more recent" | The spec wins, without deliberation. Implement the spec, record a Ruling, continue. |
 | "The block's rule spills onto the next module — the spec wins, I record a Ruling" | No ruling puts a rule in two places. A rule belongs to exactly one spec, and a rule that reaches further signals the breakdown. Stop and put it to your human partner. |
 | "My plan departs only slightly from the design, no ruling needed" | Every departure is a `Technical design ruling:`. One left out reaches the delivery review as a surprise. |
