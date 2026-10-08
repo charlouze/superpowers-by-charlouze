@@ -77,15 +77,7 @@ pull request that has to be thrown away.
    design that follows would then argue from what the code does, having been told
    in the same breath that it must not. Chaining the two is what makes that leak
    invisible, so the stop is the rule and not a preference.
-2. **The branch you are about to create starts from `main` as the remote carries
-   it.** Fetch first — allocating `NN` below already reads `origin/main` — then
-   branch from `origin/main`, never from a branch left over from an earlier
-   story. `superpowers:finishing-a-development-branch` preserves the worktree
-   on the pull request path, so a session that chains two pieces of work
-   without leaving it would otherwise stack this batch on the previous branch;
-   and without the fetch, number allocation reasons on a state that is already
-   behind.
-3. **`gh` is available and authenticated.** Number allocation queries it. Without
+2. **`gh` is available and authenticated.** Number allocation queries it. Without
    it you still have a partial safety net — the collision becomes visible when
    the pull request opens — but nothing prevents it.
 
@@ -93,9 +85,11 @@ pull request that has to be thrown away.
 
 `NN` is the **smallest integer not used in `docs/batches/` on `main`, not
 claimed by an open pull request, and not claimed by a pushed `batch/*` or
-`story/*` branch that carries no pull request yet**. All three, always:
+`story/*` branch that carries no pull request yet**. Fetch, then read all three,
+always:
 
 ```bash
+git fetch origin
 git ls-tree --name-only origin/main docs/batches/
 gh pr list --state open --json number,headRefName
 git ls-remote --heads origin 'batch/*' 'story/*'
@@ -129,16 +123,7 @@ story branch is the sole trace of its batch.
 The branch is `batch/NN-<slug>`. Path and branch patterns are English and fixed;
 the slug follows the project's language, because it names a business object.
 
-Create the branch and workspace by invoking `superpowers:using-git-worktrees`.
-That skill prefers the harness's native tooling, which picks its own branch name,
-may leave you on a detached HEAD, and may branch from wherever you happened to
-be. This plugin enforces its own naming and its own starting point: if you end up
-elsewhere, restore the conventional name and the starting point before going on —
-`batch/NN-<slug>`, from `origin/main`, with `git switch -c batch/NN-<slug>
-origin/main` inside the workspace. **A named branch is not enough.**
-Allocating `NN` above reads `batch/*` and `story/*` on the remote to refuse a
-number already claimed, so a branch left under a harness-chosen name claims
-nothing, and hands its number to the next batch opened in parallel.
+Invoke `supercharlouze:starting-a-branch` and give it the name `batch/NN-<slug>`.
 
 ## The Batch Document
 
@@ -550,9 +535,8 @@ Do it on a branch whose name **follows none of this plugin's branch patterns** �
 names are read as claims: `batch/*` and `story/*` claim a number, `story/*` and
 `bounded/*` claim sections. An amendment claims neither a number nor any section, so a
 branch named after one of the claiming patterns would claim what it does not hold,
-and a name that follows none has nothing to carry: that is what makes it the one
-exception to
-restoring a conventional name, and the exception holds for that reason alone.
+and a name that follows none has nothing to carry. Invoke
+`supercharlouze:starting-a-branch` and give it the name you chose.
 Edit the batch document in place, with no history of its own scope inside it,
 and say in the pull request body what changed and why. An amendment is not
 mutable state flowing along: it is an explicit human decision that goes through
