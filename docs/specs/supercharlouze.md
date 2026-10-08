@@ -459,7 +459,9 @@ comme une ouverture.
 
 Quand la condition d'arrêt d'un lot correctif se déclenche, l'humain tranche :
 
-- soit il corrige la spec, et le lot reste correctif sur un périmètre réduit ;
+- soit il décide de corriger la spec : un changement borné porte cette
+  correction (`Bounded change`), et un amendement réduit le périmètre du lot,
+  qui reste correctif ;
 - soit un amendement réécrit le lot comme lot ordinaire, en gardant `NN` et son
   répertoire ;
 - soit il juge le travail restant être un autre lot, qui reçoit un `NN` neuf, et le
@@ -742,6 +744,10 @@ branche `bounded/<slug>`.
 
 Quand il change quelque chose d'observable à la frontière du module, sa pull
 request met la spec à jour avec le code. Sinon, la spec reste muette.
+
+Exception : quand l'humain juge qu'une spec a tort et que le code a raison, un
+changement borné porte la correction de spec que l'humain décide, sans toucher
+au code.
 
 Il déclare dans le corps de sa pull request la spec qu'il vise et les sections
 qu'il touche, ou `none`.
