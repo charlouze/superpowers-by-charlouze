@@ -132,7 +132,6 @@ require writing-a-batch-document "the specs are the registry of flags"     "The 
 require writing-a-batch-document "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
 require amending-a-batch "amendment pull request exists"           "amendment pull request"
 require amending-a-batch "an amendment covers the design and the constraints" "An amendment changes the scope, the spec delta, the technical design, the constraints or the flag of an open batch"
-require amending-a-batch "the entry point names the design and the constraints" "Changing the scope, the spec delta, the technical design, the constraints or the flag of an existing batch"
 require amending-a-batch "a design or a constraint that must change is a dead end" "**A batch whose technical design or constraints must change**"
 require amending-a-batch "an amendment branch follows no pattern"  "follows none of this plugin's branch patterns"
 require amending-a-batch "a delta amendment is reviewed as an opening" "By exception, an amendment that changes the spec delta is reviewed as an opening"
@@ -158,46 +157,80 @@ require amending-a-batch "a change of ADRs alone is a bounded change" "A change 
 require amending-a-batch "red flag: an amendment for an ADR alone" "| \"My human partner wants this ADR rewritten, I'll amend the batch for it\" | An amendment changes the batch document. A change that touches nothing but ADRs goes through a bounded change. |"
 require amending-a-batch "red flag: an amendment's ADR is reread" "| \"This amendment only changes the scope, the ADR it writes needs no reread\" | An amendment that writes or rewrites an ADR goes through the technical reread, whatever else it changes. |"
 require amending-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
-require amending-a-batch "the human rules on a constraint a story cannot hold" "**When a story stops on a constraint it cannot hold, your human partner rules on the constraint.**"
-require amending-a-batch "an untenable constraint is amended" "If they rule it untenable, an amendment changes or removes the constraint and the story is abandoned"
-require amending-a-batch "a story abandoned on a constraint goes through abandoning-a-story" "the story is abandoned: invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
-require amending-a-batch "a constraint that holds resumes the story" "Otherwise the story resumes and holds the constraint, and nothing is amended."
-require amending-a-batch "the red flag keeps the ruling with the human" "Whether a constraint can be held is your human partner's ruling."
 require writing-a-batch-document "an obvious design is still written" "An obvious design is still a design: write it."
-require amending-a-batch "requalification offers a different batch" "**Rule the remaining work a different batch**"
-require amending-a-batch "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
 require closing-a-batch "an amendment already released what it dropped" "An entry an amendment took out of \`Scope\` is not among them: that amendment released it."
-require writing-a-user-story "abandoning leaves the reservation to the amendment or closing" "the amendment that takes its entry out of \`Scope\` releases it, or \`supercharlouze:closing-a-batch\` does"
 require writing-a-user-story "an abandonment leaves closing the reservation no amendment released" "unless an amendment took its entry out of \`Scope\` and released it"
 require closing-a-batch "an amendment's release is the one exception" "except an amendment that takes a reserved entry out of \`Scope\` and releases it"
-require amending-a-batch "a corrective story is abandoned once ruled" "1. **Leave the story as it stands until the choice below is ruled, then abandon it.**"
-require amending-a-batch "an open pull request waits for the ruling" "A pull request already open stays open until then."
-require amending-a-batch "a corrective story goes through abandoning-a-story once ruled" "Once the choice is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
-require amending-a-batch "a technical story's pull request is closed at the stop" "Close its pull request without merging it if one is already open; the branch and its worktree stay until the choice below is ruled."
-require amending-a-batch "a technical story goes through abandoning-a-story once ruled" "Once it is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
-require amending-a-batch "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |"
-# Both requalifications live in amending-a-batch; using-batches only routes to it.
-require using-batches "the corrective and the technical conditions route to amending-a-batch" "When the corrective or the technical condition fires, you stop, and \`supercharlouze:amending-a-batch\` conducts the requalification"
+# What follows a stop lives in handling-a-stopped-story; using-batches only routes to it.
+require using-batches "a fired stop condition routes to handling-a-stopped-story" "When one of them fires, you stop, and \`supercharlouze:handling-a-stopped-story\` conducts what follows."
+require using-batches "the routing table leads to handling-a-stopped-story" "| A story has stopped on a stop condition this flow adds | \`supercharlouze:handling-a-stopped-story\` |"
+require using-batches "the routing table leads an amendment to amending-a-batch" "| A batch must change its scope, its spec delta, its technical design, its constraints or its flag | \`supercharlouze:amending-a-batch\` |"
 require amending-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`bounded/<slug>\`, \`chore/supercharlouze-init\`"
 require amending-a-batch "a pattern name claims what it does not hold" "would claim what it does not hold"
-require amending-a-batch "carries the requalification procedure"   "requalification"
-require amending-a-batch "requalifies a technical story" \
-    "## Requalifying a Technical Story"
-require amending-a-batch "an observable change needs a block" \
-    "it needs a block, and a block is acquired by an amendment that goes back through the opening review"
 require amending-a-batch "the amendment declares the flag the block requires" \
-    "The same amendment declares the flag the block requires, if it requires one."
+    "An amendment that adds the block of an observable change a technical story revealed declares the flag that block requires, if it requires one."
 require amending-a-batch "the exemption question is asked again" \
     "Ask the exemption criterion again of the batch with its new block"
+require amending-a-batch "a stopped story is ruled on before it is amended for" \
+    "**When a story has stopped and nothing is ruled yet, go to \`supercharlouze:handling-a-stopped-story\` first**"
 require writing-a-user-story "the human rules the block and its flag" \
     "a block for the observable change, and the flag that block requires, if it requires one"
 require opening-a-batch "branch naming convention"                "batch/NN"
 
-# --- amending-a-batch: what the skill routes ---
-require amending-a-batch "the entry point of a constraint names its section" \
-    "| A story stopped on a constraint of its batch it cannot hold | A Constraint a Story Cannot Hold |"
-require amending-a-batch "the entry point of a technical story names its section" \
+# --- handling-a-stopped-story: what follows a stop condition ---
+require handling-a-stopped-story "the story stays, the human rules, the story is abandoned or resumes" \
+    "The story stays as it stands, your human partner rules between the options of that condition, then the story is abandoned or resumes."
+require handling-a-stopped-story "the foundation states the conditions" \
+    "\`Stop Conditions\` in \`supercharlouze:following-the-rules\` states each of them."
+require handling-a-stopped-story "the entry point of a corrective batch names its section" \
+    "| A corrective batch that turned out not to be corrective | Requalifying a Corrective Batch |"
+require handling-a-stopped-story "the entry point of a technical story names its section" \
     "| A technical story that turned out to change something observable | Requalifying a Technical Story |"
+require handling-a-stopped-story "the entry point of a constraint or an ADR names its section" \
+    "| A story stopped on a constraint of its batch or an ADR it cannot hold | A Constraint or an ADR a Story Cannot Hold |"
+require handling-a-stopped-story "requalifies a corrective batch" \
+    "## Requalifying a Corrective Batch"
+require handling-a-stopped-story "a corrective story is abandoned once ruled" "1. **Leave the story as it stands until the choice below is ruled, then abandon it.**"
+require handling-a-stopped-story "an open pull request waits for the ruling" "A pull request already open stays open until then."
+require handling-a-stopped-story "a corrective story goes through abandoning-a-story once ruled" "Once the choice is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
+require handling-a-stopped-story "requalification offers a different batch" "**Rule the remaining work a different batch**"
+require handling-a-stopped-story "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
+require handling-a-stopped-story "the substance of a requalification is the human's" \
+    "Never carry out a requalification by deciding the substance yourself."
+require handling-a-stopped-story "requalifies a technical story" \
+    "## Requalifying a Technical Story"
+require handling-a-stopped-story "a technical story's pull request is closed at the stop" "Close its pull request without merging it if one is already open; the branch and its worktree stay until the choice below is ruled."
+require handling-a-stopped-story "a technical story goes through abandoning-a-story once ruled" "Once it is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
+require handling-a-stopped-story "an observable change needs a block" \
+    "it needs a block, and a block is acquired by an amendment that goes back through the opening review"
+require handling-a-stopped-story "an unwanted change amends nothing" \
+    "If the human judges the observable change unwanted instead, there is nothing to amend: the story is abandoned and the batch carries on as it was."
+require handling-a-stopped-story "the human rules on a constraint or an ADR a story cannot hold" \
+    "**When a story stops on a constraint or an ADR it cannot hold, your human partner rules on the constraint or the ADR.**"
+require handling-a-stopped-story "the condition leaves the branch as it is" \
+    "Until then the branch and the worktree stay as they are."
+require handling-a-stopped-story "an untenable constraint or ADR abandons the story" \
+    "If they rule it untenable, the story is abandoned: invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch."
+require handling-a-stopped-story "what holds resumes the story" \
+    "Otherwise the story resumes and holds the constraint or the ADR, and nothing is amended."
+require handling-a-stopped-story "the next steps are taken in order, each with its skill" \
+    "Take them in the order their row gives, each with the skill that conducts it:"
+require handling-a-stopped-story "a corrected spec comes with a reduced scope" \
+    "| The spec is corrected, and the batch stays corrective on a reduced scope | The corrected spec ships through its own pull request, and \`supercharlouze:amending-a-batch\` reduces the \`Scope\`. |"
+require handling-a-stopped-story "a rewritten batch goes to an amendment" \
+    "| The corrective batch is rewritten as an ordinary batch | \`supercharlouze:amending-a-batch\` rewrites it. |"
+require handling-a-stopped-story "a different batch closes this one first" \
+    "| The remaining work is a different batch | \`supercharlouze:closing-a-batch\` closes this batch, then \`supercharlouze:opening-a-batch\` opens the fresh one. |"
+require handling-a-stopped-story "a wanted change goes to an amendment, then to an ordinary story" \
+    "| The observable change of a technical story is wanted | \`supercharlouze:amending-a-batch\` adds its block. Once that pull request merges, \`supercharlouze:writing-a-user-story\` rewrites the work as an ordinary story of the amended batch. |"
+require handling-a-stopped-story "an untenable constraint goes to an amendment" \
+    "| A constraint is untenable | \`supercharlouze:amending-a-batch\` changes or removes it. |"
+require handling-a-stopped-story "an untenable ADR goes to a bounded change" \
+    "| An ADR is untenable | A bounded change, under \`supercharlouze:using-batches\`, rewrites or deletes it. |"
+require handling-a-stopped-story "red flag: only the human corrects a spec" \
+    "| \"The spec is wrong here, I'll fix it and keep the batch corrective\" | Only the human corrects a spec. Stop the story, present the requalification choice. |"
+require handling-a-stopped-story "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |"
+require handling-a-stopped-story "the red flag keeps the ruling with the human" "Whether a constraint can be held is your human partner's ruling."
 
 # --- writing-a-batch-document: the batch document contract (spec section "The batch document") ---
 # The guards that stay on opening-a-batch here hold what its reread and its pull
@@ -579,12 +612,8 @@ require writing-a-user-story "a technical story touches no section" \
     "its \`Sections:\` is \`none\`"
 require writing-a-user-story "no other story carries that field" \
     "No other story carries that field"
-require writing-a-user-story "the technical condition hands off to amending-a-batch" \
-    "**the story is abandoned**, and the decision goes to \`supercharlouze:amending-a-batch\`"
-# A corrective story is abandoned once the requalification is ruled, not when it
-# stops: an open pull request stays open until then.
-require writing-a-user-story "a corrective story is abandoned once ruled" \
-    "In a corrective batch, the story is abandoned once the requalification is ruled: a pull request already open is closed without merging then, not when you stop."
+require writing-a-user-story "a fired stop condition routes to handling-a-stopped-story" \
+    "**When one of them fires, stop: \`supercharlouze:handling-a-stopped-story\` conducts what follows.**"
 require writing-a-user-story "a rule belongs to exactly one spec" "A rule belongs to exactly one spec."
 require writing-a-user-story "no ruling houses a rule twice"      "no ruling puts a rule in two places"
 
@@ -610,8 +639,6 @@ require writing-a-user-story "docs/adr carries an ADR when a .md file sits in it
     "\`docs/adr/\` carries an ADR when a \`.md\` file is placed directly in it, in this story's worktree."
 require writing-a-user-story "working around a constraint or an ADR breaks what the implementer cannot see" \
     "A constraint is a decision another story of the batch relies on, and an ADR is a decision your human partner took for all the code to come, so an implementer who works around either breaks something they cannot see."
-require writing-a-user-story "the condition leaves the branch as it is" \
-    "your human partner rules on the constraint or the ADR, and until then the branch and the worktree stay as they are."
 require writing-a-user-story "step 5 names both triggers of the condition" \
     "In a story whose batch declares constraints or whose \`docs/adr/\` carries an ADR: if, while conducting it, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner."
 require writing-a-user-story "step 5 sets aside the constraint the spec contradicts" \
@@ -652,10 +679,6 @@ require writing-a-user-story "red flag: the plan follows the ADR, then main's co
     "| \"\`main\`'s code contradicts the design, so the design wins\" | The design only guides. Where an ADR contradicts it, the plan follows the ADR; elsewhere, where \`main\`'s code departed from it, the plan starts from the code. |"
 require writing-a-user-story "red flag: no task writes the ADR" \
     "| \"This decision deserves an ADR, I'll write it with the code\" | No task writes in \`docs/adr/\`. Record an \`Open ruling:\`, and write the ADR at the review if your human partner wants it. |"
-require writing-a-user-story "an untenable ADR abandons the story" \
-    "If they rule an ADR untenable, the story is abandoned and a bounded change rewrites or deletes the ADR."
-require writing-a-user-story "what holds resumes the story" \
-    "Otherwise resume the story and hold the constraint or the ADR."
 require writing-a-user-story "red flag: a ruling replaces no stop condition" \
     "| \"This constraint, or this ADR, cannot be held, I'll work around it and record a ruling\" | A ruling replaces no stop condition. Another story of the batch relies on that constraint, and your human partner decided that ADR: stop and put it to them. |"
 require writing-a-user-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
@@ -714,7 +737,6 @@ require writing-a-user-story "the plan is pushed immediately"       "and push it
 require writing-a-user-story "the records are pushed"               "Commit both on the branch and push, so they merge with it"
 require writing-a-user-story "the merge delivers the story"         "The story is delivered when its pull request is merged"
 require writing-a-user-story "abandoning goes through abandoning-a-story" "**To abandon a story, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch.**"
-require writing-a-user-story "a requalified story goes through abandoning-a-story once ruled" "Once the requalification is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch."
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "the preconditions read what closing consolidates" \
@@ -1321,16 +1343,6 @@ require following-the-rules "a ruling would break a decision of the batch or of 
     "and the condition on a constraint or an ADR would break a decision another story of the batch relies on, or one your human partner took for all the code to come."
 require using-batches "the justification covers the ADR" \
     "and an ADR is a decision your human partner took, so only they judge it untenable."
-require using-batches "the human rules on the constraint or the ADR" \
-    "When the condition on a constraint or an ADR fires, your human partner rules on the constraint or the ADR."
-require using-batches "an untenable constraint goes to an amendment" \
-    "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:amending-a-batch\` amends the constraint."
-require using-batches "an untenable ADR goes to a bounded change" \
-    "If they rule an ADR untenable, the story is abandoned and a bounded change rewrites or deletes the ADR."
-require using-batches "what holds resumes the story" \
-    "Otherwise the story resumes and holds the constraint or the ADR."
-require writing-a-user-story "an untenable constraint abandons the story" \
-    "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:amending-a-batch\` amends the constraint."
 
 # --- following-the-rules: the shape of a review's end ---
 require following-the-rules "the amendment gate covers the design and the constraints" "the decision to change its scope, its spec delta, its technical design, its constraints or its flag"
