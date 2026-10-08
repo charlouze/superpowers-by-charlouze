@@ -37,7 +37,7 @@ Without this path none of them has an issue: the batch document is written
 at opening, and nothing else changes it before closing.
 
 A change that touches nothing but ADRs is not an amendment: it goes through a
-bounded change, under `supercharlouze:using-batches`.
+bounded change, under `supercharlouze:making-a-bounded-change`.
 
 **When a story has stopped and nothing is ruled yet, go to
 `supercharlouze:handling-a-stopped-story` first**: an amendment follows your

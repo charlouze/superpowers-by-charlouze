@@ -15,7 +15,7 @@ absent_everywhere "no skill keeps a Live flags section or its rulings" \
 
 # A branch is started in one place, `starting-a-branch`. A skill that creates a
 # branch invokes it and passes the name of the branch.
-for s in adopting-a-module opening-a-batch amending-a-batch writing-a-user-story closing-a-batch using-batches; do
+for s in adopting-a-module opening-a-batch amending-a-batch writing-a-user-story closing-a-batch making-a-bounded-change; do
     require "$s" "invokes starting-a-branch with the name of the branch" \
         "nvoke \`supercharlouze:starting-a-branch\` and give it the name"
 done
@@ -29,7 +29,7 @@ require closing-a-batch "a closing passes batch/NN-<slug>-close" \
     "**Invoke \`supercharlouze:starting-a-branch\` and give it the name \`batch/NN-<slug>-close\`.**"
 require writing-a-user-story "a story passes story/NN-us-N-<slug>" \
     "Invoke \`supercharlouze:starting-a-branch\` and give it the name \`story/NN-us-N-<slug>\`."
-require using-batches "a bounded change passes bounded/<slug>" \
+require making-a-bounded-change "a bounded change passes bounded/<slug>" \
     "invoke \`supercharlouze:starting-a-branch\` and give it the name \`bounded/<slug>\`"
 # Allocation reads `origin/main` before the branch exists, so it fetches itself.
 # The opening keeps its allocation in a reference, read at that step.
@@ -59,15 +59,15 @@ absent "no other skill restates the start of a branch" \
 
 # The concurrency scan lives in one place, `detecting-concurrency`. A skill
 # whose work claims sections invokes it, passes what varies and stops on what it
-# returns: `writing-a-user-story` for a story, `using-batches` for the bounded
-# change.
+# returns: `writing-a-user-story` for a story, `making-a-bounded-change` for the
+# bounded change.
 require writing-a-user-story "a story invokes detecting-concurrency with its spec and its sections" \
     "invoke \`supercharlouze:detecting-concurrency\` and give it the story's spec and those sections"
-require using-batches "a bounded change invokes detecting-concurrency before creating its branch" \
+require making-a-bounded-change "a bounded change invokes detecting-concurrency before creating its branch" \
     "Invoke \`supercharlouze:detecting-concurrency\` before creating \`bounded/<slug>\`, and give it that spec and those sections"
-require using-batches "a redone detection receives the branch" \
+require making-a-bounded-change "a redone detection receives the branch" \
     "invoke it again, and give it \`bounded/<slug>\` as well"
-for s in writing-a-user-story using-batches; do
+for s in writing-a-user-story making-a-bounded-change; do
     require "$s" "stops on what detecting-concurrency returns" \
         "Stop if it returns a conflict or a declaration it could not read"
 done
@@ -100,11 +100,11 @@ absent_everywhere "a branch with no declaration yet is not an unknown" \
 # writes a text a spec receives invokes it and restates nothing: a second
 # formulation of the same rule is what drifts. `adopting-a-module` writes a
 # spec's first version, `writing-a-batch-document` the blocks a spec will receive,
-# `writing-a-user-story` their transcription, and `using-batches` carries the
-# bounded change. `closing-a-batch` writes into no spec file.
+# `writing-a-user-story` their transcription, and `making-a-bounded-change` the
+# spec update of a bounded change. `closing-a-batch` writes into no spec file.
 require writing-in-a-spec "states the question of the other-implementation test" \
     "read this sentence as true of their code"
-for s in using-batches adopting-a-module writing-a-batch-document writing-a-user-story; do
+for s in making-a-bounded-change adopting-a-module writing-a-batch-document writing-a-user-story; do
     require "$s" "invokes writing-in-a-spec before writing a text a spec receives" \
         "nvoke \`supercharlouze:writing-in-a-spec\` before"
 done
@@ -126,9 +126,9 @@ shared "the other-implementation test bears one name" \
 # one place, `writing-in-a-gaps-register`. A skill that writes in a register
 # invokes it and restates nothing: `adopting-a-module` creates the file and
 # removes the entry of a gap it promotes, `closing-a-batch` adds and releases,
-# `using-batches` carries the bounded change, `opening-a-batch` reserves, `amending-a-batch`
+# `making-a-bounded-change` carries the bounded change, `opening-a-batch` reserves, `amending-a-batch`
 # releases, `writing-a-user-story` removes the entry its story resolves.
-for s in adopting-a-module closing-a-batch using-batches opening-a-batch amending-a-batch writing-a-user-story; do
+for s in adopting-a-module closing-a-batch making-a-bounded-change opening-a-batch amending-a-batch writing-a-user-story; do
     require "$s" "invokes writing-in-a-gaps-register before writing in a gaps register" \
         "nvoke \`supercharlouze:writing-in-a-gaps-register\` before"
 done
@@ -884,7 +884,7 @@ absent "no reread reopens on every unread state" \
 
 # The technical reread knows none of the skills that invoke it.
 absent "the technical reread names no skill that invokes it" \
-    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|opening-a-batch|amending-a-batch|handling-a-stopped-story|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
+    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|opening-a-batch|amending-a-batch|handling-a-stopped-story|making-a-bounded-change|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
     rereading-a-technical-design
 
 # A reading is dispatched when its object exists: the sentence that gave every
@@ -923,7 +923,7 @@ absent "no skill counts the stop conditions the flow adds" \
 # the day a rule is added, as it did when the ADR rule joined them.
 absent "no skill counts the rules of a bounded change" \
     "with (four|five|six|seven) rules|the (four|five|six|seven) rules" \
-    using-batches following-the-rules
+    using-batches following-the-rules making-a-bounded-change
 
 # An opening and an amendment both write the ADRs their human partner decided.
 # Each skill carries the gesture, since an agent reads only the one it invoked:
@@ -1019,5 +1019,24 @@ shared "the document reader is told the gating sentence as the foundation states
 shared "the document reader is told a block's identifier as the document skill states it" \
     "carries an identifier \`D<n>\`" \
     writing-a-batch-document rereading-a-batch
+
+# The rules of a bounded change live in one place, `making-a-bounded-change`.
+# `using-batches` routes to it and restates none of them. Walks the declared
+# skills, so one declared later is covered.
+require using-batches "the routing table leads bounded work to making-a-bounded-change" \
+    "| Bounded work | \`supercharlouze:making-a-bounded-change\` |"
+require using-batches "the routing table reroutes nothing of a spike" \
+    "| Spike | Nothing is rerouted |"
+# shellcheck disable=SC2046
+absent "no other skill restates the rules of a bounded change" \
+    "if and only if nothing observable at the module's boundary changes|That silence is not a tolerance|It carries no feature flag|add an entry and delete one|may carry nothing but ADRs|redoes the detection|under rule \(e\)|reread .docs/adr/. and hold what you find there|the spec can stay silent about it" \
+    $(declared_skills | grep -vx making-a-bounded-change)
+absent "using-batches keeps no section the bounded path is sent to" \
+    "under .What Is Kept, What Is Rerouted. below|except what .What Is Kept, What Is Rerouted. states below|with these rules:" \
+    using-batches
+
+# A skill that sends work to a bounded change names the skill that carries it.
+absent_everywhere "no skill sends a bounded change to using-batches" \
+    "bounded change, under .supercharlouze:using-batches"
 
 exit $((FAILURES > 0))

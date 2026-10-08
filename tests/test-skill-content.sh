@@ -153,7 +153,7 @@ require amending-a-batch "an amendment's ADR is confronted with the specs as the
 require amending-a-batch "an amendment's ADR is written by the shared skill" "Invoke \`supercharlouze:recording-a-decision\` for each ADR to write or to rewrite, and hand it those copies."
 require amending-a-batch "an amendment deletes an abandoned ADR" "Delete yourself each ADR your human partner abandoned, in a commit that says why."
 require amending-a-batch "its body states the ADRs" "The pull request body states each ADR it writes, rewrites or deletes."
-require amending-a-batch "a change of ADRs alone is a bounded change" "A change that touches nothing but ADRs is not an amendment: it goes through a bounded change, under \`supercharlouze:using-batches\`."
+require amending-a-batch "a change of ADRs alone is a bounded change" "A change that touches nothing but ADRs is not an amendment: it goes through a bounded change, under \`supercharlouze:making-a-bounded-change\`."
 require amending-a-batch "red flag: an amendment for an ADR alone" "| \"My human partner wants this ADR rewritten, I'll amend the batch for it\" | An amendment changes the batch document. A change that touches nothing but ADRs goes through a bounded change. |"
 require amending-a-batch "red flag: an amendment's ADR is reread" "| \"This amendment only changes the scope, the ADR it writes needs no reread\" | An amendment that writes or rewrites an ADR goes through the technical reread, whatever else it changes. |"
 require amending-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
@@ -226,7 +226,7 @@ require handling-a-stopped-story "a wanted change goes to an amendment, then to 
 require handling-a-stopped-story "an untenable constraint goes to an amendment" \
     "| A constraint is untenable | \`supercharlouze:amending-a-batch\` changes or removes it. |"
 require handling-a-stopped-story "an untenable ADR goes to a bounded change" \
-    "| An ADR is untenable | A bounded change, under \`supercharlouze:using-batches\`, rewrites or deletes it. |"
+    "| An ADR is untenable | A bounded change, under \`supercharlouze:making-a-bounded-change\`, rewrites or deletes it. |"
 require handling-a-stopped-story "red flag: only the human corrects a spec" \
     "| \"The spec is wrong here, I'll fix it and keep the batch corrective\" | Only the human corrects a spec. Stop the story, present the requalification choice. |"
 require handling-a-stopped-story "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |"
@@ -850,7 +850,7 @@ require writing-in-a-spec "says when to go back to the step that invoked it" \
 absent "using-batches no longer carries what a spec contains" \
     "## What a Spec Says|The other-implementation test|Four signs recognise it|Naming is not mechanising" \
     using-batches
-require using-batches "a bounded change invokes writing-in-a-spec before writing in a spec" \
+require making-a-bounded-change "a bounded change invokes writing-in-a-spec before writing in a spec" \
     "When it updates a spec, invoke \`supercharlouze:writing-in-a-spec\` before writing in it"
 
 # An internal skill names the skills it invokes, never those that invoke it.
@@ -1356,7 +1356,7 @@ require following-the-rules "the handover is conditional"         "Where a next 
 require following-the-rules "the handover prompt stands alone"    "That prompt stands on its own"
 require using-batches "an unadopted module stops the design"     "the design stops"
 require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers steps 6 to 9 and nothing else"
-require using-batches "a bounded change adds and removes entries"  "add an entry and delete one"
+require making-a-bounded-change "a bounded change adds and removes entries"  "add an entry and delete one"
 require following-the-rules "the prompt waits for the merge"      "The prompt waits for the merge announcement, not for the announcement that the pull request is ready"
 
 # --- following-the-rules: guarded code rules (referencing writing-a-user-story) ---
@@ -1378,17 +1378,27 @@ for s in using-batches opening-a-batch writing-a-batch-document; do
     esac
 done
 
-# --- using-batches: the bounded change (spec `Bounded change`) ---
-require using-batches "a bounded change may leave the spec silent" \
+# --- making-a-bounded-change: the bounded change (spec `Bounded change`) ---
+require making-a-bounded-change "a bounded change may leave the spec silent" \
         "if and only if nothing observable at the module's boundary changes"
-require using-batches "a silent bounded change leaves the spec untouched" \
+require making-a-bounded-change "a silent bounded change leaves the spec untouched" \
         "the spec stays silent. That silence is not a tolerance"
-require using-batches "a bounded change names the spec it targets" \
+require making-a-bounded-change "a bounded change names the spec it targets" \
         "the spec it targets and the sections it touches"
-require using-batches "a bounded change touching no section declares none" \
+require making-a-bounded-change "a bounded change touching no section declares none" \
         "when it touches none"
-require using-batches "a changed declaration redoes the detection" \
+require making-a-bounded-change "a changed declaration redoes the detection" \
         "redoes the detection"
+require making-a-bounded-change "a bounded change has no batch and no user story" \
+        "A bounded change has no batch and no user story: it is already a single pull request, and whether it carries a spec update is what rule (a) decides."
+require making-a-bounded-change "the ceremony of bounded work is kept, with the reading of docs/adr" \
+        "Its ceremony is the one \`superpowers:brainstorming\` gives bounded work, to which \`supercharlouze:using-batches\` adds the reading of \`docs/adr/\` by the design."
+require making-a-bounded-change "the rules are what the pull request holds besides" \
+        "\`The Rules\` are what its pull request holds besides."
+require making-a-bounded-change "a bounded change carries no flag" \
+        "**(c) It carries no feature flag.**"
+require making-a-bounded-change "red flag: a small fix that leaves the spec silent" \
+        "| \"This is a small fix, the spec can stay silent about it\" | Only if nothing observable at the module's boundary changes."
 
 require writing-a-user-story "the story skill sends its transcription to the forms of the gating sentence" \
         "states the flag and its default in a gating sentence, in the form \`supercharlouze:following-the-rules\` fixes."
@@ -1420,7 +1430,7 @@ require following-the-rules "the commit that rewrites or deletes an ADR says why
 require following-the-rules "the adoption gate reviews the ADRs written with the spec" \
         "| Module adoption | the pull request carrying the spec and the gaps register, and the ADRs written with them |"
 require using-batches "routing sends an ADR to a bounded change" \
-        "| Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | A bounded change, under \`What Is Kept, What Is Rerouted\` below |"
+        "| Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | \`supercharlouze:making-a-bounded-change\` |"
 require writing-in-a-spec "a decision with nothing observable has the ADR for outlet" \
         "Exception: a sentence that states a technical decision has an ADR for outlet, under the conditions \`supercharlouze:following-the-rules\` states."
 require writing-in-a-spec "a decision housed outside the specs goes to an ADR" \
@@ -1429,9 +1439,9 @@ require writing-in-a-spec "the scope paragraph names both outlets" \
         "that is where what the test ejects goes, except a technical decision, which has an ADR for outlet"
 require writing-in-a-spec "the red flag names the ADR as the outlet" \
         "A technical decision with nothing observable at a module's boundary is no rule at all: its outlet is an ADR. |"
-require using-batches "a bounded change writes, rewrites and deletes ADRs" \
+require making-a-bounded-change "a bounded change writes, rewrites and deletes ADRs" \
         "**(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.**"
-require using-batches "a bounded change invokes recording-a-decision" \
+require making-a-bounded-change "a bounded change invokes recording-a-decision" \
         "Invoke \`supercharlouze:recording-a-decision\` to write or rewrite one. Delete yourself the one your human partner abandons, and correct yourself, on their decision, a text whose decision does not change."
 require following-the-rules "the code holds the ADRs main carries" \
         "The code of a story or of a bounded change holds the ADRs \`main\` carries when its branch starts."
@@ -1446,30 +1456,30 @@ require following-the-rules "the amendment gate carries the ADRs changed with th
 require using-batches "the opening writes the ADRs the design decided" \
         "On the architectural path, \`supercharlouze:opening-a-batch\` writes, rewrites or deletes at the opening the ADRs they decide."
 require using-batches "the bounded ceremony has an exception" \
-        "**Bounded** — ceremony unchanged, except for the reading of \`docs/adr/\` stated below, with these rules:"
+        "**Bounded** — ceremony unchanged, except for the reading of \`docs/adr/\` stated below. \`supercharlouze:making-a-bounded-change\` carries the rules its pull request holds."
 require using-batches "the design steps have the same exception" \
         "are **kept intact**, except for the reading of \`docs/adr/\` stated below"
 require using-batches "the design reads docs/adr before proposing an approach" \
         "On the bounded path and on the architectural path, read every ADR in \`docs/adr/\` before proposing an approach"
 require using-batches "the design puts to the human the decision that meets the conditions" \
         "put to your human partner each technical decision the design takes that meets the conditions of an ADR \`supercharlouze:following-the-rules\` states"
-require using-batches "a bounded change holds the ADRs" \
+require making-a-bounded-change "a bounded change holds the ADRs" \
         "**(f) It holds the ADRs \`main\` carries when its branch starts.**"
-require using-batches "a bounded change rereads docs/adr once its branch exists" \
+require making-a-bounded-change "a bounded change rereads docs/adr once its branch exists" \
         "Once \`bounded/<slug>\` is created, reread \`docs/adr/\` and hold what you find there"
-require using-batches "a bounded change puts to the human the ADR it cannot hold" \
+require making-a-bounded-change "a bounded change puts to the human the ADR it cannot hold" \
         "When you cannot hold an ADR, put it to your human partner: if they rule it untenable, rewrite or delete it under rule (e); otherwise hold it."
-require using-batches "a bounded change puts to the human the decision that meets the conditions" \
+require making-a-bounded-change "a bounded change puts to the human the decision that meets the conditions" \
         "**(g) It puts to your human partner the technical decision it takes that meets the conditions of an ADR \`supercharlouze:following-the-rules\` states.**"
-require using-batches "a bounded change writes the ADR the human wants" \
+require making-a-bounded-change "a bounded change writes the ADR the human wants" \
         "If they want it as an ADR, write it under rule (e)."
 require following-the-rules "red flag: a decision is put to the human" \
         "| \"This decision is technical, no need to bring it to my human partner\" | If it meets the conditions of an ADR, put it to them: only they decide an ADR. |"
 require using-batches "an approach that breaks an ADR is not taken" \
         "An approach that breaks an ADR is one the code may not take, and only your human partner decides an ADR."
-require using-batches "a bounded change's decision along the way is put to the human too" \
+require making-a-bounded-change "a bounded change's decision along the way is put to the human too" \
         "That holds for a decision taken along the way as for one taken at design."
-require using-batches "the design read may be stale" \
+require making-a-bounded-change "the design read may be stale" \
         "the design read it where you stood, and the branch starts from \`main\` as the remote carries it"
 
 # --- following-the-rules: the glossary terms of the review (spec section "The model") ---

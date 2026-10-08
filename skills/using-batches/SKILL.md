@@ -23,8 +23,9 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | A story has stopped on a stop condition this flow adds | `supercharlouze:handling-a-stopped-story` |
 | A batch must change its scope, its spec delta, its technical design, its constraints or its flag | `supercharlouze:amending-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
-| Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | A bounded change, under `What Is Kept, What Is Rerouted` below |
-| Spike or bounded work | Nothing is rerouted except what `What Is Kept, What Is Rerouted` states below |
+| Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | `supercharlouze:making-a-bounded-change` |
+| Bounded work | `supercharlouze:making-a-bounded-change` |
+| Spike | Nothing is rerouted |
 
 ## What Is Kept, What Is Rerouted
 
@@ -32,20 +33,7 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
 
 **Spike** — unchanged. An answer, no artifact.
 
-**Bounded** — ceremony unchanged, except for the reading of `docs/adr/` stated below, with these rules:
-
-- **(a) Its pull request leaves the spec silent if and only if nothing observable at the module's boundary changes.** Whether it *alters* a behaviour some spec already describes or *adds* one no spec describes, it updates the spec in the same pull request as the code. Handling only the "alters" case would reopen the same hole one notch over. Where nothing observable at that boundary changes — a dependency bump, an internal rename, a preparatory refactor — the spec stays silent. That silence is not a tolerance: a rule does not move when a mechanism moves, so there is nothing to write, and writing something anyway means inventing a sentence from the code, which canonises the drift it describes. When it updates a spec, invoke `supercharlouze:writing-in-a-spec` before writing in it.
-- **(b) It undergoes the same concurrency detection as a story**, and therefore declares in the body of its pull request **the spec it targets and the sections it touches**, `none` when it touches none — otherwise it would hit a story in flight through a back door. The spec is named because nothing else in the declaration says which document those section titles belong to, and a bounded change that updates no spec file leaves a reader nothing to infer it from; two identically titled sections in two different specs are not a conflict. And `none` is a declaration, not a blank: it is what a bounded change that changes nothing observable has to say, where a blank body is indistinguishable from one nobody filled in — which is an unknown, and an unknown stops the reader. Invoke `supercharlouze:detecting-concurrency` before creating `bounded/<slug>`, and give it that spec and those sections. Stop if it returns a conflict or a declaration it could not read: report what it returned, and let your human partner sequence the two pieces of work or decide on the unread declaration.
-
-  **A declaration that changes before the pull request opens redoes the detection:** invoke it again, and give it `bounded/<slug>` as well. The detection answered about the sections declared when it ran, so a section added afterwards was never intersected against anything — not found free, simply never looked at. Redoing it costs one scan, and the opening is the last point where the widening is still cheap to undo.
-
-- **(c) It carries no feature flag.** A bounded change is complete in its own pull request, so it satisfies the exemption criterion by construction.
-- **(d) It writes to a gaps register directly.** Belonging to no batch, it may both add an entry and delete one in `docs/specs/<module>.gaps.md`, from its own pull request, contending only with another bounded change. Invoke `supercharlouze:writing-in-a-gaps-register` before writing in it.
-- **(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.** Invoke `supercharlouze:recording-a-decision` to write or rewrite one. Delete yourself the one your human partner abandons, and correct yourself, on their decision, a text whose decision does not change.
-- **(f) It holds the ADRs `main` carries when its branch starts.** Once `bounded/<slug>` is created, reread `docs/adr/` and hold what you find there: the design read it where you stood, and the branch starts from `main` as the remote carries it. When you cannot hold an ADR, put it to your human partner: if they rule it untenable, rewrite or delete it under rule (e); otherwise hold it.
-- **(g) It puts to your human partner the technical decision it takes that meets the conditions of an ADR `supercharlouze:following-the-rules` states.** That holds for a decision taken along the way as for one taken at design. If they want it as an ADR, write it under rule (e).
-
-No batch, no user story: a bounded change is already a single pull request, and whether it carries a spec update is what rule (a) decides. Its branch is `bounded/<slug>`: invoke `supercharlouze:starting-a-branch` and give it the name `bounded/<slug>`.
+**Bounded** — ceremony unchanged, except for the reading of `docs/adr/` stated below. `supercharlouze:making-a-bounded-change` carries the rules its pull request holds.
 
 **Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:opening-a-batch`, which stops the design outright when a module it touches has no spec. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**, except for the reading of `docs/adr/` stated below: that is the design work itself.
 
@@ -109,4 +97,3 @@ This override removes one choice that cannot succeed, and one that leads nowhere
 | "This case needs one more exception to a superpowers rule" | There is no undeclared fifth override. Stop and take it to the human. |
 | "The module has no spec but the change is small, I'll just code it" | Without an adopted spec there is no authority to review against, and the change becomes drift the moment it merges. The design stops until the module is adopted. |
 | "The module has no spec, I'll adopt it now and carry on designing" | Adoption is never conducted in the same context as a design. Stop, and resume in a fresh context once the adoption merges. |
-| "This is a small fix, the spec can stay silent about it" | Only if nothing observable at the module's boundary changes. The moment behaviour moves, the spec is updated in the same pull request, and either way the change declares the spec it targets and the sections it touches. |
