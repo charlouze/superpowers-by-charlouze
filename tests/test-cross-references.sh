@@ -193,10 +193,18 @@ esac
 # The README row of making-a-bounded-change says when the skill is used.
 MROW="$(grep -F '`supercharlouze:making-a-bounded-change`' "$REPO_ROOT/README.md" || true)"
 case "$MROW" in
-    *"A well-scoped change that needs no batch, or an ADR to write, rewrite or delete outside a batch"*)
+    *"A well-scoped change that needs no batch, a spec the human judges wrong where the code is right, or an ADR to write, rewrite or delete outside a batch"*)
         pass "the README row of making-a-bounded-change says when it is used" ;;
     *)  fail "the README row of making-a-bounded-change says when it is used" ;;
 esac
+
+# The README states the exception of the bounded change: the correction of a
+# spec the human judges wrong. Read flattened, since the README wraps.
+if tr '\n' ' ' < "$REPO_ROOT/README.md" | tr -s ' ' | grep -qF "it carries, without touching the code, the correction of a spec the human judges wrong where the code is right"; then
+    pass "the README states the spec correction a bounded change carries"
+else
+    fail "the README states the spec correction a bounded change carries"
+fi
 
 # The README row of applying-a-spec-delta, like the other internal skills', says
 # it is not for direct use and names none of the skills that invoke it.

@@ -43,8 +43,8 @@ may correct a spec.
    ruled, invoke `supercharlouze:abandoning-a-story` and give it the story's
    branch.
 2. **Put the choice to the human**, who alone may rule:
-   - **Correct the spec**: the batch stays corrective, on a reduced scope,
-     and the corrected spec ships through its own pull request;
+   - **Correct the spec**: a bounded change carries the correction they decide,
+     and an amendment reduces the scope of the batch, which stays corrective;
    - **Rewrite the batch as an ordinary batch**, with a real spec delta, through
      an **amendment pull request** reviewed as an opening;
    - **Rule the remaining work a different batch**: it gets a fresh `NN`, and
@@ -111,8 +111,7 @@ When it does, once the story is abandoned:
 2. **Give the prompt that starts the next steps**, in the form `The Git Model`
    in `supercharlouze:following-the-rules` fixes. It states the ruling, then
    the steps of its row below, in their order, each with the skill to invoke
-   and the document it starts from, by its path. A step the row gives to your
-   human partner is named as theirs.
+   and the document it starts from, by its path.
 
 State the ruling as your human partner gave it, and name the story and what it
 revealed. Not: "Carry on with the requalification." Good: "Technical story
@@ -121,7 +120,7 @@ is rounded, and that change is wanted."
 
 | Ruling | Next steps, in their order |
 |---|---|
-| The spec is corrected, and the batch stays corrective on a reduced scope | Your human partner corrects the spec, through a pull request of its own. Then `supercharlouze:amending-a-batch` reduces the `Scope`, from the batch document. |
+| The spec is corrected, and the batch stays corrective on a reduced scope | `supercharlouze:amending-a-batch` reduces the `Scope`, from the batch document. Then `supercharlouze:making-a-bounded-change` carries the correction your human partner decides, from the spec. |
 | The corrective batch is rewritten as an ordinary batch | `supercharlouze:amending-a-batch` rewrites it, from the batch document. |
 | The remaining work is a different batch | `supercharlouze:closing-a-batch` closes this batch, from the batch document. Then `supercharlouze:opening-a-batch` opens the fresh one, from the gaps register whose entries this batch released. |
 | The observable change of a technical story is wanted | `supercharlouze:amending-a-batch` adds its block, from the batch document. Once that pull request merges, `supercharlouze:delivering-a-story` rewrites the work as an ordinary story of the amended batch, from the amended batch document. |

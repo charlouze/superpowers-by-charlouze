@@ -1055,11 +1055,13 @@ shared "the document reader is told a block's identifier as the document skill s
 # skills, so one declared later is covered.
 require using-batches "the routing table leads bounded work to making-a-bounded-change" \
     "| Bounded work | \`supercharlouze:making-a-bounded-change\` |"
+require using-batches "the routing table leads a spec judged wrong to making-a-bounded-change" \
+    "| Your human partner judges that a spec is wrong and the code is right | \`supercharlouze:making-a-bounded-change\` |"
 require using-batches "the routing table reroutes nothing of a spike" \
     "| Spike | Nothing is rerouted |"
 # shellcheck disable=SC2046
 absent "no other skill restates the rules of a bounded change" \
-    "if and only if nothing observable at the module's boundary changes|That silence is not a tolerance|It carries no feature flag|add an entry and delete one|may carry nothing but ADRs|redoes the detection|under rule \(e\)|reread .docs/adr/. and hold what you find there|the spec can stay silent about it" \
+    "if and only if nothing observable at the module's boundary changes|That silence is not a tolerance|It carries no feature flag|add an entry and delete one|may carry nothing but ADRs|redoes the detection|under rule \(e\)|reread .docs/adr/. and hold what you find there|the spec can stay silent about it|it carries the spec correction they decide" \
     $(declared_skills | grep -vx making-a-bounded-change)
 absent "using-batches keeps no section the bounded path is sent to" \
     "under .What Is Kept, What Is Rerouted. below|except what .What Is Kept, What Is Rerouted. states below|with these rules:" \

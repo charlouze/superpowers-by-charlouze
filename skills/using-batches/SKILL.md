@@ -24,6 +24,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | A batch must change its scope, its spec delta, its technical design, its constraints or its flag | `supercharlouze:amending-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
 | Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | `supercharlouze:making-a-bounded-change` |
+| Your human partner judges that a spec is wrong and the code is right | `supercharlouze:making-a-bounded-change` |
 | Bounded work | `supercharlouze:making-a-bounded-change` |
 | Spike | Nothing is rerouted |
 
