@@ -1036,4 +1036,14 @@ Co-Authored-By: Charlouze <me@charlouze.com>"
 
 ## Rulings log
 
+Ruling: trois constats mineurs de la relecture finale sont corrigés avant la pull request, sans qu'elle l'exige : la garde sur les refs ne retient que les chemins qui nomment une skill, `user-invocable: false` se cherche comme une ligne entière, et deux commentaires de l'outil de lecture disent ce qu'il retire et ce qu'il garde — les stories suivantes du lot bâtissent leurs gardes sur ces fonctions et auraient dû les retoucher — une vague de corrections et sa relecture, si elle n'était pas nécessaire.
+
+Ruling: les autres constats mineurs restent en l'état : la garde sur la forme d'une skill interne rend ses constats sur une seule ligne `[FAIL]`, une ref citée dans un sous-répertoire de `references/` est rapportée avec un chemin coupé, deux noms de skill qui ne diffèrent que par un caractère non alphanumérique partageraient leur texte gardé, `skill_front` n'a pas d'assertion à elle, et les fichiers de test lisent `$REPO_ROOT/skills` plutôt que `$SKILLS_DIR` — aucun ne change ce qu'une garde attrape — un message d'échec moins précis.
+
+Ruling: la relecture finale de la branche a tourné sur le modèle et l'effort que l'utilisateur a fixés pour tous les sous-agents du lot, pas sur le modèle le plus capable que demande l'exécution par sous-agents — décision de l'utilisateur — une relecture finale moins profonde.
+
+Technical design ruling: `CONTRIBUTING.md` ajoute à ce que la suite ne teste pas le retour d'un agent à la skill qui a invoqué une skill interne, et laisse à la story qui livre `following-the-rules` le chargement du socle par un sous-agent — le socle n'existe pas encore, et `CONTRIBUTING.md` décrirait une skill que le dépôt ne porte pas — la story de `following-the-rules` doit ajouter cette phrase, sans quoi `CONTRIBUTING.md` reste en deçà de ce que la conception demande.
+
+Ruling: une garde négative vaut pour toutes les skills quand sa liste nommait toutes les skills, ou toutes sauf les deux relectures ; les autres gardes `absent` gardent leur liste, même quand leur libellé dit « no skill » — leur liste dit sur quelles skills la formule est chassée, et l'étendre changerait ce qu'elles tiennent — une formule retirée qui survivrait dans une skill que sa garde ne nomme pas.
+
 ## Observed drift
