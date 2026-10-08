@@ -414,4 +414,14 @@ Co-Authored-By: Charlouze <me@charlouze.com>
 
 ## Rulings log
 
+- Ruling: `Sections:` nomme `Module > The gaps register` seule — c'est la section que désigne l'entrée résorbée, et la spec ne parle de réservation dans aucune autre que la story touche — une story qui prendrait `Batch > Amending a batch` ne verrait pas de conflit avec celle-ci.
+- Ruling: l'amendement passe aussi `NN` quand il libère — `writing-in-a-gaps-register` attend le numéro du lot pour une libération comme pour une réservation, et l'amendement ne le passait pas — une phrase de plus dans `amending-a-batch` si le numéro ne servait à rien.
+- Ruling: la story retouche `closing-a-batch`, `delivering-a-story`, `abandoning-a-story` et `opening-a-batch` — chacune disait qu'une réservation vient de la pull request d'ouverture, et la clôture ne libérait que les entrées « réservées à l'ouverture » — quatre skills relues pour une phrase chacune si ces textes ne changeaient rien à ce que fait un agent.
+- Ruling: `closing-a-batch` libère toujours sans passer `NN` à `writing-in-a-gaps-register` — sa phrase nomme l'annotation `reserved by batch-NN` et la violation ne porte pas sur la libération — un agent qui clôt peut invoquer la skill du register sans lui dire le numéro.
+- Ruling: aucune relecture ne vérifie la réservation d'un amendement qui ne change que `Scope` — l'amendement ne doit la relecture du document que s'il change le spec delta, et la spec ne lui en demande pas d'autre — une réservation oubliée par un tel amendement n'est vue qu'à la revue de sa pull request.
+- Ruling: ni l'ouverture ni l'amendement ne disent quoi faire d'une entrée qui porte déjà l'annotation d'un autre lot — le geste `Reserve` dit que deux lots ne réservent jamais la même entrée, et l'ouverture ne disait rien de plus avant cette story — un agent peut poser une seconde annotation sur une entrée déjà prise.
+- Ruling: les commits des deux tâches sont fondus en un seul `feat:` — le lot est ordinaire, et la story livre une seule norme — le changelog perd la ligne de la clôture, que le corps du commit garde.
+- Ruling: la relecture finale de la branche a tourné sur le même modèle que les tâches — c'est le modèle décidé pour tous les sous-agents de ce lot — un constat qu'un modèle plus capable aurait vu reste à trouver à la revue.
+- Ruling: `**Whatever batch takes an entry on**` reste en gras dans `opening-a-batch`, à la suite d'un titre de paragraphe en gras — le gras y était avant cette story, et la relecture finale l'a relevé comme mineur — deux gras qui se suivent se lisent comme un empilement.
+
 ## Observed drift
