@@ -38,7 +38,7 @@ else
 fi
 
 # Flattened so a phrase matches regardless of how the prose is wrapped, and with
-# runs of spaces squeezed for the same reason as in test-skill-content.sh.
+# runs of spaces squeezed for the same reason as in lib.sh.
 FLAT="$(tr '\n' ' ' < "$PROMPT" | tr -s ' ')"
 
 has() {
