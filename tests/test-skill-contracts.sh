@@ -45,11 +45,19 @@ case "$(body_flat "$REPO_ROOT/skills/opening-a-batch/SKILL.md")" in
 esac
 require opening-a-batch "the opening allocates NN from its reference" \
     "Allocate \`NN\` as \`skills/opening-a-batch/references/allocating-nn.md\` says"
-case "$(body_flat "$REPO_ROOT/skills/delivering-a-story/SKILL.md")" in
+# A story keeps its allocation in a reference too, read at that step.
+case "$(body_flat "$REPO_ROOT/skills/delivering-a-story/references/allocating-us-n.md" 2>/dev/null || true)" in
     *"git fetch origin git ls-tree --name-only origin/main docs/batches/NN-<slug>/"*)
         pass "delivering-a-story: allocation fetches before it reads the remote" ;;
     *)  fail "delivering-a-story: allocation fetches before it reads the remote" ;;
 esac
+case "$(body_flat "$REPO_ROOT/skills/delivering-a-story/SKILL.md")" in
+    *"git ls-tree"*|*"smallest integer"*)
+        fail "delivering-a-story: the allocation is written in its reference alone" ;;
+    *)  pass "delivering-a-story: the allocation is written in its reference alone" ;;
+esac
+require delivering-a-story "the story allocates us-N from its reference" \
+    "Allocate \`us-N\` as \`skills/delivering-a-story/references/allocating-us-n.md\` says"
 # How a branch is started is spelled there and nowhere else. Walks the declared
 # skills, so one declared later is covered.
 # shellcheck disable=SC2046
