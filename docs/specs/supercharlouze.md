@@ -596,6 +596,10 @@ Le travail qui démarre s'arrête si l'une de ses sections est ainsi revendiqué
 
 Il s'arrête aussi si une déclaration n'a pas pu être lue.
 
+Un travail qui, avant l'ouverture de sa pull request, va toucher une section pour
+laquelle il n'a pas fait la détection la fait, et s'arrête si cette section est
+revendiquée ou si une déclaration n'a pas pu être lue.
+
 ### Delivering a story
 
 Précondition, vérifiée avant de créer la branche : le lot est ouvert.
