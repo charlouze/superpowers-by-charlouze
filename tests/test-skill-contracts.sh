@@ -598,7 +598,7 @@ absent "no calling skill carries readings of its own" \
 # it, and says nothing a calling skill would have to keep in step with. What a
 # reader gets is its own business.
 absent "the reread names no skill that invokes it" \
-    "supercharlouze:|adopting-a-module|writing-a-batch|calling skill" \
+    "supercharlouze:([^r]|r[^u]|ru[^n])|adopting-a-module|writing-a-batch|calling skill" \
     rereading-a-spec
 absent "no calling skill says what a reader gets" \
     "as a new spec|as a changed spec|never the blocks|the spec as \`main\` carries it" \
@@ -767,57 +767,38 @@ shared "the batch and the story spell a technical design ruling alike" \
     "\`Technical design ruling:\`" \
     writing-a-batch writing-a-user-story
 
-# Both rereads dispatch their readers, gather them and close their rounds the
-# same way. One assertion per rule over both skills, so neither drifts alone.
+# Both rereads dispatch their readers the same way. One assertion per rule over
+# both skills, so neither drifts alone.
 shared "both rereads dispatch on the conductor's model" \
     "Dispatch every reader on the model you run on, and name that model in the dispatch" \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads wait for every reader" \
-    "Every reader returns before anything goes up. Wait for all of them and gather their findings, never a running report" \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads retouch" \
-    "**A revision retouches.** Change only the sentences a finding names. A section rewritten whole is a section no reader has read, and it sends every reading out again." \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads keep the state a round read" \
-    "Keep a copy of the state each round read: the next round's readers are handed it." \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads read only the revision in a later round" \
-    "**A later round reads the revision, and nothing else.** What a revision adds, moves or rewords is unread; what it takes out reopens only what leaned on it" \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads open no round on nothing unread" \
-    "A revision that leaves nothing unread opens no round." \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads dispatch a later round's readings alike" \
-    "Dispatch only the readings the revision bears on: a reworded sentence goes back to the reading that found it wanting, an added one to every reading. Hand each reader the state the round before read, next to the revised one." \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads keep a ledger of problems" \
-    "Keep a ledger from round to round: each finding's problem, the round that returned it, and what you did with it. Recognise a finding by its problem, not by its words" \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads send a returning problem to the human" \
-    "When a second round returns the same problem, put it to your human partner with the option you recommend, and do not reword it a third time." \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads open three rounds at most" \
-    "**The third round is the last you open.** After it, stop and put to your human partner what is still open, with your recommendation. A further round runs only on their decision." \
     rereading-a-spec rereading-a-technical-design
 shared "both rereads send out fewer readings after the first round" \
     "This is the first round's dispatch: a later round sends out fewer (\`Findings and Rounds\`)." \
     rereading-a-spec rereading-a-technical-design
+
+# The rounds of a reread are run in one place, `running-reread-rounds`. A reread
+# invokes it once its first round is dispatched, and passes what varies from one
+# reread to the other.
+for s in rereading-a-spec rereading-a-technical-design; do
+    require "$s" "invokes running-reread-rounds once the first round is dispatched" \
+        "Once the first round is dispatched, invoke \`supercharlouze:running-reread-rounds\` and give it"
+done
+# How the rounds run is spelled there and nowhere else. Walks the declared
+# skills, so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates the rounds of a reread" \
+    "Every reader returns before anything goes up|never a running report|You instruct the findings|arbitrate a draft|A revision retouches|Keep a copy of the state each round read|reads the revision, and nothing else|leaves nothing unread opens no round|Dispatch only the readings the revision bears on|Keep a ledger from round to round|do not reword it a third time|third round is the last you open|These stop the rounds|it does not replace it|A round runs on the revised text|rewritten whole|I reworded the clause|One more round|put its findings up now|the findings to rule on" \
+    $(declared_skills | grep -vx running-reread-rounds)
 # The conditions these replaced never stopped a reread: one read as an order to
 # reopen, the other waited for a round with no fresh finding, which a reader of
 # freshly revised text always has.
 absent "no reread reopens on every unread state" \
     "A fresh round only on a state|already examined and declined|Two rounds stuck on the same clause" \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads instruct their findings" \
-    "You instruct the findings; you do not forward them." \
-    rereading-a-spec rereading-a-technical-design
-shared "both rereads spare the human a draft" \
-    "Forwarding raw findings makes your human partner arbitrate a draft, which is the work the review exists to spare them." \
-    rereading-a-spec rereading-a-technical-design
+    rereading-a-spec rereading-a-technical-design running-reread-rounds
 
 # The technical reread knows none of the skills that invoke it.
 absent "the technical reread names no skill that invokes it" \
-    "supercharlouze:|using-batches|adopting-a-module|writing-a-batch|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
+    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|writing-a-batch|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
     rereading-a-technical-design
 
 # A reading is dispatched when its object exists: the sentence that gave every

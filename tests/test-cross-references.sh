@@ -195,6 +195,19 @@ case "$SROW" in
     *)                  fail "the README row of applying-a-spec-delta rules out direct use" ;;
 esac
 
+# The README row of running-reread-rounds, like the other internal skills', says
+# it is not for direct use and names none of the skills that invoke it.
+OROW="$(grep -F '`supercharlouze:running-reread-rounds`' "$REPO_ROOT/README.md" || true)"
+case "$OROW" in
+    *"rereading-a-"*|*"invoked by"*)
+        fail "the README row of running-reread-rounds names no caller" ;;
+    *)  pass "the README row of running-reread-rounds names no caller" ;;
+esac
+case "$OROW" in
+    *"Never directly"*) pass "the README row of running-reread-rounds rules out direct use" ;;
+    *)                  fail "the README row of running-reread-rounds rules out direct use" ;;
+esac
+
 # The rereads use three skills when they are installed; the README recommends
 # them all, since nothing else tells a user they exist. Anchored on the
 # recommendation itself: a skill named anywhere else in the README proves nothing.

@@ -436,27 +436,16 @@ esac
 # passage no change aims at is what goes unseen.
 require rereading-a-spec "a reader of a changed spec gets both states" "A reader of a changed spec gets both states, and reads the later one"
 require rereading-a-spec "the reading stays on the applied state" "The reading itself stays on the applied state, read whole"
-# Waiting for every reader, then who revises between two rounds. Without the last
-# two, the stop conditions turn on text nobody is said to revise, and the skill
-# reads as forwarding raw findings while its conditions presuppose the opposite.
-require rereading-a-spec "every reader returns before anything goes up" "Every reader returns before anything goes up"
-require rereading-a-spec "no running report"                     "never a running report"
-require rereading-a-spec "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
+# The rounds live in `running-reread-rounds`, guarded in its block below. Here:
+# what this reread passes to it.
+require rereading-a-spec "the rounds revise the spec" "give it the spec as the text the rounds revise, and what becomes of each finding:"
+require rereading-a-spec "a mechanism leaves the spec, as a finding" "- A sentence that describes a mechanism leaves the spec, and goes to the output."
 # A defect the change did not write is returned and left alone. Fixed in the
 # reread, it widens what the human reviews; left to every round, it comes back
 # with each of them.
 require rereading-a-spec "a defect already on main is not fixed"  "A defect the spec already carries on \`main\` is not fixed: the change did not write that passage, and fixing it widens what your human partner reviews"
 require rereading-a-spec "a defect already on main opens no round" "It goes once into what the reread found, and opens no round"
 require rereading-a-spec "red flag: an old passage"               "| \"The reader is right about this old passage, I'll fix it too\" | The change did not write it."
-require rereading-a-spec "a round runs on the revised text"       "A round runs on the revised text"
-# The stop conditions themselves are spelled alike in both rereads, and guarded
-# once over both in test-skill-contracts.sh. Here: that they exist, the red flags
-# that answer the excuses, and the one condition whose wording is this skill's.
-require rereading-a-spec "the rounds have stop conditions"        "These stop the rounds"
-require rereading-a-spec "red flag: one more round"               "| \"One more round, the wording can still improve\" | The third round is the last you open."
-require rereading-a-spec "red flag: a section rewritten whole"    "| \"This section reads better rewritten whole\" | A rewritten section is unread, and sends every reading out again."
-require rereading-a-spec "red flag: a reworded clause"            "| \"I reworded the clause, so this finding is a new one\" | A finding is its problem, not its words."
-require rereading-a-spec "the reread does not replace the review"  "prepares the review of the pull request that carries the spec, it does not replace it"
 
 # --- rereading-a-technical-design (spec section "The technical reread") ---
 # Outside the context that wrote the design and the constraints.
@@ -512,24 +501,19 @@ case "$(body_flat "$REPO_ROOT/skills/rereading-a-technical-design/SKILL.md" 2>/d
         fail "rereading-a-technical-design: no sentence counts the readings" ;;
     *)  pass "rereading-a-technical-design: no sentence counts the readings" ;;
 esac
-# Findings are instructed, and what changes a decision goes to the human, who
+# The rounds live in `running-reread-rounds`, guarded in its block below. Here:
+# what this reread passes to it. What changes a decision goes to the human, who
 # approved the design.
-require rereading-a-technical-design "findings are instructed, not forwarded" "You instruct the findings; you do not forward them"
-require rereading-a-technical-design "a fix keeps what the design decides" "Fix each one on the technical design or the constraints without changing what they decide, or put it to your human partner when fixing it would"
+require rereading-a-technical-design "the rounds revise the design and the constraints" "- the technical design and the constraints, as the text the rounds revise;"
+require rereading-a-technical-design "the reading of the ADRs goes out once" "- the reading of the ADRs to reread, as a reading that goes out in the first round only: no revision touches what it reads;"
+require rereading-a-technical-design "it says what becomes of each finding" "- what becomes of each finding, stated below."
 require rereading-a-technical-design "an undescribed behaviour always goes up" "A behaviour the design would make observable that no specification describes is always put to your human partner"
 require rereading-a-technical-design "a finding on a block goes to the human" "A finding on a block is not fixed: put it to your human partner, who leaves the block as it is, takes the batch back to its spec delta, which ends the reread, or has the ADR changed. This reread revises no block."
 require rereading-a-technical-design "a finding on an ADR goes to the human" "A finding on an ADR is not fixed either: put it to your human partner, and return it with what they ruled. Return the same way a finding on a block or on the design that they settle by having an ADR changed. This reread revises no ADR."
-require rereading-a-technical-design "the rulings applied are those on the design" "Then put to your human partner what you changed and what you could not settle, and apply their rulings on the design."
+require rereading-a-technical-design "a fix keeps what the design decides" "Any other finding is fixed on the technical design or the constraints without changing what they decide, or put to your human partner when fixing it would: they approved what the design decides."
 require rereading-a-technical-design "red flag: fixing an ADR" "| \"The reader is right about this ADR, I'll fix its wording\" | This reread revises no ADR. Put the finding to your human partner, and return it with what they ruled. |"
 require rereading-a-technical-design "red flag: adjusting a block" "| \"This block contradicts an ADR, I'll adjust the block\" | This reread revises no block. Put the finding to your human partner. |"
 require rereading-a-technical-design "red flag: no design, nothing to reread" "| \"The batch has no design, so there is nothing to reread\" | A reading is dispatched when its object exists. An ADR the pull request writes is reread whatever the batch carries. |"
-require rereading-a-technical-design "the reading of the ADRs goes out once" "The reading of the ADRs to reread goes out in the first round only: no revision touches what it reads."
-require rereading-a-technical-design "a round runs on the revised text"  "A round runs on the revised text"
-require rereading-a-technical-design "the rounds have stop conditions"   "These stop the rounds"
-require rereading-a-technical-design "red flag: one more round"          "| \"One more round, the design can still improve\" | The third round is the last you open."
-require rereading-a-technical-design "red flag: a section rewritten whole" "| \"This section reads better rewritten whole\" | A rewritten section is unread, and sends every reading out again."
-require rereading-a-technical-design "red flag: a reworded clause"       "| \"I reworded the clause, so this finding is a new one\" | A finding is its problem, not its words."
-require rereading-a-technical-design "the reread does not replace the review" "prepares the review of the pull request that carries the design, it does not replace it"
 
 # --- recording-a-decision ---
 # A building block: it writes the ADR its human partner decided, and decides
@@ -1014,6 +998,73 @@ require applying-a-spec-delta "says when to go back to the step that invoked it"
 # An internal skill names the skills it invokes, never those that invoke it, nor
 # a numbered step of one of them.
 absent "applying-a-spec-delta names no skill that invokes it" "${entry_names%|}|Step [0-9]" applying-a-spec-delta
+
+# --- running-reread-rounds: the rounds of a reread ---
+require running-reread-rounds "says what the invoking skill passes" \
+    "The skill that invokes it gives: - the text the rounds revise; - what becomes of each finding; - the readings that go out in the first round only, when it has any."
+require running-reread-rounds "waits for every reader" \
+    "Every reader returns before anything goes up. Wait for all of them and gather their findings, never a running report"
+require running-reread-rounds "findings are instructed, not forwarded" \
+    "You instruct the findings; you do not forward them."
+require running-reread-rounds "the invoking skill says what becomes of a finding" \
+    "Work each one through: the invoking skill says what becomes of it."
+require running-reread-rounds "the rulings are applied on the text the rounds revise" \
+    "Then put to your human partner what you changed and what you could not settle, and apply their rulings on the text the rounds revise."
+require running-reread-rounds "the human is spared a draft" \
+    "Forwarding raw findings makes your human partner arbitrate a draft, which is the work the review exists to spare them."
+require running-reread-rounds "a ruling can end the rounds" \
+    "A ruling the invoking skill says ends the reread ends the rounds."
+require running-reread-rounds "a round runs on the revised text" \
+    "A round runs on the revised text."
+require running-reread-rounds "keeps the state a round read" \
+    "Keep a copy of the state each round read: the next round's readers are handed it."
+require running-reread-rounds "the rounds have stop conditions" \
+    "These stop the rounds, and without them they chain indefinitely"
+require running-reread-rounds "a revision retouches" \
+    "**A revision retouches.** Change only the sentences a finding names. A section rewritten whole is a section no reader has read, and it sends every reading out again."
+require running-reread-rounds "a later round reads only the revision" \
+    "**A later round reads the revision, and nothing else.** What a revision adds, moves or rewords is unread; what it takes out reopens only what leaned on it"
+require running-reread-rounds "nothing unread opens no round" \
+    "A revision that leaves nothing unread opens no round."
+require running-reread-rounds "a later round's readings" \
+    "Dispatch only the readings the revision bears on: a reworded sentence goes back to the reading that found it wanting, an added one to every reading. Hand each reader the state the round before read, next to the revised one."
+require running-reread-rounds "a first-round reading is not dispatched again" \
+    "A reading given as going out in the first round only is not dispatched again."
+require running-reread-rounds "a later dispatch is composed as the first" \
+    "Compose each dispatch as the invoking skill composed the first round's."
+require running-reread-rounds "keeps a ledger of problems" \
+    "Keep a ledger from round to round: each finding's problem, the round that returned it, and what you did with it. Recognise a finding by its problem, not by its words"
+require running-reread-rounds "a returning problem goes to the human" \
+    "When a second round returns the same problem, put it to your human partner with the option you recommend, and do not reword it a third time."
+require running-reread-rounds "three rounds at most" \
+    "**The third round is the last you open.** After it, stop and put to your human partner what is still open, with your recommendation. A further round runs only on their decision."
+require running-reread-rounds "the reread does not replace the review" \
+    "**The reread prepares the review of the pull request that carries the text, it does not replace it.**"
+require running-reread-rounds "returns the text" \
+    "Return the text as the rounds leave it."
+require running-reread-rounds "says when to go back to the skill that invoked it" \
+    "Once the rounds are over, go on with the skill that invoked this one: it says what the reread returns."
+# The ledger is the conductor's working note: it is kept, never returned.
+absent "running-reread-rounds returns no ledger" "[Rr]eturns? [^.]*ledger" running-reread-rounds
+require running-reread-rounds "red flag: a reader is done" \
+    "| \"This reader is done, I'll put its findings up now\" | The next reader may displace them. Wait for every reader. |"
+require running-reread-rounds "red flag: handing over the findings" \
+    "| \"I'll hand my human partner the findings to rule on\" | Instruct them first. Your human partner rules on what you changed and what you could not settle. |"
+require running-reread-rounds "red flag: one more round" \
+    "| \"One more round, the text can still improve\" | The third round is the last you open. After it, your human partner decides whether another runs. |"
+require running-reread-rounds "red flag: a section rewritten whole" \
+    "| \"This section reads better rewritten whole\" | A rewritten section is unread, and sends every reading out again. Retouch the sentences a finding names. |"
+require running-reread-rounds "red flag: a reworded clause" \
+    "| \"I reworded the clause, so this finding is a new one\" | A finding is its problem, not its words. Returned by a second round, it goes to your human partner. |"
+# An internal skill names the skills it invokes, never those that invoke it, nor
+# a numbered step of one of them. This one invokes none, and the skills that
+# invoke it are internal too: the guard walks every declared skill.
+rounds_other_names="supercharlouze:|superpowers:|calling skill|Step [0-9]"
+for declared in $(declared_skills); do
+    [ "$declared" = "running-reread-rounds" ] && continue
+    rounds_other_names="$rounds_other_names|$declared"
+done
+absent "running-reread-rounds names no skill" "$rounds_other_names" running-reread-rounds
 
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"

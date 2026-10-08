@@ -122,12 +122,9 @@ partner that `domain-driven-design` is not available, so they can install it.
 
 ## Findings and Rounds
 
-Every reader returns before anything goes up. Wait for all of them and gather
-their findings, never a running report: a partial report gets findings ruled on
-that the next reader displaces, and asks for the same ruling twice.
-
-You instruct the findings; you do not forward them. Work each one through on the
-spec:
+Once the first round is dispatched, invoke
+`supercharlouze:running-reread-rounds` and give it the spec as the text the
+rounds revise, and what becomes of each finding:
 
 - A sentence that describes a mechanism leaves the spec, and goes to the output.
 - A rule that would constrain behaviour observable at the boundary of more than
@@ -139,36 +136,6 @@ spec:
 - Any other finding is fixed without changing what its sentence rules, or put to
   your human partner when fixing it would.
 
-Then put to your human partner what you changed and what you could not settle,
-and apply their rulings. Forwarding raw findings makes your human partner
-arbitrate a draft, which is the work the review exists to spare them.
-
-A round runs on the revised text. Keep a copy of the state each round read: the
-next round's readers are handed it. These stop the rounds, and without them they
-chain indefinitely:
-
-- **A revision retouches.** Change only the sentences a finding names. A section
-  rewritten whole is a section no reader has read, and it sends every reading
-  out again.
-- **A later round reads the revision, and nothing else.** What a revision adds,
-  moves or rewords is unread; what it takes out reopens only what leaned on it,
-  coherence being a property of the state and not of the text that remains. A
-  revision that leaves nothing unread opens no round. Dispatch only the readings
-  the revision bears on: a reworded sentence goes back to the reading that found
-  it wanting, an added one to every reading. Hand each reader the state the
-  round before read, next to the revised one.
-- **A problem that comes back goes to your human partner.** Keep a ledger from
-  round to round: each finding's problem, the round that returned it, and what
-  you did with it. Recognise a finding by its problem, not by its words: a
-  reworded clause still carries the problem a reader found in it. When a second
-  round returns the same problem, put it to your human partner with the option
-  you recommend, and do not reword it a third time.
-- **The third round is the last you open.** After it, stop and put to your human
-  partner what is still open, with your recommendation. A further round runs
-  only on their decision.
-- **The reread prepares the review of the pull request that carries the spec, it
-  does not replace it.**
-
 ## Red Flags
 
 | Thought | Reality |
@@ -176,10 +143,5 @@ chain indefinitely:
 | "I wrote this spec, I can reread it myself" | The context that wrote it rereads its intentions, not its text. Dispatch readers outside it. |
 | "One reader can take every reading, it is cheaper" | A reader holding several readings does the cheapest and returns. One reader per reading. |
 | "The reading is long, I'll summarise it in the prompt" | The reader has nothing else. Paste it word for word. |
-| "This reader is done, I'll put its findings up now" | The next reader may displace them. Wait for every reader. |
-| "I'll hand my human partner the findings to rule on" | Instruct them first. Your human partner rules on what you changed and what you could not settle. |
 | "This rule spills into the next module, I'll reword it to fit" | The breakdown is your human partner's decision. Leave the rule as it is, and return it. |
 | "The reader is right about this old passage, I'll fix it too" | The change did not write it. Return it once, and fix nothing. |
-| "One more round, the wording can still improve" | The third round is the last you open. After it, your human partner decides whether another runs. |
-| "This section reads better rewritten whole" | A rewritten section is unread, and sends every reading out again. Retouch the sentences a finding names. |
-| "I reworded the clause, so this finding is a new one" | A finding is its problem, not its words. Returned by a second round, it goes to your human partner. |
