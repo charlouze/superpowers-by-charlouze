@@ -1,16 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-FAILURES=0
-
-pass() { echo "  [PASS] $1"; }
-fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
+source "$(dirname "$0")/lib.sh"
 
 echo "test-cross-references"
 
-KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design recording-a-decision"
 # Commands share the plugin namespace with the skills: /supercharlouze:init is a
 # command, not a skill, so it resolves against commands/<name>.md instead.
 KNOWN_COMMANDS="init"
@@ -23,7 +17,7 @@ BAD=0
 while read -r ref; do
     [ -n "$ref" ] || continue
     found=0
-    for s in $KNOWN_SKILLS; do
+    for s in $(declared_skills); do
         if [ "$ref" = "$s" ] && [ -f "$REPO_ROOT/skills/$s/SKILL.md" ]; then
             found=1
         fi

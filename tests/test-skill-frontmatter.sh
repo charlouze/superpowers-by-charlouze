@@ -1,19 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-FAILURES=0
-
-pass() { echo "  [PASS] $1"; }
-fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
+source "$(dirname "$0")/lib.sh"
 
 echo "test-skill-frontmatter"
 
-EXPECTED_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design recording-a-decision"
+# The declaration every check file reads is itself well formed: a line a helper
+# skips declares a skill no guard walks.
+INVALID="$(invalid_declarations | tr '\n' '|')"
+if [ -z "$INVALID" ]; then
+    pass "every declaration names a skill and one of the three types"
+else
+    fail "every declaration names a skill and one of the three types (invalid: $INVALID)"
+fi
 
-for skill in $EXPECTED_SKILLS; do
-    f="$REPO_ROOT/skills/$skill/SKILL.md"
+for skill in $(declared_skills); do
+    f="$SKILLS_DIR/$skill/SKILL.md"
     if [ ! -f "$f" ]; then
         fail "$skill/SKILL.md exists"
         continue
@@ -26,7 +28,7 @@ for skill in $EXPECTED_SKILLS; do
         fail "$skill frontmatter opens on line 1"
     fi
 
-    front="$(awk 'NR>1 && /^---$/{exit} NR>1{print}' "$f")"
+    front="$(skill_front "$skill")"
 
     name="$(printf '%s\n' "$front" | sed -n 's/^name:[[:space:]]*//p' | head -1)"
     if [ "$name" = "$skill" ]; then
@@ -48,8 +50,8 @@ done
 # its description. It is hidden from the slash menu, and its description asks
 # for an explicit call. `disable-model-invocation` would stop the calling skills
 # from invoking it too.
-for r in rereading-a-spec rereading-a-technical-design recording-a-decision; do
-    RFRONT="$(awk 'NR>1 && /^---$/{exit} NR>1{print}' "$REPO_ROOT/skills/$r/SKILL.md" 2>/dev/null || true)"
+for r in $(declared_skills internal); do
+    RFRONT="$(skill_front "$r")"
     case "$RFRONT" in
         *"user-invocable: false"*) pass "$r is hidden from the slash menu" ;;
         *)                          fail "$r is hidden from the slash menu" ;;
@@ -65,14 +67,12 @@ for r in rereading-a-spec rereading-a-technical-design recording-a-decision; do
     esac
 done
 
-if [ -d "$REPO_ROOT/skills" ]; then
-    actual="$(ls "$REPO_ROOT/skills" | sort | tr '\n' ' ')"
-    expected="$(printf '%s\n' $EXPECTED_SKILLS | sort | tr '\n' ' ')"
-    if [ "$actual" = "$expected" ]; then
-        pass "skills directory holds exactly the declared skills"
-    else
-        fail "skills directory holds exactly the declared skills (got: $actual)"
-    fi
+actual="$(ls "$SKILLS_DIR" | sort | tr '\n' ' ')"
+expected="$(declared_skills | sort | tr '\n' ' ')"
+if [ "$actual" = "$expected" ]; then
+    pass "skills directory holds exactly the declared skills"
+else
+    fail "skills directory holds exactly the declared skills (got: $actual)"
 fi
 
 exit $((FAILURES > 0))

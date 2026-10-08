@@ -1,0 +1,12 @@
+# One skill per line: its name, then its type.
+# entry: triggered by a situation.
+# internal: invoked only by another skill.
+# foundation: invoked by a skill or by a plan.
+using-batches entry
+adopting-a-module entry
+writing-a-batch entry
+writing-a-user-story entry
+closing-a-batch entry
+rereading-a-spec internal
+rereading-a-technical-design internal
+recording-a-decision internal
