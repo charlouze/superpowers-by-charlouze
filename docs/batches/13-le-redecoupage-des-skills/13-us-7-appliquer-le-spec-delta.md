@@ -563,4 +563,16 @@ bash ~/.config/github-app/as-agent.sh git commit -m "feat: writing-a-batch invoq
 
 ## Rulings log
 
+- Ruling: la story reste technique alors que `writing-a-batch` se met à invoquer une skill là où elle portait le texte — la spec ne dit pas quelle skill porte une règle, et l'humain l'a déjà tranché sur la story 13-us-3 — si c'est faux, la story est requalifiée et sa branche refaite.
+- Technical design ruling: `applying-a-spec-delta` rend aussi les blocs qui ne s'appliquent pas, chacun avec la vérification qu'il manque, là où `Technical design` ne nomme que le chemin des copies — une skill invoquée qui écarte en silence un bloc périmé cache ce que la construction de la copie sert à attraper — si c'est faux, une phrase et une garde à retirer.
+- Ruling: `rereading-a-spec`, `rereading-a-technical-design` et `recording-a-decision` ne changent pas — elles reçoivent les copies, ne disent rien de leur construction, et une skill interne ne nomme pas celle qui l'invoque — si c'est faux, une story ultérieure ajoute le renvoi manquant.
+- Ruling: la raison « that rule is not suspended to make a reread convenient » devient « whoever needs to read the state the blocks produce » — la skill sert aussi l'écriture des ADR, et ne décrit pas qui l'invoque — si c'est faux, une formulation à rétablir.
+- Ruling: dans `The Technical Reread`, « the applied copy the coherence reread built » devient « read » — `writing-a-batch` ne construit plus la copie — si c'est faux, une formulation à rétablir.
+- Ruling: `writing-a-batch` invoque la skill avant d'écrire un ADR même quand le spec delta ne porte aucun bloc, et lui passe alors une liste vide — le texte d'avant demandait déjà de construire les copies sans traiter ce cas, et une extraction reprend le comportement en l'état — si c'est faux, une phrase à ajouter dans `The ADRs`.
+- Ruling: après la revue finale, la vérification s'écrit en consigne, « Check every block as you apply it », et non « Building a copy checks every block it applies » comme le plan l'écrit — une skill donne des instructions — si c'est faux, une formulation et sa garde à rétablir.
+- Ruling: après la revue finale, « Once you have them » devient « Once you have the paths », et deux gardes s'ajoutent, sur « in a scratch directory » et sur « A spec none of them targets gets no copy. » — « them » pouvait désigner les blocs, et toute norme d'une skill a sa garde — si c'est faux, deux gardes de trop.
+- Ruling: les gardes des deux lignes de `Red Flags` ne tiennent que la pensée, pas la réponse — c'est la forme des gardes des skills voisines — si c'est faux, une réponse peut être réécrite sans qu'une garde le voie.
+- Ruling: la garde d'invocation de `tests/test-skill-contracts.sh` passe dès qu'une invocation subsiste dans `writing-a-batch` — les gardes de `tests/test-skill-content.sh` tiennent chaque passage — si c'est faux, un passage peut perdre son invocation sous une garde verte.
+- Ruling: la garde négative cherche « scratch directory » et « checks every block », deux formules courantes — elle ne touche aujourd'hui aucun texte légitime, et une paraphrase lui échappe comme à toute garde de ce genre — si c'est faux, une skill future devra reformuler une phrase correcte.
+
 ## Observed drift
