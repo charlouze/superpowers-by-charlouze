@@ -630,4 +630,26 @@ bash ~/.config/github-app/as-agent.sh git commit -m "feat: les skills qui détec
 
 ## Rulings log
 
+Ruling: la story reste technique alors que `writing-a-user-story` et `using-batches` se mettent à invoquer `detecting-concurrency` — la spec dit comment la concurrence se détecte et ne dit pas quelle skill le porte, et l'arbitrage a déjà été rendu pour `writing-in-a-spec` — si c'est faux, la story est à requalifier et le lot à amender.
+
+Ruling: `detecting-concurrency` rend les conflits et les déclarations illisibles, et l'arrêt reste dans chaque skill qui l'invoque — `Technical design` dit qu'elle rend, et une skill interne se termine en revenant à l'étape qui l'a invoquée — si c'est faux, une skill qui l'invoquera sans écrire l'arrêt poursuit malgré un conflit.
+
+Ruling: `following-the-rules` ne garde que la définition d'un conflit, les branches qui revendiquent et ce que chaque travail déclare ; la raison du filtre par nom de branche, la lecture des déclarations, le filet partiel de git et sa ligne de `Red Flags` passent à `detecting-concurrency` — le socle ne nomme aucune skill et celui qui exécute une tâche le charge sans jamais détecter — si c'est faux, une skill qui ne charge que le socle ne lit plus pourquoi le filtre est le nom de la branche.
+
+Ruling: `detecting-concurrency` écarte de toute sa lecture la branche du travail et sa pull request, là où l'étape 1 n'écartait que la branche, parmi celles sans pull request — `Technical design` dit qu'elle écarte la branche de sa lecture, et un travail qui refait la détection n'a pas encore de pull request — si c'est faux, la phrase est à restreindre aux branches sans pull request.
+
+Ruling: `git fetch origin` passe du point 3 à la tête du déroulé — `Technical design` dit qu'elle fetch, et la lecture des pull requests gagne le même état frais — si c'est faux, le fetch revient au point qui lit les branches.
+
+Ruling: la phrase sur la fenêtre qui court de l'étape 2 au push de l'étape 3 n'est pas reprise dans `detecting-concurrency` — une skill interne ne nomme pas les étapes de celle qui l'invoque, et l'étape 3 de `writing-a-user-story` dit déjà pourquoi le push se fait là — si c'est faux, la skill de story est à compléter à son étape 3.
+
+Ruling: la règle (b) de `using-batches` perd la phrase « Symmetrically… » et le paragraphe sur la branche d'un changement borné qui n'a pas encore déclaré — les points 2 et 3 du déroulé les portent — si c'est faux, celui qui conduit un changement borné ne lit plus que sa branche poussée est lue par ce qu'elle a changé.
+
+Ruling: `writing-a-user-story` n'invoque `detecting-concurrency` qu'à son étape 1, et `using-batches` lui passe `bounded/<slug>` seulement quand une déclaration change avant l'ouverture de la pull request — une extraction reprend le comportement que la branche porte, et la story qui transcrit le bloc sur `Concurrency detection` ajoute la détection refaite pour une section de plus — si c'est faux, cette règle manque jusqu'à cette story.
+
+Ruling: `Allocating NN` de `writing-a-batch` nomme `supercharlouze:detecting-concurrency` là où elle nommait le déroulé de `writing-a-user-story` — le déroulé qu'elle cite a changé de skill — si c'est faux, le renvoi est à couper.
+
+Ruling: « Once you have them, go on with the step that invoked this skill. » reste, contre le constat de la relecture finale qui y lit « poursuis malgré le conflit » — c'est la formule des autres skills internes, et l'étape qui invoque dit de s'arrêter — si c'est faux, la phrase devient « hand them back to the skill that invoked you ».
+
+Ruling: le retour à la ligne inégal du point 1 du déroulé reste — il vient du texte extrait, et la relecture finale le laisse — si c'est faux, le paragraphe est à remettre en forme.
+
 ## Observed drift
