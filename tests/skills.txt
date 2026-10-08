@@ -18,4 +18,5 @@ applying-a-spec-delta internal
 running-reread-rounds internal
 starting-a-branch internal
 finishing-a-pr internal
+writing-a-batch-document internal
 following-the-rules foundation
