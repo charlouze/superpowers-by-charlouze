@@ -110,7 +110,7 @@ their row gives, each with the skill that conducts it:
 | The remaining work is a different batch | `supercharlouze:closing-a-batch` closes this batch, then `supercharlouze:opening-a-batch` opens the fresh one. |
 | The observable change of a technical story is wanted | `supercharlouze:amending-a-batch` adds its block. Once that pull request merges, `supercharlouze:writing-a-user-story` rewrites the work as an ordinary story of the amended batch. |
 | A constraint is untenable | `supercharlouze:amending-a-batch` changes or removes it. |
-| An ADR is untenable | A bounded change, under `supercharlouze:using-batches`, rewrites or deletes it. |
+| An ADR is untenable | A bounded change, under `supercharlouze:making-a-bounded-change`, rewrites or deletes it. |
 
 ## Red Flags
 
