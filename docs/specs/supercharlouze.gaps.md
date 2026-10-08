@@ -29,14 +29,6 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Violations
 
-- **The gaps register** — la spec veut qu'un lot réserve tout ce qu'il prend en
-  charge dans le gaps register, sans limiter la réservation à l'ouverture.
-  `writing-a-batch` ne fait poser l'annotation `reserved by batch-NN` que par la
-  pull request d'ouverture, et ne dit rien d'une entrée qu'un amendement ajoute à
-  `Scope`. Un lot qui prend une entrée en charge par amendement ne la réserve donc
-  pas, et un autre lot peut alors la réserver aussi. Constatée par la story
-  `11-us-5-le-lot`, consolidée par la clôture du lot 11. `reserved by batch-13`
-
 ## Gaps
 
 - **The spec document** — la règle « un renvoi nomme la section qu'il vise » n'est
