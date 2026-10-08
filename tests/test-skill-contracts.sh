@@ -91,12 +91,12 @@ absent_everywhere "a branch with no declaration yet is not an unknown" \
 # What a spec contains lives in one place, `writing-in-a-spec`. A skill that
 # writes a text a spec receives invokes it and restates nothing: a second
 # formulation of the same rule is what drifts. `adopting-a-module` writes a
-# spec's first version, `writing-a-batch` the blocks a spec will receive,
+# spec's first version, `writing-a-batch-document` the blocks a spec will receive,
 # `writing-a-user-story` their transcription, and `using-batches` carries the
 # bounded change. `closing-a-batch` writes into no spec file.
 require writing-in-a-spec "states the question of the other-implementation test" \
     "read this sentence as true of their code"
-for s in using-batches adopting-a-module writing-a-batch writing-a-user-story; do
+for s in using-batches adopting-a-module writing-a-batch-document writing-a-user-story; do
     require "$s" "invokes writing-in-a-spec before writing a text a spec receives" \
         "nvoke \`supercharlouze:writing-in-a-spec\` before"
 done
@@ -222,12 +222,16 @@ absent "the story header does not count its fields" \
     writing-a-user-story
 
 # The three families that answer the exemption criterion by construction are
-# listed in both skills. A family spelled two ways is a family a reader cannot
-# claim: the batch document quotes the wording, and the opening review reads it.
-# One assertion over both ends.
-shared "the flag exemption names the technical batch identically" \
-    "**A batch all of whose stories are technical** — none of them changes what is observable at its module's boundary, so every pull request is deployable as it stands. That is what the qualification means, not a tolerance granted to it." \
-    following-the-rules writing-a-batch
+# listed in the foundation. The skill that writes the `Feature flag` field
+# points at them, and no other skill spells them a second time.
+require following-the-rules "the flag exemption names the technical batch" \
+    "**A batch all of whose stories are technical** — none of them changes what is observable at its module's boundary, so every pull request is deployable as it stands. That is what the qualification means, not a tolerance granted to it."
+require writing-a-batch-document "points at the exemption criterion and its families" \
+    "Decide it by \`The Model\` in \`supercharlouze:following-the-rules\`: the exemption criterion and the families that answer it by construction"
+# shellcheck disable=SC2046
+absent "no other skill spells the exemption families" \
+    "That is what the qualification means|Gating it would delay a conformance fix|nothing is ever half delivered" \
+    $(declared_skills | grep -vx following-the-rules)
 
 # `following-the-rules` fixes the forms of the gating sentence, and
 # `writing-a-user-story` points at it. Two spellings of the same sentence is how
@@ -295,6 +299,19 @@ shared "both ends spell the Blocks field alike" \
 absent_everywhere "no skill finds undelivered blocks by reading or diffing the specs" \
     "[Cc]heck the specs on main|against what (actually )?shipped"
 
+# The form of a batch document lives in one place, `writing-a-batch-document`.
+# A skill that writes or amends one invokes it and passes what varies: the
+# number and the slug of a document to write, or the document and what changes
+# in it.
+require writing-a-batch "invokes writing-a-batch-document to write or amend the batch document" \
+    "nvoke \`supercharlouze:writing-a-batch-document\` and give it"
+# The form is spelled there and nowhere else. Walks the declared skills, so one
+# declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates the form of a batch document" \
+    "exact text, in blocks|unique within the batch|Give the paragraph in a .diff. fence|No block is attached to a story|faces several specs at once|Nothing normative goes in .Constraints.|bind only its stories|Three shapes of the field|one line per guarded module|There is no other list to keep|list of stories does not appear|history of its own scope" \
+    $(declared_skills | grep -vx writing-a-batch-document)
+
 # The end of a review is conducted in one place, `finishing-a-pr`. A skill whose
 # pull request is reviewed invokes it, and passes its conditions and its next
 # step.
@@ -357,19 +374,24 @@ require writing-in-a-spec "a rule belongs to exactly one spec, stated where it l
     "**A rule belongs to exactly one spec.** A rule that would constrain behaviour observable at the boundary of more than one module is not a rule looking for a home"
 
 # Each skill that invokes it names the rule where its own step stops on it.
-for s in adopting-a-module writing-a-batch writing-a-user-story; do
+for s in adopting-a-module writing-a-batch-document writing-a-user-story; do
     require "$s" "names the rule its step stops on" "**A rule belongs to exactly one spec.**"
 done
 
-# The batch document's immutability has a bound, and the bound is this closure
-# (spec section `Batch`). `writing-a-batch` states the rule and names closing as
-# the exception; `closing-a-batch` is the end that performs it — it amends the
-# document and flips its front matter. One assertion over both files: two
-# `require` calls would each stay green while one end reworded the bound away
-# from the other, which is the whole failure this locks out.
-shared "the batch document's immutability is bounded at closing, spelled alike" \
-    "nothing in the normal course of the batch modifies it **until closing**" \
-    writing-a-batch closing-a-batch
+# The batch document's immutability has a bound, and the bound is the closure
+# (spec section `Batch`). `writing-a-batch-document` states the rule and its
+# bound; `closing-a-batch` is the end that performs it and says only what it
+# does to the document.
+require writing-a-batch-document "the batch document's immutability is bounded at closing" \
+    "nothing in the normal course of the batch modifies it **until closing**"
+require closing-a-batch "closing is the one moment that touches the batch document" \
+    "It is also the only moment in a batch's normal course that touches the batch document itself: *Withdraw the blocks no story delivered* removes them from it, and *Set status: closed* flips its front matter."
+require closing-a-batch "any other edit of the batch document goes through an amendment" \
+    "Anything else that would edit the document goes through an amendment pull request of its own, which \`supercharlouze:writing-a-batch\` owns."
+# shellcheck disable=SC2046
+absent "no other skill restates the immutability of the batch document" \
+    "nothing in the normal course of the batch modifies it" \
+    $(declared_skills | grep -vx writing-a-batch-document)
 
 # The spec used to deny the bound outright — the batch document carries no
 # mutable state and *nothing* in the normal course modifies it, full stop — while
@@ -717,11 +739,17 @@ absent "no skill keeps the former guarded-code rules" \
 absent_everywhere "no skill says the spec fixes the gating sentence's form" \
     "form the spec fixes|form fixed by the spec"
 
-# Each flag is independent of the others. The skills that declare a flag per
-# (batch, module) say it in the same words.
-shared "each flag is independent of the others" \
-    "Each flag is switched on, switched off and lifted independently of the others: one flag's lifting story waits for no other flag's." \
-    following-the-rules writing-a-batch
+# Each flag is independent of the others. The foundation says it, and the skill
+# that writes the `Feature flag` field points at the foundation for one flag
+# per (batch, module).
+require following-the-rules "each flag is independent of the others" \
+    "Each flag is switched on, switched off and lifted independently of the others: one flag's lifting story waits for no other flag's."
+require writing-a-batch-document "points at one flag per batch and module" \
+    "one flag per (batch, module)"
+# shellcheck disable=SC2046
+absent "no other skill restates the independence of the flags" \
+    "lifted independently of the others" \
+    $(declared_skills | grep -vx following-the-rules)
 
 # A corrective batch's spec delta carries no block; the field itself is never
 # left blank.
@@ -761,19 +789,19 @@ absent "a batch no longer lists only migration constraints" \
 # migration and compatibility, then the order — must not survive anywhere.
 absent "Constraints are no longer bounded to migration and order" \
     "migration and compatibility constraints,? and the required order" \
-    writing-a-batch using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
+    writing-a-batch writing-a-batch-document using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
 
 # A constraint is judged against the technical design, known at opening, never
 # against the stories, which do not exist yet.
 absent "no constraint is judged against the stories" \
     "without breaking another" \
-    writing-a-batch using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
+    writing-a-batch writing-a-batch-document using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
 
 # A story writes its departures from the design in the form the batch document
 # spells.
 shared "the batch and the story spell a technical design ruling alike" \
     "\`Technical design ruling:\`" \
-    writing-a-batch writing-a-user-story
+    writing-a-batch-document writing-a-user-story
 
 # Both rereads dispatch their readers the same way. One assertion per rule over
 # both skills, so neither drifts alone.
