@@ -134,13 +134,21 @@ can contradict it.
 The agent cannot clear its own context. So when your human partner announces the
 merge, the agent asks them to clear the context. Where a next step exists, it names
 that step and gives, in a block to copy and paste, the prompt that starts it in a
-fresh context. **That prompt stands on its own:** it names the skill to invoke and
+fresh context.
+
+**Abandoning a story after a stop condition is a moment to clear the context
+too, when the ruling asks for a next step.** The agent asks its human partner to
+clear the context, names that step and gives its prompt the same way, and that
+prompt states the ruling: the story's branch is gone, and no document carries
+what was ruled yet.
+
+**Each of these prompts stands on its own:** it names the skill to invoke and
 the document to start from, and never refers back to the conversation.
 
-The prompt waits for the merge announcement, not for the announcement that the
-pull request is ready. Between the two the review may go on, and a prompt given
-earlier ends up buried under it, or names a document the review has since
-changed.
+After a review, the prompt waits for the merge announcement, not for the
+announcement that the pull request is ready. Between the two the review may go
+on, and a prompt given earlier ends up buried under it, or names a document the
+review has since changed.
 
 "Never refers back to the conversation" is the whole point. A prompt saying
 "continue what we discussed" is worthless after a clear, and it is worthless in a

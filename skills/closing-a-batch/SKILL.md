@@ -99,6 +99,8 @@ Then push and open the pull request. The **review of the closing pull request** 
 
 **To end the review, invoke `supercharlouze:finishing-a-pr` and give it no condition and no next step.** What comes after a closed batch is chosen outside this model.
 
+Exception: when the prompt that started the closing states a ruling and names a step after the closing, give that step, with its skill and its document, and have its prompt state the ruling.
+
 ## Language
 
 **English skeleton, project-language prose.** Section titles, field names, table headers, front matter values (`status: closed`), path patterns and branch patterns are English, everywhere and always. The prose you write — the body of a gaps register entry, an amended scope paragraph — follows the project's language, as do the slugs, which name business objects. This skill and every message it produces are English; the documents it writes carry both.

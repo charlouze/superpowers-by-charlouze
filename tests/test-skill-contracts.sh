@@ -343,8 +343,18 @@ done
 # foundation keeps. Walks the declared skills, so one declared later is covered.
 # shellcheck disable=SC2046
 absent "no other skill restates the end of a review" \
-    "pushed as a .fixup!. commit|[Ss]quash the fixups|[Ss]quash the .fixup!. commits|[Aa]nnounce (that )?the pull request (is )?ready|ready to be approved and merged|[Nn]ever approves? (and|or) (never )?merges?|agreement in the conversation|block to copy and paste|[Cc]lear the context|announces the merge|prompt stands on its own|refers back to (this|the) conversation" \
+    "pushed as a .fixup!. commit|[Ss]quash the fixups|[Ss]quash the .fixup!. commits|[Aa]nnounce (that )?the pull request (is )?ready|ready to be approved and merged|[Nn]ever approves? (and|or) (never )?merges?|agreement in the conversation|block to copy and paste|announces the merge|prompts? stands on its own|refers back to (this|the) conversation" \
     $(declared_skills | grep -vx -e finishing-a-pr -e following-the-rules)
+# The abandonment of a stopped story is the other moment that asks for a clear
+# context: the skill that conducts it makes the request, and takes the form of
+# the prompt from the foundation.
+# shellcheck disable=SC2046
+absent "no other skill asks for a clear context" \
+    "[Cc]lear the context" \
+    $(declared_skills | grep -vx -e finishing-a-pr -e following-the-rules -e handling-a-stopped-story)
+absent "the steps a ruling asks for are not conducted in the session that took it" \
+    "Take them in the order their row gives" \
+    handling-a-stopped-story
 
 # The next step is named, and its prompt given, when the human announces the
 # merge, not when the agent announces the pull request ready: given then, the
@@ -766,6 +776,11 @@ absent "no skill closes a corrective story's pull request at the stop" \
     "Therefore: \*\*close the story's pull request|So: \*\*close the story's pull request|Abandon the story, closing its pull request|exactly as a requalified corrective story is abandoned" \
     using-batches following-the-rules opening-a-batch amending-a-batch delivering-a-story recording-a-decision handling-a-stopped-story
 
+# A technical story is abandoned once its ruling is given: no skill has its pull
+# request closed at the stop either.
+absent_everywhere "no skill closes a technical story's pull request at the stop" \
+    "Close its pull request without merging it if one is already open|Close it only if it is already open|[*][*]Abandon the story[.][*][*]"
+
 # using-batches routes a stopped story to handling-a-stopped-story: it neither
 # opens on what a requalification does not do nor copies its procedure.
 absent "using-batches copies no requalification procedure" \
@@ -1059,5 +1074,12 @@ absent_everywhere "no skill sends a bounded change to using-batches" \
 absent "using-batches keeps no red flag of the story path" \
     "local merge is quicker|transcribe the whole spec delta now" \
     using-batches
+
+# The reservations a requalified batch drops are released by the steps the
+# ruling asks for: the skill that takes the ruling does not make it a step of
+# its own procedure.
+absent "the session that takes a ruling releases no reservation" \
+    "[*][*]Release the reservations" \
+    handling-a-stopped-story
 
 exit $((FAILURES > 0))
