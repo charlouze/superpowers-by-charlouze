@@ -61,9 +61,15 @@ it the batch document and what the amendment changes in it. An amendment is not
 mutable state flowing along: it is an explicit human decision that goes through
 a review.
 
+An amendment that adds a gaps register entry to `Scope` reserves it in the same
+pull request: invoke `supercharlouze:writing-in-a-gaps-register` before
+reserving it, and give it this batch's `NN`. An entry taken on without its
+annotation still reads as free, and another batch can reserve it too.
+
 An amendment that takes a gaps register entry out of `Scope` releases its
 reservation in the same pull request: invoke
-`supercharlouze:writing-in-a-gaps-register` before releasing it.
+`supercharlouze:writing-in-a-gaps-register` before releasing it, and give it
+this batch's `NN`.
 
 An amendment that adds the block of an observable change a technical story
 revealed declares the flag that block requires, if it requires one. Ask the
@@ -128,6 +134,7 @@ document.**
 | Thought | Reality |
 |---------|---------|
 | "The scope changed, I'll slip the edit into the next story's pull request" | Then the change is never reviewed as a scope change. The batch document has no mutable state: before closing, it moves only through an amendment pull request of its own. |
+| "Reservations are posted at opening, this amendment only edits `Scope`" | A batch reserves every entry it takes on, whenever it takes it on. Reserve in this pull request the entry the amendment adds, or another batch can reserve it too. |
 | "I'll call the amendment branch `batch/NN-<slug>-amend`, it says what it is" | A name under one of this plugin's branch patterns claims what that pattern claims — a number, sections — and an amendment holds neither. Its branch follows none of them. |
 | "My human partner decided this ADR, I'll write the file myself" | Invoke `supercharlouze:recording-a-decision`. It confronts the decision with the specs, blocks applied, and with the other ADRs. |
 | "My human partner wants this ADR rewritten, I'll amend the batch for it" | An amendment changes the batch document. A change that touches nothing but ADRs goes through a bounded change. |

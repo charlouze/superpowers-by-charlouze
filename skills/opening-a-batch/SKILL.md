@@ -88,8 +88,8 @@ nothing into the specs is untouched. That is why a batch reserves its entries
 in this same pull request while still writing nothing into a spec.
 
 **Reserving gaps-register entries — any batch, not only a corrective one.**
-Reservation is a property of the opening pull request of **whatever batch takes
-an entry on**, and it exists so that two batches cannot draw the same entry. So:
+**Whatever batch takes an entry on** reserves it, so that two batches cannot
+draw the same entry. So:
 if any part of this batch's scope comes from `docs/specs/<module>.gaps.md`,
 reserve every entry it takes on **in this same pull request**: invoke
 `supercharlouze:writing-in-a-gaps-register` before reserving one, and give it
