@@ -12,4 +12,5 @@ rereading-a-technical-design internal
 recording-a-decision internal
 writing-in-a-spec internal
 writing-in-a-gaps-register internal
+detecting-concurrency internal
 following-the-rules foundation
