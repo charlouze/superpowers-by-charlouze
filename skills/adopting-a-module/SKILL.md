@@ -57,13 +57,9 @@ The pressure to break this rule is highest exactly where the documents are thinn
 — that is the moment to slow down, not to improvise.
 
 **And you do not read *through* a mechanism to deduce the intention it served.**
-That is the content rule of `supercharlouze:using-batches` — a spec carries
-business rules and intentions, the mechanism stays in the code — and adoption is
-where breaking it is most tempting: a validated document describes a mechanism,
-the intention behind it looks one paraphrase away, and it is not. Ask the test of
-every sentence you are about to write: *would another developer, having
-implemented the same intention differently, read this sentence as true of their
-code?* What a document states as an intention is normative and goes in; what it
+Adoption is where that is most tempting: a validated document describes a
+mechanism, the intention behind it looks one paraphrase away, and it is not.
+What a document states as an intention is normative and goes in; what it
 states as a mechanism becomes a gap. Deducing an intention from a mechanism is
 reconstruction from the code by another road, whether you read that mechanism in
 the code or in a validated document. An intention comes from a validated document
@@ -163,6 +159,8 @@ inventory, not files. Everything after it writes.
 
 Merge, deduplicate, reconcile. The spec is normative — what the code must do — not
 descriptive.
+
+**Invoke `supercharlouze:writing-in-a-spec` before writing the first sentence.**
 
 - **Every sentence you write passes the other-implementation test**, and what it
   ejects **goes straight into the gaps register**, naming the document it came

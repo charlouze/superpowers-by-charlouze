@@ -129,6 +129,19 @@ case "$DROW" in
     *)                  fail "the README row of recording-a-decision rules out direct use" ;;
 esac
 
+# The README row of writing-in-a-spec, like the other internal skills', says it
+# is not for direct use and names none of the skills that invoke it.
+WROW="$(grep -F '`supercharlouze:writing-in-a-spec`' "$REPO_ROOT/README.md" || true)"
+case "$WROW" in
+    *"using-batches"*|*"writing-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+        fail "the README row of writing-in-a-spec names no caller" ;;
+    *)  pass "the README row of writing-in-a-spec names no caller" ;;
+esac
+case "$WROW" in
+    *"Never directly"*) pass "the README row of writing-in-a-spec rules out direct use" ;;
+    *)                  fail "the README row of writing-in-a-spec rules out direct use" ;;
+esac
+
 # The rereads use three skills when they are installed; the README recommends
 # them all, since nothing else tells a user they exist. Anchored on the
 # recommendation itself: a skill named anywhere else in the README proves nothing.

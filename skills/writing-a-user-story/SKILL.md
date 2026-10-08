@@ -274,11 +274,9 @@ reopen through the window exactly the gap the living spec exists to close. The
 sentence disappears in the lifting story, and that is a spec change like any
 other.
 
-**What the spec change may contain.** The transcription applies the content rule of
-`supercharlouze:using-batches` — a spec carries business rules and intentions,
-the mechanism stays in the code — to every sentence it writes. Ask it of each:
-*would another developer, having implemented the same intention differently,
-read this sentence as true of their code?* The delta was written by a human at
+**What the spec change may contain.** Invoke `supercharlouze:writing-in-a-spec`
+before transcribing a block, and apply what it carries to every sentence you
+write. The delta was written by a human at
 the opening gate, but transcribing it is still writing, and a delta that names a
 mechanism is transcribed as the rule that mechanism served **only if a validated
 document or your human partner states that rule**. You do not deduce it: an
