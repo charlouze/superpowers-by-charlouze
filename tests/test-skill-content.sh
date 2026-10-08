@@ -573,7 +573,6 @@ require writing-a-batch "an amendment is a clear moment too"      "An amendment 
 require writing-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
-require writing-a-user-story "branches from main as the remote carries it" "starts from \`main\` as the remote carries it"
 require writing-a-user-story "concurrency via declared Sections"  "Sections:"
 require writing-a-user-story "transcription is the first commit"  "first commit on the branch"
 require writing-a-user-story "freeze travels in Global Constraints" "Global Constraints"
@@ -1065,6 +1064,43 @@ for declared in $(declared_skills); do
     rounds_other_names="$rounds_other_names|$declared"
 done
 absent "running-reread-rounds names no skill" "$rounds_other_names" running-reread-rounds
+
+# --- starting-a-branch: the start of a branch ---
+require starting-a-branch "says what the invoking skill passes" \
+    "The skill that invokes it gives the name of the branch."
+require starting-a-branch "starts from main as the remote carries it" \
+    "starts a branch from \`main\` as the remote carries it"
+require starting-a-branch "fetches first" "git fetch origin"
+require starting-a-branch "creates the branch and its workspace through using-git-worktrees" \
+    "**Create the branch and its workspace by invoking \`superpowers:using-git-worktrees\`**"
+require starting-a-branch "checks the starting point" \
+    "git merge-base --is-ancestor origin/main HEAD"
+require starting-a-branch "checks the name" "git branch --show-current"
+require starting-a-branch "restores the name and the starting point" \
+    "restore the name you were given and the starting point before going on"
+require starting-a-branch "restores when isolation was declined" \
+    "or isolation was declined, restore the name you were given"
+require starting-a-branch "puts both right inside the workspace" \
+    "git switch -c <branch> origin/main"
+require starting-a-branch "a named branch is not enough" "**A named branch is not enough.**"
+require starting-a-branch "a reused worktree creates no branch" \
+    "concludes \"already in a linked worktree\" and reuses it without creating a branch"
+# The fetch comes first, then the workspace, then the restoration.
+skill_text starting-a-branch
+case "$SKILL_TEXT" in
+    *"git fetch origin"*"superpowers:using-git-worktrees"*"git switch -c <branch> origin/main"*)
+        pass "starting-a-branch: fetch, then the workspace, then the restoration" ;;
+    *)  fail "starting-a-branch: fetch, then the workspace, then the restoration" ;;
+esac
+require starting-a-branch "red flag: already in a worktree" \
+    "| \"I'm already in a worktree, that will do\" | As a place to work, it will. A branch that starts there will not: the work lands on the branch of the piece of work before. Start the branch from \`origin/main\`, wherever you stand. |"
+require starting-a-branch "red flag: the harness named the branch" \
+    "| \"The harness already named the branch, that will do\" | Under that name the branch claims nothing of what the name you were given claims. Restore the name you were given. |"
+require starting-a-branch "says when to go back to the step that invoked it" \
+    "Once the branch is started, go on with the step that invoked this skill, in the workspace of the branch."
+# An internal skill names the skills it invokes, never those that invoke it, nor
+# a numbered step of one of them.
+absent "starting-a-branch names no skill that invokes it" "${entry_names%|}|Step [0-9]" starting-a-branch
 
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"

@@ -13,20 +13,41 @@ absent_everywhere "no skill keeps a Live flags section or its rulings" \
     "Live flags|carried by this batch|inherited by a ruling"
 
 
-# Number allocation and the concurrency scan both recognise a branch by its
-# name, and both on exactly the window where no pull request exists yet. So a
-# skill that creates a branch owes more than "some named branch exists": it
-# restores the conventional name, and the starting point the flow requires. The
-# loose reading leaves a branch that is invisible to both scans, holding neither
-# its number nor its sections — or one that is visible and built on the wrong
-# base.
-shared "every branch-creating skill restores the name and the starting point" \
-    "restore the conventional name and the starting point before going on" \
-    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
-
-shared "and each says a named branch is not enough" \
-    "named branch is not enough" \
-    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+# A branch is started in one place, `starting-a-branch`. A skill that creates a
+# branch invokes it and passes the name of the branch.
+for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches; do
+    require "$s" "invokes starting-a-branch with the name of the branch" \
+        "nvoke \`supercharlouze:starting-a-branch\` and give it the name"
+done
+require adopting-a-module "an adoption passes adopt/<module>" \
+    "Invoke \`supercharlouze:starting-a-branch\` and give it the name \`adopt/<module>\`"
+require writing-a-batch "an opening passes batch/NN-<slug>" \
+    "Invoke \`supercharlouze:starting-a-branch\` and give it the name \`batch/NN-<slug>\`."
+require writing-a-batch "an amendment passes the name it chose" \
+    "Invoke \`supercharlouze:starting-a-branch\` and give it the name you chose."
+require closing-a-batch "a closing passes batch/NN-<slug>-close" \
+    "**Invoke \`supercharlouze:starting-a-branch\` and give it the name \`batch/NN-<slug>-close\`.**"
+require writing-a-user-story "a story passes story/NN-us-N-<slug>" \
+    "Invoke \`supercharlouze:starting-a-branch\` and give it the name \`story/NN-us-N-<slug>\`."
+require using-batches "a bounded change passes bounded/<slug>" \
+    "invoke \`supercharlouze:starting-a-branch\` and give it the name \`bounded/<slug>\`"
+# Allocation reads `origin/main` before the branch exists, so it fetches itself.
+case "$(body_flat "$REPO_ROOT/skills/writing-a-batch/SKILL.md")" in
+    *"git fetch origin git ls-tree --name-only origin/main docs/batches/"*)
+        pass "writing-a-batch: allocation fetches before it reads the remote" ;;
+    *)  fail "writing-a-batch: allocation fetches before it reads the remote" ;;
+esac
+case "$(body_flat "$REPO_ROOT/skills/writing-a-user-story/SKILL.md")" in
+    *"git fetch origin git ls-tree --name-only origin/main docs/batches/NN-<slug>/"*)
+        pass "writing-a-user-story: allocation fetches before it reads the remote" ;;
+    *)  fail "writing-a-user-story: allocation fetches before it reads the remote" ;;
+esac
+# How a branch is started is spelled there and nowhere else. Walks the declared
+# skills, so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates the start of a branch" \
+    "named branch is not enough|restore the conventional name|detached HEAD|harness's native tooling|wherever you happened to be|GIT_DIR != GIT_COMMON|already in a linked worktree|merge-base --is-ancestor|[Ii]nvoking .superpowers:using-git-worktrees|then branch from .origin/main.|using-git-worktrees (opens|reuses)|branch from .origin/main.: otherwise|create the branch from .origin/main. yourself|Branch from .origin/main., wherever you stand" \
+    $(declared_skills | grep -vx starting-a-branch)
 
 # The concurrency scan lives in one place, `detecting-concurrency`. A skill
 # whose work claims sections invokes it, passes what varies and stops on what it

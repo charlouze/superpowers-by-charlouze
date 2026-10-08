@@ -43,16 +43,6 @@ spans two modules, it is two stories.
 Check all of these before creating anything. They apply to every pull request
 of this system, not only to stories.
 
-- **This story's branch starts from `main` as the remote carries it.** Fetch,
-  then branch from `origin/main`, never from another branch. Two things ride on
-  it. `superpowers:finishing-a-development-branch` *preserves* the worktree on
-  the pull request path, so a session that chains two stories without leaving
-  it lets `superpowers:using-git-worktrees` skip creation — its Step 0 sees
-  `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses
-  the existing one — and this story's code would land on the previous story's
-  branch. And merges arrive from the remote, so a starting point taken from a
-  stale `main` leaves number allocation and concurrency detection reasoning on a
-  state that is already behind.
 - **`gh` is available and authenticated.** Number allocation and concurrency
   detection both query it. Without it, both degrade to a partial net —
   collision visible when the pull request opens, merge conflict — and they no
@@ -77,6 +67,7 @@ decide on the unread declaration.
 `story/*` branch that carries no pull request yet**:
 
 ```bash
+git fetch origin
 git ls-tree --name-only origin/main docs/batches/NN-<slug>/
 gh pr list --state open --limit 100 --json number,headRefName
 git ls-remote --heads origin 'story/*'
@@ -106,19 +97,8 @@ Branch name, enforced by this plugin and not by superpowers:
 `NN` is the batch number, `us-N` the story number, and the slug follows the
 project's language — it names a business object.
 
-Create the branch and the workspace by invoking
-`superpowers:using-git-worktrees`. That skill prefers the harness's native
-tooling, which picks its own branch name, may leave a detached HEAD, and may
-branch from wherever you happened to be. If it produces another name, a detached
-HEAD, a starting point other than `origin/main`, or if isolation is declined,
-restore the conventional name and the starting point before going on:
-`story/NN-us-N-<slug>`, from `origin/main`. `git merge-base --is-ancestor
-origin/main HEAD` answers the second, and `git switch -c story/NN-us-N-<slug>
-origin/main` inside the workspace puts it right. **A named branch is not
-enough.** The concurrency scan and this step's allocation both read
-`story/*` on the remote, so a branch under any other name is invisible to
-every sibling for the whole length of an implementation — it holds neither
-its `us-N` nor its sections, and the push at the end of Step 3 buys nothing.
+Invoke `supercharlouze:starting-a-branch` and give it the name
+`story/NN-us-N-<slug>`.
 
 The story document lives at `docs/batches/NN-<slug>/NN-us-N-<slug>.md`. The
 `NN-` prefix keeps basenames unique across batches. On the nominal path it is
@@ -719,7 +699,6 @@ Every text this skill writes follows `Concision` in `supercharlouze:following-th
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No open pull request uses us-3, so us-3 is free" | A branch claims its number from its first commit until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too — same argument as the concurrency scan. |
 | "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-change commit. |
-| "I'm already in a worktree, that's fine" | It is, as a place to work. A branch that starts there is not: this story's code would land on the previous story's branch. Branch from `origin/main`, wherever you stand. |
 | "Merging locally is quicker" | It never pushes. It merges into the local `main`, deletes the worktree and the branch, and takes the unrecorded rulings with it. |
 | "I'll transcribe the spec at the end, with the code" | Then the norm is not prior to the code and the freeze has no starting point. The spec change ships as commit one. |
 | "Keeping the branch is harmless" | Without a pull request the story has no observable state and is never delivered. |
