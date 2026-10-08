@@ -94,7 +94,7 @@ fi
 # none of the skills that invoke it.
 RROW="$(grep -F '`supercharlouze:rereading-a-spec`' "$REPO_ROOT/README.md" || true)"
 case "$RROW" in
-    *"adopting-a-module"*|*"writing-a-batch"*|*"invoked by"*)
+    *"adopting-a-module"*|*"writing-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
         fail "the README row of rereading-a-spec names no caller" ;;
     *)  pass "the README row of rereading-a-spec names no caller" ;;
 esac
@@ -107,7 +107,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 TROW="$(grep -F '`supercharlouze:rereading-a-technical-design`' "$REPO_ROOT/README.md" || true)"
 case "$TROW" in
-    *"writing-a-batch"*|*"invoked by"*)
+    *"writing-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
         fail "the README row of rereading-a-technical-design names no caller" ;;
     *)  pass "the README row of rereading-a-technical-design names no caller" ;;
 esac
@@ -120,7 +120,7 @@ esac
 # direct use and names none of the skills that invoke it.
 DROW="$(grep -F '`supercharlouze:recording-a-decision`' "$REPO_ROOT/README.md" || true)"
 case "$DROW" in
-    *"writing-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+    *"writing-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
         fail "the README row of recording-a-decision names no caller" ;;
     *)  pass "the README row of recording-a-decision names no caller" ;;
 esac
@@ -133,7 +133,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 WROW="$(grep -F '`supercharlouze:writing-in-a-spec`' "$REPO_ROOT/README.md" || true)"
 case "$WROW" in
-    *"using-batches"*|*"writing-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+    *"using-batches"*|*"writing-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
         fail "the README row of writing-in-a-spec names no caller" ;;
     *)  pass "the README row of writing-in-a-spec names no caller" ;;
 esac
@@ -147,7 +147,7 @@ esac
 # invoke it.
 GROW="$(grep -F '`supercharlouze:writing-in-a-gaps-register`' "$REPO_ROOT/README.md" || true)"
 case "$GROW" in
-    *"using-batches"*|*"writing-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"closing-a-batch"*|*"invoked by"*)
+    *"using-batches"*|*"writing-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"closing-a-batch"*|*"invoked by"*)
         fail "the README row of writing-in-a-gaps-register names no caller" ;;
     *)  pass "the README row of writing-in-a-gaps-register names no caller" ;;
 esac
@@ -173,7 +173,7 @@ esac
 # it is not for direct use and names none of the skills that invoke it.
 AROW="$(grep -F '`supercharlouze:abandoning-a-story`' "$REPO_ROOT/README.md" || true)"
 case "$AROW" in
-    *"writing-a-batch"*|*"writing-a-user-story"*|*"invoked by"*)
+    *"writing-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"invoked by"*)
         fail "the README row of abandoning-a-story names no caller" ;;
     *)  pass "the README row of abandoning-a-story names no caller" ;;
 esac
@@ -186,7 +186,7 @@ esac
 # it is not for direct use and names none of the skills that invoke it.
 SROW="$(grep -F '`supercharlouze:applying-a-spec-delta`' "$REPO_ROOT/README.md" || true)"
 case "$SROW" in
-    *"writing-a-batch"*|*"invoked by"*)
+    *"writing-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
         fail "the README row of applying-a-spec-delta names no caller" ;;
     *)  pass "the README row of applying-a-spec-delta names no caller" ;;
 esac
@@ -212,7 +212,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 BROW="$(grep -F '`supercharlouze:starting-a-branch`' "$REPO_ROOT/README.md" || true)"
 case "$BROW" in
-    *"using-batches"*|*"adopting-a-module"*|*"writing-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
+    *"using-batches"*|*"adopting-a-module"*|*"writing-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
         fail "the README row of starting-a-branch names no caller" ;;
     *)  pass "the README row of starting-a-branch names no caller" ;;
 esac
@@ -225,7 +225,7 @@ esac
 # not for direct use and names none of the skills that invoke it.
 FROW="$(grep -F '`supercharlouze:finishing-a-pr`' "$REPO_ROOT/README.md" || true)"
 case "$FROW" in
-    *"adopting-a-module"*|*"writing-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
+    *"adopting-a-module"*|*"writing-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"invoked by"*)
         fail "the README row of finishing-a-pr names no caller" ;;
     *)  pass "the README row of finishing-a-pr names no caller" ;;
 esac
@@ -240,7 +240,7 @@ esac
 # taken out before the row is read.
 NROW="$(grep -F '`supercharlouze:writing-a-batch-document`' "$REPO_ROOT/README.md" || true)"
 case "${NROW//writing-a-batch-document/}" in
-    *"writing-a-batch"*|*"invoked by"*)
+    *"writing-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
         fail "the README row of writing-a-batch-document names no caller" ;;
     *)  pass "the README row of writing-a-batch-document names no caller" ;;
 esac
@@ -253,7 +253,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 BROW="$(grep -F '`supercharlouze:rereading-a-batch`' "$REPO_ROOT/README.md" || true)"
 case "$BROW" in
-    *"writing-a-batch"*|*"invoked by"*)
+    *"writing-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
         fail "the README row of rereading-a-batch names no caller" ;;
     *)  pass "the README row of rereading-a-batch names no caller" ;;
 esac

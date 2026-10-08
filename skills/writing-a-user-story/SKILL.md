@@ -479,7 +479,7 @@ nowhere.
 **Override 2 — the stop conditions the flow adds.** SDD states that four things
 stop you and only these. This plugin adds its own. The corrective and the
 technical conditions end the same way: **the story is abandoned**, and the
-decision goes to `supercharlouze:writing-a-batch`.
+decision goes to `supercharlouze:amending-a-batch`.
 
 In a corrective batch: if, while bringing code into conformity with the spec, you
 discover that the **spec** is wrong and the code is right, stop. The batch is no
@@ -522,7 +522,7 @@ partner rules on the constraint or the ADR, and until then the branch and the
 worktree stay as they are.
 
 If they rule a constraint untenable, the story is abandoned and
-`supercharlouze:writing-a-batch` amends the constraint.
+`supercharlouze:amending-a-batch` amends the constraint.
 
 If they rule an ADR untenable, the story is abandoned and a bounded change
 rewrites or deletes the ADR.
