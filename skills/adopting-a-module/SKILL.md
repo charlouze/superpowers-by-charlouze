@@ -21,7 +21,7 @@ Run this when a batch is about to touch a module that has no spec yet — always
 **in a context of its own**. A design that discovers an unadopted module stops
 instead of chaining here; you arrive from a conversation that begins with this
 adoption, or directly when your human partner asks for a module to be adopted.
-`supercharlouze:writing-a-batch` carries the rule and the reason in its
+`supercharlouze:opening-a-batch` carries the rule and the reason in its
 `Preconditions`.
 
 **Announce at start:** "I'm using the adopting-a-module skill to adopt the
@@ -255,11 +255,11 @@ a contradiction resolved in silence.
 adoption gate, and there is no other one — this plugin adds no ceremony, it puts
 its gates where your flow already has reviews. Until that pull request is merged
 the module is not adopted and no batch may start on it. An open adoption pull
-request is not adoption; do not start `supercharlouze:writing-a-batch` on the
+request is not adoption; do not start `supercharlouze:opening-a-batch` on the
 strength of one.
 
 **To end the review, invoke `supercharlouze:finishing-a-pr` and give it no
-condition, and this next step: `supercharlouze:writing-a-batch`, which starts
+condition, and this next step: `supercharlouze:opening-a-batch`, which starts
 from the adopted spec, named by path with the gaps register beside it.**
 
 The clear that follows the merge matters here: the adoption conversation carried

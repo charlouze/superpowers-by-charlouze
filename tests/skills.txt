@@ -4,7 +4,7 @@
 # foundation: invoked by a skill or by a plan.
 using-batches entry
 adopting-a-module entry
-writing-a-batch entry
+opening-a-batch entry
 amending-a-batch entry
 writing-a-user-story entry
 closing-a-batch entry
