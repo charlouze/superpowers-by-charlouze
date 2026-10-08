@@ -19,4 +19,5 @@ running-reread-rounds internal
 starting-a-branch internal
 finishing-a-pr internal
 writing-a-batch-document internal
+rereading-a-batch internal
 following-the-rules foundation

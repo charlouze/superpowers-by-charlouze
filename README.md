@@ -235,6 +235,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:starting-a-branch` | Never directly — a building block the other skills invoke to start a branch from `main` as the remote carries it: fetch, create the branch and its workspace, restore its name and its starting point |
 | `supercharlouze:finishing-a-pr` | Never directly — a building block the other skills invoke to end a pull request's review: its corrections, the squash, the announcement that it is ready, then the clear context its merge calls for |
 | `supercharlouze:writing-a-batch-document` | Never directly — a building block the other skills invoke to give a batch document its form: its fields, its blocks and its flag decision |
+| `supercharlouze:rereading-a-batch` | Never directly — a building block the other skills invoke to conduct the rereads a batch owes before its pull request opens: coherence, technical, then batch document |
 
 ## Requirements
 

@@ -465,14 +465,33 @@ absent "no other skill restates the abandonment gesture" \
 # The copies of the specs, blocks applied, are built in one place,
 # `applying-a-spec-delta`. A skill that needs them invokes it and passes the
 # batch document and the blocks to apply.
-require writing-a-batch "invokes applying-a-spec-delta with the batch document and the blocks" \
-    "nvoke \`supercharlouze:applying-a-spec-delta\` and give it the"
+for s in writing-a-batch rereading-a-batch; do
+    require "$s" "invokes applying-a-spec-delta with the batch document and the blocks" \
+        "nvoke \`supercharlouze:applying-a-spec-delta\` and give it the"
+done
 # How they are built is spelled there and nowhere else. Walks the declared
 # skills, so one declared later is covered.
 # shellcheck disable=SC2046
 absent "no other skill restates how the applied copies are built" \
     "outside the repository|scratch directory|checks every block|fails this check does not apply|the text the block ordered before it leaves|[Bb]uild (a|that|the) cop(y|ies)|cop(y|ies) built|coherence reread built|Coherence Reread\` builds it" \
     $(declared_skills | grep -vx applying-a-spec-delta)
+
+# The rereads of a batch are conducted in one place, `rereading-a-batch`. A
+# skill whose pull request owes them invokes it, and passes the batch document,
+# the blocks to apply, the rereads due and the ADRs the pull request writes or
+# rewrites.
+require writing-a-batch "invokes rereading-a-batch to have a batch reread" \
+    "nvoke \`supercharlouze:rereading-a-batch\` and give it"
+# How they are conducted is spelled there and nowhere else. Walks the declared
+# skills, so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates how a batch is reread" \
+    "Carry every revision it returns back into|coherence reread has closed its rounds|on each applied copy|outside the context that wrote the document|back to the coherence reread|changed or added a block|returns as not applied" \
+    $(declared_skills | grep -vx rereading-a-batch)
+# The batch skill reaches the two rereads through that skill only.
+absent "the batch skill invokes neither reread itself" \
+    "supercharlouze:rereading-a-spec|supercharlouze:rereading-a-technical-design" \
+    writing-a-batch
 
 # The mirror of the positive assertions above: a skill that carried both the new
 # wording and the old would leave every one of them green while still telling an
@@ -609,7 +628,7 @@ absent_everywhere "no skill has a block quote a passage" \
 # copy. A block check left in the batch-document reread would run it twice.
 absent "the batch-document reread leaves the blocks to the coherence reread" \
     "every block's paragraph|every block's unchanged and removed lines matching" \
-    writing-a-batch
+    writing-a-batch rereading-a-batch
 
 # A reread says in which context it runs. "Fresh eyes" names no context an agent
 # can reach.
@@ -620,10 +639,10 @@ absent_everywhere "no skill rereads with fresh eyes" \
 # reread invoke it rather than carrying readers of their own.
 shared "the skills that have a spec reread invoke the shared reread" \
     "invoke \`supercharlouze:rereading-a-spec\`" \
-    adopting-a-module writing-a-batch
+    adopting-a-module rereading-a-batch
 absent "no calling skill carries readings of its own" \
     "Does this specification hold what a specification must hold|precise and concise\\?|Where does this sit in the model|Every reader returns before anything goes up|stop the rounds" \
-    adopting-a-module writing-a-batch
+    adopting-a-module writing-a-batch rereading-a-batch
 # The dependency runs one way: the reread knows none of the skills that invoke
 # it, and says nothing a calling skill would have to keep in step with. What a
 # reader gets is its own business.
@@ -632,7 +651,7 @@ absent "the reread names no skill that invokes it" \
     rereading-a-spec
 absent "no calling skill says what a reader gets" \
     "as a new spec|as a changed spec|never the blocks|the spec as \`main\` carries it" \
-    adopting-a-module writing-a-batch
+    adopting-a-module writing-a-batch rereading-a-batch
 
 # An amendment changes the scope, the spec delta or the flag of an open batch.
 # A leftover naming only scope and flag would send a spec delta change nowhere.
@@ -848,19 +867,19 @@ absent "the technical reread no longer gives every batch every reading" \
 # invokes it carries none of them.
 absent "the batch skill carries no technical reading of its own" \
     "deliver what the batch promises|stand on the code as it is|hold as an architecture|modules this design draws deep|How does this design fail|blocks and the design hold the ADRs|stand with the specifications and the other ADRs" \
-    writing-a-batch
+    writing-a-batch rereading-a-batch
 
 # The opening invokes the technical reread for every batch, and the reread says
 # itself when it has nothing to reread: the former skip must survive nowhere, or
 # a batch with no design would open with its ADRs unread.
 absent "the opening no longer skips the technical reread" \
     "skipped when the batch has neither|both read \`none\` skips this step" \
-    writing-a-batch
+    writing-a-batch rereading-a-batch
 
 # The opening now places more than two rereads; the former count must not survive.
 absent "the opening counts no rereads" \
     "[Tt]wo rereads|[Tt]hree rereads" \
-    writing-a-batch
+    writing-a-batch rereading-a-batch
 
 # The flow's stop conditions are named, never counted: a count goes false in
 # every skill the day a condition is added, as it did when the constraint
@@ -940,5 +959,21 @@ absent_everywhere "no skill points at using-batches for a rule the foundation ca
 shared "the open ruling obligation is copied exactly as stated" \
     "it is recorded as an \`Open ruling:\`, which asks your human partner whether they want it as an ADR. Write nothing in \`docs/adr/\`." \
     following-the-rules writing-a-user-story
+
+# The prompt of the batch-document reader is pasted into the dispatch of a
+# subagent that loads no skill, so it copies what it needs from the skills that
+# state it. One assertion over both ends, so a copy does not drift.
+shared "the document reader is told the bound of Constraints as the document skill states it" \
+    "migration and compatibility constraints, the technical decisions the rest of the technical design relies on, and the required order of the stories and of the blocks" \
+    writing-a-batch-document rereading-a-batch
+shared "the document reader is told the reservation annotation as the register skill states it" \
+    "\`reserved by batch-NN\`" \
+    writing-in-a-gaps-register rereading-a-batch
+shared "the document reader is told the gating sentence as the foundation states it" \
+    "🔒 \`billing.recurring\`, off by default" \
+    following-the-rules rereading-a-batch
+shared "the document reader is told a block's identifier as the document skill states it" \
+    "carries an identifier \`D<n>\`" \
+    writing-a-batch-document rereading-a-batch
 
 exit $((FAILURES > 0))
