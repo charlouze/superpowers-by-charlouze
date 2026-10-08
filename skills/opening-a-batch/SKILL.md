@@ -1,9 +1,9 @@
 ---
-name: writing-a-batch
+name: opening-a-batch
 description: Use when opening a batch of user stories - writes the batch document and opens the pull request whose review is the human gate
 ---
 
-# Writing a Batch
+# Opening a Batch
 
 ## Overview
 
@@ -14,7 +14,7 @@ add behaviour to one or more module specs. It may span several modules.
 This skill produces **one pull request carrying the batch document**, and that
 pull request's review is the human gate: until it merges, no story is written.
 
-**Announce at start:** "I'm using the writing-a-batch skill to open batch NN."
+**Announce at start:** "I'm using the opening-a-batch skill to open batch NN."
 
 **Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
 

@@ -16,9 +16,9 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | Situation | Go to |
 |---|---|
 | A module this work touches has no spec in `docs/specs/` | `supercharlouze:adopting-a-module`, in a context of its own — the design stops, and resumes in a fresh context once that pull request merges |
-| Architectural work on adopted modules | `supercharlouze:writing-a-batch` |
-| Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:writing-a-batch`, as a corrective batch — never straight to the code |
-| A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:writing-a-batch`, as an ordinary batch that finally specifies them |
+| Architectural work on adopted modules | `supercharlouze:opening-a-batch` |
+| Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:opening-a-batch`, as a corrective batch — never straight to the code |
+| A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:opening-a-batch`, as an ordinary batch that finally specifies them |
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
 | A batch must change its scope, its spec delta, its technical design, its constraints or its flag, or a corrective batch must be requalified | `supercharlouze:amending-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
@@ -46,9 +46,9 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
 
 No batch, no user story: a bounded change is already a single pull request, and whether it carries a spec update is what rule (a) decides. Its branch is `bounded/<slug>`: invoke `supercharlouze:starting-a-branch` and give it the name `bounded/<slug>`.
 
-**Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:writing-a-batch`, which stops the design outright when a module it touches has no spec. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**, except for the reading of `docs/adr/` stated below: that is the design work itself.
+**Architectural** — **steps 6 to 9** of the architectural checklist (dated design doc, self-review, human review, transition to writing-plans) are replaced by `supercharlouze:opening-a-batch`, which stops the design outright when a module it touches has no spec. That is Override 1 below. Steps 1 to 5 — context, questions, approaches, design presented section by section, approval — are **kept intact**, except for the reading of `docs/adr/` stated below: that is the design work itself.
 
-**The design reads `docs/adr/`.** On the bounded path and on the architectural path, read every ADR in `docs/adr/` before proposing an approach, and put to your human partner each technical decision the design takes that meets the conditions of an ADR `supercharlouze:following-the-rules` states. An approach that breaks an ADR is one the code may not take, and only your human partner decides an ADR. On the architectural path, `supercharlouze:writing-a-batch` writes, rewrites or deletes at the opening the ADRs they decide.
+**The design reads `docs/adr/`.** On the bounded path and on the architectural path, read every ADR in `docs/adr/` before proposing an approach, and put to your human partner each technical decision the design takes that meets the conditions of an ADR `supercharlouze:following-the-rules` states. An approach that breaks an ADR is one the code may not take, and only your human partner decides an ADR. On the architectural path, `supercharlouze:opening-a-batch` writes, rewrites or deletes at the opening the ADRs they decide.
 
 ## Declared Overrides
 
@@ -64,9 +64,9 @@ The architectural checklist of `superpowers:brainstorming` ends with four steps:
 
 **This override replaces all four, not only the last.** Rerouting step 9 alone would let steps 6 to 8 run, and a dated design doc would still be written into `docs/superpowers/specs/` — exactly what this plugin exists to remove. It is one override, correctly bounded, not two: the substitution covers a coherent terminal block.
 
-**The substitute stops rather than chaining.** When a module the work touches has no spec, `supercharlouze:writing-a-batch` does not run `supercharlouze:adopting-a-module` and come back: **the design stops**, your human partner abandons it or sets it aside, and it resumes in a fresh context once the adoption pull request is merged. That skill's `Preconditions` carry the full rule and the reason it rests on — **adoption is never conducted in the same context as a design**. Said here because a post-brainstorming path that ends anywhere other than `supercharlouze:writing-a-batch` is exactly what an unnamed exception looks like, and this one ends nowhere at all — it stops. It widens nothing: the override still covers steps 6 to 9 and nothing else, and the resumed design re-enters the checklist at the same step.
+**The substitute stops rather than chaining.** When a module the work touches has no spec, `supercharlouze:opening-a-batch` does not run `supercharlouze:adopting-a-module` and come back: **the design stops**, your human partner abandons it or sets it aside, and it resumes in a fresh context once the adoption pull request is merged. That skill's `Preconditions` carry the full rule and the reason it rests on — **adoption is never conducted in the same context as a design**. Said here because a post-brainstorming path that ends anywhere other than `supercharlouze:opening-a-batch` is exactly what an unnamed exception looks like, and this one ends nowhere at all — it stops. It widens nothing: the override still covers steps 6 to 9 and nothing else, and the resumed design re-enters the checklist at the same step.
 
-Justification: `supercharlouze:writing-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its reread before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
+Justification: `supercharlouze:opening-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its reread before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
 
 ### Override 2 — the stop conditions the flow adds
 
@@ -109,7 +109,7 @@ This override removes one choice that cannot succeed, and one that leads nowhere
 | Thought | Reality |
 |---------|---------|
 | "I'll transcribe the whole spec delta now, it's more efficient" | One spec change per story. A full delta makes the spec describe behaviour nobody delivered yet, and SDD's reviewers will report it as missing. |
-| "Only writing-plans may follow brainstorming, so I must write the design doc" | Override 1 is declared: steps 6 to 9 are replaced by `supercharlouze:writing-a-batch`. A dated design doc is precisely what this plugin removes. |
+| "Only writing-plans may follow brainstorming, so I must write the design doc" | Override 1 is declared: steps 6 to 9 are replaced by `supercharlouze:opening-a-batch`. A dated design doc is precisely what this plugin removes. |
 | "This batch is refactor-only, the Feature flag field can stay empty" | The field is never empty. "none" plus its reason is a decision the opening gate reviews; a blank is an omission nobody can review. |
 | "The flag is still there but the batch is done, I'll clean it up later" | A flag surviving without a declared scope and lifting condition is the classic silent failure. Write the lifting story, declare extended scope by amendment, or write a teardown story. |
 | "A local merge is quicker than opening a pull request" | It deletes the worktree and the branch after merging into a `main` that can never be pushed. The work and the un-repatriated rulings go with them. |

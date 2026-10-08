@@ -23,7 +23,7 @@ else
 fi
 
 # The calling skill keeps no reader prompt of its own, which would drift.
-if [ -e "$REPO_ROOT/skills/writing-a-batch/references/technical-reader-prompt.md" ]; then
+if [ -e "$REPO_ROOT/skills/opening-a-batch/references/technical-reader-prompt.md" ]; then
     fail "the calling skill keeps no technical reader prompt of its own"
 else
     pass "the calling skill keeps no technical reader prompt of its own"
@@ -92,7 +92,7 @@ esac
 
 # The prompt names no skill of the plugin.
 case "$FLAT" in
-    *"supercharlouze:"*|*"using-batches"*|*"adopting-a-module"*|*"writing-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"rereading-a-spec"*|*"recording-a-decision"*|*"running-reread-rounds"*)
+    *"supercharlouze:"*|*"using-batches"*|*"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"closing-a-batch"*|*"rereading-a-spec"*|*"recording-a-decision"*|*"running-reread-rounds"*)
         fail "the prompt names no skill of the plugin" ;;
     *)  pass "the prompt names no skill of the plugin" ;;
 esac

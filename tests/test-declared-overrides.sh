@@ -63,8 +63,8 @@ check_verb() {
     fi
 }
 
-check_verb "steps 6 to 9 are replaced by writing-a-batch" \
-    "are replaced by \`supercharlouze:writing-a-batch\`" \
+check_verb "steps 6 to 9 are replaced by opening-a-batch" \
+    "are replaced by \`supercharlouze:opening-a-batch\`" \
     "replaces steps 6 to 9 of the architectural checklist"
 check_verb "the stop conditions are extended, not restated" \
     "This plugin adds the stop conditions \`supercharlouze:following-the-rules\` writes in full" \
