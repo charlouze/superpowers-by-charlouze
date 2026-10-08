@@ -190,3 +190,25 @@ absent_everywhere() {
     # shellcheck disable=SC2046
     absent "$label" "$needle" $(declared_skills)
 }
+
+# --- the references ---
+
+# The citations of a reference by a skill that does not hold it, one per line.
+# A path whose first part names no skill is no citation.
+# A reference belongs to one skill: a text several skills need lives in an
+# internal skill they invoke.
+foreign_ref_citations() {
+    local d s f hit owner
+    for d in "$SKILLS_DIR"/*/; do
+        s="$(basename "$d")"
+        while IFS= read -r f; do
+            while IFS= read -r hit; do
+                [ -n "$hit" ] || continue
+                owner="${hit%%/references/*}"
+                if [ "$owner" != "$s" ] && [ -d "$SKILLS_DIR/$owner" ]; then
+                    echo "${f#"$SKILLS_DIR"/} cites $hit"
+                fi
+            done < <(grep -oE '[a-z0-9-]+/references/[A-Za-z0-9._-]*[A-Za-z0-9]' "$f" | sort -u || true)
+        done < <(find "${d%/}" -type f | sort)
+    done
+}

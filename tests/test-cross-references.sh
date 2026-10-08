@@ -302,4 +302,15 @@ else
     fail "a section a skill names in parentheses is one of its own ($BAD found)"
 fi
 
+# 8. A reference is cited only by the skill that holds it. A text several
+#    skills need lives in an internal skill they invoke: a reference sits in
+#    the directory of one skill, and another skill citing it depends on a file
+#    it does not own.
+FOREIGN="$(foreign_ref_citations | tr '\n' '|')"
+if [ -z "$FOREIGN" ]; then
+    pass "a reference is cited only by the skill that holds it"
+else
+    fail "a reference is cited only by the skill that holds it ($FOREIGN)"
+fi
+
 exit $((FAILURES > 0))

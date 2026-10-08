@@ -132,4 +132,26 @@ has "absent_everywhere reaches every declared skill" "(present in: gamma)" \
 has "absent_everywhere passes when no declared skill carries the claim" "[PASS]" \
     "$(absent_everywhere "claim" "a claim nobody makes")"
 
+# --- a reference is cited only by the skill that holds it ---
+build_fixture
+write_skill alpha "description: Use when alpha is needed" \
+    "Compose it from \`skills/alpha/references/note.md\`."
+is "a skill citing its own reference breaks nothing" "" "$(foreign_ref_citations)"
+
+write_skill gamma "description: Use when a skill or a plan asks for gamma" \
+    "Read \`docs/references/guide.md\` first."
+is "a references path that names no skill is no citation" "" "$(foreign_ref_citations)"
+
+write_skill gamma "description: Use when a skill or a plan asks for gamma" \
+    "Read \`skills/alpha/references/note.md\` first."
+is "a skill citing the reference of another skill is reported" \
+    "gamma/SKILL.md cites alpha/references/note.md" "$(foreign_ref_citations)"
+
+write_skill gamma "description: Use when a skill or a plan asks for gamma" \
+    "Gamma holds the retired wording."
+mkdir -p "$SKILLS_DIR/gamma/references"
+printf 'See skills/alpha/references/note.md.\n' > "$SKILLS_DIR/gamma/references/own.md"
+is "a reference citing the reference of another skill is reported" \
+    "gamma/references/own.md cites alpha/references/note.md" "$(foreign_ref_citations)"
+
 exit $((FAILURES > 0))
