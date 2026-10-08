@@ -45,27 +45,15 @@ for skill in $(declared_skills); do
     fi
 done
 
-# The internal skills are building blocks: only a skill invokes them. Each keeps its
+# An internal skill is a building block: only a skill invokes it. It keeps its
 # frontmatter, since a skill without one still loads and takes its first line as
-# its description. It is hidden from the slash menu, and its description asks
-# for an explicit call. `disable-model-invocation` would stop the calling skills
-# from invoking it too.
-for r in $(declared_skills internal); do
-    RFRONT="$(skill_front "$r")"
-    case "$RFRONT" in
-        *"user-invocable: false"*) pass "$r is hidden from the slash menu" ;;
-        *)                          fail "$r is hidden from the slash menu" ;;
-    esac
-    case "$RFRONT" in
-        *"description: Use only when a skill tells you to invoke $r"*)
-            pass "$r asks for an explicit call" ;;
-        *)  fail "$r asks for an explicit call" ;;
-    esac
-    case "$RFRONT" in
-        *"disable-model-invocation"*) fail "$r stays invocable by the skills" ;;
-        *)                            pass "$r stays invocable by the skills" ;;
-    esac
-done
+# its description.
+OFFENDERS="$(internal_form_offenders | tr '\n' '|')"
+if [ -z "$OFFENDERS" ]; then
+    pass "every skill declared internal has the form of one, and no other skill has"
+else
+    fail "every skill declared internal has the form of one, and no other skill has ($OFFENDERS)"
+fi
 
 actual="$(ls "$SKILLS_DIR" | sort | tr '\n' ' ')"
 expected="$(declared_skills | sort | tr '\n' ' ')"

@@ -37,3 +37,35 @@ invalid_declarations() {
 skill_front() {
     awk 'NR>1 && /^---$/{exit} NR>1{print}' "$SKILLS_DIR/$1/SKILL.md" 2>/dev/null || true
 }
+
+# --- the form of an internal skill ---
+
+# What breaks the form of an internal skill, one finding per line. A skill
+# declared internal is hidden from the slash menu, its description asks for an
+# explicit call, and it stays invocable by the skills: `disable-model-invocation`
+# would stop the calling skills from invoking it too. No other skill carries
+# that description.
+internal_form_offenders() {
+    local s front desc
+    for s in $(declared_skills); do
+        front="$(skill_front "$s")"
+        desc="$(printf '%s\n' "$front" | sed -n 's/^description:[[:space:]]*//p' | head -1)"
+        if [ "$(skill_type "$s")" = "internal" ]; then
+            if ! printf '%s\n' "$front" | grep -qx 'user-invocable: false'; then
+                echo "$s is not hidden from the slash menu"
+            fi
+            case "$desc" in
+                "Use only when a skill tells you to invoke $s, never on "*) ;;
+                *) echo "$s does not ask for an explicit call" ;;
+            esac
+            case "$front" in
+                *"disable-model-invocation"*) echo "$s is not invocable by the skills" ;;
+            esac
+        else
+            case "$desc" in
+                *"Use only when a skill tells you to invoke"*)
+                    echo "$s carries the description of an internal skill" ;;
+            esac
+        fi
+    done
+}

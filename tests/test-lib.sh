@@ -72,4 +72,35 @@ is "a declaration checked out with CRLF line endings reads the same" \
     "beta" "$(declared_skills internal | tr '\n' ' ' | sed 's/ $//')"
 SKILLS_FILE="$GOOD_FILE"
 
+# --- the form of an internal skill ---
+build_fixture
+is "a well-formed internal skill breaks nothing" "" "$(internal_form_offenders)"
+
+write_skill beta "description: Use only when a skill tells you to invoke beta, never on a request" \
+    "Beta does one thing."
+is "an internal skill left in the slash menu is reported" \
+    "beta is not hidden from the slash menu" "$(internal_form_offenders)"
+
+write_skill beta "$(printf 'description: Use only when a skill tells you to invoke beta, never on a request\n# user-invocable: false')" \
+    "Beta does one thing."
+is "a commented-out line does not hide an internal skill" \
+    "beta is not hidden from the slash menu" "$(internal_form_offenders)"
+
+write_skill beta "$(printf 'description: Use when beta is needed\nuser-invocable: false')" \
+    "Beta does one thing."
+is "an internal skill that does not ask for an explicit call is reported" \
+    "beta does not ask for an explicit call" "$(internal_form_offenders)"
+
+write_skill beta "$(printf 'description: Use only when a skill tells you to invoke beta, never on a request\nuser-invocable: false\ndisable-model-invocation: true')" \
+    "Beta does one thing."
+is "an internal skill the skills cannot invoke is reported" \
+    "beta is not invocable by the skills" "$(internal_form_offenders)"
+
+write_skill beta "$(printf 'description: Use only when a skill tells you to invoke beta, never on a request\nuser-invocable: false')" \
+    "Beta does one thing."
+write_skill alpha "description: Use only when a skill tells you to invoke alpha, never on a request" \
+    "Alpha states its rule."
+is "another skill carrying the description of an internal skill is reported" \
+    "alpha carries the description of an internal skill" "$(internal_form_offenders)"
+
 exit $((FAILURES > 0))
