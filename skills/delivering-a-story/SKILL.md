@@ -60,6 +60,16 @@ sections.
 what it returned, and let your human partner sequence the two pieces of work or
 decide on the unread declaration.
 
+**Detect again before the story touches a section the detection was not run
+for**, as long as its pull request is not open: invoke
+`supercharlouze:detecting-concurrency` again, and give it the story's spec, that
+section and the story's branch. **Stop again if it returns a conflict or a
+declaration it could not read.** The first detection answered for the sections
+it was given, so a section added afterwards was never looked at.
+
+When the story document already carries `Sections:`, add the section to it, then
+commit and push before touching it: that field is what a sibling's scan reads.
+
 ## Step 2 — Allocate us-N and Create the Branch
 
 Allocate `us-N` as `skills/delivering-a-story/references/allocating-us-n.md`
@@ -93,6 +103,9 @@ branch** — before the plan is written, before any task runs. **A lifting story
 transcribes a removal:** its block deletes the gating sentence from the spec
 instead of adding behaviour, and that deletion is this same first commit (see
 Lifting and Teardown Stories below).
+
+**A block or a removal that reaches a section the detection was not run for is
+not written yet:** detect again first (Step 1).
 
 Three properties are load-bearing.
 
@@ -206,6 +219,10 @@ into the batch directory, and extend the standard header with the fields below.
 authority — pointing it at the living module spec is what makes this
 integration work without modifying superpowers. `Sections:` is what the *next*
 story's concurrency scan reads.
+
+`Sections:` names every section the tasks of the plan will touch. One the
+detection was not run for goes through it before the story document is
+committed (Step 1).
 
 `Blocks:` declares the blocks of the spec delta this story transcribes — the
 `D<n>` identifiers the batch document defines — and it is what
@@ -492,6 +509,11 @@ exception to a rule superpowers states as closed does not survive a session
 under pressure. It reaches the implementers through `Global Constraints`
 (Step 4), which is the only channel they read.
 
+**When a task report or a review shows the story reaching a section `Sections:`
+does not name, detect again before dispatching anything else** (Step 1).
+Implementers do not know which sections the detection was run for, so only you
+can catch it.
+
 No task writes in `docs/adr/`. The ADR a decision of this story deserves is
 written at the review (Step 7), once your human partner wants it.
 
@@ -650,6 +672,7 @@ Every text this skill writes follows `Concision` in `supercharlouze:following-th
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No open pull request uses us-3, so us-3 is free" | A branch claims its number from its first commit until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too — same argument as the concurrency scan. |
 | "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-change commit. |
+| "It's one more section of the same spec, the detection already ran" | It ran for the sections it was given, and never looked at this one. Detect again before touching it, and stop if it is held or a declaration cannot be read. |
 | "Merging locally is quicker" | It never pushes. It merges into the local `main`, deletes the worktree and the branch, and takes the unrecorded rulings with it. |
 | "I'll transcribe the spec at the end, with the code" | Then the norm is not prior to the code and the freeze has no starting point. The spec change ships as commit one. |
 | "Keeping the branch is harmless" | Without a pull request the story has no observable state and is never delivered. |

@@ -1415,8 +1415,8 @@ require making-a-bounded-change "a bounded change names the spec it targets" \
         "the spec it targets and the sections it touches"
 require making-a-bounded-change "a bounded change touching no section declares none" \
         "when it touches none"
-require making-a-bounded-change "a changed declaration redoes the detection" \
-        "redoes the detection"
+require making-a-bounded-change "one more section redoes the detection" \
+        "**Before its pull request opens, a bounded change about to touch a section the detection was not run for redoes the detection:**"
 require making-a-bounded-change "a bounded change has no batch and no user story" \
         "A bounded change has no batch and no user story: it is already a single pull request, and whether it carries a spec update is what rule (a) decides."
 require making-a-bounded-change "the ceremony of bounded work is kept, with the reading of docs/adr" \
