@@ -54,11 +54,12 @@ may correct a spec.
    The rewrite keeps `NN` and its directory: the number identifies a delivery
    unit, and any story already merged lives under it, so a new number would
    strand them.
-3. **Release the reservations of the entries the batch no longer takes on.** A
-   reduced or rewritten scope releases them in the amendment pull request that
-   changes `Scope`. A batch closed in favour of a fresh one releases them at its
-   closing, before the fresh batch reserves them at its own opening: two batches
-   never reserve the same entry.
+
+The steps the ruling asks for release the reservations of the entries the batch
+no longer takes on; this session releases none. A reduced or rewritten scope
+releases them in the amendment pull request that changes `Scope`. A batch closed
+in favour of a fresh one releases them at its closing, before the fresh batch
+reserves them at its own opening: two batches never reserve the same entry.
 
 Never carry out a requalification by deciding the substance yourself. Correcting
 a spec is a human act, never an agent act. Your job is to present the choice with
@@ -74,10 +75,10 @@ you already stopped, from inside `superpowers:subagent-driven-development`.
 
 **Procedure.**
 
-1. **Abandon the story.** Close its pull request without merging it if one is
-   already open; the branch and its worktree stay until the choice below is
-   ruled. Once it is ruled, invoke `supercharlouze:abandoning-a-story` and give
-   it the story's branch.
+1. **Leave the story as it stands until your human partner has ruled whether
+   the observable change is wanted, then abandon it.** A pull request already
+   open stays open until then. Once it is ruled, invoke
+   `supercharlouze:abandoning-a-story` and give it the story's branch.
 2. **Put the choice to the human**, who alone may rule. If they judge the
    observable change wanted, it needs a block, and a block is acquired by an
    amendment that goes back through the opening review — the exact text of a block
@@ -100,22 +101,38 @@ amended.
 
 ## What the Ruling Asks For
 
-A ruling that abandons the story may ask for next steps. Take them in the order
-their row gives, each with the skill that conducts it:
+A ruling that abandons the story may ask for next steps. They start in a fresh
+context: this conversation carries a stopped execution, and each step is
+conducted from a document.
 
-| Ruling | Next steps |
+When it does, once the story is abandoned:
+
+1. **Ask your human partner to clear the context.**
+2. **Give the prompt that starts the next steps**, in the form `The Git Model`
+   in `supercharlouze:following-the-rules` fixes. It states the ruling, then
+   the steps of its row below, in their order, each with the skill to invoke
+   and the document it starts from, by its path. A step the row gives to your
+   human partner is named as theirs.
+
+State the ruling as your human partner gave it, and name the story and what it
+revealed. Not: "Carry on with the requalification." Good: "Technical story
+`07-us-4-renommer-les-echeances` was abandoned: it changes how a prorated amount
+is rounded, and that change is wanted."
+
+| Ruling | Next steps, in their order |
 |---|---|
-| The spec is corrected, and the batch stays corrective on a reduced scope | The corrected spec ships through its own pull request, and `supercharlouze:amending-a-batch` reduces the `Scope`. |
-| The corrective batch is rewritten as an ordinary batch | `supercharlouze:amending-a-batch` rewrites it. |
-| The remaining work is a different batch | `supercharlouze:closing-a-batch` closes this batch, then `supercharlouze:opening-a-batch` opens the fresh one. |
-| The observable change of a technical story is wanted | `supercharlouze:amending-a-batch` adds its block. Once that pull request merges, `supercharlouze:delivering-a-story` rewrites the work as an ordinary story of the amended batch. |
-| A constraint is untenable | `supercharlouze:amending-a-batch` changes or removes it. |
-| An ADR is untenable | A bounded change, under `supercharlouze:making-a-bounded-change`, rewrites or deletes it. |
+| The spec is corrected, and the batch stays corrective on a reduced scope | Your human partner corrects the spec, through a pull request of its own. Then `supercharlouze:amending-a-batch` reduces the `Scope`, from the batch document. |
+| The corrective batch is rewritten as an ordinary batch | `supercharlouze:amending-a-batch` rewrites it, from the batch document. |
+| The remaining work is a different batch | `supercharlouze:closing-a-batch` closes this batch, from the batch document. Then `supercharlouze:opening-a-batch` opens the fresh one, from the gaps register whose entries this batch released. |
+| The observable change of a technical story is wanted | `supercharlouze:amending-a-batch` adds its block, from the batch document. Once that pull request merges, `supercharlouze:delivering-a-story` rewrites the work as an ordinary story of the amended batch, from the amended batch document. |
+| A constraint is untenable | `supercharlouze:amending-a-batch` changes or removes it, from the batch document. |
+| An ADR is untenable | A bounded change, under `supercharlouze:making-a-bounded-change`, rewrites or deletes it, from the ADR. |
 
 ## Red Flags
 
 | Thought | Reality |
 |---------|---------|
 | "The spec is wrong here, I'll fix it and keep the batch corrective" | Only the human corrects a spec. Stop the story, present the requalification choice. |
-| "Requalification starts by closing the story's pull request" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |
+| "Requalification starts by closing the story's pull request" | The story stays as it stands until your human partner has ruled. A pull request already open is closed with the story, once it is abandoned. |
 | "The story is right, this constraint cannot be held, I'll amend it" | Whether a constraint can be held is your human partner's ruling. Put it to them: the amendment follows a ruling of untenable, and the story resumes on any other. |
+| "The ruling is fresh in this conversation, I'll run the amendment here" | This conversation carries a stopped execution, which can contradict the document the next step starts from. Ask your human partner to clear the context, and give the prompt. |

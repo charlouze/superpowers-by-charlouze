@@ -129,6 +129,10 @@ give it no condition, and this next step: whatever the batch was doing when it
 stopped, with the skill that conducts it, starting from the amended batch
 document.**
 
+When the prompt that started the amendment states a ruling and names a step
+after the amendment, give that step instead, with its skill and its document,
+and have its prompt state the ruling.
+
 ## Red Flags
 
 | Thought | Reality |
