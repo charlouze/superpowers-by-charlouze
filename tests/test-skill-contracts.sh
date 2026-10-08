@@ -461,7 +461,7 @@ require writing-in-a-gaps-register "a removal says why in its commit" \
 
 # The gesture that abandons a story lives in one place, `abandoning-a-story`. A
 # skill that abandons a story invokes it and passes the story's branch.
-for s in amending-a-batch writing-a-user-story; do
+for s in handling-a-stopped-story writing-a-user-story; do
     require "$s" "invokes abandoning-a-story with the story's branch" \
         "invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
 done
@@ -510,6 +510,13 @@ absent "the batch skill invokes neither reread itself" \
 absent "the opening carries no amendment and no requalification" \
     "amendment|[Rr]equalif" \
     opening-a-batch
+
+# What follows a stop condition is conducted in one place,
+# `handling-a-stopped-story`. The skill that amends a batch abandons no story
+# and puts no choice to the human.
+absent "the amendment carries no handling of a stopped story" \
+    "abandoning-a-story|Put the choice to the human|[Rr]equalifying|rules on the constraint" \
+    amending-a-batch
 
 # The mirror of the positive assertions above: a skill that carried both the new
 # wording and the old would leave every one of them green while still telling an
@@ -742,13 +749,19 @@ absent_everywhere "no skill merely revises reservations" \
 # its pull request closed at the stop.
 absent "no skill closes a corrective story's pull request at the stop" \
     "Therefore: \*\*close the story's pull request|So: \*\*close the story's pull request|Abandon the story, closing its pull request|exactly as a requalified corrective story is abandoned" \
-    using-batches following-the-rules opening-a-batch amending-a-batch writing-a-user-story recording-a-decision
+    using-batches following-the-rules opening-a-batch amending-a-batch writing-a-user-story recording-a-decision handling-a-stopped-story
 
-# using-batches routes a requalification to amending-a-batch: it neither opens on
-# what the requalification does not do nor copies its procedure.
+# using-batches routes a stopped story to handling-a-stopped-story: it neither
+# opens on what a requalification does not do nor copies its procedure.
 absent "using-batches copies no requalification procedure" \
     "does not start by closing a pull request|abandon the story|close its pull request|no longer takes on are released|a fresh \`NN\`|settled elsewhere" \
     using-batches following-the-rules
+
+# What follows a stop is spelled in handling-a-stopped-story and nowhere else:
+# a skill that routes to it says nothing of the ruling nor of the abandonment.
+absent "no routing skill restates what follows a stop" \
+    "conducts the requalification|rule a constraint untenable|rule an ADR untenable|requalification is ruled|decision goes to|or a corrective batch must be requalified" \
+    using-batches writing-a-user-story
 
 # A requalified technical story brings the flag its block requires, if any, not a
 # flag by default.
@@ -871,7 +884,7 @@ absent "no reread reopens on every unread state" \
 
 # The technical reread knows none of the skills that invoke it.
 absent "the technical reread names no skill that invokes it" \
-    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|opening-a-batch|amending-a-batch|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
+    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|opening-a-batch|amending-a-batch|handling-a-stopped-story|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
     rereading-a-technical-design
 
 # A reading is dispatched when its object exists: the sentence that gave every
@@ -904,7 +917,7 @@ absent "the opening counts no rereads" \
 # condition joined the corrective and the technical ones.
 absent "no skill counts the stop conditions the flow adds" \
     "adds (two|three|four)( stop)? conditions|adds (two|three|four)[.,]|(both|either|neither) (stop )?conditions?" \
-    using-batches following-the-rules writing-a-user-story opening-a-batch amending-a-batch recording-a-decision
+    using-batches following-the-rules writing-a-user-story opening-a-batch amending-a-batch recording-a-decision handling-a-stopped-story
 
 # The rules of a bounded change are listed, never counted: a count goes false
 # the day a rule is added, as it did when the ADR rule joined them.

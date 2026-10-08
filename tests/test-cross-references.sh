@@ -173,13 +173,21 @@ esac
 # it is not for direct use and names none of the skills that invoke it.
 AROW="$(grep -F '`supercharlouze:abandoning-a-story`' "$REPO_ROOT/README.md" || true)"
 case "$AROW" in
-    *"opening-a-batch"*|*"amending-a-batch"*|*"writing-a-user-story"*|*"invoked by"*)
+    *"opening-a-batch"*|*"amending-a-batch"*|*"handling-a-stopped-story"*|*"writing-a-user-story"*|*"invoked by"*)
         fail "the README row of abandoning-a-story names no caller" ;;
     *)  pass "the README row of abandoning-a-story names no caller" ;;
 esac
 case "$AROW" in
     *"Never directly"*) pass "the README row of abandoning-a-story rules out direct use" ;;
     *)                  fail "the README row of abandoning-a-story rules out direct use" ;;
+esac
+
+# The README row of handling-a-stopped-story says when the skill is used.
+HROW="$(grep -F '`supercharlouze:handling-a-stopped-story`' "$REPO_ROOT/README.md" || true)"
+case "$HROW" in
+    *"A story has stopped on a stop condition the flow adds"*)
+        pass "the README row of handling-a-stopped-story says when it is used" ;;
+    *)  fail "the README row of handling-a-stopped-story says when it is used" ;;
 esac
 
 # The README row of applying-a-spec-delta, like the other internal skills', says
