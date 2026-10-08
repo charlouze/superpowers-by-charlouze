@@ -23,14 +23,21 @@ exactly one file, that the versions in the three manifests agree, and that
 is named so the runner picks it up and that none of them silently asserts
 nothing.
 
-What the suite **deliberately does not test** — all three need a live agent
+`tests/skills.txt` declares every skill with its type: `entry`, `internal` or
+`foundation`. The suite fails on a skill directory that is not declared there,
+and a guard that holds for every skill walks that list. `tests/lib.sh` holds
+what the check files share, and `tests/test-lib.sh` checks it.
+
+What the suite **deliberately does not test** — each needs a live agent
 session, and asserting them from a shell would only assert a paraphrase of them:
 
 - whether the `CLAUDE.md` block actually wins precedence over superpowers in a
   live session;
 - whether subagent-driven implementers honour the freeze of the spec file;
 - whether `finishing-a-development-branch` is really kept to the pull-request
-  option on a story.
+  option on a story;
+- whether an agent that invokes an internal skill comes back to the next step
+  of the skill that invoked it.
 
 Read that list as the shape of the net, not as a to-do: these are the properties
 the human gates exist for.
