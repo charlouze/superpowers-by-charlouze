@@ -295,37 +295,24 @@ shared "both ends spell the Blocks field alike" \
 absent_everywhere "no skill finds undelivered blocks by reading or diffing the specs" \
     "[Cc]heck the specs on main|against what (actually )?shipped"
 
-# The end of a review is one norm with five ends. `shared` and not five `require`
-# calls: separate assertions would each stay green while one skill drifted away
-# from the wording the others use, and a skill that says "the agent may merge
-# once approved" would contradict the spec with its own test passing.
-shared "every review-ending skill forbids the agent approving or merging" \
-    "never approves and never merges a pull request" \
-    following-the-rules adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
-
-shared "every review-ending skill pushes corrections as fixup! commits" \
-    "pushed as a \`fixup!\` commit" \
-    following-the-rules adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
-
-# All five: every review merge is a clear moment, closing included — nothing
-# follows a closing, so what comes next is unrelated work that the closed batch's
-# context would only pollute. What sets closing apart is that it has no next step
-# to name and so hands over no prompt, which is a different claim and is guarded
-# per-skill in test-skill-content.sh. Keeping that distinction out of this
-# assertion is deliberate: this one asks whether the five skills say the same
-# thing in the same words, and they do.
-shared "every review-ending skill names the merge a clear moment" \
-    "is a moment to clear the context" \
-    following-the-rules adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
+# The end of a review is conducted in one place, `finishing-a-pr`. A skill whose
+# pull request is reviewed invokes it, and passes its conditions and its next
+# step.
+for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch; do
+    require "$s" "ends its review by invoking finishing-a-pr" \
+        "nvoke \`supercharlouze:finishing-a-pr\` and give it"
+done
+# How a review ends is spelled there and nowhere else, apart from the rules the
+# foundation keeps. Walks the declared skills, so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates the end of a review" \
+    "pushed as a .fixup!. commit|[Ss]quash the fixups|[Ss]quash the .fixup!. commits|[Aa]nnounce (that )?the pull request (is )?ready|ready to be approved and merged|[Nn]ever approves? (and|or) (never )?merges?|agreement in the conversation|block to copy and paste|[Cc]lear the context|announces the merge|prompt stands on its own|refers back to (this|the) conversation" \
+    $(declared_skills | grep -vx -e finishing-a-pr -e following-the-rules)
 
 # The next step is named, and its prompt given, when the human announces the
 # merge, not when the agent announces the pull request ready: given then, the
 # review that follows buries it. One assertion over the review-ending
 # skills, and the former timing hunted in all of them.
-shared "every review-ending skill acts on the merge announcement" \
-    "your human partner announces the merge" \
-    following-the-rules adopting-a-module writing-a-batch writing-a-user-story closing-a-batch
-
 absent_everywhere "no skill hands over the next step at the ready announcement" \
     "[Tt]he announcement (says so|names|therefore names)|announcing it ready is where|an announcement that names|when it announces the pull request ready"
 

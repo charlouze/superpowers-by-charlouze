@@ -60,11 +60,10 @@ require adopting-a-module "the fallback enumerates at the boundary"   "observabl
 require adopting-a-module "the question is about the intention"       "about the intention, never about the mechanism"
 require adopting-a-module "a mechanism is not put to validation"      "A mechanism is not submitted to human validation"
 require adopting-a-module "branch naming convention"             "adopt/"
-require adopting-a-module "ends the review as every gate does"   "never approves and never merges a pull request"
-require adopting-a-module "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
-require adopting-a-module "names the merge a clear moment"       "a moment to clear the context"
-require adopting-a-module "names the next step after the clear"  "name \`supercharlouze:writing-a-batch\` as the next step"
-require adopting-a-module "hands over a self-contained prompt"   "the prompt names the adopted spec by path"
+require adopting-a-module "ends its review with no condition and the first batch as next step" \
+    "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: \`supercharlouze:writing-a-batch\`, which starts from the adopted spec, named by path with the gaps register beside it.**"
+require adopting-a-module "says why the clear matters after an adoption" \
+    "the adoption conversation carried every mechanism you read while auditing the code, which is exactly what must not leak into the batch that follows"
 require adopting-a-module "arrives in a context of its own"      "in a context of its own"
 require adopting-a-module "the design that follows starts fresh" "from the adopted spec, not from a conversation"
 require adopting-a-module "a spilling rule is about the rule's reach" "the signal is the rule's reach"
@@ -563,13 +562,12 @@ for needle in "## Considered options" "## Consequences" "One to three sentences 
 done
 
 # --- writing-a-batch: ending the opening and amendment reviews ---
-require writing-a-batch "ends the review as every gate does"      "never approves and never merges a pull request"
-require writing-a-batch "pushes corrections as fixups"            "pushed as a \`fixup!\` commit"
-require writing-a-batch "names the merge a clear moment"          "a moment to clear the context"
+require writing-a-batch "an opening ends its review with no condition and the first story as next step" \
+    "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: \`supercharlouze:writing-a-user-story\`, which starts from the batch document, with a prompt that says to choose the blocks from those the document still carries.**"
 require writing-a-batch "the merged document carries the design too" \
     "the exact text of every block and the technical design, which is what the design conversation was for"
-require writing-a-batch "opening hands over to the first story"   "name \`supercharlouze:writing-a-user-story\` as the next step"
-require writing-a-batch "an amendment is a clear moment too"      "An amendment merges into the same clear moment"
+require writing-a-batch "an amendment ends its review with no condition and hands back to the batch" \
+    "**To end the review of an amendment, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: whatever the batch was doing when it stopped, with the skill that conducts it, starting from the amended batch document.**"
 require writing-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
@@ -599,7 +597,10 @@ require writing-a-user-story "step 6 records every departure from the design" \
     "Write as a \`Technical design ruling:\`, with the three parts of a \`Ruling:\`, every departure from the batch's \`Technical design\` that the plan or the execution took, except where the plan follows an ADR or the code on \`main\`."
 require writing-a-user-story "answers review feedback"            "review feedback"
 require writing-a-user-story "an open ruling needs a destination"  "A story does not merge leaving an open ruling without a destination"
-require writing-a-user-story "the review is the last place to act" "do not announce the pull request ready while an open ruling without a destination stands"
+require writing-a-user-story "the review is the last place to act" \
+    "Your human partner has the rulings in front of them here, and nowhere later."
+require writing-a-user-story "ends its review on the condition of its open rulings" \
+    "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it this condition: no \`Open ruling:\` without a destination stands in the \`Rulings log\`.**"
 require writing-a-user-story "story branch naming convention"     "story/NN"
 require writing-a-user-story "spec change states flag and default" "states the flag and its default"
 require writing-a-user-story "the gating sentence follows the story's module" "If the batch declares a feature flag for this story's module"
@@ -727,10 +728,10 @@ require writing-a-user-story "main moved: fit the block"            "When \`main
 require writing-a-user-story "a problematic block goes to the human" "When the block's text is a problem, stop and put it to your human partner before transcribing it"
 require writing-a-user-story "a doubtful block stops the story"     "Do not transcribe a text you believe is wrong"
 require writing-a-user-story "no divergence amends the batch document" "Neither case amends the batch document"
-require writing-a-user-story "ends the review as every gate does"   "never approves and never merges a pull request"
-require writing-a-user-story "pushes corrections as fixups"         "pushed as a \`fixup!\` commit"
-require writing-a-user-story "names the merge a clear moment"       "a moment to clear the context"
-require writing-a-user-story "hands over to the next story"         "name the next story as the next step"
+require writing-a-user-story "hands over to the next story" \
+    "Give it this next step: the next story, conducted by \`supercharlouze:writing-a-user-story\` from the batch document, with a prompt that says to choose from the blocks no merged story has declared."
+require writing-a-user-story "hands over to the closing after the last blocks" \
+    "If this story took the batch's last undelivered blocks, give it \`supercharlouze:closing-a-batch\` instead, from the same document."
 require writing-a-user-story "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- writing-a-user-story: what the spec leaves to the skill (sections
@@ -777,16 +778,12 @@ require closing-a-batch "offers three exits"                     "three exits"
 require closing-a-batch "sets status closed"                     "status: closed"
 require closing-a-batch "closing PR is reviewed"                 "review of the closing pull request"
 require closing-a-batch "branch naming convention"               "batch/NN"
-require closing-a-batch "ends the review as every gate does"  "never approves and never merges a pull request"
-require closing-a-batch "pushes corrections as fixups"        "pushed as a \`fixup!\` commit"
-require closing-a-batch "names the merge a clear moment"      "is a moment to clear the context"
-# Closing clears like every gate; what it lacks is a next step, so it alone hands
-# over no prompt. Two assertions because they are two claims: a skill that dropped
-# the second would send an agent inventing a step the model does not have. This is
-# the only place either claim is stated — the spec and `following-the-rules` carry the
-# general rule ("where a next step exists…"), which already implies the negative.
-require closing-a-batch "has no next step to name"            "no next step to name"
-require closing-a-batch "therefore hands over no prompt"      "hands over no prompt"
+# Closing has no next step, and says so when it ends its review: a skill that
+# dropped it would send an agent inventing a step the model does not have.
+require closing-a-batch "ends its review with no condition and no next step" \
+    "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition and no next step.**"
+require closing-a-batch "what follows a closed batch is chosen elsewhere" \
+    "What comes after a closed batch is chosen outside this model."
 
 # --- closing-a-batch: the duty precisions (spec section "Closing a batch") ---
 require closing-a-batch "the flag check is a duty"               "### Refuse to close on a flag"
@@ -1101,6 +1098,58 @@ require starting-a-branch "says when to go back to the step that invoked it" \
 # An internal skill names the skills it invokes, never those that invoke it, nor
 # a numbered step of one of them.
 absent "starting-a-branch names no skill that invokes it" "${entry_names%|}|Step [0-9]" starting-a-branch
+
+# --- finishing-a-pr: the end of a review ---
+require finishing-a-pr "says what the invoking skill passes" \
+    "The skill that invokes it gives the conditions the announcement waits on, or none, and the next step, or none."
+require finishing-a-pr "says what a next step comes with" \
+    "A next step comes with the skill that conducts it and the document it starts from, and with what else its prompt must say when there is anything."
+require finishing-a-pr "points at the rules of the foundation" \
+    "The rules this skill applies are those of \`The Git Model\` in \`supercharlouze:following-the-rules\`"
+require finishing-a-pr "pushes a correction as a fixup" \
+    "**Push each correction the review asks for as a \`fixup!\` commit of the commit it corrects.**"
+require finishing-a-pr "a fresh decision is a commit of its own" \
+    "A correction that carries a fresh decision is a commit of its own: a review that changes the wording of a spec change is deciding something, not fixing a slip."
+require finishing-a-pr "waits for the agreement in the conversation" \
+    "**Wait for your human partner's agreement, given in the conversation.**"
+require finishing-a-pr "checks the conditions it was given" \
+    "**Check each condition you were given.**"
+require finishing-a-pr "a condition that does not hold sends back to the review" \
+    "When one does not hold, say which one, squash nothing and go back to the review: it goes on until the condition holds and your human partner agrees again."
+require finishing-a-pr "squashes the fixups and pushes" \
+    "**Squash the \`fixup!\` commits into the commits they correct, and push the rewritten branch.**"
+require finishing-a-pr "announces the pull request ready" \
+    "**Announce that the pull request is ready to be approved and merged.**"
+# Corrections, the agreement, the conditions, the squash, then the announcement.
+skill_text finishing-a-pr
+case "$SKILL_TEXT" in
+    *"**Push each correction"*"**Wait for your human partner's agreement"*"**Check each condition you were given.**"*"**Squash the "*"**Announce that the pull request is ready"*"When your human partner announces the merge"*)
+        pass "finishing-a-pr: corrections, agreement, conditions, squash, announcement, then the merge" ;;
+    *)  fail "finishing-a-pr: corrections, agreement, conditions, squash, announcement, then the merge" ;;
+esac
+require finishing-a-pr "acts on the merge announcement" \
+    "When your human partner announces the merge"
+require finishing-a-pr "asks for a clear context" "**Ask them to clear the context.**"
+require finishing-a-pr "gives the prompt of the next step" \
+    "**If you were given a next step, name it and give, in a block to copy and paste, the prompt that starts it in a fresh context.**"
+require finishing-a-pr "the prompt names the skill and the document" \
+    "The prompt names the skill to invoke and the document to start from, by its path, says what else you were given for it, and never refers back to this conversation."
+require finishing-a-pr "no next step, no prompt" "Without a next step, give no prompt."
+require finishing-a-pr "red flag: amending instead of a fixup" \
+    "| \"The correction is tiny, I'll amend the commit and force-push\" | A force-push mid-review replaces the commits your human partner has comments on. Push a \`fixup!\`. |"
+require finishing-a-pr "red flag: a GitHub approval is not the agreement" \
+    "| \"They approved on GitHub, that is their agreement\" | The agreement is given in the conversation. Ask for it there before you squash. |"
+require finishing-a-pr "red flag: a condition settled after the merge" \
+    "| \"They agreed, the condition can be settled after the merge\" | After the merge the branch is gone and nothing settles it. Go back to the review. |"
+require finishing-a-pr "red flag: merging oneself" \
+    "| \"They agreed, I can merge it myself\" | Approving and merging are your human partner's acts. Announce the pull request ready and wait. |"
+require finishing-a-pr "red flag: the prompt given at the ready announcement" \
+    "| \"The pull request is ready, I'll give the next prompt now\" | The review may go on and bury it, or change the document it names. Give it when the merge is announced. |"
+require finishing-a-pr "says when to go back to the step that invoked it" \
+    "Once you have answered the merge announcement, go on with the step that invoked this skill."
+# An internal skill names the skills it invokes, never those that invoke it, nor
+# a numbered step of one of them.
+absent "finishing-a-pr names no skill that invokes it" "${entry_names%|}|Step [0-9]" finishing-a-pr
 
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"

@@ -488,25 +488,15 @@ the self-review becomes the batch-document reread above, and the human review of
 the written spec becomes this pull request review. The human review is not
 removed; it changes tool, into the one where you already review everything else.
 
-**Ending the review.** The agent never approves and never merges a pull request.
-Each correction the review asks for is pushed as a `fixup!` commit of the commit
-it corrects, or as a commit of its own when it carries a fresh decision — the
-block texts are what the human is reading, and a force-push mid-review replaces
-the very lines their comments hang on. Your human partner gives their agreement
-in the conversation; then you squash the fixups, push, and announce the pull
-request ready.
+**To end the review, invoke `supercharlouze:finishing-a-pr` and give it no
+condition, and this next step: `supercharlouze:writing-a-user-story`, which
+starts from the batch document, with a prompt that says to choose the blocks
+from those the document still carries.**
 
-**Merging this pull request is a moment to clear the context.** The batch
-document now carries the exact text of every block and the technical design,
-which is what the design conversation was for — and that conversation also
-carries every option you discarded on the way, which the first story must not
-inherit.
-
-When your human partner announces the merge, name
-`supercharlouze:writing-a-user-story` as the next step and give its prompt in a
-block to copy and paste. **That prompt stands on its own:** it names the skill to
-invoke, the batch document by path, and says to choose the blocks from those the
-document still carries, and it never refers back to this conversation.
+The clear that follows the merge matters here: the batch document carries the
+exact text of every block and the technical design, which is what the design
+conversation was for — and that conversation also carries every option you
+discarded on the way, which the first story must not inherit.
 
 ## Amending a Batch
 
@@ -584,12 +574,10 @@ An amendment that takes a gaps register entry out of `Scope` releases its
 reservation in the same pull request: invoke
 `supercharlouze:writing-in-a-gaps-register` before releasing it.
 
-**An amendment merges into the same clear moment as an opening**, and ends its
-review the same way: fixups during the review, agreement in the conversation,
-squash, the pull request announced ready, then the next step named when your
-human partner announces the merge. What differs is which step that is: an
-amendment hands back to whatever the batch was doing when it stopped, so name
-that, and give a prompt that names the amended batch document by path.
+**To end the review of an amendment, invoke `supercharlouze:finishing-a-pr` and
+give it no condition, and this next step: whatever the batch was doing when it
+stopped, with the skill that conducts it, starting from the amended batch
+document.**
 
 ## Requalifying a Corrective Batch
 
