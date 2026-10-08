@@ -268,10 +268,11 @@ in this same pull request while still writing nothing into a spec.
 Reservation is a property of the opening pull request of **whatever batch takes
 an entry on**, and it exists so that two batches cannot draw the same entry. So:
 if any part of this batch's scope comes from `docs/specs/<module>.gaps.md`,
-reserve every entry it takes on **in this same pull request**, annotating the
-entry `reserved by batch-NN`. The reservation lives on `main`; that is what
-stops another batch from taking the same gap, and closing a story's pull request
-does not carry it away. `supercharlouze:closing-a-batch` releases whatever is
+reserve every entry it takes on **in this same pull request**: invoke
+`supercharlouze:writing-in-a-gaps-register` before reserving one, and give it
+this batch's `NN`. The reservation lives on `main`; that is what stops another
+batch from taking the same gap, and closing a story's pull request does not
+carry it away. `supercharlouze:closing-a-batch` releases whatever is
 left unconsumed — which it can only do for entries that were reserved in the
 first place.
 
@@ -602,8 +603,8 @@ sections. Otherwise the story resumes and holds the constraint, and nothing is
 amended.
 
 An amendment that takes a gaps register entry out of `Scope` releases its
-reservation in the same pull request: it removes the entry's
-`reserved by batch-NN` annotation and leaves the entry.
+reservation in the same pull request: invoke
+`supercharlouze:writing-in-a-gaps-register` before releasing it.
 
 **An amendment merges into the same clear moment as an opening**, and ends its
 review the same way: fixups during the review, agreement in the conversation,

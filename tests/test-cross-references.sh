@@ -142,6 +142,20 @@ case "$WROW" in
     *)                  fail "the README row of writing-in-a-spec rules out direct use" ;;
 esac
 
+# The README row of writing-in-a-gaps-register, like the other internal
+# skills', says it is not for direct use and names none of the skills that
+# invoke it.
+GROW="$(grep -F '`supercharlouze:writing-in-a-gaps-register`' "$REPO_ROOT/README.md" || true)"
+case "$GROW" in
+    *"using-batches"*|*"writing-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"closing-a-batch"*|*"invoked by"*)
+        fail "the README row of writing-in-a-gaps-register names no caller" ;;
+    *)  pass "the README row of writing-in-a-gaps-register names no caller" ;;
+esac
+case "$GROW" in
+    *"Never directly"*) pass "the README row of writing-in-a-gaps-register rules out direct use" ;;
+    *)                  fail "the README row of writing-in-a-gaps-register rules out direct use" ;;
+esac
+
 # The rereads use three skills when they are installed; the README recommends
 # them all, since nothing else tells a user they exist. Anchored on the
 # recommendation itself: a skill named anywhere else in the README proves nothing.

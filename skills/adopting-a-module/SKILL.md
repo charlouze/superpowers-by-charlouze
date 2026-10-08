@@ -164,7 +164,8 @@ descriptive.
 
 - **Every sentence you write passes the other-implementation test**, and what it
   ejects **goes straight into the gaps register**, naming the document it came
-  from. Create `docs/specs/<module>.gaps.md` the first time you need it. The
+  from. Create `docs/specs/<module>.gaps.md` the first time you need it, and
+  invoke `supercharlouze:writing-in-a-gaps-register` before writing in it. The
   authority rule of `Source Authority` above holds while you write: a mechanism
   the document prescribes is no more admissible here than one you read in the
   code.
@@ -220,88 +221,9 @@ the prose under them follows the project's language.
 ### 5. Audit the code against the spec
 
 Read the code against each section you just wrote, and add to the gaps register
-what the audit reveals.
+what the audit reveals, each finding as an entry under its category.
 
-Two categories, each under its own heading, kept apart because they are not
-treated the same way:
-
-- **Violations** — the code contradicts the spec. Feeds a *corrective batch*.
-- **Gaps** — a real behaviour or requirement no spec describes. Feeds an ordinary
-  batch that finally specifies them.
-
-Each entry designates a section of the spec. **An entry that came from a document
-names that document**, so your human partner can promote it knowing what they are
-promoting instead of re-reading the whole thing.
-
-**Each entry is one list item, never a paragraph of running prose.** You are
-the only skill that ever *creates* this file, and four writers act on its
-entries afterwards — three skills, plus the bounded path, which has no skill
-of its own — as do you yourself at the step `Offer to promote the gaps`. Each
-of them needs a thing it can point at, whether to annotate it in place or to
-take it out whole:
-
-| Gesture | Who | What it does to the entry |
-|---|---|---|
-| Reserve | `supercharlouze:writing-a-batch`, in the batch's opening pull request | appends `reserved by batch-NN` to it |
-| Remove | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | deletes it from the file, atomically with the code, and the commit that removes it says why |
-| Remove | you, at the step `Offer to promote the gaps`, when your human partner promotes one | deletes it from the file, in the same pull request that writes the rule it became |
-| Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed, and leaves the entry |
-| Release | `supercharlouze:writing-a-batch`, in an amendment pull request | removes the `reserved by batch-NN` of an entry the amendment takes out of the batch's `Scope`, and leaves the entry |
-| Add | `supercharlouze:closing-a-batch`, in the batch's closing pull request | appends it at the end of its category; within a batch, no other pull request adds one |
-| Add or remove | a bounded change, from its own pull request | belonging to no batch, it writes an entry or deletes one directly, contending only with another bounded change |
-
-A register written as flowing paragraphs satisfies every other word of this step
-and breaks every one of them: there is no item to annotate, none to remove
-cleanly, no list for a bounded change to append one to — what it adds is more
-prose, which the next writer cannot point at either — and nothing a corrective
-batch can draw a scope from. Write entries so those gestures are mechanical.
-
-**What qualifies an entry lives in the entry.** Besides its coverage, the register
-carries nothing but entries: no prose qualifies a *group* of them — where they came
-from, how they were classified, how many there are. Entries are added and removed
-one at a time, and nothing keeps such a paragraph honest: it goes false without
-anyone touching it. What it would say of several entries is repeated in each, and
-where an entry came from is read in the history of the file. You write this file's
-first entries all at once, which is exactly when a group paragraph feels natural —
-and it is the one moment nobody is left to notice it later.
-
-**An entry designates no other entry.** A settled entry leaves the file whole, and
-it takes with it anything that pointed at it — by name or by position. What an
-entry needs from its neighbour it states itself.
-
-**Nothing stays behind in this file once an entry is settled.** The register
-carries what is still open, and what an entry was — and why it left — is read in
-the history of the file (`git log -p docs/specs/<module>.gaps.md`).
-
-**The shape of the register:**
-
-```markdown
-# <module> — Gaps register
-
-## Coverage
-
-<Which parts of the module were audited, which were not, and why. Written even
-— especially — when nothing was found.>
-
-## Violations
-
-- **<spec section>** — <how the code contradicts it.>
-- **<spec section>** — <another one.> `reserved by batch-08`
-
-## Gaps
-
-- **<spec section, or the section that should exist>** — <behaviour no spec
-  describes.>
-- **<spec section, or the section that should exist>** — <a mechanism
-  `<the validated document, by its archive path>`
-  prescribes and no spec carries.>
-```
-
-**The register also declares its own coverage:** which parts of the module were
-audited, which were not, and why. An empty register that means "nothing was
-examined" must never look like an empty register that means "everything conforms" —
-they are opposite facts and they look identical unless you write the difference
-down. Declare the coverage especially when you found nothing.
+Write the register's `Coverage` from this audit.
 
 Fix nothing in the code while you are here. Adoption produces the register;
 resorbing a violation is a batch of its own, with its own review.
@@ -315,7 +237,8 @@ module's boundary, ask whether that behaviour carries an intended rule — a
 question about the intention, never about the mechanism. What they validate goes
 into the spec, under the section that behaviour constrains, and **its entry is
 deleted from the register** — this is an adoption that promotes a gap into the
-spec, and the commit that removes it says why. Everything else stays there.
+spec, and that is the reason the commit that removes it gives. Everything else
+stays there.
 
 The intention comes from them, not from you: you show the behaviour, they state or
 confirm what it is for. Paraphrasing an intention from the code yourself and
@@ -440,7 +363,6 @@ Every text this skill writes follows `Concision` in `supercharlouze:following-th
 | "The intention behind this mechanism is obvious, I'll write it down" | Deducing an intention from a mechanism is reconstruction from the code by another road. It comes from a document or from your partner, or it goes to the register. |
 | "I can infer the module boundaries from the directory layout" | Boundaries belong to your human partner. A wrong one contaminates everything downstream. |
 | "This old design doc is close enough to validated" | Ask. The spec's quality is capped by the inventory. |
-| "The audit found nothing, so the register is empty" | An empty register must say whether nothing was found or nothing was examined. |
 | "I'll write the spec first and show the source list with it" | The inventory is presented before anything is written, or your partner reviews sources they can no longer change your mind about. |
 | "These two documents disagree, I'll keep the clearer one" | Most recent wins by default, and the choice is a ruling, written down. |
 | "This behaviour is obviously intended, so into the spec it goes" | Obvious to you is not validated by them. Undocumented behaviour is a gap until a human says otherwise. |
@@ -448,7 +370,6 @@ Every text this skill writes follows `Concision` in `supercharlouze:following-th
 | "They said yes to it, so this mechanism is now a rule" | A mechanism is not submitted to validation. Enumerate what is observable at the boundary; a validated mechanism is approved drift. |
 | "I'll write the two documents first and create the branch to carry them" | using-git-worktrees opens a separate, empty directory. The branch comes first, at step 3, or both files stay stranded where you started. |
 | "I'm already in a worktree, that will do" | The worktree is not the problem; the branch is. Step 0 reuses the workspace, and the adoption lands on the previous branch unless you create the branch from `origin/main` yourself. |
-| "Prose reads better than a list in the gaps register" | Then nothing can reserve, remove or release an entry, and the three downstream gestures break. |
 | "The adoption PR is open, the batch can start" | Merged is adopted. The review is the gate, not the push. |
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |
 | "I ejected those mechanisms at step 4, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit, and step 4's set-aside list is its only route into the register. |

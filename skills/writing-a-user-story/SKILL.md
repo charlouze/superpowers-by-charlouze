@@ -307,13 +307,13 @@ header of the story document and its empty `Rulings log` and `Observed drift`
 sections — Step 4 then writes the plan into that document rather than creating it
 — together with what this particular story removes, if it removes anything.
 
-A technical story removes nothing, and its first commit carries that header alone.
-A corrective batch's story removes an entry: it deletes the gaps register entry it
-resolves from `docs/specs/<module>.gaps.md`, and the commit that removes it says
-why. Removing an entry takes out lines nobody else is writing, so two stories
-removing different entries do not collide — and what the entry said, and why it
-went, stay readable in the history of the file. A teardown story removes from
-the spec what no block announced, and that removal is this same commit.
+A technical story removes nothing, and its first commit carries that header
+alone. A corrective batch's story removes an entry: it deletes the gaps register
+entry it resolves from `docs/specs/<module>.gaps.md`. Invoke
+`supercharlouze:writing-in-a-gaps-register` before deleting it. Removing an
+entry takes out lines nobody else is writing, so two stories removing different
+entries do not collide. A teardown story removes from the spec what no block
+announced, and that removal is this same commit.
 
 **Push the branch as soon as this commit exists** — `git push -u origin
 story/NN-us-N-<slug>`. Nothing depends on it for this story; it is what makes
@@ -668,7 +668,7 @@ exist:
 - Record under **Observed drift** the drift you noticed *outside* this story's
   scope: code that contradicts the spec, and behaviour no spec describes.
 
-Do not add those observations to the gaps register yourself. Within a batch, only the closing pull request adds entries to the gaps register, and `supercharlouze:closing-a-batch` consolidates them there.
+Do not add those observations to the gaps register yourself: `supercharlouze:closing-a-batch` consolidates them there.
 
 Commit both on the branch and push, so they merge with it.
 

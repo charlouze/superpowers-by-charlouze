@@ -63,23 +63,15 @@ Collect from every story document in the batch what it left for you, and write i
 
 **An open ruling that names no category should not reach you.** A story does not merge leaving one without a destination — the delivery review settles those, and it is the last moment that can: here the story is merged and its branch is gone, so you can note that a ruling was never taken up and no longer take it up. If you find one, report it with the rest of your findings and let your human partner rule; do not classify it yourself.
 
-Within a batch, only the closing pull request adds entries to the gaps register. Every addition contends with every other on the same module, which is why a batch adds through one pull request.
-
-An entry is one list item, added at the end of its category.
+**Invoke `supercharlouze:writing-in-a-gaps-register` before adding an entry.**
 
 "Out of scope for this batch" is never a reason to drop an observation. It is precisely why the observation belongs in the register: the register is what a later corrective batch draws its scope from. Dropped here, the finding dies with the session that made it.
 
-A finding already deleted from the register is re-entered only if the entry says what has changed since.
-
-Read the file's history before adding an entry (`git log -p docs/specs/<module>.gaps.md`). An entry that left this file left for a reason, written in the commit that removed it: resolved, promoted, moot, false, or set aside by your human partner.
-
-**What qualifies an entry lives in the entry.** Besides its coverage, the register carries nothing but entries: no prose qualifies a *group* of them — where they came from, how they were classified, how many there are. Entries are added and removed one at a time, and nothing keeps such a paragraph honest: it goes false without anyone touching it. What it would say of several entries is repeated in each, and where an entry came from is read in the history of the file. You arrive with a batch's worth of findings at once, so the temptation is yours more than anyone's: write "consolidated by batch NN" into each entry that needs it, never above them.
-
-**An entry designates no other entry.** A settled entry leaves the file whole, and it takes with it anything that pointed at it — by name or by position. What an entry needs from its neighbour it states itself.
+You arrive with a batch's worth of findings at once: write "consolidated by batch NN" into each entry that needs it, never above them.
 
 ### Release unconsumed reservations
 
-For every gaps register entry this batch reserved at opening (`reserved by batch-NN`) that is still in the file, release it. Releasing removes the reservation annotation and leaves the entry: the gap is still open, it is simply no longer claimed. Those are the **unconsumed reservations**: a story abandoned, an entry no story resolved. An entry an amendment took out of `Scope` is not among them: that amendment released it. An entry a story did resolve is not there to release: the story deleted it from the file, atomically with the code that resolved it, and the commit that removes it says why.
+For every gaps register entry this batch reserved at opening (`reserved by batch-NN`) that is still in the file, release it. Invoke `supercharlouze:writing-in-a-gaps-register` before releasing one. Those are the **unconsumed reservations**: a story abandoned, an entry no story resolved. An entry an amendment took out of `Scope` is not among them: that amendment released it. An entry a story did resolve is not there to release: the story deleted it from the file, atomically with the code that resolved it.
 
 Closing a story's pull request does not do this for you. The reservation lives on `main` — it got there when the batch's opening pull request merged — and abandoning a story touches nothing on `main`. Left in place, the annotation is a perpetual claim: the gap looks taken forever, and no future batch can pick it up.
 
@@ -88,7 +80,7 @@ Closing a story's pull request does not do this for you. The reservation lives o
 Read the `Blocks:` field of every story document in the batch directory, and collect the `D<n>` identifiers they declare; a `none` declares nothing. A block the batch document's `Spec delta` defines and that no collected declaration names is a block announced but never delivered: a story abandoned, a scope cut along the way. For each one:
 
 1. Remove it from the batch document, its `Spec delta` entry and any constraint that names it, so the document no longer promises what the batch did not deliver.
-2. Ask your human partner whether it joins the gaps register. If they say yes, write it under **Gaps** in the register of the module concerned.
+2. Ask your human partner whether it joins the gaps register. If they say yes, invoke `supercharlouze:writing-in-a-gaps-register` and add it under **Gaps** in the register of the module concerned.
 
 Without this duty the abandonment is invisible. It is not drift, since the spec and the code agree: both are silent about the feature. And nothing else records it.
 
