@@ -67,11 +67,11 @@ its consequences, then execute what is ruled.
 
 ## Requalifying a Technical Story
 
-**Trigger — the stop condition of a technical story.** `supercharlouze:following-the-rules`
-states it and `supercharlouze:delivering-a-story` copies it into the
-`Global Constraints` of every technical story: a story that discovers it changes
-something observable at its module's boundary is no longer technical. It reaches
-you already stopped, from inside `superpowers:subagent-driven-development`.
+**Trigger — the stop condition of a technical story.**
+`supercharlouze:following-the-rules` states it, and the `Global Constraints` of
+every technical story names it: a story that discovers it changes something
+observable at its module's boundary is no longer technical. It reaches you
+already stopped, from inside `superpowers:subagent-driven-development`.
 
 **Procedure.**
 

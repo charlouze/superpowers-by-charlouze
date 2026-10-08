@@ -51,6 +51,9 @@ un seul module et se livre en une pull request.
 **Story technique** (`technical story`) — une story qui ne change rien
 d'observable à la frontière de son module.
 
+**Règles d'exécution** (`execution rules`) — les règles à suivre par celui qui
+exécute ou relit une tâche d'un plan.
+
 **Conception technique** (`technical design`) — le mécanisme prévu pour les
 stories d'un lot, dont chacune peut s'écarter.
 
@@ -559,24 +562,33 @@ qui l'accueille quand il en rejoint une.
 `Global Constraints` porte :
 
 1. la section `Constraints` du lot, recopiée mot pour mot ;
-2. le gel du fichier de spec ;
-3. la primauté de la spec sur le lot, et la correction d'une spec réservée à
-   l'humain ;
-4. les règles de `Concision` ;
-5. dans un lot correctif seulement, sa condition d'arrêt
-   (`Departures from superpowers`) ;
-6. dans une story qui écrit du code gardé par un flag seulement, les règles de
-   `Code under a feature flag`, quel que soit le lot qui déclare le flag ;
-7. dans une story technique seulement, sa condition d'arrêt
-   (`Departures from superpowers`) ;
-8. seulement si le lot déclare des contraintes ou si `main` porte un ADR quand la
-   branche de la story en part, la condition d'arrêt sur une contrainte ou un ADR
-   qui ne peut pas être tenu (`Departures from superpowers`) ;
-9. seulement si `main` porte un ADR quand la branche de la story en part,
-   l'obligation de tenir ces ADR (`Architecture decision records`) ;
-10. les conditions auxquelles une décision technique est consignée en ADR
-    (`Architecture decision records`), et l'obligation de soumettre comme
-    arbitrage ouvert la décision qui les réunit (`Delivering a story`).
+2. le nom des règles d'exécution qui valent pour la story (`Execution rules`),
+   sans les recopier ;
+3. le chemin de chaque ADR que `main` porte à la création de la branche de la
+   story, ou `none`.
+
+### Execution rules
+
+Celui qui exécute ou relit une tâche du plan d'une story suit les règles
+d'exécution :
+
+- le gel du fichier de spec ;
+- la primauté de la spec sur le lot, et la correction d'une spec réservée à
+  l'humain ;
+- les règles de `Concision` ;
+- dans un lot correctif, sa condition d'arrêt (`Departures from superpowers`) ;
+- dans une story qui écrit du code gardé par un flag, les règles de
+  `Code under a feature flag` ;
+- dans une story technique, sa condition d'arrêt
+  (`Departures from superpowers`) ;
+- si le lot déclare des contraintes ou si `main` porte un ADR, la condition
+  d'arrêt sur une contrainte ou un ADR qui ne peut pas être tenu
+  (`Departures from superpowers`) ;
+- si `main` porte un ADR, l'obligation de tenir ces ADR
+  (`Architecture decision records`) ;
+- les conditions auxquelles une décision technique est consignée en ADR
+  (`Architecture decision records`), et l'obligation de soumettre comme
+  arbitrage ouvert la décision qui les réunit (`Delivering a story`).
 
 ### Concurrency detection
 

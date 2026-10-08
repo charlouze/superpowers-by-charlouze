@@ -160,7 +160,7 @@ way nobody notices until the context is already gone.
 
 **When a batch and a spec contradict each other, the spec wins — no exception, no deliberation.** Implement what the spec says, record a `Ruling:`, and carry on. **Correcting a spec mid-batch is a human act, never an agent's.** An agent that "fixes" the spec silently inverts the authority: the batch's intent wins, and the document reviewers rely on becomes a record of what an agent preferred.
 
-**The spec file is frozen, with a start and an end.** Between the first commit of the branch and the opening of the pull request, no task modifies the spec file; a story that discovers the spec must change stops. Once the pull request is open the freeze lifts — review requests are human decisions, including on the wording of the spec change. A freeze without an end would make it literally impossible to answer a review, or to resolve a merge conflict on that file. The rule is copied into the `Global Constraints` of every plan, so it sits under the eyes of every implementer and every reviewer.
+**The spec file is frozen, with a start and an end.** Between the first commit of the branch and the opening of the pull request, no task modifies the spec file; a story that discovers the spec must change stops. Once the pull request is open the freeze lifts — review requests are human decisions, including on the wording of the spec change. A freeze without an end would make it literally impossible to answer a review, or to resolve a merge conflict on that file. The spec file travels in the same branch as the code, so a task can edit it, which is why the freeze is an execution rule.
 
 **Every conflict is recorded for the human.** Reuse the existing mechanism rather than inventing one: the execution of a plan by subagents keeps a ledger whose decisions take the form `Ruling: <decision> — <why> — <what it costs if it is wrong>`, presented under "Rulings I made" before it deletes its workspace. Copy those lines into the story document, on the story's branch, before the merge — they are perishable, and the workspace is already gone.
 
@@ -221,7 +221,9 @@ The identifier may follow in parentheses when the human has to find it in the do
 
 ## Execution Rules
 
-A story's `Global Constraints` carries the execution rules that hold for that story. Each has a name:
+Whoever executes or reviews a task of a story's plan follows the execution rules. The plan's `Global Constraints` names those that hold for the story, and copies none.
+
+**Before you start a task, read each rule `Global Constraints` names, under the section this table gives for it:**
 
 | Name | Holds for | Written under |
 |---|---|---|
