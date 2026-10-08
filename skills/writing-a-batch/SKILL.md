@@ -395,10 +395,10 @@ the spec, with its condition, in front of whoever touches that section next.
 Write, rewrite or delete in this pull request, with the batch document, the ADRs
 your human partner decided during the brainstorming.
 
-Before writing or rewriting one, build a copy of each spec the batch touches
-with its blocks applied, as `The Coherence Reread` builds it. An ADR is
-confronted with the specs as the batch leaves them, and no block is in a spec
-yet.
+Before writing or rewriting one, invoke `supercharlouze:applying-a-spec-delta`
+and give it the batch document and every block of its spec delta: it returns
+the copies of the specs, blocks applied. An ADR is confronted with the specs as
+the batch leaves them, and no block is in a spec yet.
 
 Invoke `supercharlouze:recording-a-decision` for each ADR to write or to
 rewrite, and hand it those copies.
@@ -417,15 +417,8 @@ change, so with no block it has nothing to read and no state to build. Such a
 batch still owes step 6, and step 7, the batch-document reread, which bears on
 whatever stands in the blocks' place.
 
-Build that state — a copy of each touched spec with its blocks applied —
-**outside the repository**, in a scratch directory: no block is written into a
-spec before a story transcribes it, and that rule is not suspended to make a
-reread convenient.
-
-Building that copy checks every block: it carries its `D<n>`, it names the spec
-and section it targets, and its unchanged and removed lines match `main`, or the
-text the block ordered before it leaves. A block that fails this check does not
-apply, which is how a delta gone stale since the batch was drafted is caught.
+Invoke `supercharlouze:applying-a-spec-delta` and give it the batch document and
+every block of its spec delta.
 
 Then invoke `supercharlouze:rereading-a-spec` on each applied copy, with the path
 of the spec it applies to.
@@ -451,7 +444,7 @@ that holds.
 that is so.
 
 Invoke `supercharlouze:rereading-a-technical-design` with the batch document and
-each spec the batch touches: the applied copy the coherence reread built, or the
+each spec the batch touches: the applied copy the coherence reread read, or the
 spec itself when no block targets it. Hand it also `docs/specs/`, `docs/adr/`
 and the path of each ADR this pull request writes or rewrites. An ADR whose text
 you corrected on a finding counts among those it rewrites.
@@ -567,29 +560,32 @@ a review.
 
 An amendment's pull request may also write, rewrite or delete the ADRs your
 human partner decided with the amendment. Do it as `The ADRs` does, once the
-document is amended. Where that section applies the batch's blocks, apply every
-block of the amended document that no merged story has declared yet. The pull
-request body states each ADR it writes, rewrites or deletes.
+document is amended. Where that section gives
+`supercharlouze:applying-a-spec-delta` every block of the spec delta, give it
+every block of the amended document that no merged story has declared yet. The
+pull request body states each ADR it writes, rewrites or deletes.
 
 A change that touches nothing but ADRs is not an amendment: it goes through a
 bounded change, under `supercharlouze:using-batches`.
 
 By exception, an amendment that changes the spec delta is reviewed as an
-opening. Before its pull request opens, apply its new or changed blocks together
-with every block no merged story has declared yet, and invoke
-`supercharlouze:rereading-a-spec` on each applied copy, with the path of the
-spec it applies to, as `The Coherence Reread` does. Its body states the exact
-text of every new or changed block, and what the coherence reread found.
+opening. Before its pull request opens, invoke
+`supercharlouze:applying-a-spec-delta` and give it the amended document and its
+new or changed blocks together with every block no merged story has declared
+yet, then invoke `supercharlouze:rereading-a-spec` on each applied copy, with
+the path of the spec it applies to, as `The Coherence Reread` does. Its body
+states the exact text of every new or changed block, and what the coherence
+reread found.
 
 An amendment that changes the spec delta, the technical design or the
 constraints, or that writes or rewrites an ADR, goes through the technical
 reread before its pull request opens, after the coherence reread when it runs
 one. Conduct it as `The Technical Reread` does, on the amended document and on
-each spec with every block no merged story has declared yet applied, in a copy
-built as `The Coherence Reread` builds it. A behaviour or a block it returns as
-taken back to the spec delta makes the amendment one that changes the spec
-delta: it goes through the coherence reread, then through the technical reread
-again.
+each spec with every block no merged story has declared yet applied: invoke
+`supercharlouze:applying-a-spec-delta` and give it the amended document and
+those blocks. A behaviour or a block it returns as taken back to the spec delta
+makes the amendment one that changes the spec delta: it goes through the
+coherence reread, then through the technical reread again.
 
 After its rereads, an amendment that changes the spec delta puts the whole
 document through the batch-document reread.

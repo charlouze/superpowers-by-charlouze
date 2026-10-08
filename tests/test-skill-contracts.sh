@@ -432,6 +432,18 @@ absent "no other skill restates the abandonment gesture" \
     "dies with the branch|live claim on its sections|[Dd]elete (its|the story|the abandoned) branch|[Rr]emove its worktree|worktree removed|discard the branch" \
     $(declared_skills | grep -vx abandoning-a-story)
 
+# The copies of the specs, blocks applied, are built in one place,
+# `applying-a-spec-delta`. A skill that needs them invokes it and passes the
+# batch document and the blocks to apply.
+require writing-a-batch "invokes applying-a-spec-delta with the batch document and the blocks" \
+    "nvoke \`supercharlouze:applying-a-spec-delta\` and give it the"
+# How they are built is spelled there and nowhere else. Walks the declared
+# skills, so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates how the applied copies are built" \
+    "outside the repository|scratch directory|checks every block|fails this check does not apply|the text the block ordered before it leaves|[Bb]uild (a|that|the) cop(y|ies)|cop(y|ies) built|coherence reread built|Coherence Reread\` builds it" \
+    $(declared_skills | grep -vx applying-a-spec-delta)
+
 # The mirror of the positive assertions above: a skill that carried both the new
 # wording and the old would leave every one of them green while still telling an
 # agent to strike a register entry. The needle is the bare token, because a
