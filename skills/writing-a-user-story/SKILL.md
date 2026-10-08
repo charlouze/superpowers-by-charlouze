@@ -527,15 +527,12 @@ a pull request already open is closed without merging then, not when you stop.
 In a technical story, close the story's pull request without merging it if one
 is already open.
 
-Nothing on `main` changes either way — the spec change, or the deleted
-gaps-register entry, travels with the code and dies with the branch. The
-reservation posted on `main` by the batch's opening pull request is untouched:
-the amendment that takes its entry out of `Scope` releases it, or
-`supercharlouze:closing-a-batch` does. Once the requalification is
-ruled, delete the abandoned branch, locally and on the remote, and remove its
-worktree — the branch left on the remote would read as a live claim on its
-sections, and the worktree left behind is where a later session resumes work
-under a qualification the batch — or the story — no longer has.
+The reservation posted on `main` by the batch's opening pull request is
+untouched: the amendment that takes its entry out of `Scope` releases it, or
+`supercharlouze:closing-a-batch` does.
+
+Once the requalification is ruled, invoke `supercharlouze:abandoning-a-story`
+and give it the story's branch.
 
 In a story whose batch declares constraints or whose `docs/adr/` carries an ADR:
 if, while conducting it, you discover that a constraint of its batch or an ADR
@@ -645,23 +642,13 @@ never refers back to this conversation.
 Everything perishable is already in the story document — that is what
 `Step 6 — Record Before the Merge` was for.
 
-**Abandoning is almost free.** Closing the pull request without merging throws
-the transcription away with the code — nothing to revoke, no spec to put back
-straight. If the abandonment happens before the pull request exists — a
-requalification under Override 2, a story dropped mid-run — there is nothing to
-close, only a branch and a worktree to discard. What remains on `main` belongs
-to `supercharlouze:closing-a-batch`: the blocks the batch announced and no
-story delivered, and the gaps register reservation posted by the batch's
-opening pull request, unless an amendment took its entry out of `Scope` and
-released it. Do not count them — a story that transcribed no block announced
-nothing in the spec delta and leaves the reservation alone.
-
-**Clean up after an abandoned or requalified story: remove its worktree and
-delete its branch, locally and on the remote.** This is not tidiness. A pushed
-`story/*` branch with no pull request is exactly what every sibling's
-concurrency scan reads as a live claim on its sections, so an abandoned branch
-left on the remote holds those sections against every story that follows, and
-nothing ever releases them.
+**To abandon a story, invoke `supercharlouze:abandoning-a-story` and give it the
+story's branch.** What remains on `main` belongs to
+`supercharlouze:closing-a-batch`: the blocks the batch announced and no story
+delivered, and the gaps register reservation posted by the batch's opening pull
+request, unless an amendment took its entry out of `Scope` and released it. Do
+not count them — a story that transcribed no block announced nothing in the spec
+delta and leaves the reservation alone.
 
 ## Lifting and Teardown Stories
 
@@ -732,7 +719,6 @@ Every text this skill writes follows `Concision` in `supercharlouze:following-th
 | "The spec is wrong, I'll fix it while I'm here" | Only your human partner corrects a spec. Stop and say so. |
 | "No open pull request uses us-3, so us-3 is free" | A branch claims its number from its first commit until its pull request opens at the end of Step 5. Read the pushed `story/*` branches too — same argument as the concurrency scan. |
 | "I'll push the branch when the work is done" | Then this story is invisible to every sibling for the whole implementation. Push right after the spec-change commit. |
-| "The story is abandoned, the branch can stay" | A pushed `story/*` branch with no pull request reads as a live claim on its sections. Delete it, locally and on the remote. |
 | "I'm already in a worktree, that's fine" | It is, as a place to work. A branch that starts there is not: this story's code would land on the previous story's branch. Branch from `origin/main`, wherever you stand. |
 | "Merging locally is quicker" | It never pushes. It merges into the local `main`, deletes the worktree and the branch, and takes the unrecorded rulings with it. |
 | "I'll transcribe the spec at the end, with the code" | Then the norm is not prior to the code and the freeze has no starting point. The spec change ships as commit one. |

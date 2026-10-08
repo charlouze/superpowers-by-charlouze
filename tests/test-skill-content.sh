@@ -149,7 +149,7 @@ require writing-a-batch "red flag: an amendment's ADR is reread" "| \"This amend
 require writing-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
 require writing-a-batch "the human rules on a constraint a story cannot hold" "**When a story stops on a constraint it cannot hold, your human partner rules on the constraint.**"
 require writing-a-batch "an untenable constraint is amended" "If they rule it untenable, an amendment changes or removes the constraint and the story is abandoned"
-require writing-a-batch "a story abandoned on a constraint leaves no branch behind" "delete its branch locally and on the remote, and remove its worktree, since a branch left on the remote reads as a live claim on its sections"
+require writing-a-batch "a story abandoned on a constraint goes through abandoning-a-story" "the story is abandoned: invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
 require writing-a-batch "a constraint that holds resumes the story" "Otherwise the story resumes and holds the constraint, and nothing is amended."
 require writing-a-batch "the red flag keeps the ruling with the human" "Whether a constraint can be held is your human partner's ruling."
 require writing-a-batch "an obvious design is still written" "An obvious design is still a design: write it."
@@ -161,7 +161,10 @@ require writing-a-user-story "an abandonment leaves closing the reservation no a
 require closing-a-batch "an amendment's release is the one exception" "except an amendment that takes a reserved entry out of \`Scope\` and releases it"
 require writing-a-batch "a corrective story is abandoned once ruled" "1. **Leave the story as it stands until the choice below is ruled, then abandon it.**"
 require writing-a-batch "an open pull request waits for the ruling" "A pull request already open stays open until then."
-require writing-a-batch "a corrective story's remote branch is a live claim" "a branch left on the remote is read as a live claim on its sections by every sibling's concurrency scan"
+require writing-a-batch "a corrective story goes through abandoning-a-story once ruled" "Once the choice is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
+require writing-a-batch "a technical story's pull request is closed at the stop" "Close its pull request without merging it if one is already open; the branch and its worktree stay until the choice below is ruled."
+require writing-a-batch "a technical story goes through abandoning-a-story once ruled" "Once it is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
+require writing-a-batch "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |"
 # Both requalifications live in writing-a-batch; using-batches only routes to it.
 require using-batches "the corrective and the technical conditions route to writing-a-batch" "When the corrective or the technical condition fires, you stop, and \`supercharlouze:writing-a-batch\` conducts the requalification"
 require writing-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`bounded/<slug>\`, \`chore/supercharlouze-init\`"
@@ -766,7 +769,8 @@ require writing-a-user-story "the plan goes into the first commit's document" "S
 require writing-a-user-story "the plan is pushed immediately"       "and push it immediately"
 require writing-a-user-story "the records are pushed"               "Commit both on the branch and push, so they merge with it"
 require writing-a-user-story "the merge delivers the story"         "The story is delivered when its pull request is merged"
-require writing-a-user-story "abandoning removes the worktree too"  "remove its worktree and delete its branch, locally and on the remote"
+require writing-a-user-story "abandoning goes through abandoning-a-story" "**To abandon a story, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch.**"
+require writing-a-user-story "a requalified story goes through abandoning-a-story once ruled" "Once the requalification is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch."
 
 # --- closing-a-batch (spec 4.1, 4.2, 5.4) ---
 require closing-a-batch "the preconditions read what closing consolidates" \
@@ -954,6 +958,37 @@ require detecting-concurrency "says when to go back to the step that invoked it"
 # An internal skill names the skills it invokes, never those that invoke it, nor
 # a numbered step of one of them.
 absent "detecting-concurrency names no skill that invokes it" "${entry_names%|}|Step [0-9]" detecting-concurrency
+
+# --- abandoning-a-story: the gesture (spec section "Abandoning a story") ---
+require abandoning-a-story "says what the invoking skill passes" \
+    "The skill that invokes it gives the story's branch."
+require abandoning-a-story "closes an open pull request without merging it" \
+    "**Close the story's pull request without merging it, if one is open.**"
+require abandoning-a-story "a story stopped before its pull request opened has none" \
+    "there is nothing to close, only a branch and a worktree to discard"
+require abandoning-a-story "deletes the branch on the remote too" \
+    "**Delete the branch, locally and on the remote.**"
+require abandoning-a-story "a branch left on the remote is a live claim" \
+    "reads as a live claim on its sections"
+require abandoning-a-story "removes the worktree" "**Remove its worktree.**"
+# The worktree goes before the branch: git refuses to delete a branch a worktree
+# still has checked out.
+skill_text abandoning-a-story
+case "$SKILL_TEXT" in
+    *"**Remove its worktree.**"*"**Delete the branch, locally and on the remote.**"*)
+        pass "abandoning-a-story: the worktree is removed before the branch is deleted" ;;
+    *)  fail "abandoning-a-story: the worktree is removed before the branch is deleted" ;;
+esac
+require abandoning-a-story "nothing reached main" \
+    "the spec change, or the deleted gaps-register entry, travels with the code and dies with the branch"
+require abandoning-a-story "changes nothing on main" "Change nothing on \`main\`."
+require abandoning-a-story "red flag: the branch can stay" \
+    "| \"The story is abandoned, the branch can stay\" | A pushed \`story/*\` branch with no pull request reads as a live claim on its sections. Delete it, locally and on the remote. |"
+require abandoning-a-story "says when to go back to the step that invoked it" \
+    "Once the story is abandoned, go on with the step that invoked this skill."
+# An internal skill names the skills it invokes, never those that invoke it, nor
+# a numbered step of one of them.
+absent "abandoning-a-story names no skill that invokes it" "${entry_names%|}|Step [0-9]" abandoning-a-story
 
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"

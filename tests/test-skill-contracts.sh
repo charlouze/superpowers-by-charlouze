@@ -419,13 +419,18 @@ require writing-in-a-gaps-register "the history is read before an entry is added
 require writing-in-a-gaps-register "a removal says why in its commit" \
     "the commit that removes it says why"
 
-# The same sentence about what an abandoned story leaves behind is written in
-# two skills, and it names the gesture the register now uses. One assertion over
-# both: separate ones would let the two accounts of an abandonment drift apart,
-# and an agent reading either would believe it had the whole picture.
-shared "both accounts of an abandonment name the same residue" \
-    "the spec change, or the deleted gaps-register entry, travels with the code and dies with the branch" \
-    writing-a-batch writing-a-user-story
+# The gesture that abandons a story lives in one place, `abandoning-a-story`. A
+# skill that abandons a story invokes it and passes the story's branch.
+for s in writing-a-batch writing-a-user-story; do
+    require "$s" "invokes abandoning-a-story with the story's branch" \
+        "invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
+done
+# What it carries is spelled there and nowhere else. Walks the declared skills,
+# so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates the abandonment gesture" \
+    "dies with the branch|live claim on its sections|[Dd]elete (its|the story|the abandoned) branch|[Rr]emove its worktree|worktree removed|discard the branch" \
+    $(declared_skills | grep -vx abandoning-a-story)
 
 # The mirror of the positive assertions above: a skill that carried both the new
 # wording and the old would leave every one of them green while still telling an
