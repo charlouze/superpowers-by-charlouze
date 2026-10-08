@@ -48,12 +48,10 @@ require adopting-a-module "the PR body lists every source"       "List every ret
 require adopting-a-module "offers to promote the gaps"           "to promote the gaps into the spec"
 require adopting-a-module "no mechanism is put up for promotion" "A gap that names a mechanism is not put to them"
 require adopting-a-module "produces the gaps register"           "gaps register"
-require adopting-a-module "the register declares its coverage"   "declares its own coverage"
 require adopting-a-module "exclusivity is scoped, not dropped"   "Within that bound, only they create normative text"
 # Step 4 points at the authority rule rather than restating it: a second full
 # statement of the same rule, a few hundred lines from the first, is what drifts.
 require adopting-a-module "step 4 points at the authority rule" "The authority rule of \`Source Authority\` above holds while you write"
-require adopting-a-module "a gap entry names its source document"   "came from a document names that document"
 require adopting-a-module "step 4 files the gap itself"            "goes straight into the gaps register"
 require adopting-a-module "the register is created when needed"    "the first time you need it"
 require adopting-a-module "the PR review is the gate"             "review of the adoption pull request"
@@ -72,7 +70,6 @@ require adopting-a-module "the design that follows starts fresh" "from the adopt
 require adopting-a-module "a spilling rule is about the rule's reach" "the signal is the rule's reach"
 require adopting-a-module "a spilling rule questions the breakdown" "the breakdown is what is in question"
 require adopting-a-module "names the one late signal on a boundary" "One late signal exists, and only one"
-require adopting-a-module "the register's gestures include removal"  "the commit that removes it says why"
 require adopting-a-module "promoting a gap removes its entry"        "an adoption that promotes a gap into the spec"
 
 # --- adopting-a-module: the technical decision that meets the conditions of an
@@ -120,7 +117,6 @@ require writing-a-batch "no story list in the batch document"     "list of stori
 require writing-a-batch "the story list counts pushed branches" "completed by the open pull requests and by the pushed \`story/*\` branches that carry no pull request yet"
 require writing-a-batch "writes no spec at opening"               "no writing into the specs"
 require writing-a-batch "PR review is the human gate"             "review of the batch pull request"
-require writing-a-batch "corrective batch reserves entries"       "reserved by batch"
 require writing-a-batch "declares the Feature flag field"         "Feature flag"
 require writing-a-batch "flag field is never left empty"          "never left empty"
 require writing-a-batch "flag is per batch and module"            "per (batch, module)"
@@ -160,7 +156,6 @@ require writing-a-batch "an obvious design is still written" "An obvious design 
 require writing-a-batch "requalification offers a different batch" "**Rule the remaining work a different batch**"
 require writing-a-batch "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
 require closing-a-batch "an amendment already released what it dropped" "An entry an amendment took out of \`Scope\` is not among them: that amendment released it."
-require adopting-a-module "an amendment releases a reservation" "| Release | \`supercharlouze:writing-a-batch\`, in an amendment pull request |"
 require writing-a-user-story "abandoning leaves the reservation to the amendment or closing" "the amendment that takes its entry out of \`Scope\` releases it, or \`supercharlouze:closing-a-batch\` does"
 require writing-a-user-story "an abandonment leaves closing the reservation no amendment released" "unless an amendment took its entry out of \`Scope\` and released it"
 require closing-a-batch "an amendment's release is the one exception" "except an amendment that takes a reserved entry out of \`Scope\` and releases it"
@@ -788,7 +783,6 @@ require closing-a-batch "names the Rulings log as a source"      "The **Rulings 
 require closing-a-batch "consolidates the open rulings too"      "the ones classified as a violation or a gap are yours"
 require closing-a-batch "red flag: the Rulings log's open rulings are closing's" \
     "| \"The Rulings log is the delivery review's business, not mine\" | Its open rulings classified as a violation or a gap are yours to consolidate. The review settled the rest. |"
-require closing-a-batch "releasing keeps the entry"  "removes the reservation annotation and leaves the entry"
 # This duty sorts what the stories brought back; it must not read as a definition
 # of either category. A fourth wording of "what a gap is" would sit outside the
 # `shared` assertion that locks the other three, and drift with nothing to catch it.
@@ -901,6 +895,42 @@ require using-batches "a bounded change invokes writing-in-a-spec before writing
 # Walks the declared entry skills, so one declared later is covered.
 entry_names="$(declared_skills entry | tr '\n' '|')"
 absent "writing-in-a-spec names no skill that invokes it" "${entry_names%|}" writing-in-a-spec
+
+# --- writing-in-a-gaps-register: the register, an entry, the gestures (spec
+# section "The gaps register") ---
+require writing-in-a-gaps-register "carries the shape of the register"      "# <module> — Gaps register"
+require writing-in-a-gaps-register "the categories are kept apart"          "kept apart because they are not treated the same way"
+require writing-in-a-gaps-register "the register declares its coverage"     "declares its own coverage"
+require writing-in-a-gaps-register "nothing stays once an entry is settled" "Nothing stays behind in this file once an entry is settled"
+require writing-in-a-gaps-register "an entry designates a section"          "Each entry designates a section of the spec"
+require writing-in-a-gaps-register "a gap entry names its source document"  "came from a document names that document"
+require writing-in-a-gaps-register "the entry's shape is still stated without the word" \
+    "one list item, never a paragraph of running prose"
+require writing-in-a-gaps-register "carries the gestures"                   "## The Gestures"
+require writing-in-a-gaps-register "an added entry goes to the end of its category" \
+    "An entry is one list item, added at the end of its category"
+require writing-in-a-gaps-register "a removal travels with what settles it" \
+    "Delete the entry from the file, whole, in the same pull request as what settles it"
+require writing-in-a-gaps-register "a reservation annotates the entry"      "Append \`reserved by batch-NN\` to the entry"
+require writing-in-a-gaps-register "two batches never reserve the same entry" "two batches never reserve the same entry"
+require writing-in-a-gaps-register "releasing keeps the entry"              "removes the reservation annotation and leaves the entry"
+require writing-in-a-gaps-register "red flag: prose instead of a list" \
+    "| \"Prose reads better than a list in the gaps register\" | Then nothing can reserve, remove or release an entry"
+require writing-in-a-gaps-register "red flag: an empty register says why it is empty" \
+    "| \"The audit found nothing, so the register is empty\" | An empty register must say whether nothing was found or nothing was examined. |"
+require writing-in-a-gaps-register "says what the invoking skill passes" \
+    "The skill that invokes it says which gesture to make"
+require writing-in-a-gaps-register "says when to go back to the step that invoked it" \
+    "Once the register is written, go on with the step that invoked this skill."
+case "$(body_flat "$REPO_ROOT/skills/writing-in-a-gaps-register/SKILL.md")" in
+    *"# <module> — Gaps register"*"## Coverage"*"## Violations"*"## Gaps"*)
+        pass "writing-in-a-gaps-register: the register keeps its coverage and its categories" ;;
+    *)  fail "writing-in-a-gaps-register: the register keeps its coverage and its categories" ;;
+esac
+
+# An internal skill names the skills it invokes, never those that invoke it.
+# Walks the declared entry skills, so one declared later is covered.
+absent "writing-in-a-gaps-register names no skill that invokes it" "${entry_names%|}" writing-in-a-gaps-register
 
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"

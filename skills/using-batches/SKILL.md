@@ -41,20 +41,7 @@ The spike / bounded / architectural classification of `superpowers:brainstorming
   Before its pull request opens, a bounded change's branch carries no declaration, since the declaration lives in the pull request body. Once pushed, it is read like any branch that has not declared yet, by the sections it has already changed. Unpushed, it is invisible, like any branch the remote does not carry.
 
 - **(c) It carries no feature flag.** A bounded change is complete in its own pull request, so it satisfies the exemption criterion by construction.
-- **(d) It writes to a gaps register directly.** Belonging to no batch, it may both add an entry and delete one in `docs/specs/<module>.gaps.md`, from its own pull request, contending only with another bounded change.
-
-  An entry is one list item, added at the end of its category.
-
-  When it deletes one, the commit that removes it says why.
-
-  A finding already deleted from the register is re-entered only if the entry says what has changed since. Read the file's history before adding an entry (`git log -p docs/specs/<module>.gaps.md`): what was set aside was set aside for a reason, written in the commit that removed it.
-
-  What qualifies an entry lives in the entry: no prose qualifies a *group* of them, and what an entry's neighbours have in common is repeated in each of them.
-
-  An entry designates no other entry: a settled entry leaves the file whole, and takes with it anything that pointed at it.
-
-  Within a batch, only the closing pull request adds entries to the gaps register: stories record their findings in their own document, and `supercharlouze:closing-a-batch` consolidates them.
-
+- **(d) It writes to a gaps register directly.** Belonging to no batch, it may both add an entry and delete one in `docs/specs/<module>.gaps.md`, from its own pull request, contending only with another bounded change. Invoke `supercharlouze:writing-in-a-gaps-register` before writing in it.
 - **(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.** Invoke `supercharlouze:recording-a-decision` to write or rewrite one. Delete yourself the one your human partner abandons, and correct yourself, on their decision, a text whose decision does not change.
 - **(f) It holds the ADRs `main` carries when its branch starts.** Once `bounded/<slug>` is created, reread `docs/adr/` and hold what you find there: the design read it where you stood, and the branch starts from `main` as the remote carries it. When you cannot hold an ADR, put it to your human partner: if they rule it untenable, rewrite or delete it under rule (e); otherwise hold it.
 - **(g) It puts to your human partner the technical decision it takes that meets the conditions of an ADR `supercharlouze:following-the-rules` states.** That holds for a decision taken along the way as for one taken at design. If they want it as an ADR, write it under rule (e).

@@ -11,4 +11,5 @@ rereading-a-spec internal
 rereading-a-technical-design internal
 recording-a-decision internal
 writing-in-a-spec internal
+writing-in-a-gaps-register internal
 following-the-rules foundation

@@ -91,6 +91,42 @@ shared "the other-implementation test bears one name" \
     "other-implementation test" \
     writing-in-a-spec rereading-a-spec adopting-a-module
 
+# The shape of a gaps register, the rules of an entry and the gestures live in
+# one place, `writing-in-a-gaps-register`. A skill that writes in a register
+# invokes it and restates nothing: `adopting-a-module` creates the file and
+# removes the entry of a gap it promotes, `closing-a-batch` adds and releases,
+# `using-batches` carries the bounded change, `writing-a-batch` reserves and
+# releases, `writing-a-user-story` removes the entry its story resolves.
+for s in adopting-a-module closing-a-batch using-batches writing-a-batch writing-a-user-story; do
+    require "$s" "invokes writing-in-a-gaps-register before writing in a gaps register" \
+        "nvoke \`supercharlouze:writing-in-a-gaps-register\` before"
+done
+# What it carries is spelled there and nowhere else. Walks the declared skills,
+# so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill restates the rules of a gaps register entry or its gestures" \
+    "What qualifies an entry lives in the entry|An entry designates no other entry|is one list item|Read the file's history before adding an entry|re-entered only if the entry says what has changed|the commit that removes it says why|removes the reservation annotation|declares its own coverage|— Gaps register|Within a batch, only the closing pull request adds entries to the gaps register" \
+    $(declared_skills | grep -vx writing-in-a-gaps-register)
+
+# Each caller passes what varies: the batch number of a reservation and of its
+# release, the reason of a removal, the coverage an audit gives.
+require writing-a-batch "the opening invokes the reservation with its number" \
+    "invoke \`supercharlouze:writing-in-a-gaps-register\` before reserving one, and give it this batch's \`NN\`"
+require writing-a-batch "an amendment invokes the release" \
+    "releases its reservation in the same pull request: invoke \`supercharlouze:writing-in-a-gaps-register\` before releasing it"
+require adopting-a-module "the adoption writes the coverage from its audit" \
+    "Write the register's \`Coverage\` from this audit"
+require adopting-a-module "a promotion gives the removal its reason" \
+    "that is the reason the commit that removes it gives"
+require writing-a-user-story "a story adds no entry itself" \
+    "Do not add those observations to the gaps register yourself"
+require closing-a-batch "the consolidation is written into each entry" \
+    "write \"consolidated by batch NN\" into each entry that needs it, never above them"
+require closing-a-batch "the release invokes the gesture" \
+    "release it. Invoke \`supercharlouze:writing-in-a-gaps-register\` before releasing one."
+require closing-a-batch "an undelivered block joins the register through the gesture" \
+    "invoke \`supercharlouze:writing-in-a-gaps-register\` and add it under **Gaps**"
+
 # The corrective batch's stop condition is copied "in full" into a story's
 # Global Constraints. `following-the-rules` states it and `writing-a-user-story` has it
 # copied; a copy that adds or drops a sentence is no longer the condition the
@@ -371,23 +407,15 @@ absent_everywhere "no skill scopes the blockless first commit to a corrective st
     "\*\*Corrective story\.\*\*|A corrective story is the one exception"
 
 # Removal leaves no trace in the register, so what a module already rejected is
-# readable only in the file's history. Both writers that add an entry — a
-# batch's closing and a bounded change — owe that read. One assertion over both,
-# because a rule only one of them carries is a rule the other writer never sees.
-shared "both writers read the file's history before adding" \
-    "Read the file's history before adding an entry" \
-    closing-a-batch using-batches
+# readable only in the file's history. The skill that carries the gestures
+# states that read.
+require writing-in-a-gaps-register "the history is read before an entry is added" \
+    "Read the file's history before adding an entry"
 
 # The removal duty — say why in the commit, because the file keeps nothing once
-# the entry is gone — is stated in four skills, and it is stated word for word.
-# Three of them prescribe a removal; `closing-a-batch` states it while explaining
-# why an entry a story resolved is not there to release, which is the one place a
-# reader could otherwise conclude that closing removes entries too. One assertion
-# over the four: four `require` calls would each stay green while one end reworded
-# the duty away from the others.
-shared "the removal duty is spelled alike wherever it is stated" \
-    "the commit that removes it says why" \
-    adopting-a-module writing-a-user-story closing-a-batch using-batches
+# the entry is gone — is stated by the skill that carries the gestures.
+require writing-in-a-gaps-register "a removal says why in its commit" \
+    "the commit that removes it says why"
 
 # The same sentence about what an abandoned story leaves behind is written in
 # two skills, and it names the gesture the register now uses. One assertion over
@@ -416,28 +444,17 @@ absent_everywhere "no skill strikes a gaps register entry" \
 absent_everywhere "no skill calls an entry addressable" \
     "[Aa]ddressable"
 
-# The word leaves, the rule stays: without this assertion, deleting the whole
-# sentence would pass green.
-shared "the entry's shape is still stated without the word" \
-    "one list item, never a paragraph of running prose" \
-    adopting-a-module
-
 # A register is reread entry by entry, and nothing keeps a prose that
 # qualifies a group in step: it goes false without anyone having touched it.
-# The three skills that *add* an entry say so — adoption writes all its gaps
-# at once, closing consolidates several stories, the bounded change writes
-# alone. One assertion over the three: three `require`s would stay green while
-# one edge got reworded.
-shared "every writer that adds an entry keeps a group's qualification out" \
-    "What qualifies an entry lives in the entry" \
-    adopting-a-module closing-a-batch using-batches
+# The skill that carries the rules of an entry says so.
+require writing-in-a-gaps-register "a group's qualification stays out of the register" \
+    "What qualifies an entry lives in the entry"
 
 # A settled entry leaves the file and takes with it whatever pointed at it:
 # the entry-to-entry cross-reference loses its target without anyone editing
-# it. The same three writers say so, in the same words, under one assertion.
-shared "every writer that adds an entry keeps entries from pointing at each other" \
-    "An entry designates no other entry" \
-    adopting-a-module closing-a-batch using-batches
+# it. The same skill says so.
+require writing-in-a-gaps-register "entries do not point at each other" \
+    "An entry designates no other entry"
 
 # The pairing of a spec change with its code is stated by the negation, because a
 # story may carry code alone — a corrective batch's story does today. Both skills
@@ -593,33 +610,23 @@ absent_everywhere "no skill requires continuous deployment" \
     "[Cc]ontinuous"
 
 # Within a batch, one pull request adds to a gaps register: the closing one.
-# Every skill on the batch path says so in the same words.
-shared "only the closing pull request adds entries within a batch" \
-    "Within a batch, only the closing pull request adds entries to the gaps register" \
-    closing-a-batch using-batches writing-a-user-story
+# The skill that carries the gestures says so.
+require writing-in-a-gaps-register "only the closing pull request adds entries within a batch" \
+    "Within a batch, only the closing pull request adds entries to the gaps register"
 
 # A finding the register already let go comes back only with what changed.
-# The writers that add an entry say so alike.
-shared "a deleted finding is re-entered only with what changed" \
-    "A finding already deleted from the register is re-entered only if the entry says what has changed since" \
-    closing-a-batch using-batches
+require writing-in-a-gaps-register "a deleted finding is re-entered only with what changed" \
+    "A finding already deleted from the register is re-entered only if the entry says what has changed since"
 
-# The spec no longer carries the register's format; the writers that append
-# to it keep it.
-shared "the writers that append keep the entry format" \
-    "An entry is one list item, added at the end of its category" \
-    closing-a-batch using-batches
+# The spec no longer carries the register's format; the skill that carries the
+# gestures keeps it.
+require writing-in-a-gaps-register "an added entry keeps the entry format" \
+    "An entry is one list item, added at the end of its category"
 
 # The former wording left the batch's adding writer unnamed, and placed an
 # entry at the end of a section.
 absent_everywhere "no skill leaves the batch's adding writer unnamed" \
     "one writer per batch|single writer per batch|at the end of a section"
-
-# The gesture table of the adoption lists every writer, the closing that adds
-# included.
-shared "the adoption's gesture table names the closing that adds" \
-    "| Add | \`supercharlouze:closing-a-batch\`, in the batch's closing pull request |" \
-    adopting-a-module
 
 # The batch-document reread is a step of its own, before the pull request opens.
 absent_everywhere "no skill folds the document reread into opening the pull request" \

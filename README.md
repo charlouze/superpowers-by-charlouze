@@ -227,6 +227,7 @@ There is never an undeclared fifth one.
 | `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design, its blocks and its ADRs reread |
 | `supercharlouze:recording-a-decision` | Never directly — a building block the other skills invoke to have an ADR written or rewritten |
 | `supercharlouze:writing-in-a-spec` | Never directly — a building block the other skills invoke before writing into a spec |
+| `supercharlouze:writing-in-a-gaps-register` | Never directly — a building block the other skills invoke before writing into a gaps register |
 
 ## Requirements
 
