@@ -735,4 +735,28 @@ bash ~/.config/github-app/as-agent.sh git commit -m "feat: les skills qui écriv
 
 ## Rulings log
 
+Ruling: la story reste technique alors que cinq skills se mettent à invoquer `writing-in-a-gaps-register` — la spec dit ce qu'un gaps register porte et ne dit pas quelle skill le porte, et l'arbitrage a déjà été rendu pour `writing-in-a-spec` — si c'est faux, la story est à requalifier et le lot à amender.
+
+Ruling: la table de `adopting-a-module` qui disait quelle skill fait quel geste n'est reprise nulle part — une skill interne ne nomme pas celles qui l'invoquent, et chaque skill appelante dit déjà son propre moment — si c'est faux, plus aucun texte ne montre d'un coup d'œil qui écrit dans un gaps register, et la table est à réécrire sans nom de skill.
+
+Ruling: le geste `Reserve` dit comment réserver et ne dit pas quand — seule l'ouverture d'un lot l'invoque pour réserver, donc la violation sur `The gaps register` reste telle quelle pour la story qui la résorbe — si c'est faux, un amendement qui ajoute une entrée à `Scope` la réserve dès cette story, hors de l'ordre que les `Constraints` fixent.
+
+Ruling: le geste `Remove` dit « in the same pull request as what settles it », là où `writing-a-user-story` disait « atomically with the code » et `adopting-a-module` « in the same pull request that writes the rule it became » — les deux formules disent la même règle pour deux appelants — si c'est faux, un changement borné lit une contrainte que rule (d) ne lui posait pas en ces mots.
+
+Ruling: `adopting-a-module` invoque `writing-in-a-gaps-register` une fois, à l'étape 4, et ses étapes 5 à 7 écrivent dans le registre sans le redire — une adoption se conduit dans un seul contexte, où la skill reste chargée — si c'est faux, une adoption reprise après une perte de contexte écrit des entrées sans la skill, et une phrase d'invocation est à ajouter aux étapes 5 et 6.
+
+Ruling: l'étape 3 de `Requalifying a Corrective Batch`, dans `writing-a-batch`, libère des réservations sans invoquer `writing-in-a-gaps-register` — elle renvoie à l'amendement ou à la clôture, qui l'invoquent tous deux — si c'est faux, une requalification libère une entrée sans la skill.
+
+Ruling: l'amendement invoque `writing-in-a-gaps-register` pour libérer sans lui passer le numéro du lot, que l'ouverture lui passe pour réserver — libérer retire l'annotation que l'entrée porte déjà — si c'est faux, une phrase est à ajouter à `Amending a Batch`.
+
+Ruling: les avertissements propres à l'adoption et à la clôture sur le paragraphe qui qualifie un groupe d'entrées deviennent une phrase de `writing-in-a-gaps-register`, « Writing several entries at once is exactly when a group paragraph feels natural. », et `closing-a-batch` garde ce qu'elle écrit dans chaque entrée — la règle est la même pour les deux — si c'est faux, celui qui adopte un module ne se sait plus le premier visé.
+
+Ruling: `writing-a-user-story` garde « Do not add those observations to the gaps register yourself » sans la règle qui suivait, et la règle (d) de `using-batches` ne dit plus que les stories consignent leurs constats dans leur document — la règle est écrite en entier dans le geste `Add`, et la consigne de la story lui suffit — si c'est faux, une story ne lit plus pourquoi elle n'ajoute pas d'entrée.
+
+Ruling: la garde « the adoption's gesture table names the closing that adds » et la garde sur la ligne de table « an amendment releases a reservation » sont remplacées par la garde sur la règle dans `writing-in-a-gaps-register` et par les gardes d'invocation de `closing-a-batch` et de `writing-a-batch` — la table qu'elles lisaient n'existe plus — si c'est faux, une garde manque sur ce que la table disait.
+
+Ruling: les phrases d'ouverture en gras des règles d'une entrée sont reprises telles quelles — une extraction déplace un texte sans le changer — si c'est faux, la skill neuve marque en gras plus que ce qu'un agent est tenté de sauter.
+
+Ruling: le geste `Add` porte « Within a batch, only the closing pull request adds entries to the gaps register » sans nommer l'adoption ni le changement borné — la borne « Within a batch » les laisse dehors, et chacun dit qu'il ajoute dans sa propre skill — si c'est faux, un agent lit que seule une clôture ajoute.
+
 ## Observed drift
