@@ -597,8 +597,6 @@ require opening-a-batch "allocation reads main on the remote" "git ls-tree --nam
 # --- delivering-a-story (spec 3, 4.4, 5.1, 5.3) ---
 require delivering-a-story "concurrency via declared Sections"  "Sections:"
 require delivering-a-story "transcription is the first commit"  "first commit on the branch"
-require delivering-a-story "freeze travels in Global Constraints" "Global Constraints"
-require delivering-a-story "freeze ends when the PR opens"      "freeze is lifted when the pull request opens"
 require delivering-a-story "hands off to writing-plans"         "superpowers:writing-plans"
 require delivering-a-story "requires SDD"                       "superpowers:subagent-driven-development"
 require delivering-a-story "constrains finishing to the PR"     "Push and create a Pull Request"
@@ -641,50 +639,71 @@ require delivering-a-story "a fired stop condition routes to handling-a-stopped-
 require delivering-a-story "a rule belongs to exactly one spec" "A rule belongs to exactly one spec."
 require delivering-a-story "no ruling houses a rule twice"      "no ruling puts a rule in two places"
 
-# --- delivering-a-story: what Global Constraints carries (spec section "The user story document") ---
+# --- delivering-a-story: what Global Constraints carries ---
 require delivering-a-story "GC carries the batch Constraints"   "\`Constraints\` section copied verbatim"
-require delivering-a-story "GC carries the spec freeze"         "freeze of the spec file"
-require delivering-a-story "GC carries the authority rule"      "That rule is the authority rule \`Global Constraints\` carries"
-require delivering-a-story "the authority rule is stated in full" "the spec wins — without exception and without deliberation"
-require delivering-a-story "GC carries the corrective stop condition" "the stop condition proper to a corrective batch, written out in full"
-require delivering-a-story "GC lists the concision rules"       "- the concision rules;"
-require delivering-a-story "GC carries the concision rules"     "In every story, \`Global Constraints\` carries the concision rules, written out in full"
-require delivering-a-story "the concision block names what it covers" "These rules hold for every document, pull request body and commit message this story writes"
-require delivering-a-story "GC carries the guarded-code rules"  "carries the rules for code under a flag, written out in full"
-require delivering-a-story "GC carries the technical stop condition" "carries the stop condition proper to a technical story, written out in full"
-require delivering-a-story "GC lists the technical stop condition" "- **in a technical story only**, the stop condition proper to a technical story"
-require delivering-a-story "GC lists the stop condition on a constraint or an ADR" \
-    "- **only if the batch declares constraints or \`docs/adr/\` carries an ADR**, the stop condition on a constraint or an ADR that cannot be held"
-require delivering-a-story "GC carries the stop condition on a constraint or an ADR" \
-    "**In a story whose batch declares constraints, or whose \`docs/adr/\` carries an ADR, \`Global Constraints\` carries the stop condition on a constraint or an ADR that cannot be held, written out in full.**"
+require delivering-a-story "GC is written from its template" \
+    "is written from \`skills/delivering-a-story/references/global-constraints.md\`"
+require delivering-a-story "GC names the rules that hold and gives the ADR paths" \
+    "the name of each execution rule that holds for this story, and the path of each ADR this story's code holds, or \`none\`"
+require delivering-a-story "GC copies no execution rule" \
+    "**It names the execution rules and copies none.**"
+require delivering-a-story "a rule copied into a plan drifts" \
+    "a rule copied into a plan drifts from the one written there"
+require delivering-a-story "the technical stop condition is named in GC" \
+    "what catches a false one is the \`technical stop condition\`, which \`Global Constraints\` names"
+require delivering-a-story "the stop conditions reach the implementers through GC and the foundation" \
+    "It reaches the implementers through \`Global Constraints\` (Step 4), which names it and sends them to \`supercharlouze:following-the-rules\`, where it is written."
+# The mirror: no text of an execution rule survives in the story skill or in its
+# template, where it would drift from the foundation with nothing to hold it.
+absent "the story skill copies no execution rule" \
+    "written out in full|Copy (the block below|it) verbatim|undoing it is expensive|Every paragraph carries one rule|no task modifies the spec file|holds up when the flag is on" \
+    delivering-a-story
+
+# The template of `Global Constraints` is pasted into a plan, where whoever
+# executes or reviews a task reads it with nothing else in hand.
+GC_TEMPLATE="$SKILLS_DIR/delivering-a-story/references/global-constraints.md"
+GC_FLAT=""
+if [ -f "$GC_TEMPLATE" ]; then
+    pass "the Global Constraints template exists"
+    GC_FLAT="$(body_flat "$GC_TEMPLATE")"
+else
+    fail "the Global Constraints template exists"
+fi
+gc_has() {
+    case "$GC_FLAT" in
+        *"$2"*) pass "the Global Constraints template: $1" ;;
+        *)      fail "the Global Constraints template: $1" ;;
+    esac
+}
+gc_has "asks to invoke the foundation" \
+    "Before you execute or review a task of this plan, invoke \`supercharlouze:following-the-rules\`."
+gc_has "says where the named rules are read" \
+    "Its \`Execution Rules\` section says where each rule named here is written: read them there, and follow them."
+gc_has "carries the batch's constraints word for word" \
+    "<the \`Constraints\` section of the batch document, word for word>"
+gc_has "labels the ADR paths" \
+    "**ADRs the code of this story holds:** \`docs/adr/<slug>.md\`"
+gc_has "the ADR paths are none when there is no ADR" \
+    "write \`none\` when it carries none"
+gc_has "keeps the names of the rules that hold, and no other" \
+    "Keep on the \`Execution rules:\` line the name of each rule that holds for this story, and delete the others."
+gc_has "takes from the foundation which story a rule holds for" \
+    "\`Execution Rules\` in \`supercharlouze:following-the-rules\` says which story each rule holds for."
+gc_has "is changed only where its steps fill it" \
+    "change nothing in it but what the steps below fill"
+
 require delivering-a-story "a batch declares constraints when they are not none" \
     "A batch declares constraints when its \`Constraints\` section is not \`none\`."
 require delivering-a-story "docs/adr carries an ADR when a .md file sits in it" \
     "\`docs/adr/\` carries an ADR when a \`.md\` file is placed directly in it, in this story's worktree."
-require delivering-a-story "working around a constraint or an ADR breaks what the implementer cannot see" \
-    "A constraint is a decision another story of the batch relies on, and an ADR is a decision your human partner took for all the code to come, so an implementer who works around either breaks something they cannot see."
 require delivering-a-story "step 5 names both triggers of the condition" \
     "In a story whose batch declares constraints or whose \`docs/adr/\` carries an ADR: if, while conducting it, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner."
 require delivering-a-story "step 5 sets aside the constraint the spec contradicts" \
     "A constraint the spec contradicts is not this case, since the spec wins."
 require delivering-a-story "the worktree carries the ADRs the code holds" \
     "the worktree carries the ADRs \`main\` carried when the branch started, which are the ones this story's code holds."
-require delivering-a-story "an implementer leaves the ADR to the review" \
-    "Only your human partner decides an ADR, so an implementer who takes such a decision reports it and leaves the file to the review."
-require delivering-a-story "GC lists the ADRs the code holds" \
-    "- **only if \`docs/adr/\` carries an ADR**, the paths of the ADRs this story's code holds;"
-require delivering-a-story "GC lists the conditions of an ADR" \
-    "- the conditions of an ADR, with the obligation to record as an \`Open ruling:\` the decision that meets them."
-require delivering-a-story "GC carries the paths of the ADRs" \
-    "**When \`docs/adr/\` carries an ADR, \`Global Constraints\` lists the path of each one, under the sentence below.**"
-require delivering-a-story "the sentence the paths sit under" \
-    "The code this story writes holds these ADRs."
 require delivering-a-story "an ADR left out of the list binds nobody" \
     "An implementer reads only this list, so an ADR whose path is missing from it binds nobody."
-require delivering-a-story "GC carries the conditions of an ADR" \
-    "**In every story, \`Global Constraints\` carries the conditions of an ADR, written out in full, with the obligation to record the decision that meets them.**"
-require delivering-a-story "a task records the decision as an open ruling" \
-    "When you take a technical decision that meets them, say so in your report: it is recorded as an \`Open ruling:\`, which asks your human partner whether they want it as an ADR. Write nothing in \`docs/adr/\`."
 require delivering-a-story "no task writes in docs/adr" \
     "No task writes in \`docs/adr/\`. The ADR a decision of this story deserves is written at the review (Step 7), once your human partner wants it."
 require delivering-a-story "step 6 records the decision that meets the conditions" \
@@ -705,16 +724,9 @@ require delivering-a-story "red flag: no task writes the ADR" \
     "| \"This decision deserves an ADR, I'll write it with the code\" | No task writes in \`docs/adr/\`. Record an \`Open ruling:\`, and write the ADR at the review if your human partner wants it. |"
 require delivering-a-story "red flag: a ruling replaces no stop condition" \
     "| \"This constraint, or this ADR, cannot be held, I'll work around it and record a ruling\" | A ruling replaces no stop condition. Another story of the batch relies on that constraint, and your human partner decided that ADR: stop and put it to them. |"
-require delivering-a-story "the owning batch does not decide"   "whether the flag was declared by this story's batch or by another one"
-require delivering-a-story "GC is the only channel to SDD subagents" "only channel to this skill's rules is this list"
+require delivering-a-story "red flag: the owning batch does not decide" \
+    "| \"This story writes guarded code, but the flag is another batch's\" | \`Global Constraints\` names \`code under a feature flag\` all the same. What decides is that this story writes guarded code, not which batch owns the flag. |"
 
-# --- delivering-a-story: the rules a guarded story copies into Global
-# Constraints (spec section "Code under a feature flag") ---
-require delivering-a-story "guarded code holds up in every situation" "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off:"
-require delivering-a-story "both states work on the same data" "The two states work on the same data: what one produces, the other reads and uses, with no error and no data loss."
-require delivering-a-story "flag off restores the former behaviour" "With the flag off, the user finds the behaviour from before the batch."
-require delivering-a-story "both states and their coexistence are tested" "The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence."
-require delivering-a-story "lifting only removes"               "Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new."
 require following-the-rules "the foundation states the rules for code under a flag" "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off:"
 
 # --- delivering-a-story: Lifting and Teardown Stories ---
@@ -1461,7 +1473,7 @@ require following-the-rules "a corrective batch's delta carries no block" \
 # records" and "Bounded change") ---
 require following-the-rules "defines the ADR" \
         "**ADR** — the document that records a technical decision of the project and its reason: a \`.md\` file placed directly in \`docs/adr/\`, at \`docs/adr/<slug>.md\`."
-# The reference text of the conditions. Word for word: another skill copies it.
+# The reference text of the conditions.
 require following-the-rules "the conditions of an ADR, word for word" \
         "A technical decision is recorded as an ADR only if it meets these conditions: - undoing it is expensive; - it surprises whoever does not know its context; - it settles between real alternatives."
 require following-the-rules "the human decides every ADR" \
@@ -1551,12 +1563,43 @@ for declared in $(declared_skills); do
 done
 absent "the foundation names no skill" "$foundation_skill_names" following-the-rules
 
-# Each execution rule has a name a story's Global Constraints can cite.
-for rule in "spec freeze" "spec authority" "concision" "corrective stop condition" \
-    "code under a feature flag" "technical stop condition" \
-    "untenable constraint or ADR" "held ADRs" "decision worth an ADR"; do
-    require following-the-rules "names the execution rule: $rule" "| \`$rule\` |"
-done
+# Each execution rule has a name a story's Global Constraints can cite, says
+# which story it holds for and names the section it is written under.
+require following-the-rules "execution rule: spec freeze" \
+    "| \`spec freeze\` | every story | \`Authority and Conflict Rules\` |"
+require following-the-rules "execution rule: spec authority" \
+    "| \`spec authority\` | every story | \`Authority and Conflict Rules\` |"
+require following-the-rules "execution rule: concision" \
+    "| \`concision\` | every story | \`Concision\` |"
+require following-the-rules "execution rule: corrective stop condition" \
+    "| \`corrective stop condition\` | a story of a corrective batch | \`Stop Conditions\` |"
+require following-the-rules "execution rule: code under a feature flag" \
+    "| \`code under a feature flag\` | a story that writes code guarded by a flag, whichever batch declares the flag | \`Code Under a Feature Flag\` |"
+require following-the-rules "execution rule: technical stop condition" \
+    "| \`technical stop condition\` | a technical story | \`Stop Conditions\` |"
+require following-the-rules "execution rule: untenable constraint or ADR" \
+    "| \`untenable constraint or ADR\` | a story whose batch declares constraints, or whose branch starts from a \`main\` that carries an ADR | \`Stop Conditions\` |"
+require following-the-rules "execution rule: held ADRs" \
+    "| \`held ADRs\` | a story whose branch starts from a \`main\` that carries an ADR | \`The Model\` |"
+require following-the-rules "execution rule: decision worth an ADR" \
+    "| \`decision worth an ADR\` | every story | \`Decisions Worth an ADR\` |"
+
+# Whoever executes or reviews a task reads the rules in the foundation: a plan
+# names them and copies none.
+require following-the-rules "who follows the execution rules" \
+    "Whoever executes or reviews a task of a story's plan follows the execution rules."
+require following-the-rules "a plan names the execution rules and copies none" \
+    "The plan's \`Global Constraints\` names those that hold for the story, and copies none."
+require following-the-rules "a task starts by reading the rules its plan names" \
+    "**Before you start a task, read each rule \`Global Constraints\` names, under the section this table gives for it:**"
+require following-the-rules "the freeze lifts when the pull request opens" \
+    "Once the pull request is open the freeze lifts"
+require following-the-rules "why the freeze is an execution rule" \
+    "The spec file travels in the same branch as the code, so a task can edit it, which is why the freeze is an execution rule."
+require handling-a-stopped-story "the technical stop condition is named in the plan" \
+    "states it, and the \`Global Constraints\` of every technical story names it"
+absent_everywhere "no skill says an execution rule is copied into Global Constraints" \
+    "copied into the \`Global Constraints\`|copies it into the \`Global Constraints\`|go into \`Global Constraints\`"
 
 # The rules for code under a flag are written in full in the foundation.
 require following-the-rules "guarded code holds up in the three states of the flag" \

@@ -195,29 +195,39 @@ require closing-a-batch "the release invokes the gesture" \
 require closing-a-batch "an undelivered block joins the register through the gesture" \
     "invoke \`supercharlouze:writing-in-a-gaps-register\` and add it under **Gaps**"
 
-# The corrective batch's stop condition is copied "in full" into a story's
-# Global Constraints. `following-the-rules` states it and `delivering-a-story` has it
-# copied; a copy that adds or drops a sentence is no longer the condition the
-# spec names. One assertion over both ends.
-shared "the corrective stop condition is copied exactly as stated" \
-    "you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified." \
-    following-the-rules delivering-a-story
+# A story's Global Constraints names the execution rules and copies none: the
+# foundation is the one place each is written, and whoever executes or reviews a
+# task reads it there. The template of Global Constraints lets a plan cite every
+# name the foundation gives, and no other: a name the foundation does not give
+# sends its reader to a rule that is written nowhere, and a name the template
+# leaves out is a rule no plan can ask for.
+foundation_rule_names() {
+    awk '/^## Execution Rules$/ { f = 1; next }
+         f && /^#/ { exit }
+         f && /^\| `/ { split($0, cell, "`"); print cell[2] }' \
+        "$SKILLS_DIR/following-the-rules/SKILL.md" | sort
+}
+template_rule_names() {
+    { grep -m1 '^\*\*Execution rules:\*\*' \
+        "$SKILLS_DIR/delivering-a-story/references/global-constraints.md" 2>/dev/null || true; } \
+        | { grep -oE '`[^`]+`' || true; } | tr -d '`' | sort
+}
+FOUNDATION_RULES="$(foundation_rule_names)"
+TEMPLATE_RULES="$(template_rule_names)"
+if [ -n "$FOUNDATION_RULES" ] && [ "$FOUNDATION_RULES" = "$TEMPLATE_RULES" ]; then
+    pass "the Global Constraints template cites every execution rule the foundation names, and no other"
+else
+    fail "the Global Constraints template cites every execution rule the foundation names, and no other"
+fi
 
-# The technical story's stop condition travels the same way: `following-the-rules`
-# states it and `delivering-a-story` has it copied into a story's Global
-# Constraints. Same argument as above — a copy that adds or drops a sentence is no
-# longer the condition the spec names. One assertion over both ends.
-shared "the technical stop condition is copied exactly as stated" \
-    "If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical." \
-    following-the-rules delivering-a-story
-
-# The stop condition on a constraint or an ADR that cannot be held travels the
-# same way, with the sentence that bounds it: an implementer who meets a
-# constraint the spec contradicts must find, in the same copy, that this is not
-# the case.
-shared "the stop condition on a constraint or an ADR is copied exactly as stated" \
-    "If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner. A constraint the spec contradicts does not fall under this condition: the spec wins." \
-    following-the-rules delivering-a-story
+# The stop conditions the flow adds are written in the foundation, each with the
+# sentence that bounds it.
+require following-the-rules "states the corrective stop condition" \
+    "you discover that it is the **spec** that is wrong and the code that is right, stop. The batch is no longer corrective and must be requalified."
+require following-the-rules "states the technical stop condition" \
+    "If, while conducting a technical story, you discover that it changes something observable at the module's boundary, stop. The story is no longer technical."
+require following-the-rules "states the stop condition on a constraint or an ADR" \
+    "If, while conducting a story, you discover that a constraint of its batch or an ADR cannot be held, stop and put it to your human partner. A constraint the spec contradicts does not fall under this condition: the spec wins."
 
 # The condition no longer bears on a constraint alone, nor fires only in a batch
 # that declares constraints: the former wording must survive nowhere, or a story
@@ -226,33 +236,21 @@ absent "the stop condition is no longer bounded to a constraint" \
     "a constraint of its batch cannot be held|constraint condition|whose batch declares constraints only" \
     using-batches following-the-rules delivering-a-story
 
-# The conditions of an ADR are copied into every story's Global Constraints.
-# `following-the-rules` states them and `delivering-a-story` has them copied: a
-# condition spelled differently in the copy is no longer the threshold the
-# human agreed to.
-shared "the conditions of an ADR are copied exactly as stated" \
-    "A technical decision is recorded as an ADR only if it meets these conditions: - undoing it is expensive; - it surprises whoever does not know its context; - it settles between real alternatives." \
-    following-the-rules delivering-a-story
-
 # An unrecorded departure is answered by the delivery review, not by what
 # closing does with the design: the former red flag must survive nowhere.
 absent "an unrecorded departure no longer leaves the design false" \
     "describing a mechanism nobody built" \
     delivering-a-story
 
-# The concision rules are copied into every story's Global Constraints.
-# `following-the-rules` states them and `delivering-a-story` has them copied; a rule
-# spelled differently in the copy is no longer the rule the implementers obey.
-# Only each rule's first sentence is pinned: the copy adapts the exception and
-# the gloss on relief for an implementer who reads nothing else.
+# The concision rules are written in the foundation, where whoever executes or
+# reviews a task reads them.
 for rule in \
     "Every sentence says one exact thing, once, and stands on its own." \
     "Every paragraph carries one rule." \
     "A rule says how far it holds, and an exception presents itself as one." \
     "A text says what it delivers or decides, without telling how it got there or why." \
     "No sentence is set in relief"; do
-    shared "the concision rule is copied as stated: $rule" "$rule" \
-        following-the-rules delivering-a-story
+    require following-the-rules "states the concision rule: $rule" "$rule"
 done
 
 # The mirror: an item of Global Constraints is named, never counted or numbered.
@@ -610,13 +608,17 @@ shared "the pairing is stated by the negation" \
 absent_everywhere "no skill pairs spec change and code unconditionally" \
     "ship together or not at all|\*both\* the spec change|the spec change and the code together"
 
-# The freeze is copied verbatim into the Global Constraints of every plan, so the
-# skill that states the norm and the skill that copies it must spell it identically.
-# Two separate assertions would each stay green while the copied wording drifted
-# from the stated one, and the implementers only ever read the copy.
-shared "the freeze is spelled alike wherever it is stated" \
-    "Between the first commit of the branch and the opening of the pull request, no task modifies the spec file" \
-    following-the-rules delivering-a-story
+# The freeze is written in the foundation, where whoever executes or reviews a
+# task reads it.
+require following-the-rules "states the freeze of the spec file" \
+    "Between the first commit of the branch and the opening of the pull request, no task modifies the spec file"
+
+# The authority rule is written in the foundation, where whoever executes or
+# reviews a task reads it.
+require following-the-rules "states that the spec wins over the batch" \
+    "**When a batch and a spec contradict each other, the spec wins — no exception, no deliberation.**"
+require following-the-rules "states that correcting a spec is a human act" \
+    "**Correcting a spec mid-batch is a human act, never an agent's.**"
 
 # The mirror. A skill carrying both anchors would leave the positive assertion
 # green while still handing implementers the old one. The needle is the bare term:
@@ -1021,17 +1023,11 @@ absent "the adoption does not copy the conditions of an ADR" \
     "undoing it is expensive|settles between real alternatives" \
     adopting-a-module
 
-# The rules for code under a flag are written in full in the foundation, and
-# `delivering-a-story` has them copied into a story's Global Constraints. A
-# copy that adds or drops a rule is no longer what the foundation states. One
-# assertion over both ends.
-shared "the rules for code under a flag are copied exactly as stated" \
-    "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off: - The two states work on the same data: what one produces, the other reads and uses, with no error and no data loss. - With the flag off, the user finds the behaviour from before the batch. - The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence. - Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new." \
-    following-the-rules delivering-a-story
+# The rules for code under a flag are written in full in the foundation, as one
+# block.
+require following-the-rules "states the rules for code under a flag as one block" \
+    "Code guarded by a feature flag holds up when the flag is on for some users only, on for everyone, and off: - The two states work on the same data: what one produces, the other reads and uses, with no error and no data loss. - With the flag off, the user finds the behaviour from before the batch. - The story's pull request tests the flag-on behaviour, the flag-off behaviour, and their coexistence. - Lifting the flag comes down to deleting the branching and the behaviour from before the batch, without writing anything new."
 
-# The story skill says where each text it has copied is stated.
-require delivering-a-story "copies the rules for code under a flag as the foundation states them" \
-    "Copy the block below verbatim, exactly as \`supercharlouze:following-the-rules\` states it"
 require delivering-a-story "takes the form of the gating sentence from the foundation" \
     "in the form \`supercharlouze:following-the-rules\` fixes"
 absent "the story skill no longer claims to be where the rules for code under a flag are written" \
@@ -1054,12 +1050,6 @@ done
 # A rule the foundation carries is pointed at there, never at using-batches.
 absent_everywhere "no skill points at using-batches for a rule the foundation carries" \
     "\`Concision\` in \`supercharlouze:using-batches\`|\`The Model\` of \`supercharlouze:using-batches\`"
-
-# The obligation to report a decision that meets the conditions of an ADR is
-# stated in the foundation and copied into a story's Global Constraints.
-shared "the open ruling obligation is copied exactly as stated" \
-    "it is recorded as an \`Open ruling:\`, which asks your human partner whether they want it as an ADR. Write nothing in \`docs/adr/\`." \
-    following-the-rules delivering-a-story
 
 # The prompt of the batch-document reader is pasted into the dispatch of a
 # subagent that loads no skill, so it copies what it needs from the skills that
