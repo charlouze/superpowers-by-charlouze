@@ -10,4 +10,5 @@ closing-a-batch entry
 rereading-a-spec internal
 rereading-a-technical-design internal
 recording-a-decision internal
+writing-in-a-spec internal
 following-the-rules foundation

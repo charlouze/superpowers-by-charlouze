@@ -65,17 +65,31 @@ absent "a branch with no declaration yet is not an unknown" \
     "concerns the spec it has already changed|it is an unknown and stops you|stop on an unknown" \
     using-batches following-the-rules writing-a-user-story
 
-# The content rule lives in one place, `using-batches`. A skill that writes into a
-# spec file names it and reuses its question verbatim rather than restating it —
-# a second formulation of the same rule is exactly what drifts. One assertion over
-# the files: separate ones would all stay green while one end reworded.
-# `adopting-a-module` is in the list because it does not merely write into a spec,
-# it creates one: every sentence of a spec's first version passes through it.
-# `closing-a-batch` is not: since it dropped the changelog line, it no longer
-# writes into a spec file at all.
-shared "whoever writes into a spec spells the other-implementation test identically" \
+# What a spec contains lives in one place, `writing-in-a-spec`. A skill that
+# writes a text a spec receives invokes it and restates nothing: a second
+# formulation of the same rule is what drifts. `adopting-a-module` writes a
+# spec's first version, `writing-a-batch` the blocks a spec will receive,
+# `writing-a-user-story` their transcription, and `using-batches` carries the
+# bounded change. `closing-a-batch` writes into no spec file.
+require writing-in-a-spec "states the question of the other-implementation test" \
+    "read this sentence as true of their code"
+for s in using-batches adopting-a-module writing-a-batch writing-a-user-story; do
+    require "$s" "invokes writing-in-a-spec before writing a text a spec receives" \
+        "nvoke \`supercharlouze:writing-in-a-spec\` before"
+done
+# The question is spelled in the skill that carries it and nowhere else. Walks
+# the declared skills, so one declared later is covered.
+# shellcheck disable=SC2046
+absent "no other skill spells the question of the other-implementation test" \
     "read this sentence as true of their code" \
-    using-batches writing-a-user-story adopting-a-module
+    $(declared_skills | grep -vx writing-in-a-spec)
+
+# The test has one name. The reading a spec reader receives is written in full
+# in `rereading-a-spec`, since a reader loads no skill, and it names the test as
+# the skill that carries it does.
+shared "the other-implementation test bears one name" \
+    "other-implementation test" \
+    writing-in-a-spec rereading-a-spec adopting-a-module
 
 # The corrective batch's stop condition is copied "in full" into a story's
 # Global Constraints. `following-the-rules` states it and `writing-a-user-story` has it
@@ -174,9 +188,8 @@ absent "no skill counts or ranks the forms of the gating sentence" \
 # document — that means nothing outside an adoption, and would have to be kept in
 # step with every context that finds gaps some other way.
 #
-# Scoped to the gloss, not the file: `using-batches` names a validated document
-# legitimately elsewhere, in the content rule, as one of the two places an
-# intention may come from.
+# Scoped to the gloss, not the file: a skill may name a validated document
+# legitimately elsewhere, as one of the two places an intention may come from.
 absent "no routing gloss names a source of gaps" \
     "Gaps\*?\*?[^.|]{0,160}validated document" \
     using-batches following-the-rules writing-a-batch
@@ -291,12 +304,16 @@ absent "only following-the-rules justifies dropping the directory precondition" 
     "Where you are standing does not matter" \
     adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
-# One home per rule: the norm is stated in the four skills that write normative
-# text, and it is stated there word for word. One assertion, never one per file:
-# four separate assertions would each stay green while one end drifts away from
-# the other three.
-shared "a rule belongs to exactly one spec" "A rule belongs to exactly one spec." \
-    using-batches adopting-a-module writing-a-batch writing-a-user-story
+# One home per rule: `writing-in-a-spec` states that a rule belongs to exactly
+# one spec, and the skills that invoke it keep only what their own step does
+# when a rule reaches past one module.
+require writing-in-a-spec "a rule belongs to exactly one spec, stated where it lives" \
+    "**A rule belongs to exactly one spec.** A rule that would constrain behaviour observable at the boundary of more than one module is not a rule looking for a home"
+
+# Each skill that invokes it names the rule where its own step stops on it.
+for s in adopting-a-module writing-a-batch writing-a-user-story; do
+    require "$s" "names the rule its step stops on" "**A rule belongs to exactly one spec.**"
+done
 
 # The batch document's immutability has a bound, and the bound is this closure
 # (spec section `Batch`). `writing-a-batch` states the rule and names closing as
@@ -506,7 +523,7 @@ shared "a flag's gating sentence is the one marker a spec admits" \
 
 absent "no skill denies a spec every marker" \
     "A spec carries none, ever" \
-    using-batches following-the-rules adopting-a-module
+    using-batches following-the-rules adopting-a-module writing-in-a-spec
 
 # A batch no longer says why it happens now, and its reserved entries go under
 # `Scope`, not under `Spec delta`. The positive assertions stay green beside a

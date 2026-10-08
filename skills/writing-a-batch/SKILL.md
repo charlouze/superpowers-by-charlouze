@@ -215,6 +215,10 @@ now would put behaviour into the spec that no code delivers — drift by
 definition, and the reviewers of a story would then report as missing what is
 merely not built yet.
 
+**Invoke `supercharlouze:writing-in-a-spec` before writing a block.** A block is
+the exact text a spec will receive, so what a spec contains holds for every
+sentence of it.
+
 **A block is the unit of the delta.** Each one carries an identifier `D<n>`,
 unique within the batch, and names the spec and the section it targets.
 

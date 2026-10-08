@@ -862,29 +862,45 @@ require following-the-rules "the spec binds, the design guides" \
 require following-the-rules "defines the technical design ruling" \
         "**Technical design ruling** — a ruling by which a story departs from its batch's technical design."
 
-# --- using-batches: what a spec says (spec section "The spec document") ---
-require using-batches "the test bears on the module boundary"   "bears on the module's boundary"
-require using-batches "infrastructure states branches and PRs"  "states branch names and pull requests as rules"
-require using-batches "no rewording a mechanism into a rule"    "You do not reword a mechanism into a rule"
-require using-batches "lists the laundering signs"              "Four signs recognise it"
-require using-batches "a business choice carries its number"    "A business choice carries its number"
-require using-batches "vagueness is not prudence"               "Vagueness is not prudence"
-require using-batches "a number says where it comes from"       "a decision, or a reading of the code"
-require using-batches "structure follows the business"          "structure follows the business"
-require using-batches "the ban is on the code's decomposition"   "reproduces the code's internal decomposition"
-require using-batches "a boundary concept may gather rules"      "A section carrying a concept observable at the module's boundary"
-require using-batches "a glossary is a rule, not a leak"        "Naming is not mechanising"
-require using-batches "one normative level, no ranking"         "normative, at the same level"
-require using-batches "a module redefines what it borrows"      "redefines what it borrows"
-require using-batches "the gaps register is out of scope"       "\`docs/specs/<module>.gaps.md\`, which is not a spec"
-require using-batches "states the content rule itself"          "business rules and intentions; the mechanism stays in the code"
-require using-batches "corollary: a rule outlives a mechanism"  "A rule does not move when a mechanism moves"
-require using-batches "corollary: no legislating on quality"    "does not legislate on code quality"
-require using-batches "carries the section it points at"        "## What a Spec Says"
+# --- writing-in-a-spec: what a spec says (spec section "The spec document") ---
+require writing-in-a-spec "the test bears on the module boundary"   "bears on the module's boundary"
+require writing-in-a-spec "infrastructure states branches and PRs"  "states branch names and pull requests as rules"
+require writing-in-a-spec "no rewording a mechanism into a rule"    "You do not reword a mechanism into a rule"
+require writing-in-a-spec "lists the laundering signs"              "Four signs recognise it"
+require writing-in-a-spec "a business choice carries its number"    "A business choice carries its number"
+require writing-in-a-spec "vagueness is not prudence"               "Vagueness is not prudence"
+require writing-in-a-spec "a number says where it comes from"       "a decision, or a reading of the code"
+require writing-in-a-spec "structure follows the business"          "structure follows the business"
+require writing-in-a-spec "the ban is on the code's decomposition"   "reproduces the code's internal decomposition"
+require writing-in-a-spec "a boundary concept may gather rules"      "A section carrying a concept observable at the module's boundary"
+require writing-in-a-spec "a glossary is a rule, not a leak"        "Naming is not mechanising"
+require writing-in-a-spec "one normative level, no ranking"         "normative, at the same level"
+require writing-in-a-spec "a module redefines what it borrows"      "redefines what it borrows"
+require writing-in-a-spec "the gaps register is out of scope"       "\`docs/specs/<module>.gaps.md\`, which is not a spec"
+require writing-in-a-spec "states the content rule itself"          "business rules and intentions; the mechanism stays in the code"
+require writing-in-a-spec "corollary: a rule outlives a mechanism"  "A rule does not move when a mechanism moves"
+require writing-in-a-spec "corollary: no legislating on quality"    "does not legislate on code quality"
+require writing-in-a-spec "carries the section it points at"        "## What a Spec Says"
 require following-the-rules "the glossary states the content property" "it carries **business rules and intentions; the mechanism stays in the code**"
-require using-batches "a rule belongs to exactly one spec"  "A rule belongs to exactly one spec."
-require using-batches "a shared rule signals the breakdown" "it is a module breakdown asking to be revisited"
-require using-batches "a rule outside the specs binds nobody"  "sits beyond everything that makes a spec binding"
+require writing-in-a-spec "a rule belongs to exactly one spec"  "A rule belongs to exactly one spec."
+require writing-in-a-spec "a shared rule signals the breakdown" "it is a module breakdown asking to be revisited"
+require writing-in-a-spec "a rule outside the specs binds nobody"  "sits beyond everything that makes a spec binding"
+require writing-in-a-spec "red flag: rewording a mechanism into a rule" \
+    "| \"The delta names a mechanism — I'll reword it into a business rule\" | That is the laundering this rule exists to stop"
+require writing-in-a-spec "red flag: a number nobody can answer for" \
+    "| \"I can't say where this number came from, I'll write 'a few minutes'\" | Vagueness is not prudence"
+require writing-in-a-spec "says when to go back to the step that invoked it" \
+    "Once the text is written, go on with the step that invoked this skill."
+absent "using-batches no longer carries what a spec contains" \
+    "## What a Spec Says|The other-implementation test|Four signs recognise it|Naming is not mechanising" \
+    using-batches
+require using-batches "a bounded change invokes writing-in-a-spec before writing in a spec" \
+    "When it updates a spec, invoke \`supercharlouze:writing-in-a-spec\` before writing in it"
+
+# An internal skill names the skills it invokes, never those that invoke it.
+# Walks the declared entry skills, so one declared later is covered.
+entry_names="$(declared_skills entry | tr '\n' '|')"
+absent "writing-in-a-spec names no skill that invokes it" "${entry_names%|}" writing-in-a-spec
 
 # --- following-the-rules: the delta block (spec section "The model") ---
 require following-the-rules "defines the delta block" "**Delta block** — the unit of a batch's spec delta: one targeted section and the exact text"
@@ -997,13 +1013,13 @@ require following-the-rules "the adoption gate reviews the ADRs written with the
         "| Module adoption | the pull request carrying the spec and the gaps register, and the ADRs written with them |"
 require using-batches "routing sends an ADR to a bounded change" \
         "| Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | A bounded change, under \`What Is Kept, What Is Rerouted\` below |"
-require using-batches "a decision with nothing observable has the ADR for outlet" \
+require writing-in-a-spec "a decision with nothing observable has the ADR for outlet" \
         "Exception: a sentence that states a technical decision has an ADR for outlet, under the conditions \`supercharlouze:following-the-rules\` states."
-require using-batches "a decision housed outside the specs goes to an ADR" \
+require writing-in-a-spec "a decision housed outside the specs goes to an ADR" \
         "A technical decision that no module boundary makes observable is not a rule: its outlet is an ADR."
-require using-batches "the scope paragraph names both outlets" \
+require writing-in-a-spec "the scope paragraph names both outlets" \
         "that is where what the test ejects goes, except a technical decision, which has an ADR for outlet"
-require using-batches "the red flag names the ADR as the outlet" \
+require writing-in-a-spec "the red flag names the ADR as the outlet" \
         "A technical decision with nothing observable at a module's boundary is no rule at all: its outlet is an ADR. |"
 require using-batches "a bounded change writes, rewrites and deletes ADRs" \
         "**(e) It may write, rewrite and delete ADRs, and may carry nothing but ADRs.**"
