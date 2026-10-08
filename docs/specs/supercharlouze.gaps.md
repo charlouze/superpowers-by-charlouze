@@ -35,7 +35,7 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   pull request d'ouverture, et ne dit rien d'une entrée qu'un amendement ajoute à
   `Scope`. Un lot qui prend une entrée en charge par amendement ne la réserve donc
   pas, et un autre lot peut alors la réserver aussi. Constatée par la story
-  `11-us-5-le-lot`, consolidée par la clôture du lot 11.
+  `11-us-5-le-lot`, consolidée par la clôture du lot 11. `reserved by batch-13`
 
 ## Gaps
 
@@ -50,7 +50,7 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   de ces gloses n'est une reformulation complète, mais rien ne la soutient : une
   glose peut dériver de son texte canonique sans que quoi que ce soit le signale, et
   un lecteur se fier à la mauvaise. Relevée puis parquée par la story
-  `06-us-1-le-code-garde`.
+  `06-us-1-le-code-garde`. `reserved by batch-13`
 
 - **The spec document** — la règle « un renvoi nomme la section qu'il vise » n'est
   écrite dans aucune spec, et rien n'attrape un renvoi par la position. Le lot 01
@@ -128,3 +128,4 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   `writing-a-user-story` gardent la branche et le worktree jusqu'à ce que l'humain
   tranche. C'est la spec qui a tort, et la corriger est un acte humain. Constatée
   par la story `11-us-5-le-lot`, consolidée par la clôture du lot 11.
+  `reserved by batch-13`
