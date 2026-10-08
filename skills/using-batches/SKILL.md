@@ -19,7 +19,7 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | Architectural work on adopted modules | `supercharlouze:opening-a-batch` |
 | Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:opening-a-batch`, as a corrective batch — never straight to the code |
 | A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:opening-a-batch`, as an ordinary batch that finally specifies them |
-| A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
+| A batch is open and its next story must be written | `supercharlouze:delivering-a-story` |
 | A story has stopped on a stop condition this flow adds | `supercharlouze:handling-a-stopped-story` |
 | A batch must change its scope, its spec delta, its technical design, its constraints or its flag | `supercharlouze:amending-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
@@ -55,7 +55,7 @@ The architectural checklist of `superpowers:brainstorming` ends with four steps:
 
 **The substitute stops rather than chaining.** When a module the work touches has no spec, `supercharlouze:opening-a-batch` does not run `supercharlouze:adopting-a-module` and come back: **the design stops**, your human partner abandons it or sets it aside, and it resumes in a fresh context once the adoption pull request is merged. That skill's `Preconditions` carry the full rule and the reason it rests on — **adoption is never conducted in the same context as a design**. Said here because a post-brainstorming path that ends anywhere other than `supercharlouze:opening-a-batch` is exactly what an unnamed exception looks like, and this one ends nowhere at all — it stops. It widens nothing: the override still covers steps 6 to 9 and nothing else, and the resumed design re-enters the checklist at the same step.
 
-Justification: `supercharlouze:opening-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:writing-a-user-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its reread before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
+Justification: `supercharlouze:opening-a-batch` is not an implementation skill — the category step 9's rule protects — but a substitute for the documentary step that precedes writing-plans, which is still called, from `supercharlouze:delivering-a-story`. And the substitution preserves every replaced step: step 6 becomes the batch document, step 7 its reread before opening, and **step 8 becomes the review of the batch pull request**. The human review is not removed; it changes tool.
 
 ### Override 2 — the stop conditions the flow adds
 

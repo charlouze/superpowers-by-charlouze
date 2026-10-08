@@ -1,9 +1,9 @@
 ---
-name: writing-a-user-story
+name: delivering-a-story
 description: Use when writing the next user story of an open batch - transcribes the spec change, then hands off to superpowers:writing-plans and subagent-driven-development
 ---
 
-# Writing a User Story
+# Delivering a Story
 
 ## Overview
 
@@ -15,7 +15,7 @@ may carry code alone, as a corrective batch's story does. That is what gives
 code does.** No intermediate state to signal, no marker, no exception to the
 drift rule.
 
-**Announce at start:** "I'm using the writing-a-user-story skill to write this
+**Announce at start:** "I'm using the delivering-a-story skill to deliver this
 story."
 
 **Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
@@ -572,7 +572,7 @@ decision, is a `fixup!` of that commit.
 condition: no `Open ruling:` without a destination stands in the `Rulings log`.**
 
 Give it this next step: the next story, conducted by
-`supercharlouze:writing-a-user-story` from the batch document, with a prompt
+`supercharlouze:delivering-a-story` from the batch document, with a prompt
 that says to choose from the blocks no merged story has declared.
 
 If this story took the batch's last undelivered blocks, give it
