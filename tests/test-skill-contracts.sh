@@ -135,7 +135,7 @@ shared "the other-implementation test bears one name" \
 # invokes it and restates nothing: `adopting-a-module` creates the file and
 # removes the entry of a gap it promotes, `closing-a-batch` adds and releases,
 # `making-a-bounded-change` carries the bounded change, `opening-a-batch` reserves, `amending-a-batch`
-# releases, `delivering-a-story` removes the entry its story resolves.
+# reserves and releases, `delivering-a-story` removes the entry its story resolves.
 for s in adopting-a-module closing-a-batch making-a-bounded-change opening-a-batch amending-a-batch delivering-a-story; do
     require "$s" "invokes writing-in-a-gaps-register before writing in a gaps register" \
         "nvoke \`supercharlouze:writing-in-a-gaps-register\` before"
@@ -151,8 +151,10 @@ absent "no other skill restates the rules of a gaps register entry or its gestur
 # release, the reason of a removal, the coverage an audit gives.
 require opening-a-batch "the opening invokes the reservation with its number" \
     "invoke \`supercharlouze:writing-in-a-gaps-register\` before reserving one, and give it this batch's \`NN\`"
-require amending-a-batch "an amendment invokes the release" \
-    "releases its reservation in the same pull request: invoke \`supercharlouze:writing-in-a-gaps-register\` before releasing it"
+require amending-a-batch "an amendment invokes the reservation with its number" \
+    "reserves it in the same pull request: invoke \`supercharlouze:writing-in-a-gaps-register\` before reserving it, and give it this batch's \`NN\`"
+require amending-a-batch "an amendment invokes the release with its number" \
+    "releases its reservation in the same pull request: invoke \`supercharlouze:writing-in-a-gaps-register\` before releasing it, and give it this batch's \`NN\`"
 require adopting-a-module "the adoption writes the coverage from its audit" \
     "Write the register's \`Coverage\` from this audit"
 require adopting-a-module "a promotion gives the removal its reason" \
@@ -752,6 +754,11 @@ fi
 # amendment releases them before closing does.
 absent_everywhere "no skill merely revises reservations" \
     "reservations are revised|Revise the gaps register reservations|a scope revised mid-flight|and \`supercharlouze:closing-a-batch\` releases it\.|No other skill picks them up|A fresh \`NN\` only if|out of the scope releases it"
+
+# A batch reserves an entry at its opening or by an amendment: no skill says a
+# reservation comes from the opening alone.
+absent_everywhere "no skill ties a reservation to the opening alone" \
+    "reserved at opening|Reservation is a property of the opening pull request|reservation posted by the batch's opening pull request|by the batch's own opening pull request|put there by the batch's opening pull request,|it got there when the batch's opening pull request merged"
 
 # A corrective story is abandoned once the requalification is ruled: no skill has
 # its pull request closed at the stop.

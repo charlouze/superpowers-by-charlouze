@@ -37,8 +37,8 @@ Nothing has to be revoked: the spec change, or the deleted gaps-register entry,
 travels with the code and dies with the branch.
 
 Change nothing on `main`. The gaps register reservations and the blocks the
-batch announced were put there by the batch's opening pull request, and
-abandoning a story leaves them as they are.
+batch announced were put there by the batch's opening pull request or by one of
+its amendments, and abandoning a story leaves them as they are.
 
 ## Red Flags
 

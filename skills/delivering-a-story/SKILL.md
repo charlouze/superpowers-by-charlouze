@@ -576,10 +576,10 @@ what `Step 6 — Record Before the Merge` was for.
 **To abandon a story, invoke `supercharlouze:abandoning-a-story` and give it the
 story's branch.** What remains on `main` belongs to
 `supercharlouze:closing-a-batch`: the blocks the batch announced and no story
-delivered, and the gaps register reservation posted by the batch's opening pull
-request, unless an amendment took its entry out of `Scope` and released it. Do
-not count them — a story that transcribed no block announced nothing in the spec
-delta and leaves the reservation alone.
+delivered, and the gaps register reservation the batch posted, unless an
+amendment took its entry out of `Scope` and released it. Do not count them — a
+story that transcribed no block announced nothing in the spec delta and leaves
+the reservation alone.
 
 ## Lifting and Teardown Stories
 

@@ -11,7 +11,7 @@ A batch closes when every one of its user stories is merged or abandoned and the
 
 It is also the only moment in a batch's normal course that touches the batch document itself: *Withdraw the blocks no story delivered* removes them from it, and *Set status: closed* flips its front matter. Anything else that would edit the document goes through an amendment pull request of its own, which `supercharlouze:amending-a-batch` owns.
 
-Abandoning a story is almost free: closing its pull request without merging throws away its code, and its spec change if it had one — nothing to revoke, no spec left out of step. But what it never touched is still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the blocks the batch announced in its spec delta. Either may be absent — a batch with no blocks announced none, a batch that reserved nothing left nothing to release — so what closing owes here is a look at both, not a tally. **Nothing else picks them up**, except an amendment that takes a reserved entry out of `Scope` and releases it. If closing skips a duty, that duty is simply never done.
+Abandoning a story is almost free: closing its pull request without merging throws away its code, and its spec change if it had one — nothing to revoke, no spec left out of step. But what it never touched is still on `main`, put there by the batch's opening pull request or by one of its amendments: the gaps register entry the batch reserved, and the blocks the batch announced in its spec delta. Either may be absent — a batch with no blocks announced none, a batch that reserved nothing left nothing to release — so what closing owes here is a look at both, not a tally. **Nothing else picks them up**, except an amendment that takes a reserved entry out of `Scope` and releases it. If closing skips a duty, that duty is simply never done.
 
 Every duty lands in one pull request, on a branch named `batch/NN-<slug>-close`. The flag check is allowed to refuse, and because it is allowed to refuse it comes before the duties that write.
 
@@ -70,9 +70,9 @@ You arrive with a batch's worth of findings at once: write "consolidated by batc
 
 ### Release unconsumed reservations
 
-For every gaps register entry this batch reserved at opening (`reserved by batch-NN`) that is still in the file, release it. Invoke `supercharlouze:writing-in-a-gaps-register` before releasing one. Those are the **unconsumed reservations**: a story abandoned, an entry no story resolved. An entry an amendment took out of `Scope` is not among them: that amendment released it. An entry a story did resolve is not there to release: the story deleted it from the file, atomically with the code that resolved it.
+For every gaps register entry this batch reserved (`reserved by batch-NN`) that is still in the file, release it. Invoke `supercharlouze:writing-in-a-gaps-register` before releasing one. Those are the **unconsumed reservations**: a story abandoned, an entry no story resolved. An entry an amendment took out of `Scope` is not among them: that amendment released it. An entry a story did resolve is not there to release: the story deleted it from the file, atomically with the code that resolved it.
 
-Closing a story's pull request does not do this for you. The reservation lives on `main` — it got there when the batch's opening pull request merged — and abandoning a story touches nothing on `main`. Left in place, the annotation is a perpetual claim: the gap looks taken forever, and no future batch can pick it up.
+Closing a story's pull request does not do this for you. The reservation lives on `main`, and abandoning a story touches nothing on `main`. Left in place, the annotation is a perpetual claim: the gap looks taken forever, and no future batch can pick it up.
 
 ### Withdraw the blocks no story delivered
 
