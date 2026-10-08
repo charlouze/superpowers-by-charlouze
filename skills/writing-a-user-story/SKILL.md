@@ -586,9 +586,8 @@ what was settled.
 
 The review is the last place where an open ruling can still be acted on. By
 closing, the story is merged and its branch is gone: closing can note that a
-ruling was never taken up, it can no longer take it up. So do not announce the
-pull request ready while an open ruling without a destination stands — your human
-partner has the rulings in front of them here, and nowhere later.
+ruling was never taken up, it can no longer take it up. Your human partner has
+the rulings in front of them here, and nowhere later.
 
 **Your human partner settles an open ruling on a decision that meets the
 conditions of an ADR.** If they want the ADR, invoke
@@ -600,27 +599,21 @@ If nothing is written, record in the `Rulings log` what they ruled.
 A correction of the ADR's text asked for afterwards, which does not change its
 decision, is a `fixup!` of that commit.
 
-**Ending the review.** The agent never approves and never merges a pull request.
-Each correction is pushed as a `fixup!` commit of the commit it corrects — or as
-a commit of its own when it carries a fresh decision, which on this path is
-common: a review that changes the wording of the spec change is deciding
-something, not fixing a slip. Your human partner gives their agreement in the
-conversation; then you squash the fixups, push the rewritten branch, and announce
-the pull request ready to be approved and merged.
+**To end the review, invoke `supercharlouze:finishing-a-pr` and give it this
+condition: no `Open ruling:` without a destination stands in the `Rulings log`.**
 
-**Merging it is a moment to clear the context.** On this path the conversation is
-the heaviest of any gate — it carries a plan, an SDD ledger, and every file the
-implementers touched — while `main` now carries this story's code, and its spec
-change if it had one, which is all the next story needs.
+Give it this next step: the next story, conducted by
+`supercharlouze:writing-a-user-story` from the batch document, with a prompt
+that says to choose from the blocks no merged story has declared.
 
-So when your human partner announces the merge, name the next story as the next
-step, or `supercharlouze:closing-a-batch` if this story took the batch's last
-undelivered blocks, and give its prompt in a block to copy and paste. **That
-prompt stands on its own:** it names the skill to invoke, the batch document by
-path, and says to choose from the blocks no merged story has declared, and
-never refers back to this conversation.
-Everything perishable is already in the story document — that is what
-`Step 6 — Record Before the Merge` was for.
+If this story took the batch's last undelivered blocks, give it
+`supercharlouze:closing-a-batch` instead, from the same document.
+
+The clear that follows the merge matters here: the conversation carries a plan,
+an SDD ledger and every file the implementers touched, while `main` now carries
+this story's code, and its spec change if it had one, which is all the next
+story needs. Everything perishable is already in the story document — that is
+what `Step 6 — Record Before the Merge` was for.
 
 **To abandon a story, invoke `supercharlouze:abandoning-a-story` and give it the
 story's branch.** What remains on `main` belongs to

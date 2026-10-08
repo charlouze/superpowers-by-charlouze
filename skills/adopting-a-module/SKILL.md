@@ -258,25 +258,13 @@ the module is not adopted and no batch may start on it. An open adoption pull
 request is not adoption; do not start `supercharlouze:writing-a-batch` on the
 strength of one.
 
-**Ending the review.** The agent never approves and never merges a pull request,
-here as at every gate. Each correction the review asks for is pushed as a
-`fixup!` commit of the commit it corrects, or as a commit of its own when it
-carries a fresh decision; your human partner gives their agreement in the
-conversation, and only then do you squash the fixups, push, and announce the
-pull request ready.
+**To end the review, invoke `supercharlouze:finishing-a-pr` and give it no
+condition, and this next step: `supercharlouze:writing-a-batch`, which starts
+from the adopted spec, named by path with the gaps register beside it.**
 
-**Merging this pull request is a moment to clear the context**, and your human
-partner's announcement of the merge is where you say so. The adoption
-conversation carried an inventory, rulings and a boundary argument that the
-merged documents now carry better than it does — and worse, it carried every
-mechanism you read while auditing the code, which is exactly what must not leak
-into the batch that follows.
-
-So when your human partner announces the merge, name
-`supercharlouze:writing-a-batch` as the next step, and give the prompt for it in
-a block to copy and paste. **That prompt stands on its own:** it names the skill
-to invoke, and the prompt names the adopted spec by path, and the gaps register
-beside it, and never refers back to this conversation.
+The clear that follows the merge matters here: the adoption conversation carried
+every mechanism you read while auditing the code, which is exactly what must not
+leak into the batch that follows.
 
 That next step is a **start, not a return**. A design that stopped on this
 module does not carry over: it begins again from the adopted spec, not from a
