@@ -220,7 +220,8 @@ There is never an undeclared fifth one.
 | `supercharlouze:using-batches` | Entry point — routing, declared overrides |
 | `supercharlouze:following-the-rules` | Never directly — the rules that hold at every moment of the flow, which the other skills and a story's plan invoke |
 | `supercharlouze:adopting-a-module` | A module has no living spec yet |
-| `supercharlouze:writing-a-batch` | Opening, amending or requalifying a batch |
+| `supercharlouze:opening-a-batch` | Opening a batch |
+| `supercharlouze:amending-a-batch` | Amending an open batch, or requalifying a corrective batch or a technical story |
 | `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
 | `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |

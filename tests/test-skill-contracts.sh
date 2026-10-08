@@ -15,15 +15,15 @@ absent_everywhere "no skill keeps a Live flags section or its rulings" \
 
 # A branch is started in one place, `starting-a-branch`. A skill that creates a
 # branch invokes it and passes the name of the branch.
-for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch using-batches; do
+for s in adopting-a-module opening-a-batch amending-a-batch writing-a-user-story closing-a-batch using-batches; do
     require "$s" "invokes starting-a-branch with the name of the branch" \
         "nvoke \`supercharlouze:starting-a-branch\` and give it the name"
 done
 require adopting-a-module "an adoption passes adopt/<module>" \
     "Invoke \`supercharlouze:starting-a-branch\` and give it the name \`adopt/<module>\`"
-require writing-a-batch "an opening passes batch/NN-<slug>" \
+require opening-a-batch "an opening passes batch/NN-<slug>" \
     "Invoke \`supercharlouze:starting-a-branch\` and give it the name \`batch/NN-<slug>\`."
-require writing-a-batch "an amendment passes the name it chose" \
+require amending-a-batch "an amendment passes the name it chose" \
     "Invoke \`supercharlouze:starting-a-branch\` and give it the name you chose."
 require closing-a-batch "a closing passes batch/NN-<slug>-close" \
     "**Invoke \`supercharlouze:starting-a-branch\` and give it the name \`batch/NN-<slug>-close\`.**"
@@ -32,11 +32,19 @@ require writing-a-user-story "a story passes story/NN-us-N-<slug>" \
 require using-batches "a bounded change passes bounded/<slug>" \
     "invoke \`supercharlouze:starting-a-branch\` and give it the name \`bounded/<slug>\`"
 # Allocation reads `origin/main` before the branch exists, so it fetches itself.
-case "$(body_flat "$REPO_ROOT/skills/writing-a-batch/SKILL.md")" in
+# The opening keeps its allocation in a reference, read at that step.
+case "$(body_flat "$REPO_ROOT/skills/opening-a-batch/references/allocating-nn.md" 2>/dev/null || true)" in
     *"git fetch origin git ls-tree --name-only origin/main docs/batches/"*)
-        pass "writing-a-batch: allocation fetches before it reads the remote" ;;
-    *)  fail "writing-a-batch: allocation fetches before it reads the remote" ;;
+        pass "opening-a-batch: allocation fetches before it reads the remote" ;;
+    *)  fail "opening-a-batch: allocation fetches before it reads the remote" ;;
 esac
+case "$(body_flat "$REPO_ROOT/skills/opening-a-batch/SKILL.md")" in
+    *"git ls-tree"*|*"smallest integer"*)
+        fail "opening-a-batch: the allocation is written in its reference alone" ;;
+    *)  pass "opening-a-batch: the allocation is written in its reference alone" ;;
+esac
+require opening-a-batch "the opening allocates NN from its reference" \
+    "Allocate \`NN\` as \`skills/opening-a-batch/references/allocating-nn.md\` says"
 case "$(body_flat "$REPO_ROOT/skills/writing-a-user-story/SKILL.md")" in
     *"git fetch origin git ls-tree --name-only origin/main docs/batches/NN-<slug>/"*)
         pass "writing-a-user-story: allocation fetches before it reads the remote" ;;
@@ -118,9 +126,9 @@ shared "the other-implementation test bears one name" \
 # one place, `writing-in-a-gaps-register`. A skill that writes in a register
 # invokes it and restates nothing: `adopting-a-module` creates the file and
 # removes the entry of a gap it promotes, `closing-a-batch` adds and releases,
-# `using-batches` carries the bounded change, `writing-a-batch` reserves and
+# `using-batches` carries the bounded change, `opening-a-batch` reserves, `amending-a-batch`
 # releases, `writing-a-user-story` removes the entry its story resolves.
-for s in adopting-a-module closing-a-batch using-batches writing-a-batch writing-a-user-story; do
+for s in adopting-a-module closing-a-batch using-batches opening-a-batch amending-a-batch writing-a-user-story; do
     require "$s" "invokes writing-in-a-gaps-register before writing in a gaps register" \
         "nvoke \`supercharlouze:writing-in-a-gaps-register\` before"
 done
@@ -133,9 +141,9 @@ absent "no other skill restates the rules of a gaps register entry or its gestur
 
 # Each caller passes what varies: the batch number of a reservation and of its
 # release, the reason of a removal, the coverage an audit gives.
-require writing-a-batch "the opening invokes the reservation with its number" \
+require opening-a-batch "the opening invokes the reservation with its number" \
     "invoke \`supercharlouze:writing-in-a-gaps-register\` before reserving one, and give it this batch's \`NN\`"
-require writing-a-batch "an amendment invokes the release" \
+require amending-a-batch "an amendment invokes the release" \
     "releases its reservation in the same pull request: invoke \`supercharlouze:writing-in-a-gaps-register\` before releasing it"
 require adopting-a-module "the adoption writes the coverage from its audit" \
     "Write the register's \`Coverage\` from this audit"
@@ -255,7 +263,7 @@ absent "no skill counts or ranks the forms of the gating sentence" \
 # legitimately elsewhere, as one of the two places an intention may come from.
 absent "no routing gloss names a source of gaps" \
     "Gaps\*?\*?[^.|]{0,160}validated document" \
-    using-batches following-the-rules writing-a-batch
+    using-batches following-the-rules opening-a-batch
 
 # `Branch naming` used to deny, in bold, that any mechanism of this system
 # depends on a branch's name. Two sections of the same spec contradicted it, and
@@ -303,8 +311,10 @@ absent_everywhere "no skill finds undelivered blocks by reading or diffing the s
 # A skill that writes or amends one invokes it and passes what varies: the
 # number and the slug of a document to write, or the document and what changes
 # in it.
-require writing-a-batch "invokes writing-a-batch-document to write or amend the batch document" \
-    "nvoke \`supercharlouze:writing-a-batch-document\` and give it"
+for s in opening-a-batch amending-a-batch; do
+    require "$s" "invokes writing-a-batch-document to write or amend the batch document" \
+        "nvoke \`supercharlouze:writing-a-batch-document\` and give it"
+done
 # The form is spelled there and nowhere else. Walks the declared skills, so one
 # declared later is covered.
 # shellcheck disable=SC2046
@@ -315,7 +325,7 @@ absent "no other skill restates the form of a batch document" \
 # The end of a review is conducted in one place, `finishing-a-pr`. A skill whose
 # pull request is reviewed invokes it, and passes its conditions and its next
 # step.
-for s in adopting-a-module writing-a-batch writing-a-user-story closing-a-batch; do
+for s in adopting-a-module opening-a-batch amending-a-batch writing-a-user-story closing-a-batch; do
     require "$s" "ends its review by invoking finishing-a-pr" \
         "nvoke \`supercharlouze:finishing-a-pr\` and give it"
 done
@@ -343,13 +353,13 @@ absent "the observation period is not described as enable-then-remove" \
     writing-a-user-story
 
 # Adoption never sharing the design's context is one coupling with two ends:
-# `writing-a-batch` states it as the reason its Preconditions stop, and
+# `opening-a-batch` states it as the reason its Preconditions stop, and
 # `using-batches` repeats it in Override 1. One assertion over both files —
 # two separate `require` calls would each stay green while one end drifted
 # away from the other's wording.
 shared "adoption never shares the design's context" \
     "never conducted in the same context" \
-    writing-a-batch using-batches
+    opening-a-batch using-batches
 
 # The old norm called adoption a "blocking precondition" and this branch
 # retired that wording along with the wordings it produced ("Adoption is
@@ -365,7 +375,7 @@ absent_everywhere "no skill carries the retired blocking-precondition wording" \
 # second formulation is what drifts.
 absent "only following-the-rules justifies dropping the directory precondition" \
     "Where you are standing does not matter" \
-    adopting-a-module writing-a-batch writing-a-user-story closing-a-batch recording-a-decision
+    adopting-a-module opening-a-batch amending-a-batch writing-a-user-story closing-a-batch recording-a-decision
 
 # One home per rule: `writing-in-a-spec` states that a rule belongs to exactly
 # one spec, and the skills that invoke it keep only what their own step does
@@ -387,7 +397,7 @@ require writing-a-batch-document "the batch document's immutability is bounded a
 require closing-a-batch "closing is the one moment that touches the batch document" \
     "It is also the only moment in a batch's normal course that touches the batch document itself: *Withdraw the blocks no story delivered* removes them from it, and *Set status: closed* flips its front matter."
 require closing-a-batch "any other edit of the batch document goes through an amendment" \
-    "Anything else that would edit the document goes through an amendment pull request of its own, which \`supercharlouze:writing-a-batch\` owns."
+    "Anything else that would edit the document goes through an amendment pull request of its own, which \`supercharlouze:amending-a-batch\` owns."
 # shellcheck disable=SC2046
 absent "no other skill restates the immutability of the batch document" \
     "nothing in the normal course of the batch modifies it" \
@@ -451,7 +461,7 @@ require writing-in-a-gaps-register "a removal says why in its commit" \
 
 # The gesture that abandons a story lives in one place, `abandoning-a-story`. A
 # skill that abandons a story invokes it and passes the story's branch.
-for s in writing-a-batch writing-a-user-story; do
+for s in amending-a-batch writing-a-user-story; do
     require "$s" "invokes abandoning-a-story with the story's branch" \
         "invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
 done
@@ -465,7 +475,7 @@ absent "no other skill restates the abandonment gesture" \
 # The copies of the specs, blocks applied, are built in one place,
 # `applying-a-spec-delta`. A skill that needs them invokes it and passes the
 # batch document and the blocks to apply.
-for s in writing-a-batch rereading-a-batch; do
+for s in opening-a-batch amending-a-batch rereading-a-batch; do
     require "$s" "invokes applying-a-spec-delta with the batch document and the blocks" \
         "nvoke \`supercharlouze:applying-a-spec-delta\` and give it the"
 done
@@ -480,8 +490,10 @@ absent "no other skill restates how the applied copies are built" \
 # skill whose pull request owes them invokes it, and passes the batch document,
 # the blocks to apply, the rereads due and the ADRs the pull request writes or
 # rewrites.
-require writing-a-batch "invokes rereading-a-batch to have a batch reread" \
-    "nvoke \`supercharlouze:rereading-a-batch\` and give it"
+for s in opening-a-batch amending-a-batch; do
+    require "$s" "invokes rereading-a-batch to have a batch reread" \
+        "nvoke \`supercharlouze:rereading-a-batch\` and give it"
+done
 # How they are conducted is spelled there and nowhere else. Walks the declared
 # skills, so one declared later is covered.
 # shellcheck disable=SC2046
@@ -491,7 +503,13 @@ absent "no other skill restates how a batch is reread" \
 # The batch skill reaches the two rereads through that skill only.
 absent "the batch skill invokes neither reread itself" \
     "supercharlouze:rereading-a-spec|supercharlouze:rereading-a-technical-design" \
-    writing-a-batch
+    opening-a-batch amending-a-batch
+
+# An amendment and a requalification are conducted in one place,
+# `amending-a-batch`. The skill that opens a batch carries neither.
+absent "the opening carries no amendment and no requalification" \
+    "amendment|[Rr]equalif" \
+    opening-a-batch
 
 # The mirror of the positive assertions above: a skill that carried both the new
 # wording and the old would leave every one of them green while still telling an
@@ -628,7 +646,7 @@ absent_everywhere "no skill has a block quote a passage" \
 # copy. A block check left in the batch-document reread would run it twice.
 absent "the batch-document reread leaves the blocks to the coherence reread" \
     "every block's paragraph|every block's unchanged and removed lines matching" \
-    writing-a-batch rereading-a-batch
+    opening-a-batch amending-a-batch rereading-a-batch
 
 # A reread says in which context it runs. "Fresh eyes" names no context an agent
 # can reach.
@@ -642,16 +660,16 @@ shared "the skills that have a spec reread invoke the shared reread" \
     adopting-a-module rereading-a-batch
 absent "no calling skill carries readings of its own" \
     "Does this specification hold what a specification must hold|precise and concise\\?|Where does this sit in the model|Every reader returns before anything goes up|stop the rounds" \
-    adopting-a-module writing-a-batch rereading-a-batch
+    adopting-a-module opening-a-batch amending-a-batch rereading-a-batch
 # The dependency runs one way: the reread knows none of the skills that invoke
 # it, and says nothing a calling skill would have to keep in step with. What a
 # reader gets is its own business.
 absent "the reread names no skill that invokes it" \
-    "supercharlouze:([^r]|r[^u]|ru[^n])|adopting-a-module|writing-a-batch|calling skill" \
+    "supercharlouze:([^r]|r[^u]|ru[^n])|adopting-a-module|opening-a-batch|amending-a-batch|calling skill" \
     rereading-a-spec
 absent "no calling skill says what a reader gets" \
     "as a new spec|as a changed spec|never the blocks|the spec as \`main\` carries it" \
-    adopting-a-module writing-a-batch rereading-a-batch
+    adopting-a-module opening-a-batch amending-a-batch rereading-a-batch
 
 # An amendment changes the scope, the spec delta or the flag of an open batch.
 # A leftover naming only scope and flag would send a spec delta change nowhere.
@@ -669,7 +687,7 @@ absent_everywhere "no skill bounds an amendment to scope, spec delta and flag" \
 # amendment reach the review unread.
 absent "an amendment's technical reread is not bound to the batch document" \
     "or the constraints goes through the technical reread" \
-    writing-a-batch
+    amending-a-batch
 
 # Everything that reaches `main` may ship to production. The flow presumes no
 # more of the project: a skill still requiring continuous deployment asks more
@@ -704,7 +722,7 @@ absent_everywhere "no skill folds the document reread into opening the pull requ
 # rank: the list carries the count, and a rank goes false when a step is added.
 absent "the batch rules neither count nor rank their steps and choices" \
     "runs these [a-z]+ steps|Step 7 opens|step 3 releases|among three choices" \
-    using-batches following-the-rules writing-a-batch
+    using-batches following-the-rules opening-a-batch amending-a-batch
 
 # The specs carry no changelog any more. No shipped skill file names one:
 # frontmatter included, which the content guards skip.
@@ -724,9 +742,9 @@ absent_everywhere "no skill merely revises reservations" \
 # its pull request closed at the stop.
 absent "no skill closes a corrective story's pull request at the stop" \
     "Therefore: \*\*close the story's pull request|So: \*\*close the story's pull request|Abandon the story, closing its pull request|exactly as a requalified corrective story is abandoned" \
-    using-batches following-the-rules writing-a-batch writing-a-user-story recording-a-decision
+    using-batches following-the-rules opening-a-batch amending-a-batch writing-a-user-story recording-a-decision
 
-# using-batches routes a requalification to writing-a-batch: it neither opens on
+# using-batches routes a requalification to amending-a-batch: it neither opens on
 # what the requalification does not do nor copies its procedure.
 absent "using-batches copies no requalification procedure" \
     "does not start by closing a pull request|abandon the story|close its pull request|no longer takes on are released|a fresh \`NN\`|settled elsewhere" \
@@ -808,13 +826,13 @@ absent "a batch no longer lists only migration constraints" \
 # migration and compatibility, then the order — must not survive anywhere.
 absent "Constraints are no longer bounded to migration and order" \
     "migration and compatibility constraints,? and the required order" \
-    writing-a-batch writing-a-batch-document using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
+    opening-a-batch amending-a-batch writing-a-batch-document using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
 
 # A constraint is judged against the technical design, known at opening, never
 # against the stories, which do not exist yet.
 absent "no constraint is judged against the stories" \
     "without breaking another" \
-    writing-a-batch writing-a-batch-document using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
+    opening-a-batch amending-a-batch writing-a-batch-document using-batches following-the-rules writing-a-user-story closing-a-batch recording-a-decision
 
 # A story writes its departures from the design in the form the batch document
 # spells.
@@ -853,7 +871,7 @@ absent "no reread reopens on every unread state" \
 
 # The technical reread knows none of the skills that invoke it.
 absent "the technical reread names no skill that invokes it" \
-    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|writing-a-batch|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
+    "supercharlouze:([^r]|r[^u]|ru[^n])|using-batches|adopting-a-module|opening-a-batch|amending-a-batch|writing-a-user-story|closing-a-batch|rereading-a-spec|recording-a-decision|calling skill" \
     rereading-a-technical-design
 
 # A reading is dispatched when its object exists: the sentence that gave every
@@ -867,32 +885,45 @@ absent "the technical reread no longer gives every batch every reading" \
 # invokes it carries none of them.
 absent "the batch skill carries no technical reading of its own" \
     "deliver what the batch promises|stand on the code as it is|hold as an architecture|modules this design draws deep|How does this design fail|blocks and the design hold the ADRs|stand with the specifications and the other ADRs" \
-    writing-a-batch rereading-a-batch
+    opening-a-batch amending-a-batch rereading-a-batch
 
 # The opening invokes the technical reread for every batch, and the reread says
 # itself when it has nothing to reread: the former skip must survive nowhere, or
 # a batch with no design would open with its ADRs unread.
 absent "the opening no longer skips the technical reread" \
     "skipped when the batch has neither|both read \`none\` skips this step" \
-    writing-a-batch rereading-a-batch
+    opening-a-batch amending-a-batch rereading-a-batch
 
 # The opening now places more than two rereads; the former count must not survive.
 absent "the opening counts no rereads" \
     "[Tt]wo rereads|[Tt]hree rereads" \
-    writing-a-batch rereading-a-batch
+    opening-a-batch amending-a-batch rereading-a-batch
 
 # The flow's stop conditions are named, never counted: a count goes false in
 # every skill the day a condition is added, as it did when the constraint
 # condition joined the corrective and the technical ones.
 absent "no skill counts the stop conditions the flow adds" \
     "adds (two|three|four)( stop)? conditions|adds (two|three|four)[.,]|(both|either|neither) (stop )?conditions?" \
-    using-batches following-the-rules writing-a-user-story writing-a-batch recording-a-decision
+    using-batches following-the-rules writing-a-user-story opening-a-batch amending-a-batch recording-a-decision
 
 # The rules of a bounded change are listed, never counted: a count goes false
 # the day a rule is added, as it did when the ADR rule joined them.
 absent "no skill counts the rules of a bounded change" \
     "with (four|five|six|seven) rules|the (four|five|six|seven) rules" \
     using-batches following-the-rules
+
+# An opening and an amendment both write the ADRs their human partner decided.
+# Each skill carries the gesture, since an agent reads only the one it invoked:
+# one assertion per sentence over both, so neither copy drifts alone.
+shared "the opening and the amendment have an ADR written the same way" \
+    "Invoke \`supercharlouze:recording-a-decision\` for each ADR to write or to rewrite, and hand it those copies." \
+    opening-a-batch amending-a-batch
+shared "the opening and the amendment delete an abandoned ADR the same way" \
+    "Delete yourself each ADR your human partner abandoned, in a commit that says why." \
+    opening-a-batch amending-a-batch
+shared "the opening and the amendment answer the ADR written by hand alike" \
+    "| \"My human partner decided this ADR, I'll write the file myself\" | Invoke \`supercharlouze:recording-a-decision\`. It confronts the decision with the specs, blocks applied, and with the other ADRs. |" \
+    opening-a-batch amending-a-batch
 
 # What an ADR is on disk, and what it does not carry, is said alike by the skill
 # that defines it and the skill that writes it.
@@ -906,7 +937,7 @@ shared "an ADR this flow writes carries no date and no status, on both ends" \
 # The dependency runs one way: recording-a-decision knows none of the skills
 # that invoke it, and says nothing they would have to keep in step with.
 absent "recording-a-decision names no skill that invokes it" \
-    "writing-a-batch|writing-a-user-story|adopting-a-module|calling skill" \
+    "opening-a-batch|amending-a-batch|writing-a-user-story|adopting-a-module|calling skill" \
     recording-a-decision
 
 # recording-a-decision is told not to commit, and not who does.

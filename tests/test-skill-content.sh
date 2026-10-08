@@ -6,12 +6,12 @@ source "$(dirname "$0")/lib.sh"
 echo "test-skill-content"
 
 # Every document-producing skill states the language rule (Global Constraints, spec 10).
-for s in adopting-a-module writing-a-batch writing-a-batch-document writing-a-user-story closing-a-batch recording-a-decision; do
+for s in adopting-a-module opening-a-batch writing-a-batch-document writing-a-user-story closing-a-batch recording-a-decision; do
     require "$s" "states the language rule" "English skeleton"
 done
 
 # Every document-producing skill sends its writer to the concision rules.
-for s in adopting-a-module writing-a-batch writing-a-batch-document writing-a-user-story closing-a-batch recording-a-decision; do
+for s in adopting-a-module opening-a-batch amending-a-batch writing-a-batch-document writing-a-user-story closing-a-batch recording-a-decision; do
     require "$s" "points at the concision rules" "follows \`Concision\` in \`supercharlouze:following-the-rules\`"
 done
 
@@ -61,7 +61,7 @@ require adopting-a-module "the question is about the intention"       "about the
 require adopting-a-module "a mechanism is not put to validation"      "A mechanism is not submitted to human validation"
 require adopting-a-module "branch naming convention"             "adopt/"
 require adopting-a-module "ends its review with no condition and the first batch as next step" \
-    "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: \`supercharlouze:writing-a-batch\`, which starts from the adopted spec, named by path with the gaps register beside it.**"
+    "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: \`supercharlouze:opening-a-batch\`, which starts from the adopted spec, named by path with the gaps register beside it.**"
 require adopting-a-module "says why the clear matters after an adoption" \
     "the adoption conversation carried every mechanism you read while auditing the code, which is exactly what must not leak into the batch that follows"
 require adopting-a-module "arrives in a context of its own"      "in a context of its own"
@@ -103,94 +103,104 @@ case "$(body_flat "$REPO_ROOT/skills/adopting-a-module/SKILL.md")" in
 esac
 require adopting-a-module "an intention comes from a document or the human" "An intention comes from a validated document or from your human partner"
 
-# --- writing-a-batch (spec 4, 4.3, 5.2, 8.3) ---
-require writing-a-batch "an unadopted module stops the design"   "the design stops"
+# --- opening-a-batch (spec 4, 4.3, 5.2, 8.3) ---
+require opening-a-batch "an unadopted module stops the design"   "the design stops"
 # The preconditions are checked before any branch, and not counted: the count
 # once said four over a list of three.
-require writing-a-batch "preconditions come before any branch"   "Check them all **before creating any branch**"
-require writing-a-batch "the human abandons or sets the design aside" "abandon the design or set it aside"
-require writing-a-batch "the design resumes in a fresh context"   "resumes in a fresh context"
-require writing-a-batch "NN accounts for open pull requests"      "open pull request"
+require opening-a-batch "preconditions come before any branch"   "Check them all **before creating any branch**"
+require opening-a-batch "the human abandons or sets the design aside" "abandon the design or set it aside"
+require opening-a-batch "the design resumes in a fresh context"   "resumes in a fresh context"
+require opening-a-batch "NN accounts for open pull requests"      "open pull request"
 require writing-a-batch-document "batch document carries no mutable state" "no mutable state"
 require writing-a-batch-document "no story list in the batch document"     "list of stories"
 require writing-a-batch-document "the story list counts pushed branches" "completed by the open pull requests and by the pushed \`story/*\` branches that carry no pull request yet"
-require writing-a-batch "writes no spec at opening"               "no writing into the specs"
-require writing-a-batch "the opening has the document written by the shared skill" \
+require opening-a-batch "writes no spec at opening"               "no writing into the specs"
+require opening-a-batch "the opening has the document written by the shared skill" \
     "To write the batch document, invoke \`supercharlouze:writing-a-batch-document\` and give it this batch's \`NN\` and its slug."
-require writing-a-batch "an amendment has the document amended by the shared skill" \
+require amending-a-batch "an amendment has the document amended by the shared skill" \
     "To amend the document, invoke \`supercharlouze:writing-a-batch-document\` and give it the batch document and what the amendment changes in it."
-require writing-a-batch "no block is transcribed at opening" \
+require opening-a-batch "no block is transcribed at opening" \
     "No block is transcribed at opening: each one is transcribed by a story, in that story's own pull request"
-require writing-a-batch "an amendment says in its body what changed" \
+require amending-a-batch "an amendment says in its body what changed" \
     "Say in the pull request body what changed and why."
-require writing-a-batch "PR review is the human gate"             "review of the batch pull request"
+require opening-a-batch "PR review is the human gate"             "review of the batch pull request"
 require writing-a-batch-document "declares the Feature flag field"         "Feature flag"
 require writing-a-batch-document "flag field is never left empty"          "never left empty"
 require writing-a-batch-document "flag is per batch and module"            "per (batch, module)"
 require writing-a-batch-document "extended scope names its lifting condition" "lifting condition"
 require writing-a-batch-document "the specs are the registry of flags"     "The specs are the registry of flags"
 require writing-a-batch-document "a lifting is stated in the spec delta"   "state its lifting in the \`Spec delta\`"
-require writing-a-batch "amendment pull request exists"           "amendment pull request"
-require writing-a-batch "an amendment covers the design and the constraints" "An amendment changes the scope, the spec delta, the technical design, the constraints or the flag of an open batch"
-require writing-a-batch "the entry point names the design and the constraints" "Changing the scope, the spec delta, the technical design, the constraints or the flag of an existing batch"
-require writing-a-batch "a design or a constraint that must change is a dead end" "**A batch whose technical design or constraints must change**"
-require writing-a-batch "an amendment branch follows no pattern"  "follows none of this plugin's branch patterns"
-require writing-a-batch "a delta amendment is reviewed as an opening" "By exception, an amendment that changes the spec delta is reviewed as an opening"
+require amending-a-batch "amendment pull request exists"           "amendment pull request"
+require amending-a-batch "an amendment covers the design and the constraints" "An amendment changes the scope, the spec delta, the technical design, the constraints or the flag of an open batch"
+require amending-a-batch "the entry point names the design and the constraints" "Changing the scope, the spec delta, the technical design, the constraints or the flag of an existing batch"
+require amending-a-batch "a design or a constraint that must change is a dead end" "**A batch whose technical design or constraints must change**"
+require amending-a-batch "an amendment branch follows no pattern"  "follows none of this plugin's branch patterns"
+require amending-a-batch "a delta amendment is reviewed as an opening" "By exception, an amendment that changes the spec delta is reviewed as an opening"
 # An amendment says which rereads it owes by what it changes, and passes them.
-require writing-a-batch "an amendment owes the technical reread" \
+require amending-a-batch "an amendment owes the technical reread" \
     "An amendment that changes the spec delta, the technical design or the constraints, or that writes or rewrites an ADR, owes the technical reread."
-require writing-a-batch "a delta amendment owes the other rereads as well" \
+require amending-a-batch "a delta amendment owes the other rereads as well" \
     "One that changes the spec delta owes the coherence reread and the batch-document reread as well."
-require writing-a-batch "an amendment has its rereads conducted by the shared skill" \
+require amending-a-batch "an amendment has its rereads conducted by the shared skill" \
     "invoke \`supercharlouze:rereading-a-batch\` and give it the amended document, its new or changed blocks together with every block no merged story has declared yet, the rereads it owes, and the path of each ADR it writes or rewrites"
-require writing-a-batch "a behaviour or a block taken back makes a delta amendment" "A behaviour or a block that skill returns as taken back to the spec delta makes the amendment one that changes the spec delta"
-require writing-a-batch "an amendment's body says what its rereads found" "The body of an amendment says what each of its rereads found, as \`The Rereads\` states."
-require writing-a-batch "its body carries what an opening body carries" "the exact text of every new or changed block, and what the coherence reread found"
-require writing-a-batch "an amendment writes, rewrites or deletes ADRs" "An amendment's pull request may also write, rewrite or delete the ADRs your human partner decided with the amendment."
-require writing-a-batch "its ADRs are written as the opening's" "Do it as \`The ADRs\` does, once the document is amended."
-require writing-a-batch "its ADRs meet the pending blocks of the amended document" "Where that section gives \`supercharlouze:applying-a-spec-delta\` every block of the spec delta, give it every block of the amended document that no merged story has declared yet."
-require writing-a-batch "its body states the ADRs" "The pull request body states each ADR it writes, rewrites or deletes."
-require writing-a-batch "a change of ADRs alone is a bounded change" "A change that touches nothing but ADRs is not an amendment: it goes through a bounded change, under \`supercharlouze:using-batches\`."
-require writing-a-batch "red flag: an amendment for an ADR alone" "| \"My human partner wants this ADR rewritten, I'll amend the batch for it\" | An amendment changes the batch document. A change that touches nothing but ADRs goes through a bounded change. |"
-require writing-a-batch "red flag: an amendment's ADR is reread" "| \"This amendment only changes the scope, the ADR it writes needs no reread\" | An amendment that writes or rewrites an ADR goes through the technical reread, whatever else it changes. |"
-require writing-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
-require writing-a-batch "the human rules on a constraint a story cannot hold" "**When a story stops on a constraint it cannot hold, your human partner rules on the constraint.**"
-require writing-a-batch "an untenable constraint is amended" "If they rule it untenable, an amendment changes or removes the constraint and the story is abandoned"
-require writing-a-batch "a story abandoned on a constraint goes through abandoning-a-story" "the story is abandoned: invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
-require writing-a-batch "a constraint that holds resumes the story" "Otherwise the story resumes and holds the constraint, and nothing is amended."
-require writing-a-batch "the red flag keeps the ruling with the human" "Whether a constraint can be held is your human partner's ruling."
+require amending-a-batch "a behaviour or a block taken back makes a delta amendment" "A behaviour or a block that skill returns as taken back to the spec delta makes the amendment one that changes the spec delta"
+require amending-a-batch "an amendment's body says what its rereads found" "The body of an amendment says what each of its rereads found, or that it found nothing."
+require amending-a-batch "an amendment's body says when there was nothing to reread" "When the technical reread returned that it had nothing to reread, the body says that instead."
+require amending-a-batch "its body carries what an opening body carries" "the exact text of every new or changed block, and what the coherence reread found"
+require amending-a-batch "an amendment writes, rewrites or deletes ADRs" "An amendment's pull request may also write, rewrite or delete the ADRs your human partner decided with the amendment."
+require amending-a-batch "its ADRs come once the document is amended" "Do it once the document is amended."
+require amending-a-batch "its ADRs meet the pending blocks of the amended document" "Before writing or rewriting one, invoke \`supercharlouze:applying-a-spec-delta\` and give it the amended document and every block of it that no merged story has declared yet: it returns the copies of the specs, blocks applied."
+require amending-a-batch "an amendment's ADR is confronted with the specs as the batch leaves them" "An ADR is confronted with the specs as the batch leaves them, and those blocks are in no spec yet."
+require amending-a-batch "an amendment's ADR is written by the shared skill" "Invoke \`supercharlouze:recording-a-decision\` for each ADR to write or to rewrite, and hand it those copies."
+require amending-a-batch "an amendment deletes an abandoned ADR" "Delete yourself each ADR your human partner abandoned, in a commit that says why."
+require amending-a-batch "its body states the ADRs" "The pull request body states each ADR it writes, rewrites or deletes."
+require amending-a-batch "a change of ADRs alone is a bounded change" "A change that touches nothing but ADRs is not an amendment: it goes through a bounded change, under \`supercharlouze:using-batches\`."
+require amending-a-batch "red flag: an amendment for an ADR alone" "| \"My human partner wants this ADR rewritten, I'll amend the batch for it\" | An amendment changes the batch document. A change that touches nothing but ADRs goes through a bounded change. |"
+require amending-a-batch "red flag: an amendment's ADR is reread" "| \"This amendment only changes the scope, the ADR it writes needs no reread\" | An amendment that writes or rewrites an ADR goes through the technical reread, whatever else it changes. |"
+require amending-a-batch "an amendment releases what it drops" "An amendment that takes a gaps register entry out of \`Scope\` releases its reservation in the same pull request"
+require amending-a-batch "the human rules on a constraint a story cannot hold" "**When a story stops on a constraint it cannot hold, your human partner rules on the constraint.**"
+require amending-a-batch "an untenable constraint is amended" "If they rule it untenable, an amendment changes or removes the constraint and the story is abandoned"
+require amending-a-batch "a story abandoned on a constraint goes through abandoning-a-story" "the story is abandoned: invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
+require amending-a-batch "a constraint that holds resumes the story" "Otherwise the story resumes and holds the constraint, and nothing is amended."
+require amending-a-batch "the red flag keeps the ruling with the human" "Whether a constraint can be held is your human partner's ruling."
 require writing-a-batch-document "an obvious design is still written" "An obvious design is still a design: write it."
-require writing-a-batch "requalification offers a different batch" "**Rule the remaining work a different batch**"
-require writing-a-batch "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
+require amending-a-batch "requalification offers a different batch" "**Rule the remaining work a different batch**"
+require amending-a-batch "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
 require closing-a-batch "an amendment already released what it dropped" "An entry an amendment took out of \`Scope\` is not among them: that amendment released it."
 require writing-a-user-story "abandoning leaves the reservation to the amendment or closing" "the amendment that takes its entry out of \`Scope\` releases it, or \`supercharlouze:closing-a-batch\` does"
 require writing-a-user-story "an abandonment leaves closing the reservation no amendment released" "unless an amendment took its entry out of \`Scope\` and released it"
 require closing-a-batch "an amendment's release is the one exception" "except an amendment that takes a reserved entry out of \`Scope\` and releases it"
-require writing-a-batch "a corrective story is abandoned once ruled" "1. **Leave the story as it stands until the choice below is ruled, then abandon it.**"
-require writing-a-batch "an open pull request waits for the ruling" "A pull request already open stays open until then."
-require writing-a-batch "a corrective story goes through abandoning-a-story once ruled" "Once the choice is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
-require writing-a-batch "a technical story's pull request is closed at the stop" "Close its pull request without merging it if one is already open; the branch and its worktree stay until the choice below is ruled."
-require writing-a-batch "a technical story goes through abandoning-a-story once ruled" "Once it is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
-require writing-a-batch "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |"
-# Both requalifications live in writing-a-batch; using-batches only routes to it.
-require using-batches "the corrective and the technical conditions route to writing-a-batch" "When the corrective or the technical condition fires, you stop, and \`supercharlouze:writing-a-batch\` conducts the requalification"
-require writing-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`bounded/<slug>\`, \`chore/supercharlouze-init\`"
-require writing-a-batch "a pattern name claims what it does not hold" "would claim what it does not hold"
-require writing-a-batch "carries the requalification procedure"   "requalification"
-require writing-a-batch "requalifies a technical story" \
+require amending-a-batch "a corrective story is abandoned once ruled" "1. **Leave the story as it stands until the choice below is ruled, then abandon it.**"
+require amending-a-batch "an open pull request waits for the ruling" "A pull request already open stays open until then."
+require amending-a-batch "a corrective story goes through abandoning-a-story once ruled" "Once the choice is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
+require amending-a-batch "a technical story's pull request is closed at the stop" "Close its pull request without merging it if one is already open; the branch and its worktree stay until the choice below is ruled."
+require amending-a-batch "a technical story goes through abandoning-a-story once ruled" "Once it is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
+require amending-a-batch "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |"
+# Both requalifications live in amending-a-batch; using-batches only routes to it.
+require using-batches "the corrective and the technical conditions route to amending-a-batch" "When the corrective or the technical condition fires, you stop, and \`supercharlouze:amending-a-batch\` conducts the requalification"
+require amending-a-batch "the patterns are all named"              "\`adopt/<module>\`, \`batch/NN-<slug>\`, \`batch/NN-<slug>-close\`, \`story/NN-us-N-<slug>\`, \`bounded/<slug>\`, \`chore/supercharlouze-init\`"
+require amending-a-batch "a pattern name claims what it does not hold" "would claim what it does not hold"
+require amending-a-batch "carries the requalification procedure"   "requalification"
+require amending-a-batch "requalifies a technical story" \
     "## Requalifying a Technical Story"
-require writing-a-batch "an observable change needs a block" \
+require amending-a-batch "an observable change needs a block" \
     "it needs a block, and a block is acquired by an amendment that goes back through the opening review"
-require writing-a-batch "the amendment declares the flag the block requires" \
+require amending-a-batch "the amendment declares the flag the block requires" \
     "The same amendment declares the flag the block requires, if it requires one."
-require writing-a-batch "the exemption question is asked again" \
+require amending-a-batch "the exemption question is asked again" \
     "Ask the exemption criterion again of the batch with its new block"
 require writing-a-user-story "the human rules the block and its flag" \
     "a block for the observable change, and the flag that block requires, if it requires one"
-require writing-a-batch "branch naming convention"                "batch/NN"
+require opening-a-batch "branch naming convention"                "batch/NN"
+
+# --- amending-a-batch: what the skill routes ---
+require amending-a-batch "the entry point of a constraint names its section" \
+    "| A story stopped on a constraint of its batch it cannot hold | A Constraint a Story Cannot Hold |"
+require amending-a-batch "the entry point of a technical story names its section" \
+    "| A technical story that turned out to change something observable | Requalifying a Technical Story |"
 
 # --- writing-a-batch-document: the batch document contract (spec section "The batch document") ---
-# The guards that stay on writing-a-batch here hold what its reread and its pull
+# The guards that stay on opening-a-batch here hold what its reread and its pull
 # request body say of the document.
 require writing-a-batch-document "template declares the Constraints section" "## Constraints"
 require writing-a-batch-document "Constraints are copied verbatim to stories" "Every story's \`Global Constraints\` copies this section **verbatim**"
@@ -234,7 +244,7 @@ require writing-a-batch-document "every other decision is design" \
 # neither another batch nor the code that comes after the batch has to hold them.
 require writing-a-batch-document "a batch's constraints bind only its stories" \
     "A batch's constraints bind only its stories."
-require writing-a-batch "the PR body puts the constraints to the reviewer" \
+require opening-a-batch "the PR body puts the constraints to the reviewer" \
     "the technical design, or the reason for its \`none\`; the constraints; the flag decision;"
 # The batch document carries the technical design of its stories (spec section
 # "The batch document"): between the delta and the constraints, never blank.
@@ -250,57 +260,57 @@ require writing-a-batch-document "a story may depart from the design" \
     "a story may depart from it by recording a \`Technical design ruling:\`"
 require writing-a-batch-document "an observable behaviour is a block, not design" \
     "What a user or a neighbouring module would observe goes in a block, never in \`Technical design\`."
-require writing-a-batch "the PR body puts the design to the reviewer" \
+require opening-a-batch "the PR body puts the design to the reviewer" \
     "the technical design, or the reason for its \`none\`;"
 
-# --- writing-a-batch: the opening review (spec section "Opening a batch") ---
-require writing-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
-require writing-a-batch "the text is read in the batch document"     "block by block, in the batch document"
-require writing-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
+# --- opening-a-batch: the opening review (spec section "Opening a batch") ---
+require opening-a-batch "the opening review bears on the exact text" "It bears on the exact text of every block"
+require opening-a-batch "the text is read in the batch document"     "block by block, in the batch document"
+require opening-a-batch "the PR body puts the block text to the reviewer" "has to rule on: the exact text of every block"
 # With no block there is no block text to read, and the gate is the same gate
 # (spec section "Opening a batch"). What it reads instead is the reason for
 # the `none` and the entries `Scope` takes on, so a blockless batch passes
 # the opening review rather than passing it by.
-require writing-a-batch "a blockless delta still faces the gate" "the review bears on what stands in their place"
-require writing-a-batch "what the gate reads in the blocks' place" "the reason for the \`none\`, and the entries \`Scope\` takes on"
-require writing-a-batch "the PR body carries it to the reviewer" "the exact text of every block, or the reason for the \`none\`"
+require opening-a-batch "a blockless delta still faces the gate" "the review bears on what stands in their place"
+require opening-a-batch "what the gate reads in the blocks' place" "the reason for the \`none\`, and the entries \`Scope\` takes on"
+require opening-a-batch "the PR body carries it to the reviewer" "the exact text of every block, or the reason for the \`none\`"
 
-# --- writing-a-batch: the ordered opening, and the rereads it places ---
-require writing-a-batch "the opening is stated in order"        "Opening a new batch runs these steps, in this order"
+# --- opening-a-batch: the ordered opening, and the rereads it places ---
+require opening-a-batch "the opening is stated in order"        "Opening a new batch runs these steps, in this order"
 # Step 3 names every field the opening writes (spec section "Opening a batch").
 # `Constraints` was the one missing: a step that lists three fields out of four
 # reads as exhaustive, and the field it leaves out is the one each story copies
 # verbatim into its `Global Constraints`.
-require writing-a-batch "step 3 names every field it writes"    "3. **Write the batch document**: \`Scope\`, \`Spec delta\`, \`Technical design\`, \`Constraints\`, \`Feature flag\`"
-require writing-a-batch "step 3 ends on the ADRs"               "then write, rewrite or delete the ADRs your human partner decided (\`The ADRs\`)"
+require opening-a-batch "step 3 names every field it writes"    "3. **Write the batch document**: \`Scope\`, \`Spec delta\`, \`Technical design\`, \`Constraints\`, \`Feature flag\`"
+require opening-a-batch "step 3 ends on the ADRs"               "then write, rewrite or delete the ADRs your human partner decided (\`The ADRs\`)"
 # The opening places the rereads and says which are due; `rereading-a-batch`
 # conducts them.
-require writing-a-batch "the rereads are step 5" \
+require opening-a-batch "the rereads are step 5" \
     "5. **Have the batch reread**: the coherence reread, the technical reread and the batch-document reread (\`The Rereads\`)."
-require writing-a-batch "the pull request is step 6" \
+require opening-a-batch "the pull request is step 6" \
     "6. **Open the pull request** from \`batch/NN-<slug>\`"
-require writing-a-batch "the opening has its rereads conducted by the shared skill" \
+require opening-a-batch "the opening has its rereads conducted by the shared skill" \
     "Invoke \`supercharlouze:rereading-a-batch\` and give it the batch document, every block of its spec delta, those rereads as the rereads due, and the path of each ADR this pull request writes or rewrites."
-require writing-a-batch "an opening owes every reread" \
+require opening-a-batch "an opening owes every reread" \
     "**An opening owes every reread, whatever the batch carries.** A reread that has nothing to read says so itself."
-require writing-a-batch "the pull request body says what each reread found" \
-    "The body of the pull request, opening or amendment, says what each reread found, or that it found nothing."
-require writing-a-batch "the pull request body says when there was nothing to reread" \
+require opening-a-batch "the pull request body says what each reread found" \
+    "The body of the pull request says what each reread found, or that it found nothing."
+require opening-a-batch "the pull request body says when there was nothing to reread" \
     "When the technical reread returned that it had nothing to reread, the body says that instead."
-require writing-a-batch "a reread is visible from the pull request" \
+require opening-a-batch "a reread is visible from the pull request" \
     "A reread nobody can see from the pull request is a practice again, not a rule."
-require writing-a-batch "red flag: skipping the technical reread" \
+require opening-a-batch "red flag: skipping the technical reread" \
     "| \"The batch has no design and no constraints, I'll skip the technical reread\" | An opening owes every reread. The technical reread says itself when it has nothing to reread, and it rereads the ADRs this pull request writes. |"
 
-# --- writing-a-batch: the ADRs of an opening (spec section "Opening a batch") ---
-require writing-a-batch "the ADRs change in the opening pull request" "Write, rewrite or delete in this pull request, with the batch document, the ADRs your human partner decided during the brainstorming."
-require writing-a-batch "the blocks are applied before an ADR is written" "Before writing or rewriting one, invoke \`supercharlouze:applying-a-spec-delta\` and give it the batch document and every block of its spec delta: it returns the copies of the specs, blocks applied."
-require writing-a-batch "an ADR is confronted with the specs as the batch leaves them" "An ADR is confronted with the specs as the batch leaves them, and no block is in a spec yet."
-require writing-a-batch "an ADR is written by the shared skill" "Invoke \`supercharlouze:recording-a-decision\` for each ADR to write or to rewrite, and hand it those copies."
-require writing-a-batch "an abandoned ADR is deleted" "Delete yourself each ADR your human partner abandoned, in a commit that says why."
-require writing-a-batch "the PR body puts the ADRs to the reviewer" "any flag lifting the delta announces; and each ADR this pull request writes, rewrites or deletes."
-require writing-a-batch "red flag: writing the ADR by hand" "| \"My human partner decided this ADR, I'll write the file myself\" | Invoke \`supercharlouze:recording-a-decision\`. It confronts the decision with the specs, blocks applied, and with the other ADRs. |"
-require writing-a-batch "red flag: an ADR nobody decided" "| \"This design decision deserves an ADR, I'll write it with the batch\" | Only your human partner decides an ADR. Put the decision to them, and write it once they want it. |"
+# --- opening-a-batch: the ADRs of an opening (spec section "Opening a batch") ---
+require opening-a-batch "the ADRs change in the opening pull request" "Write, rewrite or delete in this pull request, with the batch document, the ADRs your human partner decided during the brainstorming."
+require opening-a-batch "the blocks are applied before an ADR is written" "Before writing or rewriting one, invoke \`supercharlouze:applying-a-spec-delta\` and give it the batch document and every block of its spec delta: it returns the copies of the specs, blocks applied."
+require opening-a-batch "an ADR is confronted with the specs as the batch leaves them" "An ADR is confronted with the specs as the batch leaves them, and no block is in a spec yet."
+require opening-a-batch "an ADR is written by the shared skill" "Invoke \`supercharlouze:recording-a-decision\` for each ADR to write or to rewrite, and hand it those copies."
+require opening-a-batch "an abandoned ADR is deleted" "Delete yourself each ADR your human partner abandoned, in a commit that says why."
+require opening-a-batch "the PR body puts the ADRs to the reviewer" "any flag lifting the delta announces; and each ADR this pull request writes, rewrites or deletes."
+require opening-a-batch "red flag: writing the ADR by hand" "| \"My human partner decided this ADR, I'll write the file myself\" | Invoke \`supercharlouze:recording-a-decision\`. It confronts the decision with the specs, blocks applied, and with the other ADRs. |"
+require opening-a-batch "red flag: an ADR nobody decided" "| \"This design decision deserves an ADR, I'll write it with the batch\" | Only your human partner decides an ADR. Put the decision to them, and write it once they want it. |"
 
 # --- rereading-a-spec (spec sections "Module adoption" and "The coherence reread") ---
 # Outside the context that wrote the text, whichever state the spec is in.
@@ -518,14 +528,14 @@ for needle in "## Considered options" "## Consequences" "One to three sentences 
     fi
 done
 
-# --- writing-a-batch: ending the opening and amendment reviews ---
-require writing-a-batch "an opening ends its review with no condition and the first story as next step" \
+# --- opening-a-batch: ending the opening and amendment reviews ---
+require opening-a-batch "an opening ends its review with no condition and the first story as next step" \
     "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: \`supercharlouze:writing-a-user-story\`, which starts from the batch document, with a prompt that says to choose the blocks from those the document still carries.**"
-require writing-a-batch "the merged document carries the design too" \
+require opening-a-batch "the merged document carries the design too" \
     "the exact text of every block and the technical design, which is what the design conversation was for"
-require writing-a-batch "an amendment ends its review with no condition and hands back to the batch" \
+require amending-a-batch "an amendment ends its review with no condition and hands back to the batch" \
     "**To end the review of an amendment, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: whatever the batch was doing when it stopped, with the skill that conducts it, starting from the amended batch document.**"
-require writing-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
+require opening-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- writing-a-user-story (spec 3, 4.4, 5.1, 5.3) ---
 require writing-a-user-story "concurrency via declared Sections"  "Sections:"
@@ -569,8 +579,8 @@ require writing-a-user-story "a technical story touches no section" \
     "its \`Sections:\` is \`none\`"
 require writing-a-user-story "no other story carries that field" \
     "No other story carries that field"
-require writing-a-user-story "the technical condition hands off to writing-a-batch" \
-    "**the story is abandoned**, and the decision goes to \`supercharlouze:writing-a-batch\`"
+require writing-a-user-story "the technical condition hands off to amending-a-batch" \
+    "**the story is abandoned**, and the decision goes to \`supercharlouze:amending-a-batch\`"
 # A corrective story is abandoned once the requalification is ruled, not when it
 # stops: an open pull request stays open until then.
 require writing-a-user-story "a corrective story is abandoned once ruled" \
@@ -1130,10 +1140,8 @@ require writing-a-batch-document "the gating sentence is left to the story" \
 require writing-a-batch-document "a block is written under the rules of a spec" \
     "**Invoke \`supercharlouze:writing-in-a-spec\` before writing a block.**"
 # An internal skill names the skills it invokes, never those that invoke it, nor
-# a numbered step of one of them. Its own name starts with the name of an entry
-# skill, which the pattern lets through.
-document_callers="$(printf '%s' "${entry_names%|}" | sed 's/writing-a-batch/writing-a-batch([^-]|$)/')"
-absent "writing-a-batch-document names no skill that invokes it" "$document_callers|Step [0-9]" writing-a-batch-document
+# a numbered step of one of them.
+absent "writing-a-batch-document names no skill that invokes it" "${entry_names%|}|Step [0-9]" writing-a-batch-document
 
 # --- rereading-a-batch: the rereads of a batch ---
 require rereading-a-batch "says what the invoking skill passes" \
@@ -1316,13 +1324,13 @@ require using-batches "the justification covers the ADR" \
 require using-batches "the human rules on the constraint or the ADR" \
     "When the condition on a constraint or an ADR fires, your human partner rules on the constraint or the ADR."
 require using-batches "an untenable constraint goes to an amendment" \
-    "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:writing-a-batch\` amends the constraint, under \`Amending a Batch\`."
+    "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:amending-a-batch\` amends the constraint."
 require using-batches "an untenable ADR goes to a bounded change" \
     "If they rule an ADR untenable, the story is abandoned and a bounded change rewrites or deletes the ADR."
 require using-batches "what holds resumes the story" \
     "Otherwise the story resumes and holds the constraint or the ADR."
 require writing-a-user-story "an untenable constraint abandons the story" \
-    "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:writing-a-batch\` amends the constraint."
+    "If they rule a constraint untenable, the story is abandoned and \`supercharlouze:amending-a-batch\` amends the constraint."
 
 # --- following-the-rules: the shape of a review's end ---
 require following-the-rules "the amendment gate covers the design and the constraints" "the decision to change its scope, its spec delta, its technical design, its constraints or its flag"
@@ -1351,7 +1359,7 @@ absent_everywhere "no skill glosses the rules for code under a flag" \
 # a batch of that kind has no block, and nothing said what its field held. Nothing
 # may name it again — an assertion on the new family alone would stay green beside
 # a leftover copy of the old one.
-for s in using-batches writing-a-batch writing-a-batch-document; do
+for s in using-batches opening-a-batch writing-a-batch-document; do
     case "$(body_flat "$REPO_ROOT/skills/$s/SKILL.md")" in
         *"Refactor and infrastructure"*) fail "$s: the old exemption family is gone" ;;
         *)                               pass "$s: the old exemption family is gone" ;;
@@ -1424,7 +1432,7 @@ require following-the-rules "the opening gate carries the ADRs changed with the 
 require following-the-rules "the amendment gate carries the ADRs changed with the decision" \
         "| Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag, and the ADRs written, rewritten or deleted with it |"
 require using-batches "the opening writes the ADRs the design decided" \
-        "On the architectural path, \`supercharlouze:writing-a-batch\` writes, rewrites or deletes at the opening the ADRs they decide."
+        "On the architectural path, \`supercharlouze:opening-a-batch\` writes, rewrites or deletes at the opening the ADRs they decide."
 require using-batches "the bounded ceremony has an exception" \
         "**Bounded** — ceremony unchanged, except for the reading of \`docs/adr/\` stated below, with these rules:"
 require using-batches "the design steps have the same exception" \

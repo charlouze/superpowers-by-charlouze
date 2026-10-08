@@ -26,7 +26,7 @@ fi
 # One template for every spec reread: the skills that have a spec reread keep
 # no reader prompt of their own, which would drift from the shared one.
 STRAY=""
-for old in writing-a-batch adopting-a-module; do
+for old in opening-a-batch amending-a-batch adopting-a-module; do
     if [ -e "$REPO_ROOT/skills/$old/references/reader-prompt.md" ]; then
         STRAY="$STRAY $old"
     fi
