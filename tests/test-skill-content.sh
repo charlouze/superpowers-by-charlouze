@@ -202,12 +202,12 @@ require handling-a-stopped-story "a corrective story is abandoned once ruled" "1
 require handling-a-stopped-story "an open pull request waits for the ruling" "A pull request already open stays open until then."
 require handling-a-stopped-story "a corrective story goes through abandoning-a-story once ruled" "Once the choice is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
 require handling-a-stopped-story "requalification offers a different batch" "**Rule the remaining work a different batch**"
-require handling-a-stopped-story "requalification releases what the batch drops" "3. **Release the reservations of the entries the batch no longer takes on.**"
+require handling-a-stopped-story "the steps the ruling asks for release what the batch drops" "The steps the ruling asks for release the reservations of the entries the batch no longer takes on; this session releases none. A reduced or rewritten scope releases them in the amendment pull request that changes \`Scope\`."
 require handling-a-stopped-story "the substance of a requalification is the human's" \
     "Never carry out a requalification by deciding the substance yourself."
 require handling-a-stopped-story "requalifies a technical story" \
     "## Requalifying a Technical Story"
-require handling-a-stopped-story "a technical story's pull request is closed at the stop" "Close its pull request without merging it if one is already open; the branch and its worktree stay until the choice below is ruled."
+require handling-a-stopped-story "a technical story stays as it stands until the ruling" "1. **Leave the story as it stands until your human partner has ruled whether the observable change is wanted, then abandon it.** A pull request already open stays open until then. Once it is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch."
 require handling-a-stopped-story "a technical story goes through abandoning-a-story once ruled" "Once it is ruled, invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch"
 require handling-a-stopped-story "an observable change needs a block" \
     "it needs a block, and a block is acquired by an amendment that goes back through the opening review"
@@ -221,23 +221,33 @@ require handling-a-stopped-story "an untenable constraint or ADR abandons the st
     "If they rule it untenable, the story is abandoned: invoke \`supercharlouze:abandoning-a-story\` and give it the story's branch."
 require handling-a-stopped-story "what holds resumes the story" \
     "Otherwise the story resumes and holds the constraint or the ADR, and nothing is amended."
-require handling-a-stopped-story "the next steps are taken in order, each with its skill" \
-    "Take them in the order their row gives, each with the skill that conducts it:"
+require handling-a-stopped-story "the next steps start in a fresh context" \
+    "A ruling that abandons the story may ask for next steps. They start in a fresh context: this conversation carries a stopped execution, and each step is conducted from a document."
+require handling-a-stopped-story "asks for a clear context once the story is abandoned, when the ruling asks for next steps" \
+    "When it does, once the story is abandoned: 1. **Ask your human partner to clear the context.**"
+require handling-a-stopped-story "the prompt takes its form from the foundation" \
+    "2. **Give the prompt that starts the next steps**, in the form \`The Git Model\` in \`supercharlouze:following-the-rules\` fixes."
+require handling-a-stopped-story "the prompt states the ruling, then each step with its skill and its document" \
+    "It states the ruling, then the steps of its row below, in their order, each with the skill to invoke and the document it starts from, by its path. A step the row gives to your human partner is named as theirs."
+require handling-a-stopped-story "the ruling is stated with the story and what it revealed" \
+    "State the ruling as your human partner gave it, and name the story and what it revealed. Not: \"Carry on with the requalification.\" Good: \"Technical story \`07-us-4-renommer-les-echeances\` was abandoned: it changes how a prorated amount is rounded, and that change is wanted.\""
 require handling-a-stopped-story "a corrected spec comes with a reduced scope" \
-    "| The spec is corrected, and the batch stays corrective on a reduced scope | The corrected spec ships through its own pull request, and \`supercharlouze:amending-a-batch\` reduces the \`Scope\`. |"
+    "| The spec is corrected, and the batch stays corrective on a reduced scope | Your human partner corrects the spec, through a pull request of its own. Then \`supercharlouze:amending-a-batch\` reduces the \`Scope\`, from the batch document. |"
 require handling-a-stopped-story "a rewritten batch goes to an amendment" \
-    "| The corrective batch is rewritten as an ordinary batch | \`supercharlouze:amending-a-batch\` rewrites it. |"
+    "| The corrective batch is rewritten as an ordinary batch | \`supercharlouze:amending-a-batch\` rewrites it, from the batch document. |"
 require handling-a-stopped-story "a different batch closes this one first" \
-    "| The remaining work is a different batch | \`supercharlouze:closing-a-batch\` closes this batch, then \`supercharlouze:opening-a-batch\` opens the fresh one. |"
+    "| The remaining work is a different batch | \`supercharlouze:closing-a-batch\` closes this batch, from the batch document. Then \`supercharlouze:opening-a-batch\` opens the fresh one, from the gaps register whose entries this batch released. |"
 require handling-a-stopped-story "a wanted change goes to an amendment, then to an ordinary story" \
-    "| The observable change of a technical story is wanted | \`supercharlouze:amending-a-batch\` adds its block. Once that pull request merges, \`supercharlouze:delivering-a-story\` rewrites the work as an ordinary story of the amended batch. |"
+    "| The observable change of a technical story is wanted | \`supercharlouze:amending-a-batch\` adds its block, from the batch document. Once that pull request merges, \`supercharlouze:delivering-a-story\` rewrites the work as an ordinary story of the amended batch, from the amended batch document. |"
 require handling-a-stopped-story "an untenable constraint goes to an amendment" \
-    "| A constraint is untenable | \`supercharlouze:amending-a-batch\` changes or removes it. |"
+    "| A constraint is untenable | \`supercharlouze:amending-a-batch\` changes or removes it, from the batch document. |"
 require handling-a-stopped-story "an untenable ADR goes to a bounded change" \
-    "| An ADR is untenable | A bounded change, under \`supercharlouze:making-a-bounded-change\`, rewrites or deletes it. |"
+    "| An ADR is untenable | A bounded change, under \`supercharlouze:making-a-bounded-change\`, rewrites or deletes it, from the ADR. |"
+require handling-a-stopped-story "red flag: the next step does not run in this conversation" \
+    "| \"The ruling is fresh in this conversation, I'll run the amendment here\" | This conversation carries a stopped execution, which can contradict the document the next step starts from. Ask your human partner to clear the context, and give the prompt. |"
 require handling-a-stopped-story "red flag: only the human corrects a spec" \
     "| \"The spec is wrong here, I'll fix it and keep the batch corrective\" | Only the human corrects a spec. Stop the story, present the requalification choice. |"
-require handling-a-stopped-story "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | Override 2 fires mid-SDD, usually before any pull request exists. Close it only if it is already open. |"
+require handling-a-stopped-story "red flag: requalification does not start by closing" "| \"Requalification starts by closing the story's pull request\" | The story stays as it stands until your human partner has ruled. A pull request already open is closed with the story, once it is abandoned. |"
 require handling-a-stopped-story "the red flag keeps the ruling with the human" "Whether a constraint can be held is your human partner's ruling."
 
 # --- writing-a-batch-document: the batch document contract (spec section "The batch document") ---
@@ -576,6 +586,8 @@ require opening-a-batch "the merged document carries the design too" \
     "the exact text of every block and the technical design, which is what the design conversation was for"
 require amending-a-batch "an amendment ends its review with no condition and hands back to the batch" \
     "**To end the review of an amendment, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: whatever the batch was doing when it stopped, with the skill that conducts it, starting from the amended batch document.**"
+require amending-a-batch "an amendment a ruling started hands on the step that follows it" \
+    "When the prompt that started the amendment states a ruling and names a step after the amendment, give that step instead, with its skill and its document, and have its prompt state the ruling."
 require opening-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- delivering-a-story (spec 3, 4.4, 5.1, 5.3) ---
@@ -781,6 +793,8 @@ require closing-a-batch "ends its review with no condition and no next step" \
     "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition and no next step.**"
 require closing-a-batch "what follows a closed batch is chosen elsewhere" \
     "What comes after a closed batch is chosen outside this model."
+require closing-a-batch "a closing a ruling started hands on the step that follows it" \
+    "Exception: when the prompt that started the closing states a ruling and names a step after the closing, give that step, with its skill and its document, and have its prompt state the ruling."
 
 # --- closing-a-batch: the duty precisions (spec section "Closing a batch") ---
 require closing-a-batch "the flag check is a duty"               "### Refuse to close on a flag"
@@ -1361,11 +1375,13 @@ require following-the-rules "the agreement is given in conversation" "The human 
 require following-the-rules "names the merge a clear moment"      "a moment to clear the context"
 require following-the-rules "the rule covers every gate"          "Merging any review is a moment to clear the context"
 require following-the-rules "the handover is conditional"         "Where a next step exists"
-require following-the-rules "the handover prompt stands alone"    "That prompt stands on its own"
+require following-the-rules "an abandonment after a stop is a clear moment too" "**Abandoning a story after a stop condition is a moment to clear the context too, when the ruling asks for a next step.**"
+require following-the-rules "the prompt given after an abandonment states the ruling" "The agent asks its human partner to clear the context, names that step and gives its prompt the same way, and that prompt states the ruling: the story's branch is gone, and no document carries what was ruled yet."
+require following-the-rules "each handover prompt stands alone"   "**Each of these prompts stands on its own:** it names the skill to invoke and the document to start from, and never refers back to the conversation."
 require using-batches "an unadopted module stops the design"     "the design stops"
 require using-batches "Override 1 stays bounded to steps 6 to 9" "still covers steps 6 to 9 and nothing else"
 require making-a-bounded-change "a bounded change adds and removes entries"  "add an entry and delete one"
-require following-the-rules "the prompt waits for the merge"      "The prompt waits for the merge announcement, not for the announcement that the pull request is ready"
+require following-the-rules "the prompt waits for the merge"      "After a review, the prompt waits for the merge announcement, not for the announcement that the pull request is ready"
 
 # --- following-the-rules: guarded code rules (referencing delivering-a-story) ---
 # The rules for code under a flag are written in full in the foundation, and
