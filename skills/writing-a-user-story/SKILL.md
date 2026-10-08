@@ -477,9 +477,8 @@ So this override removes one choice that cannot succeed, and one that leads
 nowhere.
 
 **Override 2 — the stop conditions the flow adds.** SDD states that four things
-stop you and only these. This plugin adds its own. The corrective and the
-technical conditions end the same way: **the story is abandoned**, and the
-decision goes to `supercharlouze:amending-a-batch`.
+stop you and only these. This plugin adds its own. **When one of them fires,
+stop: `supercharlouze:handling-a-stopped-story` conducts what follows.**
 
 In a corrective batch: if, while bringing code into conformity with the spec, you
 discover that the **spec** is wrong and the code is right, stop. The batch is no
@@ -494,40 +493,10 @@ it says it is; here the qualification it was written under is what is in questio
 and only your human partner may rule what follows: a block for the observable
 change, and the flag that block requires, if it requires one.
 
-**Abandoning here does not start by closing a pull request, because there is
-normally no pull request yet.** This condition fires *inside*
-`superpowers:subagent-driven-development`, mid-implementation, and the story's
-pull request only opens at the very end of this step, through
-`superpowers:finishing-a-development-branch`. What exists when it triggers is a
-branch and a worktree, and they stay until the requalification is ruled.
-
-In a corrective batch, the story is abandoned once the requalification is ruled:
-a pull request already open is closed without merging then, not when you stop.
-
-In a technical story, close the story's pull request without merging it if one
-is already open.
-
-The reservation posted on `main` by the batch's opening pull request is
-untouched: the amendment that takes its entry out of `Scope` releases it, or
-`supercharlouze:closing-a-batch` does.
-
-Once the requalification is ruled, invoke `supercharlouze:abandoning-a-story`
-and give it the story's branch.
-
 In a story whose batch declares constraints or whose `docs/adr/` carries an ADR:
 if, while conducting it, you discover that a constraint of its batch or an ADR
 cannot be held, stop and put it to your human partner. A constraint the spec
-contradicts is not this case, since the spec wins. When you stop, your human
-partner rules on the constraint or the ADR, and until then the branch and the
-worktree stay as they are.
-
-If they rule a constraint untenable, the story is abandoned and
-`supercharlouze:amending-a-batch` amends the constraint.
-
-If they rule an ADR untenable, the story is abandoned and a bounded change
-rewrites or deletes the ADR.
-
-Otherwise resume the story and hold the constraint or the ADR.
+contradicts is not this case, since the spec wins.
 
 It is named as an override for the same reason as the other three: an unnamed
 exception to a rule superpowers states as closed does not survive a session

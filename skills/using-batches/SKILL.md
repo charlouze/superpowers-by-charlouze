@@ -20,7 +20,8 @@ This project replaces dated design docs and one-off plans with a **living spec p
 | Drift found, or a module's gaps register holds unreserved **Violations** — the code contradicts the spec | `supercharlouze:opening-a-batch`, as a corrective batch — never straight to the code |
 | A module's gaps register holds unreserved **Gaps** — something real that no spec describes | `supercharlouze:opening-a-batch`, as an ordinary batch that finally specifies them |
 | A batch is open and its next story must be written | `supercharlouze:writing-a-user-story` |
-| A batch must change its scope, its spec delta, its technical design, its constraints or its flag, or a corrective batch must be requalified | `supercharlouze:amending-a-batch` |
+| A story has stopped on a stop condition this flow adds | `supercharlouze:handling-a-stopped-story` |
+| A batch must change its scope, its spec delta, its technical design, its constraints or its flag | `supercharlouze:amending-a-batch` |
 | Every story of a batch is merged or abandoned | `supercharlouze:closing-a-batch` |
 | Your human partner wants an ADR written, rewritten or deleted outside the adoption of a module, the opening of a batch, its amendment, the delivery review of a story and the installation | A bounded change, under `What Is Kept, What Is Rerouted` below |
 | Spike or bounded work | Nothing is rerouted except what `What Is Kept, What Is Rerouted` states below |
@@ -74,15 +75,7 @@ Justification: `supercharlouze:opening-a-batch` is not an implementation skill �
 
 Justification: the four native conditions assume a valid authority exists, assume the story is the story it says it is, and know nothing of the stories beside it. A corrective batch puts the authority in question; a technical story puts its own qualification in question — "purely technical" is otherwise the door through which behaviour enters with no gate behind it, since a story that transcribes no block passes no opening review; a constraint is what the other stories of its batch rely on, so a story that cannot hold one cannot settle it alone; and an ADR is a decision your human partner took, so only they judge it untenable.
 
-When the corrective or the technical condition fires, you stop, and `supercharlouze:amending-a-batch` conducts the requalification: under `Requalifying a Corrective Batch` for the corrective one, under `Requalifying a Technical Story` for the technical one.
-
-When the condition on a constraint or an ADR fires, your human partner rules on the constraint or the ADR.
-
-If they rule a constraint untenable, the story is abandoned and `supercharlouze:amending-a-batch` amends the constraint.
-
-If they rule an ADR untenable, the story is abandoned and a bounded change rewrites or deletes the ADR.
-
-Otherwise the story resumes and holds the constraint or the ADR.
+When one of them fires, you stop, and `supercharlouze:handling-a-stopped-story` conducts what follows.
 
 ### Override 3 — imposed execution mode
 
