@@ -10,7 +10,7 @@
 
 **Spec:** docs/specs/supercharlouze.md
 **Batch:** docs/batches/13-le-redecoupage-des-skills/README.md
-**Sections:** Batch > Amending a batch, Bounded change
+**Sections:** The model, Authority and conflict rules, Batch > Amending a batch, Bounded change
 **Blocks:** D2, D3
 
 ## Global Constraints
@@ -408,5 +408,3 @@ Co-Authored-By: Charlouze <me@charlouze.com>
 - Ruling: le plan ci-dessus garde le texte planifié de la tâche 2, où le prompt dit « the correction your human partner decided » ; le texte livré dit « decides », et la garde qui refuse à toute autre skill les règles du changement borné refuse aussi « it carries the spec correction they decide » — la relecture finale a relevé que la correction se décide dans le changement borné, pas avant — si c'est faux, un mot et un motif à reprendre.
 
 ## Observed drift
-
-- `Authority and conflict rules` — la spec ne dit pas si la pull request d'un changement borné est une revue : son tableau des revues ne la compte pas, alors que « quand l'humain annonce une fusion et qu'une étape suivante existe, l'agent la nomme et donne le prompt » ne dit pas de quelle fusion il s'agit. Aucune skill ne donne donc le prompt de l'étape qui suit un changement borné.

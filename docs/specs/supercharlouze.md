@@ -66,7 +66,7 @@ qu'un comportement est gardé par un flag.
 l'humain revoit avant qu'il l'atteigne.
 
 **Revue** (`gate`) — l'examen par l'humain d'une pull request, dont la fusion fait
-avancer un module, un lot ou une story.
+avancer un module, un lot ou une story, ou livre un changement borné.
 
 **Relecture** (`reread`) — la vérification d'un travail par un agent. Une
 relecture n'est pas une revue.
@@ -195,6 +195,7 @@ doit changer s'arrête.
 | Livraison | le code d'une story, sa modification de spec s'il y en a une, et les ADR que la revue fait écrire | la story est livrée |
 | Amendement | la décision de changer le périmètre, le spec delta, la conception technique, les contraintes ou le flag d'un lot, et les ADR écrits, réécrits ou supprimés avec elle | le lot est amendé |
 | Clôture | la consolidation et `status: closed` | le lot est clos |
+| Changement borné | ce qu'il change du code, d'une spec, d'un gaps register et des ADR | le changement borné est livré |
 
 L'agent n'approuve ni ne fusionne jamais une pull request de revue.
 
