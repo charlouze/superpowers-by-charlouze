@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.9.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.8.0...v0.9.0) (2026-10-14)
+
+
+### Features
+
+* la revue d'un changement borné s'achève par finishing-a-pr ([2e2d5ab](https://github.com/charlouze/superpowers-by-charlouze/commit/2e2d5ab1ec823feec458f303bf8f79c1c2658c9f))
+* la skill d'entrée amending-a-batch conduit l'amendement d'un lot ([b9651ca](https://github.com/charlouze/superpowers-by-charlouze/commit/b9651caac180de0bf70199b016cdf1d9e436a7f6))
+* la skill d'entrée handling-a-stopped-story conduit ce qui suit une condition d'arrêt ([6d42751](https://github.com/charlouze/superpowers-by-charlouze/commit/6d42751f75088fe07996d92f745e235245376e37))
+* la skill d'entrée making-a-bounded-change porte les règles du changement borné ([37a19c0](https://github.com/charlouze/superpowers-by-charlouze/commit/37a19c049fcbdf24be1178199983f8893b7b495a))
+* la skill interne abandoning-a-story porte le geste d'abandon ([ddeb965](https://github.com/charlouze/superpowers-by-charlouze/commit/ddeb9658acbbb2688198816e29fcc8d78d9e727d))
+* la skill interne applying-a-spec-delta porte les copies des specs, blocs appliqués ([cd22f01](https://github.com/charlouze/superpowers-by-charlouze/commit/cd22f01eb7d8f62a6e16c722f3e23d675b2d8caf))
+* la skill interne detecting-concurrency porte la détection de concurrence ([d346862](https://github.com/charlouze/superpowers-by-charlouze/commit/d346862bbbeb0cf17ce94b751072855ec5a13199))
+* la skill interne finishing-a-pr porte la fin d'une revue ([418c2b4](https://github.com/charlouze/superpowers-by-charlouze/commit/418c2b417b7389a9a95b5a92b28d1d20bdf0e6e9))
+* la skill interne rereading-a-batch conduit les relectures d'un lot ([562a740](https://github.com/charlouze/superpowers-by-charlouze/commit/562a740295b2966913542f3b0928fcc5c8d7d083))
+* la skill interne running-reread-rounds porte le déroulé des tours d'une relecture ([b719e26](https://github.com/charlouze/superpowers-by-charlouze/commit/b719e261bef172c9c63c90702860504acf58e846))
+* la skill interne starting-a-branch porte le départ d'une branche ([035d742](https://github.com/charlouze/superpowers-by-charlouze/commit/035d742b6f7ca1255e2d976270def2c6108e5bd3))
+* la skill interne writing-a-batch-document porte la forme du document de lot ([22621e9](https://github.com/charlouze/superpowers-by-charlouze/commit/22621e9b8ad1b40be4b28c342810f5a4655dd2a3))
+* la skill interne writing-in-a-gaps-register porte le gaps register ([3d8d4d0](https://github.com/charlouze/superpowers-by-charlouze/commit/3d8d4d0cb19628076a44cb6b1613c1a3504c2f0c))
+* la skill interne writing-in-a-spec porte ce qu'une spec contient ([15ee0a6](https://github.com/charlouze/superpowers-by-charlouze/commit/15ee0a6b287cbba1b7ffa9fe1915da443c676106))
+* le plan d'une story nomme les règles d'exécution sans les recopier ([f2d328a](https://github.com/charlouze/superpowers-by-charlouze/commit/f2d328abbb9b3d35008c47837a73dd205a1aed9e))
+* le socle following-the-rules porte ce qui vaut en permanence ([391ee95](https://github.com/charlouze/superpowers-by-charlouze/commit/391ee95c459696e998d3f80e49b680ca70b7a762))
+* un amendement réserve l'entrée du gaps register qu'il ajoute à Scope ([0905b89](https://github.com/charlouze/superpowers-by-charlouze/commit/0905b89a36eee66d7d5ee28b9956c18abd3490c6))
+* un changement borné porte la correction d'une spec que l'humain juge fausse ([d9cd31a](https://github.com/charlouze/superpowers-by-charlouze/commit/d9cd31a876e5d3a8475b493b78b4ea875c2e74b3))
+* un travail refait la détection avant de toucher une section de plus ([aea96bc](https://github.com/charlouze/superpowers-by-charlouze/commit/aea96bc24caa75dbc2c63893ff77c5abc44dbff5))
+* une story arrêtée reste en l'état jusqu'à la décision, dont la suite part d'un contexte vide ([cf0508a](https://github.com/charlouze/superpowers-by-charlouze/commit/cf0508a5b660ce14b5d59ee2d64ae2bf7b933cd0))
+* writing-a-user-story devient delivering-a-story ([7af47a3](https://github.com/charlouze/superpowers-by-charlouze/commit/7af47a3d26fce95ef644bbf83eac3cd2d20fe64e))
+
 ## [0.8.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.7.0...v0.8.0) (2026-10-07)
 
 
