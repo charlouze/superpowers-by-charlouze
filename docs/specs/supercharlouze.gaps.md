@@ -29,6 +29,22 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Violations
 
+- **Authority and conflict rules** — la spec veut que toute branche du flux parte
+  de `main` tel que le remote le porte. Le contrôle que `starting-a-branch` fait
+  après la création d'une branche, `git merge-base --is-ancestor origin/main
+  HEAD`, passe aussi pour une branche partie d'une autre branche qui contient
+  `origin/main` : une branche empilée sur une autre n'est pas détectée. Constatée
+  par la story `13-us-9-demarrer-une-branche`, consolidée par la clôture du
+  lot 13.
+
+- **The gaps register** — la spec veut que le gaps register dise quelles parties
+  du module ont été auditées contre la spec, et pourquoi les autres ne l'ont pas
+  été. `Coverage` nomme les cinq `skills/*/SKILL.md` audités à l'adoption et dit
+  que le module ne contient aucun autre fichier suivi, alors qu'il porte
+  aujourd'hui vingt-deux skills : il ne dit pas que les autres n'ont pas été
+  auditées, ni pourquoi. Constatée par la story `13-us-2-le-socle`, consolidée
+  par la clôture du lot 13.
+
 ## Gaps
 
 - **The spec document** — la règle « un renvoi nomme la section qu'il vise » n'est
@@ -100,3 +116,10 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   doit tenir et sur sa concision. `rereading-a-spec` lui pose aussi la question
   « Where does this sit in the model? », que l'étape 7 ne cite pas. Constatée par
   la story `11-us-4-le-module`, consolidée par la clôture du lot 11.
+
+- **The coherence reread / The technical reread** — la spec fait lire chaque spec
+  touchée blocs appliqués, et ne dit pas ce que devient un bloc qui ne s'applique
+  plus à `main` au moment de l'ouverture ou de l'amendement. `rereading-a-batch`
+  arrête alors les relectures et soumet le bloc à l'humain, ce qu'aucune règle ne
+  décrit. Constatée par la story `13-us-12-relire-un-lot`, consolidée par la
+  clôture du lot 13.
