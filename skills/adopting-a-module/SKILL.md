@@ -21,11 +21,13 @@ Run this when a batch is about to touch a module that has no spec yet — always
 **in a context of its own**. A design that discovers an unadopted module stops
 instead of chaining here; you arrive from a conversation that begins with this
 adoption, or directly when your human partner asks for a module to be adopted.
-`supercharlouze:writing-a-batch` carries the rule and the reason in its
+`supercharlouze:opening-a-batch` carries the rule and the reason in its
 `Preconditions`.
 
 **Announce at start:** "I'm using the adopting-a-module skill to adopt the
 <module> module."
+
+**Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
 
 ## Source Authority
 
@@ -55,13 +57,9 @@ The pressure to break this rule is highest exactly where the documents are thinn
 — that is the moment to slow down, not to improvise.
 
 **And you do not read *through* a mechanism to deduce the intention it served.**
-That is the content rule of `supercharlouze:using-batches` — a spec carries
-business rules and intentions, the mechanism stays in the code — and adoption is
-where breaking it is most tempting: a validated document describes a mechanism,
-the intention behind it looks one paraphrase away, and it is not. Ask the test of
-every sentence you are about to write: *would another developer, having
-implemented the same intention differently, read this sentence as true of their
-code?* What a document states as an intention is normative and goes in; what it
+Adoption is where that is most tempting: a validated document describes a
+mechanism, the intention behind it looks one paraphrase away, and it is not.
+What a document states as an intention is normative and goes in; what it
 states as a mechanism becomes a gap. Deducing an intention from a mechanism is
 reconstruction from the code by another road, whether you read that mechanism in
 the code or in a validated document. An intention comes from a validated document
@@ -69,25 +67,14 @@ or from your human partner.
 
 ## Steps
 
-**Check the preconditions first, before creating any branch and long before
-writing a line of either document.** They are the ones every pull request of this
-system checks:
-
-- **The branch you are about to create starts from `main` as the remote carries
-  it.** Fetch, then branch from `origin/main`, never from another branch. The
-  reason matters, because this is exactly the rule an agent talks itself out of:
-  `superpowers:finishing-a-development-branch` *preserves* the worktree on the
-  pull request path, so `superpowers:using-git-worktrees` Step 0 sees
-  `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree", reuses it,
-  and the adoption lands on the previous piece of work's branch. And merges
-  arrive from the remote: an adoption written from a stale starting point audits
-  code that is no longer there.
-- **`gh` is available and authenticated.** The adoption ends in a pull request.
+**Check the precondition first, before creating any branch and long before
+writing a line of either document: `gh` is available and authenticated.** The
+adoption ends in a pull request.
 
 The order below is not a suggestion. **The branch exists before either document
-is written** — step 3 — because `superpowers:using-git-worktrees` creates a
-*separate directory*: writing the spec first would leave it uncommitted where you
-started, and the new workspace would open empty.
+is written** — step 3 — because the branch's workspace is a *separate
+directory*: writing the spec first would leave it uncommitted where you started,
+and the new workspace would open empty.
 
 ### 1. Delimit the module
 
@@ -135,24 +122,9 @@ they are archived.
 
 ### 3. Create the branch
 
-Now, and not later. Create the branch `adopt/<module>` and its workspace by
-invoking `superpowers:using-git-worktrees`, then move into that workspace: every
-file the next two steps write belongs there.
-
-That skill prefers the harness's native tooling, which picks its own branch
-name and may leave you on a detached HEAD, and may branch from wherever you
-happened to be. If it leaves you on a differently named branch, a detached
-HEAD, or a starting point other than `origin/main`, restore the conventional
-name and the starting point before going on: `adopt/<module>`, from
-`origin/main`. **A named branch is not enough** — and here that is a matter
-of convention rather than mechanism, which is worth saying plainly: nothing
-scans `adopt/*`. Number allocation reads `batch/*` and `story/*`, the
-concurrency scan reads `story/*` and `bounded/*`, and an adoption branch claims no number and
-holds no sections, so it is equally unseen under either name. The convention
-is uniform anyway: a rule honoured only where a scan would catch you is not a
-rule. And it is on `batch/*` and `story/*` that it bites — there, a branch
-under the wrong name silently hands away its number and its sections for the
-length of an implementation.
+Now, and not later. Invoke `supercharlouze:starting-a-branch` and give it the
+name `adopt/<module>`: every file the next two steps write belongs in the
+workspace it leaves you in.
 
 The two steps before this one are dialogue: they produce a boundary and an
 inventory, not files. Everything after it writes.
@@ -162,15 +134,18 @@ inventory, not files. Everything after it writes.
 Merge, deduplicate, reconcile. The spec is normative — what the code must do — not
 descriptive.
 
+**Invoke `supercharlouze:writing-in-a-spec` before writing the first sentence.**
+
 - **Every sentence you write passes the other-implementation test**, and what it
   ejects **goes straight into the gaps register**, naming the document it came
-  from. Create `docs/specs/<module>.gaps.md` the first time you need it. The
+  from. Create `docs/specs/<module>.gaps.md` the first time you need it, and
+  invoke `supercharlouze:writing-in-a-gaps-register` before writing in it. The
   authority rule of `Source Authority` above holds while you write: a mechanism
   the document prescribes is no more admissible here than one you read in the
   code.
 - Exception: put to your human partner a technical decision the test ejects
-  that meets the conditions of an ADR, which `The Model` of
-  `supercharlouze:using-batches` states. If they want it as an ADR, invoke
+  that meets the conditions of an ADR, which
+  `supercharlouze:following-the-rules` states. If they want it as an ADR, invoke
   `supercharlouze:recording-a-decision`, and the ADR travels in the adoption
   pull request. Otherwise it becomes a gap.
 
@@ -220,88 +195,9 @@ the prose under them follows the project's language.
 ### 5. Audit the code against the spec
 
 Read the code against each section you just wrote, and add to the gaps register
-what the audit reveals.
+what the audit reveals, each finding as an entry under its category.
 
-Two categories, each under its own heading, kept apart because they are not
-treated the same way:
-
-- **Violations** — the code contradicts the spec. Feeds a *corrective batch*.
-- **Gaps** — a real behaviour or requirement no spec describes. Feeds an ordinary
-  batch that finally specifies them.
-
-Each entry designates a section of the spec. **An entry that came from a document
-names that document**, so your human partner can promote it knowing what they are
-promoting instead of re-reading the whole thing.
-
-**Each entry is one list item, never a paragraph of running prose.** You are
-the only skill that ever *creates* this file, and four writers act on its
-entries afterwards — three skills, plus the bounded path, which has no skill
-of its own — as do you yourself at the step `Offer to promote the gaps`. Each
-of them needs a thing it can point at, whether to annotate it in place or to
-take it out whole:
-
-| Gesture | Who | What it does to the entry |
-|---|---|---|
-| Reserve | `supercharlouze:writing-a-batch`, in the batch's opening pull request | appends `reserved by batch-NN` to it |
-| Remove | `supercharlouze:writing-a-user-story`, as the first commit of the story that resolves it | deletes it from the file, atomically with the code, and the commit that removes it says why |
-| Remove | you, at the step `Offer to promote the gaps`, when your human partner promotes one | deletes it from the file, in the same pull request that writes the rule it became |
-| Release | `supercharlouze:closing-a-batch`, at closing | removes a `reserved by batch-NN` the batch never consumed, and leaves the entry |
-| Release | `supercharlouze:writing-a-batch`, in an amendment pull request | removes the `reserved by batch-NN` of an entry the amendment takes out of the batch's `Scope`, and leaves the entry |
-| Add | `supercharlouze:closing-a-batch`, in the batch's closing pull request | appends it at the end of its category; within a batch, no other pull request adds one |
-| Add or remove | a bounded change, from its own pull request | belonging to no batch, it writes an entry or deletes one directly, contending only with another bounded change |
-
-A register written as flowing paragraphs satisfies every other word of this step
-and breaks every one of them: there is no item to annotate, none to remove
-cleanly, no list for a bounded change to append one to — what it adds is more
-prose, which the next writer cannot point at either — and nothing a corrective
-batch can draw a scope from. Write entries so those gestures are mechanical.
-
-**What qualifies an entry lives in the entry.** Besides its coverage, the register
-carries nothing but entries: no prose qualifies a *group* of them — where they came
-from, how they were classified, how many there are. Entries are added and removed
-one at a time, and nothing keeps such a paragraph honest: it goes false without
-anyone touching it. What it would say of several entries is repeated in each, and
-where an entry came from is read in the history of the file. You write this file's
-first entries all at once, which is exactly when a group paragraph feels natural —
-and it is the one moment nobody is left to notice it later.
-
-**An entry designates no other entry.** A settled entry leaves the file whole, and
-it takes with it anything that pointed at it — by name or by position. What an
-entry needs from its neighbour it states itself.
-
-**Nothing stays behind in this file once an entry is settled.** The register
-carries what is still open, and what an entry was — and why it left — is read in
-the history of the file (`git log -p docs/specs/<module>.gaps.md`).
-
-**The shape of the register:**
-
-```markdown
-# <module> — Gaps register
-
-## Coverage
-
-<Which parts of the module were audited, which were not, and why. Written even
-— especially — when nothing was found.>
-
-## Violations
-
-- **<spec section>** — <how the code contradicts it.>
-- **<spec section>** — <another one.> `reserved by batch-08`
-
-## Gaps
-
-- **<spec section, or the section that should exist>** — <behaviour no spec
-  describes.>
-- **<spec section, or the section that should exist>** — <a mechanism
-  `<the validated document, by its archive path>`
-  prescribes and no spec carries.>
-```
-
-**The register also declares its own coverage:** which parts of the module were
-audited, which were not, and why. An empty register that means "nothing was
-examined" must never look like an empty register that means "everything conforms" —
-they are opposite facts and they look identical unless you write the difference
-down. Declare the coverage especially when you found nothing.
+Write the register's `Coverage` from this audit.
 
 Fix nothing in the code while you are here. Adoption produces the register;
 resorbing a violation is a batch of its own, with its own review.
@@ -315,7 +211,8 @@ module's boundary, ask whether that behaviour carries an intended rule — a
 question about the intention, never about the mechanism. What they validate goes
 into the spec, under the section that behaviour constrains, and **its entry is
 deleted from the register** — this is an adoption that promotes a gap into the
-spec, and the commit that removes it says why. Everything else stays there.
+spec, and that is the reason the commit that removes it gives. Everything else
+stays there.
 
 The intention comes from them, not from you: you show the behaviour, they state or
 confirm what it is for. Paraphrasing an intention from the code yourself and
@@ -358,28 +255,16 @@ a contradiction resolved in silence.
 adoption gate, and there is no other one — this plugin adds no ceremony, it puts
 its gates where your flow already has reviews. Until that pull request is merged
 the module is not adopted and no batch may start on it. An open adoption pull
-request is not adoption; do not start `supercharlouze:writing-a-batch` on the
+request is not adoption; do not start `supercharlouze:opening-a-batch` on the
 strength of one.
 
-**Ending the review.** The agent never approves and never merges a pull request,
-here as at every gate. Each correction the review asks for is pushed as a
-`fixup!` commit of the commit it corrects, or as a commit of its own when it
-carries a fresh decision; your human partner gives their agreement in the
-conversation, and only then do you squash the fixups, push, and announce the
-pull request ready.
+**To end the review, invoke `supercharlouze:finishing-a-pr` and give it no
+condition, and this next step: `supercharlouze:opening-a-batch`, which starts
+from the adopted spec, named by path with the gaps register beside it.**
 
-**Merging this pull request is a moment to clear the context**, and your human
-partner's announcement of the merge is where you say so. The adoption
-conversation carried an inventory, rulings and a boundary argument that the
-merged documents now carry better than it does — and worse, it carried every
-mechanism you read while auditing the code, which is exactly what must not leak
-into the batch that follows.
-
-So when your human partner announces the merge, name
-`supercharlouze:writing-a-batch` as the next step, and give the prompt for it in
-a block to copy and paste. **That prompt stands on its own:** it names the skill
-to invoke, and the prompt names the adopted spec by path, and the gaps register
-beside it, and never refers back to this conversation.
+The clear that follows the merge matters here: the adoption conversation carried
+every mechanism you read while auditing the code, which is exactly what must not
+leak into the batch that follows.
 
 That next step is a **start, not a return**. A design that stopped on this
 module does not carry over: it begins again from the adopted spec, not from a
@@ -429,7 +314,7 @@ headers, front matter values and path patterns are English, while requirement
 bodies, descriptions, rationale and the slugs naming business objects follow the
 project's language. The spec and the gaps register you write obey this rule.
 
-Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+Every text this skill writes follows `Concision` in `supercharlouze:following-the-rules`.
 
 ## Red Flags
 
@@ -440,15 +325,12 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "The intention behind this mechanism is obvious, I'll write it down" | Deducing an intention from a mechanism is reconstruction from the code by another road. It comes from a document or from your partner, or it goes to the register. |
 | "I can infer the module boundaries from the directory layout" | Boundaries belong to your human partner. A wrong one contaminates everything downstream. |
 | "This old design doc is close enough to validated" | Ask. The spec's quality is capped by the inventory. |
-| "The audit found nothing, so the register is empty" | An empty register must say whether nothing was found or nothing was examined. |
 | "I'll write the spec first and show the source list with it" | The inventory is presented before anything is written, or your partner reviews sources they can no longer change your mind about. |
 | "These two documents disagree, I'll keep the clearer one" | Most recent wins by default, and the choice is a ruling, written down. |
 | "This behaviour is obviously intended, so into the spec it goes" | Obvious to you is not validated by them. Undocumented behaviour is a gap until a human says otherwise. |
 | "No documents exist, so I'll draft from the code and have them confirm" | A draft to confirm is a blanket yes waiting to happen. Section by section, one question at a time. |
 | "They said yes to it, so this mechanism is now a rule" | A mechanism is not submitted to validation. Enumerate what is observable at the boundary; a validated mechanism is approved drift. |
-| "I'll write the two documents first and create the branch to carry them" | using-git-worktrees opens a separate, empty directory. The branch comes first, at step 3, or both files stay stranded where you started. |
-| "I'm already in a worktree, that will do" | The worktree is not the problem; the branch is. Step 0 reuses the workspace, and the adoption lands on the previous branch unless you create the branch from `origin/main` yourself. |
-| "Prose reads better than a list in the gaps register" | Then nothing can reserve, remove or release an entry, and the three downstream gestures break. |
+| "I'll write the two documents first and create the branch to carry them" | The branch's workspace is a separate, empty directory. The branch comes first, at step 3, or both files stay stranded where you started. |
 | "The adoption PR is open, the batch can start" | Merged is adopted. The review is the gate, not the push. |
 | "I found a violation, I'll fix it while I'm in there" | Adoption produces the register. The fix is a corrective batch, with its own review. |
 | "I ejected those mechanisms at step 4, the code audit will pick them up" | It cannot. A mechanism the code never implemented has no code to audit, and step 4's set-aside list is its only route into the register. |

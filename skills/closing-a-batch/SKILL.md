@@ -9,20 +9,21 @@ description: Use when every user story of a batch is merged or abandoned - conso
 
 A batch closes when every one of its user stories is merged or abandoned and the human judges the work finished. Closing is not bookkeeping. It is the only moment in the lifecycle where the residue left on `main` gets collected.
 
-It is also the only moment in a batch's normal course that touches the batch document itself. The batch document carries no mutable state: it is written once, by the opening pull request, and nothing in the normal course of the batch modifies it **until closing** — *Withdraw the blocks no story delivered* removes them from it, and *Set status: closed* flips its front matter. This closure is that exception and the only one: anything else that would edit the document goes through an amendment pull request of its own, which `supercharlouze:writing-a-batch` owns.
+It is also the only moment in a batch's normal course that touches the batch document itself: *Withdraw the blocks no story delivered* removes them from it, and *Set status: closed* flips its front matter. Anything else that would edit the document goes through an amendment pull request of its own, which `supercharlouze:amending-a-batch` owns.
 
-Abandoning a story is almost free: closing its pull request without merging throws away its code, and its spec change if it had one — nothing to revoke, no spec left out of step. But what it never touched is still on `main`, put there by the batch's own opening pull request: the gaps register entry the batch reserved, and the blocks the batch announced in its spec delta. Either may be absent — a batch with no blocks announced none, a batch that reserved nothing left nothing to release — so what closing owes here is a look at both, not a tally. **Nothing else picks them up**, except an amendment that takes a reserved entry out of `Scope` and releases it. If closing skips a duty, that duty is simply never done.
+Abandoning a story is almost free: closing its pull request without merging throws away its code, and its spec change if it had one — nothing to revoke, no spec left out of step. But what it never touched is still on `main`, put there by the batch's opening pull request or by one of its amendments: the gaps register entry the batch reserved, and the blocks the batch announced in its spec delta. Either may be absent — a batch with no blocks announced none, a batch that reserved nothing left nothing to release — so what closing owes here is a look at both, not a tally. **Nothing else picks them up**, except an amendment that takes a reserved entry out of `Scope` and releases it. If closing skips a duty, that duty is simply never done.
 
 Every duty lands in one pull request, on a branch named `batch/NN-<slug>-close`. The flag check is allowed to refuse, and because it is allowed to refuse it comes before the duties that write.
 
 **Announce at start:** "I'm using the closing-a-batch skill to close batch NN."
 
+**Start by invoking `supercharlouze:following-the-rules`, unless this session already has.**
+
 ## Preconditions
 
 - **Every story is merged or its pull request is closed.** `gh pr list` is the authority. A story's state *is* its pull request's state — there is no checklist anywhere to reconcile against.
 - **Your human partner judges the batch finished.** Every story being merged or closed is necessary and not sufficient. Closing records a human decision — that the batch delivered what it owed — and a batch is never closed because an agent judged the work to look finished.
-- **The close branch starts from `main` as the remote carries it.** Fetch, then branch from `origin/main`, never from another branch. Otherwise two things go wrong at once: `superpowers:finishing-a-development-branch` *preserves* the worktree on the pull request path, so from inside one `superpowers:using-git-worktrees` Step 0 sees `GIT_DIR != GIT_COMMON`, concludes "already in a linked worktree" and reuses it, and this closure lands on the previous branch instead of its own; and a starting point behind the remote hides the very stories you are about to account for, so you would consolidate from an incomplete set.
-- **Create the branch and its workspace by invoking `superpowers:using-git-worktrees`.** The conventional name is `batch/NN-<slug>-close`, enforced by this plugin, not by that skill. If it lands on a differently named branch, a detached HEAD, or a starting point other than `origin/main`, restore the conventional name and the starting point before going on. **A named branch is not enough** — though here, unlike on a story branch, nothing is lost if you get it wrong: this batch's `NN` is already held by `docs/batches/NN-<slug>/` on `main`, since closing only runs on a batch whose opening pull request merged, so number allocation refuses it on that ground alone whatever this branch is called. The convention is uniform because one honoured only where a scan would catch you is not a convention at all.
+- **Invoke `supercharlouze:starting-a-branch` and give it the name `batch/NN-<slug>-close`.** The documents below are read on that branch: read from a `main` behind the remote, they leave out the stories merged since.
 - **Read the batch document `docs/batches/NN-<slug>/README.md` and every story document in that directory.** The story documents carry what you are about to consolidate: the drift they observed and the open rulings their `Rulings log` leaves. The batch document carries the blocks you are about to check against the `Blocks:` declarations of the story documents. "Every document in that directory" is every document that reached `main`: an abandoned story's document died with its branch, never merged, so it is not there — and neither is whatever it recorded under `Observed drift`. Nothing recovers it; that is part of what abandoning costs. Read what is on `main` and do not go hunting closed pull requests for documents that never landed.
 
 ## The Duties
@@ -49,9 +50,9 @@ Refusing is not a dead end. Report the surviving flag and present the **three ex
 
 | Exit | What it does | Form |
 |---|---|---|
-| Lift | Ships what exists: removes the branching in the code and the gating sentence in the spec | A lifting story, written with `supercharlouze:writing-a-user-story` — one per guarded module |
-| Extend the scope | Defers the decision to a later batch by declaring the flag's extended scope and its lifting condition | An amendment pull request on the batch document, written with `supercharlouze:writing-a-batch` — its *Amending a Batch* section owns this path — and reviewed like any other |
-| Tear down | Removes the guarded code and the corresponding spec change | A teardown story, written with `supercharlouze:writing-a-user-story` |
+| Lift | Ships what exists: removes the branching in the code and the gating sentence in the spec | A lifting story, written with `supercharlouze:delivering-a-story` — one per guarded module |
+| Extend the scope | Defers the decision to a later batch by declaring the flag's extended scope and its lifting condition | An amendment pull request on the batch document, written with `supercharlouze:amending-a-batch` and reviewed like any other |
+| Tear down | Removes the guarded code and the corresponding spec change | A teardown story, written with `supercharlouze:delivering-a-story` |
 
 Then stop and wait. Do not close the batch under an undeclared surviving flag "to be tidied up later" — that is the outcome this duty exists to prevent. And do not leave the batch open indefinitely either: without these three exits, the refusal would manufacture exactly the dead flagged code it is meant to prevent.
 
@@ -61,32 +62,24 @@ Collect from every story document in the batch what it left for you, and write i
 
 **An open ruling that names no category should not reach you.** A story does not merge leaving one without a destination — the delivery review settles those, and it is the last moment that can: here the story is merged and its branch is gone, so you can note that a ruling was never taken up and no longer take it up. If you find one, report it with the rest of your findings and let your human partner rule; do not classify it yourself.
 
-Within a batch, only the closing pull request adds entries to the gaps register. Every addition contends with every other on the same module, which is why a batch adds through one pull request.
-
-An entry is one list item, added at the end of its category.
+**Invoke `supercharlouze:writing-in-a-gaps-register` before adding an entry.**
 
 "Out of scope for this batch" is never a reason to drop an observation. It is precisely why the observation belongs in the register: the register is what a later corrective batch draws its scope from. Dropped here, the finding dies with the session that made it.
 
-A finding already deleted from the register is re-entered only if the entry says what has changed since.
-
-Read the file's history before adding an entry (`git log -p docs/specs/<module>.gaps.md`). An entry that left this file left for a reason, written in the commit that removed it: resolved, promoted, moot, false, or set aside by your human partner.
-
-**What qualifies an entry lives in the entry.** Besides its coverage, the register carries nothing but entries: no prose qualifies a *group* of them — where they came from, how they were classified, how many there are. Entries are added and removed one at a time, and nothing keeps such a paragraph honest: it goes false without anyone touching it. What it would say of several entries is repeated in each, and where an entry came from is read in the history of the file. You arrive with a batch's worth of findings at once, so the temptation is yours more than anyone's: write "consolidated by batch NN" into each entry that needs it, never above them.
-
-**An entry designates no other entry.** A settled entry leaves the file whole, and it takes with it anything that pointed at it — by name or by position. What an entry needs from its neighbour it states itself.
+You arrive with a batch's worth of findings at once: write "consolidated by batch NN" into each entry that needs it, never above them.
 
 ### Release unconsumed reservations
 
-For every gaps register entry this batch reserved at opening (`reserved by batch-NN`) that is still in the file, release it. Releasing removes the reservation annotation and leaves the entry: the gap is still open, it is simply no longer claimed. Those are the **unconsumed reservations**: a story abandoned, an entry no story resolved. An entry an amendment took out of `Scope` is not among them: that amendment released it. An entry a story did resolve is not there to release: the story deleted it from the file, atomically with the code that resolved it, and the commit that removes it says why.
+For every gaps register entry this batch reserved (`reserved by batch-NN`) that is still in the file, release it. Invoke `supercharlouze:writing-in-a-gaps-register` before releasing one. Those are the **unconsumed reservations**: a story abandoned, an entry no story resolved. An entry an amendment took out of `Scope` is not among them: that amendment released it. An entry a story did resolve is not there to release: the story deleted it from the file, atomically with the code that resolved it.
 
-Closing a story's pull request does not do this for you. The reservation lives on `main` — it got there when the batch's opening pull request merged — and abandoning a story touches nothing on `main`. Left in place, the annotation is a perpetual claim: the gap looks taken forever, and no future batch can pick it up.
+Closing a story's pull request does not do this for you. The reservation lives on `main`, and abandoning a story touches nothing on `main`. Left in place, the annotation is a perpetual claim: the gap looks taken forever, and no future batch can pick it up.
 
 ### Withdraw the blocks no story delivered
 
 Read the `Blocks:` field of every story document in the batch directory, and collect the `D<n>` identifiers they declare; a `none` declares nothing. A block the batch document's `Spec delta` defines and that no collected declaration names is a block announced but never delivered: a story abandoned, a scope cut along the way. For each one:
 
 1. Remove it from the batch document, its `Spec delta` entry and any constraint that names it, so the document no longer promises what the batch did not deliver.
-2. Ask your human partner whether it joins the gaps register. If they say yes, write it under **Gaps** in the register of the module concerned.
+2. Ask your human partner whether it joins the gaps register. If they say yes, invoke `supercharlouze:writing-in-a-gaps-register` and add it under **Gaps** in the register of the module concerned.
 
 Without this duty the abandonment is invisible. It is not drift, since the spec and the code agree: both are silent about the feature. And nothing else records it.
 
@@ -104,15 +97,15 @@ Set `status: closed` in the batch document's front matter. That is the whole dut
 
 Then push and open the pull request. The **review of the closing pull request** is the human gate, like every other gate in this system — this plugin adds no ceremony, it puts its checkpoints where your flow already has them. Closing records a human decision, that the batch delivered what it owed, and that decision deserves its review. A batch is never closed because an agent judged the work to look finished.
 
-**Ending the review.** The agent never approves and never merges a pull request. Each correction is pushed as a `fixup!` commit of the commit it corrects, or as a commit of its own when it carries a fresh decision; your human partner gives their agreement in the conversation, and only then do you squash the fixups, push, and announce the pull request ready.
+**To end the review, invoke `supercharlouze:finishing-a-pr` and give it no condition and no next step.** What comes after a closed batch is chosen outside this model.
 
-**Merging a closing review is a moment to clear the context.** When your human partner announces the merge, ask them to clear the context. It is the one gate with **no next step to name**, so it **hands over no prompt**: what comes after a closed batch is chosen outside this model.
+Exception: when the prompt that started the closing states a ruling and names a step after the closing, give that step, with its skill and its document, and have its prompt state the ruling.
 
 ## Language
 
 **English skeleton, project-language prose.** Section titles, field names, table headers, front matter values (`status: closed`), path patterns and branch patterns are English, everywhere and always. The prose you write — the body of a gaps register entry, an amended scope paragraph — follows the project's language, as do the slugs, which name business objects. This skill and every message it produces are English; the documents it writes carry both.
 
-Every text this skill writes follows `Concision` in `supercharlouze:using-batches`.
+Every text this skill writes follows `Concision` in `supercharlouze:following-the-rules`.
 
 ## Red Flags
 
@@ -122,7 +115,6 @@ Every text this skill writes follows `Concision` in `supercharlouze:using-batche
 | "Observed drift is out of scope for this batch" | That is exactly why it goes to the register instead of being forgotten. |
 | "A flag is still live, so I cannot close — dead end" | Three exits: lift it, declare an extended scope by amendment, or tear the guarded code down. |
 | "I'll do the writing duties first and check the flags at the end" | The flag check writes nothing, so it comes first. Checked later, a refusal strands the writing already done on a branch nobody can merge, and re-running duplicates all of it. |
-| "I'm already in a worktree from this batch's last story, I'll close from here" | Close from there if you like, but branch from `origin/main`: otherwise using-git-worktrees reuses the workspace and the closure lands on that story's branch. |
 | "The flag is gone from the code, that is enough" | The gating sentence in the spec is part of the flag. Left behind, it makes the spec false. |
 | "The delta announced lifting an earlier batch's flag, but the flag check only covers our own flags" | Right, and *Withdraw the blocks no story delivered* checks the rest: an announced lifting that did not happen is a block not delivered. |
 | "I'll flip the status now and file the gaps in a follow-up" | The status is the record that the duties were done. Flipping it first turns the record into a lie. |

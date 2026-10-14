@@ -1,0 +1,26 @@
+# One skill per line: its name, then its type.
+# entry: triggered by a situation.
+# internal: invoked only by another skill.
+# foundation: invoked by a skill or by a plan.
+using-batches entry
+adopting-a-module entry
+opening-a-batch entry
+amending-a-batch entry
+handling-a-stopped-story entry
+delivering-a-story entry
+closing-a-batch entry
+making-a-bounded-change entry
+rereading-a-spec internal
+rereading-a-technical-design internal
+recording-a-decision internal
+writing-in-a-spec internal
+writing-in-a-gaps-register internal
+detecting-concurrency internal
+abandoning-a-story internal
+applying-a-spec-delta internal
+running-reread-rounds internal
+starting-a-branch internal
+finishing-a-pr internal
+writing-a-batch-document internal
+rereading-a-batch internal
+following-the-rules foundation

@@ -51,6 +51,9 @@ un seul module et se livre en une pull request.
 **Story technique** (`technical story`) — une story qui ne change rien
 d'observable à la frontière de son module.
 
+**Règles d'exécution** (`execution rules`) — les règles à suivre par celui qui
+exécute ou relit une tâche d'un plan.
+
 **Conception technique** (`technical design`) — le mécanisme prévu pour les
 stories d'un lot, dont chacune peut s'écarter.
 
@@ -66,7 +69,7 @@ qu'un comportement est gardé par un flag.
 l'humain revoit avant qu'il l'atteigne.
 
 **Revue** (`gate`) — l'examen par l'humain d'une pull request, dont la fusion fait
-avancer un module, un lot ou une story.
+avancer un module, un lot ou une story, ou livre un changement borné.
 
 **Relecture** (`reread`) — la vérification d'un travail par un agent. Une
 relecture n'est pas une revue.
@@ -195,6 +198,7 @@ doit changer s'arrête.
 | Livraison | le code d'une story, sa modification de spec s'il y en a une, et les ADR que la revue fait écrire | la story est livrée |
 | Amendement | la décision de changer le périmètre, le spec delta, la conception technique, les contraintes ou le flag d'un lot, et les ADR écrits, réécrits ou supprimés avec elle | le lot est amendé |
 | Clôture | la consolidation et `status: closed` | le lot est clos |
+| Changement borné | ce qu'il change du code, d'une spec, d'un gaps register et des ADR | le changement borné est livré |
 
 L'agent n'approuve ni ne fusionne jamais une pull request de revue.
 
@@ -212,8 +216,13 @@ La fusion d'une revue est le moment de vider le contexte.
 Quand l'humain annonce une fusion et qu'une étape suivante existe, l'agent la nomme
 et donne le prompt qui la lance dans un contexte vide.
 
-Ce prompt nomme la skill à invoquer et le document d'où repartir, et ne renvoie
-jamais à la conversation.
+Quand une story arrêtée par une condition d'arrêt (`Departures from superpowers`)
+est abandonnée et que la décision de l'humain demande une étape suivante, l'agent
+la nomme et donne le prompt qui la lance dans un contexte vide, et ce prompt
+énonce cette décision.
+
+Chacun de ces prompts nomme la skill à invoquer et le document d'où repartir, et
+ne renvoie jamais à la conversation.
 
 ## Module
 
@@ -454,7 +463,9 @@ comme une ouverture.
 
 Quand la condition d'arrêt d'un lot correctif se déclenche, l'humain tranche :
 
-- soit il corrige la spec, et le lot reste correctif sur un périmètre réduit ;
+- soit il décide de corriger la spec : un changement borné porte cette
+  correction (`Bounded change`), et un amendement réduit le périmètre du lot,
+  qui reste correctif ;
 - soit un amendement réécrit le lot comme lot ordinaire, en gardant `NN` et son
   répertoire ;
 - soit il juge le travail restant être un autre lot, qui reçoit un `NN` neuf, et le
@@ -465,7 +476,8 @@ La story en cours est abandonnée une fois la requalification tranchée.
 Les entrées du gaps register que le lot ne prend plus en charge sont libérées.
 
 Quand la condition d'arrêt d'une story technique se déclenche, la story est
-abandonnée.
+abandonnée une fois que l'humain a tranché si le changement observable qu'elle a
+révélé est voulu.
 
 Si l'humain veut le changement observable qu'elle a révélé, un amendement ajoute
 son bloc, et le flag qu'il exige s'il en exige un (`Feature flags`).
@@ -551,24 +563,33 @@ qui l'accueille quand il en rejoint une.
 `Global Constraints` porte :
 
 1. la section `Constraints` du lot, recopiée mot pour mot ;
-2. le gel du fichier de spec ;
-3. la primauté de la spec sur le lot, et la correction d'une spec réservée à
-   l'humain ;
-4. les règles de `Concision` ;
-5. dans un lot correctif seulement, sa condition d'arrêt
-   (`Departures from superpowers`) ;
-6. dans une story qui écrit du code gardé par un flag seulement, les règles de
-   `Code under a feature flag`, quel que soit le lot qui déclare le flag ;
-7. dans une story technique seulement, sa condition d'arrêt
-   (`Departures from superpowers`) ;
-8. seulement si le lot déclare des contraintes ou si `main` porte un ADR quand la
-   branche de la story en part, la condition d'arrêt sur une contrainte ou un ADR
-   qui ne peut pas être tenu (`Departures from superpowers`) ;
-9. seulement si `main` porte un ADR quand la branche de la story en part,
-   l'obligation de tenir ces ADR (`Architecture decision records`) ;
-10. les conditions auxquelles une décision technique est consignée en ADR
-    (`Architecture decision records`), et l'obligation de soumettre comme
-    arbitrage ouvert la décision qui les réunit (`Delivering a story`).
+2. le nom des règles d'exécution qui valent pour la story (`Execution rules`),
+   sans les recopier ;
+3. le chemin de chaque ADR que `main` porte à la création de la branche de la
+   story, ou `none`.
+
+### Execution rules
+
+Celui qui exécute ou relit une tâche du plan d'une story suit les règles
+d'exécution :
+
+- le gel du fichier de spec ;
+- la primauté de la spec sur le lot, et la correction d'une spec réservée à
+  l'humain ;
+- les règles de `Concision` ;
+- dans un lot correctif, sa condition d'arrêt (`Departures from superpowers`) ;
+- dans une story qui écrit du code gardé par un flag, les règles de
+  `Code under a feature flag` ;
+- dans une story technique, sa condition d'arrêt
+  (`Departures from superpowers`) ;
+- si le lot déclare des contraintes ou si `main` porte un ADR, la condition
+  d'arrêt sur une contrainte ou un ADR qui ne peut pas être tenu
+  (`Departures from superpowers`) ;
+- si `main` porte un ADR, l'obligation de tenir ces ADR
+  (`Architecture decision records`) ;
+- les conditions auxquelles une décision technique est consignée en ADR
+  (`Architecture decision records`), et l'obligation de soumettre comme
+  arbitrage ouvert la décision qui les réunit (`Delivering a story`).
 
 ### Concurrency detection
 
@@ -587,6 +608,10 @@ branche a déjà modifiées.
 Le travail qui démarre s'arrête si l'une de ses sections est ainsi revendiquée.
 
 Il s'arrête aussi si une déclaration n'a pas pu être lue.
+
+Un travail qui, avant l'ouverture de sa pull request, va toucher une section pour
+laquelle il n'a pas fait la détection la fait, et s'arrête si cette section est
+revendiquée ou si une déclaration n'a pas pu être lue.
 
 ### Delivering a story
 
@@ -736,6 +761,10 @@ branche `bounded/<slug>`.
 
 Quand il change quelque chose d'observable à la frontière du module, sa pull
 request met la spec à jour avec le code. Sinon, la spec reste muette.
+
+Exception : quand l'humain juge qu'une spec a tort et que le code a raison, un
+changement borné porte la correction de spec que l'humain décide, sans toucher
+au code.
 
 Il déclare dans le corps de sa pull request la spec qu'il vise et les sections
 qu'il touche, ou `none`.

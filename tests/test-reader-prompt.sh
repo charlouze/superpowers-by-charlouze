@@ -26,7 +26,7 @@ fi
 # One template for every spec reread: the skills that have a spec reread keep
 # no reader prompt of their own, which would drift from the shared one.
 STRAY=""
-for old in writing-a-batch adopting-a-module; do
+for old in opening-a-batch amending-a-batch adopting-a-module; do
     if [ -e "$REPO_ROOT/skills/$old/references/reader-prompt.md" ]; then
         STRAY="$STRAY $old"
     fi
@@ -38,7 +38,7 @@ else
 fi
 
 # Flattened so a phrase matches regardless of how the prose is wrapped, and with
-# runs of spaces squeezed for the same reason as in test-skill-content.sh.
+# runs of spaces squeezed for the same reason as in lib.sh.
 FLAT="$(tr '\n' ' ' < "$PROMPT" | tr -s ' ')"
 
 has() {
@@ -118,6 +118,13 @@ case "$FLAT" in
     *"one of the two"*|*"neither of them"*|*"step 7"*)
         fail "the prompt neither counts the readings nor ranks a step" ;;
     *)  pass "the prompt neither counts the readings nor ranks a step" ;;
+esac
+
+# A reader loads no skill of the plugin: the prompt does not name the one that
+# runs the rounds.
+case "$FLAT" in
+    *"running-reread-rounds"*) fail "the prompt does not name the skill that runs the rounds" ;;
+    *)                         pass "the prompt does not name the skill that runs the rounds" ;;
 esac
 
 exit $((FAILURES > 0))

@@ -1,5 +1,5 @@
 ---
-status: open
+status: closed
 ---
 
 # 13 — Le redécoupage des skills

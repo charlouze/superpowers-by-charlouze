@@ -29,28 +29,23 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
 
 ## Violations
 
-- **The gaps register** — la spec veut qu'un lot réserve tout ce qu'il prend en
-  charge dans le gaps register, sans limiter la réservation à l'ouverture.
-  `writing-a-batch` ne fait poser l'annotation `reserved by batch-NN` que par la
-  pull request d'ouverture, et ne dit rien d'une entrée qu'un amendement ajoute à
-  `Scope`. Un lot qui prend une entrée en charge par amendement ne la réserve donc
-  pas, et un autre lot peut alors la réserver aussi. Constatée par la story
-  `11-us-5-le-lot`, consolidée par la clôture du lot 11. `reserved by batch-13`
+- **Authority and conflict rules** — la spec veut que toute branche du flux parte
+  de `main` tel que le remote le porte. Le contrôle que `starting-a-branch` fait
+  après la création d'une branche, `git merge-base --is-ancestor origin/main
+  HEAD`, passe aussi pour une branche partie d'une autre branche qui contient
+  `origin/main` : une branche empilée sur une autre n'est pas détectée. Constatée
+  par la story `13-us-9-demarrer-une-branche`, consolidée par la clôture du
+  lot 13.
+
+- **The gaps register** — la spec veut que le gaps register dise quelles parties
+  du module ont été auditées contre la spec, et pourquoi les autres ne l'ont pas
+  été. `Coverage` nomme les cinq `skills/*/SKILL.md` audités à l'adoption et dit
+  que le module ne contient aucun autre fichier suivi, alors qu'il porte
+  aujourd'hui vingt-deux skills : il ne dit pas que les autres n'ont pas été
+  auditées, ni pourquoi. Constatée par la story `13-us-2-le-socle`, consolidée
+  par la clôture du lot 13.
 
 ## Gaps
-
-- **Code under a feature flag / The user story document** — les quatre règles sont
-  écrites en entier à un seul endroit, `writing-a-user-story`, et trois
-  reformulations partielles en circulent ailleurs sans que rien ne les y rattache :
-  le renvoi de la doctrine du flag dans `using-batches`, une ligne `Red Flags` de la
-  même skill, et une troisième formulation de la règle du registre des flags. Aucune
-  spec ne dit ce qu'une glose doit à son texte canonique, ni combien de
-  reformulations partielles d'une même règle un module tolère. La division « écrit
-  en entier à un seul endroit, désigné ailleurs » tient aujourd'hui parce qu'aucune
-  de ces gloses n'est une reformulation complète, mais rien ne la soutient : une
-  glose peut dériver de son texte canonique sans que quoi que ce soit le signale, et
-  un lecteur se fier à la mauvaise. Relevée puis parquée par la story
-  `06-us-1-le-code-garde`. `reserved by batch-13`
 
 - **The spec document** — la règle « un renvoi nomme la section qu'il vise » n'est
   écrite dans aucune spec, et rien n'attrape un renvoi par la position. Le lot 01
@@ -122,10 +117,9 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   « Where does this sit in the model? », que l'étape 7 ne cite pas. Constatée par
   la story `11-us-4-le-module`, consolidée par la clôture du lot 11.
 
-- **Amending a batch** — la spec dit « Quand la condition d'arrêt d'une story
-  technique se déclenche, la story est abandonnée », donc dès l'arrêt. Abandonner
-  une story est pourtant une décision humaine : `writing-a-batch` et
-  `writing-a-user-story` gardent la branche et le worktree jusqu'à ce que l'humain
-  tranche. C'est la spec qui a tort, et la corriger est un acte humain. Constatée
-  par la story `11-us-5-le-lot`, consolidée par la clôture du lot 11.
-  `reserved by batch-13`
+- **The coherence reread / The technical reread** — la spec fait lire chaque spec
+  touchée blocs appliqués, et ne dit pas ce que devient un bloc qui ne s'applique
+  plus à `main` au moment de l'ouverture ou de l'amendement. `rereading-a-batch`
+  arrête alors les relectures et soumet le bloc à l'humain, ce qu'aucune règle ne
+  décrit. Constatée par la story `13-us-12-relire-un-lot`, consolidée par la
+  clôture du lot 13.

@@ -96,6 +96,7 @@ own; it puts its checkpoints where your flow already has them.
 | Story delivery | a story's code, its spec change if it has one, and the ADRs the review asks for, in one diff |
 | Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch, and the ADRs written, rewritten or deleted with it |
 | Batch closing | the consolidation, `status: closed` |
+| Bounded change | what a change outside any batch does to the code, a spec, a gaps register and the ADRs |
 
 The opening gate is the one that pays. You read the wording of a spec at the
 moment changing it still costs nothing — and no story may be written until it
@@ -172,6 +173,9 @@ whose branch is `story/*` or `bounded/*`, and from every pushed `story/*` or
 not declared yet is read by the sections it has already changed. The branch
 name is the filter: only those branches claim sections, so a pull request that touches no spec at all is seen like any other.
 
+A piece of work about to touch one more section before its pull request opens
+runs the detection again for that section.
+
 Git is a partial net here, not the net. It conflicts on lines, not on sections,
 so two edits far apart inside one section merge cleanly — exactly the case worth
 catching.
@@ -183,13 +187,14 @@ is. A spike is an answer, and leaves no artifact. A **bounded change** — a
 well-scoped change to code that already exists — keeps its own ceremony and its
 `bounded/<slug>` branch, under these rules: it updates the spec in the same pull
 request whenever something observable at the module's boundary changes, and says
-nothing there only when nothing does; it declares the spec it targets and the
-sections it touches, like a story; it carries no flag, being complete on its own;
-it may write to a gaps register directly; it may write, rewrite and delete ADRs,
-or carry nothing but ADRs; it holds the ADRs `main` carries when its branch
-starts, and puts to the human one it cannot hold; and it puts to the human the
-technical decision it takes that would earn an ADR. Only architectural work opens
-a batch.
+nothing there only when nothing does; it carries, without touching the code, the
+correction of a spec the human judges wrong where the code is right; it declares
+the spec it targets and the sections it touches, like a story; it carries no
+flag, being complete on its own; it may write to a gaps register directly; it
+may write, rewrite and delete ADRs, or carry nothing but ADRs; it holds the ADRs
+`main` carries when its branch starts, and puts to the human one it cannot hold;
+and it puts to the human the technical decision it takes that would earn an ADR.
+Only architectural work opens a batch.
 
 ### The four departures
 
@@ -217,14 +222,28 @@ There is never an undeclared fifth one.
 
 | Skill | Use it when |
 |---|---|
-| `supercharlouze:using-batches` | Entry point — routing, authority rules, declared overrides |
+| `supercharlouze:using-batches` | Entry point — routing, declared overrides |
+| `supercharlouze:following-the-rules` | Never directly — the rules that hold at every moment of the flow, which the other skills and a story's plan invoke |
 | `supercharlouze:adopting-a-module` | A module has no living spec yet |
-| `supercharlouze:writing-a-batch` | Opening, amending or requalifying a batch |
-| `supercharlouze:writing-a-user-story` | Writing the next story of an open batch |
+| `supercharlouze:opening-a-batch` | Opening a batch |
+| `supercharlouze:amending-a-batch` | Amending an open batch |
+| `supercharlouze:handling-a-stopped-story` | A story has stopped on a stop condition the flow adds |
+| `supercharlouze:delivering-a-story` | Writing the next story of an open batch |
 | `supercharlouze:closing-a-batch` | Every story is merged or abandoned |
+| `supercharlouze:making-a-bounded-change` | A well-scoped change that needs no batch, a spec the human judges wrong where the code is right, or an ADR to write, rewrite or delete outside a batch |
 | `supercharlouze:rereading-a-spec` | Never directly — a building block the other skills invoke to have a spec reread |
 | `supercharlouze:rereading-a-technical-design` | Never directly — a building block the other skills invoke to have a batch's technical design, its blocks and its ADRs reread |
 | `supercharlouze:recording-a-decision` | Never directly — a building block the other skills invoke to have an ADR written or rewritten |
+| `supercharlouze:writing-in-a-spec` | Never directly — a building block the other skills invoke before writing into a spec |
+| `supercharlouze:writing-in-a-gaps-register` | Never directly — a building block the other skills invoke before writing into a gaps register |
+| `supercharlouze:detecting-concurrency` | Never directly — a building block the other skills invoke to check that nobody else holds the sections a piece of work will touch |
+| `supercharlouze:abandoning-a-story` | Never directly — a building block the other skills invoke to close an abandoned story's pull request, delete its branch and remove its worktree |
+| `supercharlouze:applying-a-spec-delta` | Never directly — a building block the other skills invoke to build, outside the repository, a copy of each spec with a batch's blocks applied |
+| `supercharlouze:running-reread-rounds` | Never directly — a building block the other skills invoke to run the rounds of a reread: gather the readers' findings, work them through and open the later rounds |
+| `supercharlouze:starting-a-branch` | Never directly — a building block the other skills invoke to start a branch from `main` as the remote carries it: fetch, create the branch and its workspace, restore its name and its starting point |
+| `supercharlouze:finishing-a-pr` | Never directly — a building block the other skills invoke to end a pull request's review: its corrections, the squash, the announcement that it is ready, then the clear context its merge calls for |
+| `supercharlouze:writing-a-batch-document` | Never directly — a building block the other skills invoke to give a batch document its form: its fields, its blocks and its flag decision |
+| `supercharlouze:rereading-a-batch` | Never directly — a building block the other skills invoke to conduct the rereads a batch owes before its pull request opens: coherence, technical, then batch document |
 
 ## Requirements
 

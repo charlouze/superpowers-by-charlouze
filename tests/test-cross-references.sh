@@ -1,16 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-FAILURES=0
-
-pass() { echo "  [PASS] $1"; }
-fail() { echo "  [FAIL] $1"; FAILURES=$((FAILURES + 1)); }
+source "$(dirname "$0")/lib.sh"
 
 echo "test-cross-references"
 
-KNOWN_SKILLS="using-batches adopting-a-module writing-a-batch writing-a-user-story closing-a-batch rereading-a-spec rereading-a-technical-design recording-a-decision"
 # Commands share the plugin namespace with the skills: /supercharlouze:init is a
 # command, not a skill, so it resolves against commands/<name>.md instead.
 KNOWN_COMMANDS="init"
@@ -23,7 +17,7 @@ BAD=0
 while read -r ref; do
     [ -n "$ref" ] || continue
     found=0
-    for s in $KNOWN_SKILLS; do
+    for s in $(declared_skills); do
         if [ "$ref" = "$s" ] && [ -f "$REPO_ROOT/skills/$s/SKILL.md" ]; then
             found=1
         fi
@@ -73,8 +67,8 @@ else
     fail "the CLAUDE.md block exists in exactly one file (found $COPIES)"
 fi
 
-# 4. The bounded path is spelled out (spec 8.2) — it has no skill of its own.
-UB="$(awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$REPO_ROOT/skills/using-batches/SKILL.md" | tr '\n' ' ')"
+# 4. The bounded path is spelled out (spec 8.2), in the skill that carries it.
+UB="$(awk 'f{print} /^---$/{c++; if(c==2) f=1}' "$REPO_ROOT/skills/making-a-bounded-change/SKILL.md" | tr '\n' ' ')"
 has() { case "$2" in *"$1"*) return 0 ;; *) return 1 ;; esac }
 for needle in "if and only if nothing observable" "bounded/" "no feature flag"; do
     if has "$needle" "$UB"; then
@@ -100,7 +94,7 @@ fi
 # none of the skills that invoke it.
 RROW="$(grep -F '`supercharlouze:rereading-a-spec`' "$REPO_ROOT/README.md" || true)"
 case "$RROW" in
-    *"adopting-a-module"*|*"writing-a-batch"*|*"invoked by"*)
+    *"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
         fail "the README row of rereading-a-spec names no caller" ;;
     *)  pass "the README row of rereading-a-spec names no caller" ;;
 esac
@@ -113,7 +107,7 @@ esac
 # is not for direct use and names none of the skills that invoke it.
 TROW="$(grep -F '`supercharlouze:rereading-a-technical-design`' "$REPO_ROOT/README.md" || true)"
 case "$TROW" in
-    *"writing-a-batch"*|*"invoked by"*)
+    *"opening-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
         fail "the README row of rereading-a-technical-design names no caller" ;;
     *)  pass "the README row of rereading-a-technical-design names no caller" ;;
 esac
@@ -126,13 +120,168 @@ esac
 # direct use and names none of the skills that invoke it.
 DROW="$(grep -F '`supercharlouze:recording-a-decision`' "$REPO_ROOT/README.md" || true)"
 case "$DROW" in
-    *"writing-a-batch"*|*"writing-a-user-story"*|*"adopting-a-module"*|*"invoked by"*)
+    *"making-a-bounded-change"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"adopting-a-module"*|*"invoked by"*)
         fail "the README row of recording-a-decision names no caller" ;;
     *)  pass "the README row of recording-a-decision names no caller" ;;
 esac
 case "$DROW" in
     *"Never directly"*) pass "the README row of recording-a-decision rules out direct use" ;;
     *)                  fail "the README row of recording-a-decision rules out direct use" ;;
+esac
+
+# The README row of writing-in-a-spec, like the other internal skills', says it
+# is not for direct use and names none of the skills that invoke it.
+WROW="$(grep -F '`supercharlouze:writing-in-a-spec`' "$REPO_ROOT/README.md" || true)"
+case "$WROW" in
+    *"making-a-bounded-change"*|*"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"adopting-a-module"*|*"invoked by"*)
+        fail "the README row of writing-in-a-spec names no caller" ;;
+    *)  pass "the README row of writing-in-a-spec names no caller" ;;
+esac
+case "$WROW" in
+    *"Never directly"*) pass "the README row of writing-in-a-spec rules out direct use" ;;
+    *)                  fail "the README row of writing-in-a-spec rules out direct use" ;;
+esac
+
+# The README row of writing-in-a-gaps-register, like the other internal
+# skills', says it is not for direct use and names none of the skills that
+# invoke it.
+GROW="$(grep -F '`supercharlouze:writing-in-a-gaps-register`' "$REPO_ROOT/README.md" || true)"
+case "$GROW" in
+    *"making-a-bounded-change"*|*"using-batches"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"adopting-a-module"*|*"closing-a-batch"*|*"invoked by"*)
+        fail "the README row of writing-in-a-gaps-register names no caller" ;;
+    *)  pass "the README row of writing-in-a-gaps-register names no caller" ;;
+esac
+case "$GROW" in
+    *"Never directly"*) pass "the README row of writing-in-a-gaps-register rules out direct use" ;;
+    *)                  fail "the README row of writing-in-a-gaps-register rules out direct use" ;;
+esac
+
+# The README row of detecting-concurrency, like the other internal skills',
+# says it is not for direct use and names none of the skills that invoke it.
+CROW="$(grep -F '`supercharlouze:detecting-concurrency`' "$REPO_ROOT/README.md" || true)"
+case "$CROW" in
+    *"making-a-bounded-change"*|*"using-batches"*|*"delivering-a-story"*|*"invoked by"*)
+        fail "the README row of detecting-concurrency names no caller" ;;
+    *)  pass "the README row of detecting-concurrency names no caller" ;;
+esac
+case "$CROW" in
+    *"Never directly"*) pass "the README row of detecting-concurrency rules out direct use" ;;
+    *)                  fail "the README row of detecting-concurrency rules out direct use" ;;
+esac
+
+# The README row of abandoning-a-story, like the other internal skills', says
+# it is not for direct use and names none of the skills that invoke it.
+AROW="$(grep -F '`supercharlouze:abandoning-a-story`' "$REPO_ROOT/README.md" || true)"
+case "$AROW" in
+    *"opening-a-batch"*|*"amending-a-batch"*|*"handling-a-stopped-story"*|*"delivering-a-story"*|*"invoked by"*)
+        fail "the README row of abandoning-a-story names no caller" ;;
+    *)  pass "the README row of abandoning-a-story names no caller" ;;
+esac
+case "$AROW" in
+    *"Never directly"*) pass "the README row of abandoning-a-story rules out direct use" ;;
+    *)                  fail "the README row of abandoning-a-story rules out direct use" ;;
+esac
+
+# The README row of handling-a-stopped-story says when the skill is used.
+HROW="$(grep -F '`supercharlouze:handling-a-stopped-story`' "$REPO_ROOT/README.md" || true)"
+case "$HROW" in
+    *"A story has stopped on a stop condition the flow adds"*)
+        pass "the README row of handling-a-stopped-story says when it is used" ;;
+    *)  fail "the README row of handling-a-stopped-story says when it is used" ;;
+esac
+
+# The README row of making-a-bounded-change says when the skill is used.
+MROW="$(grep -F '`supercharlouze:making-a-bounded-change`' "$REPO_ROOT/README.md" || true)"
+case "$MROW" in
+    *"A well-scoped change that needs no batch, a spec the human judges wrong where the code is right, or an ADR to write, rewrite or delete outside a batch"*)
+        pass "the README row of making-a-bounded-change says when it is used" ;;
+    *)  fail "the README row of making-a-bounded-change says when it is used" ;;
+esac
+
+# The README states the exception of the bounded change: the correction of a
+# spec the human judges wrong. Read flattened, since the README wraps.
+if tr '\n' ' ' < "$REPO_ROOT/README.md" | tr -s ' ' | grep -qF "it carries, without touching the code, the correction of a spec the human judges wrong where the code is right"; then
+    pass "the README states the spec correction a bounded change carries"
+else
+    fail "the README states the spec correction a bounded change carries"
+fi
+
+# The README row of applying-a-spec-delta, like the other internal skills', says
+# it is not for direct use and names none of the skills that invoke it.
+SROW="$(grep -F '`supercharlouze:applying-a-spec-delta`' "$REPO_ROOT/README.md" || true)"
+case "$SROW" in
+    *"opening-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
+        fail "the README row of applying-a-spec-delta names no caller" ;;
+    *)  pass "the README row of applying-a-spec-delta names no caller" ;;
+esac
+case "$SROW" in
+    *"Never directly"*) pass "the README row of applying-a-spec-delta rules out direct use" ;;
+    *)                  fail "the README row of applying-a-spec-delta rules out direct use" ;;
+esac
+
+# The README row of running-reread-rounds, like the other internal skills', says
+# it is not for direct use and names none of the skills that invoke it.
+OROW="$(grep -F '`supercharlouze:running-reread-rounds`' "$REPO_ROOT/README.md" || true)"
+case "$OROW" in
+    *"rereading-a-"*|*"invoked by"*)
+        fail "the README row of running-reread-rounds names no caller" ;;
+    *)  pass "the README row of running-reread-rounds names no caller" ;;
+esac
+case "$OROW" in
+    *"Never directly"*) pass "the README row of running-reread-rounds rules out direct use" ;;
+    *)                  fail "the README row of running-reread-rounds rules out direct use" ;;
+esac
+
+# The README row of starting-a-branch, like the other internal skills', says it
+# is not for direct use and names none of the skills that invoke it.
+BROW="$(grep -F '`supercharlouze:starting-a-branch`' "$REPO_ROOT/README.md" || true)"
+case "$BROW" in
+    *"making-a-bounded-change"*|*"using-batches"*|*"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"closing-a-batch"*|*"invoked by"*)
+        fail "the README row of starting-a-branch names no caller" ;;
+    *)  pass "the README row of starting-a-branch names no caller" ;;
+esac
+case "$BROW" in
+    *"Never directly"*) pass "the README row of starting-a-branch rules out direct use" ;;
+    *)                  fail "the README row of starting-a-branch rules out direct use" ;;
+esac
+
+# The README row of finishing-a-pr, like the other internal skills', says it is
+# not for direct use and names none of the skills that invoke it.
+FROW="$(grep -F '`supercharlouze:finishing-a-pr`' "$REPO_ROOT/README.md" || true)"
+case "$FROW" in
+    *"adopting-a-module"*|*"opening-a-batch"*|*"amending-a-batch"*|*"delivering-a-story"*|*"closing-a-batch"*|*"invoked by"*)
+        fail "the README row of finishing-a-pr names no caller" ;;
+    *)  pass "the README row of finishing-a-pr names no caller" ;;
+esac
+case "$FROW" in
+    *"Never directly"*) pass "the README row of finishing-a-pr rules out direct use" ;;
+    *)                  fail "the README row of finishing-a-pr rules out direct use" ;;
+esac
+
+# The README row of writing-a-batch-document, like the other internal skills',
+# says it is not for direct use and names none of the skills that invoke it.
+NROW="$(grep -F '`supercharlouze:writing-a-batch-document`' "$REPO_ROOT/README.md" || true)"
+case "$NROW" in
+    *"opening-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
+        fail "the README row of writing-a-batch-document names no caller" ;;
+    *)  pass "the README row of writing-a-batch-document names no caller" ;;
+esac
+case "$NROW" in
+    *"Never directly"*) pass "the README row of writing-a-batch-document rules out direct use" ;;
+    *)                  fail "the README row of writing-a-batch-document rules out direct use" ;;
+esac
+
+# The README row of rereading-a-batch, like the other internal skills', says it
+# is not for direct use and names none of the skills that invoke it.
+BROW="$(grep -F '`supercharlouze:rereading-a-batch`' "$REPO_ROOT/README.md" || true)"
+case "$BROW" in
+    *"opening-a-batch"*|*"amending-a-batch"*|*"invoked by"*)
+        fail "the README row of rereading-a-batch names no caller" ;;
+    *)  pass "the README row of rereading-a-batch names no caller" ;;
+esac
+case "$BROW" in
+    *"Never directly"*) pass "the README row of rereading-a-batch rules out direct use" ;;
+    *)                  fail "the README row of rereading-a-batch rules out direct use" ;;
 esac
 
 # The rereads use three skills when they are installed; the README recommends
@@ -247,6 +396,13 @@ case "$README_FLAT" in
     *)  fail "the README's amendment gate carries the ADRs changed with the amendment" ;;
 esac
 
+# A bounded change is a gate, in the README's gate table too.
+case "$README_FLAT" in
+    *"| Bounded change | what a change outside any batch does to the code, a spec, a gaps register and the ADRs |"*)
+        pass "the README's gate table counts the bounded change" ;;
+    *)  fail "the README's gate table counts the bounded change" ;;
+esac
+
 # The README extends the stop condition on a constraint to an ADR.
 case "$README_FLAT" in
     *"If a story finds that a constraint of its batch or an ADR cannot be held, it stops and puts it to the human. An agent may neither correct a spec, nor keep a qualification it has lost, nor bend a constraint or an ADR."*)
@@ -306,6 +462,36 @@ if [ "$BAD" = "0" ]; then
     pass "a section a skill names in parentheses is one of its own"
 else
     fail "a section a skill names in parentheses is one of its own ($BAD found)"
+fi
+
+# 8. A reference is cited only by the skill that holds it. A text several
+#    skills need lives in an internal skill they invoke: a reference sits in
+#    the directory of one skill, and another skill citing it depends on a file
+#    it does not own.
+FOREIGN="$(foreign_ref_citations | tr '\n' '|')"
+if [ -z "$FOREIGN" ]; then
+    pass "a reference is cited only by the skill that holds it"
+else
+    fail "a reference is cited only by the skill that holds it ($FOREIGN)"
+fi
+
+# 9. `writing-a-batch` was renamed `opening-a-batch`. The former name survives
+#    in no skill, in no command and not in the README. `writing-a-batch-document`
+#    is another skill, which the pattern lets through.
+FORMER="$(grep -rnE 'writing-a-batch([^-]|$)' "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/README.md" 2>/dev/null | wc -l | tr -d ' ' || true)"
+if [ "$FORMER" = "0" ]; then
+    pass "no skill, no command and not the README names writing-a-batch"
+else
+    fail "no skill, no command and not the README names writing-a-batch ($FORMER found)"
+fi
+
+# 10. `writing-a-user-story` was renamed `delivering-a-story`. The former name
+#     survives in no skill, in no command and not in the README.
+FORMER_STORY="$(grep -rn 'writing-a-user-story' "$REPO_ROOT/skills" "$REPO_ROOT/commands" "$REPO_ROOT/README.md" 2>/dev/null | wc -l | tr -d ' ' || true)"
+if [ "$FORMER_STORY" = "0" ]; then
+    pass "no skill, no command and not the README names writing-a-user-story"
+else
+    fail "no skill, no command and not the README names writing-a-user-story ($FORMER_STORY found)"
 fi
 
 exit $((FAILURES > 0))

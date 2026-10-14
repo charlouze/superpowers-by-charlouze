@@ -20,11 +20,12 @@ echo "test-suite-integrity"
 # --- 1: nothing hides from the runner ---
 # run-all.sh collects `tests/test-*.sh` by glob. A check file under any other
 # name is never executed, and nothing reports it — it simply sits there looking
-# like part of the suite.
+# like part of the suite. lib.sh is no check file: the check files source it.
 STRAYS=""
 for f in "$SCRIPT_DIR"/*.sh; do
     b="$(basename "$f")"
     [ "$b" = "run-all.sh" ] && continue
+    [ "$b" = "lib.sh" ] && continue
     case "$b" in
         test-*.sh) ;;
         *)         STRAYS="$STRAYS $b" ;;

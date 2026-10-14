@@ -23,6 +23,7 @@ fi
 # Flatten both files: a phrase must match regardless of how the prose is wrapped.
 SKILL_FLAT="$(tr '\n' ' ' < "$SKILL")"
 BLOCK_FLAT="$(tr '\n' ' ' < "$BLOCK")"
+FOUNDATION_FLAT="$(tr '\n' ' ' < "$REPO_ROOT/skills/following-the-rules/SKILL.md")"
 
 has() { case "$2" in *"$1"*) return 0 ;; *) return 1 ;; esac }
 
@@ -62,19 +63,19 @@ check_verb() {
     fi
 }
 
-check_verb "steps 6 to 9 are replaced by writing-a-batch" \
-    "are replaced by \`supercharlouze:writing-a-batch\`" \
+check_verb "steps 6 to 9 are replaced by opening-a-batch" \
+    "are replaced by \`supercharlouze:opening-a-batch\`" \
     "replaces steps 6 to 9 of the architectural checklist"
 check_verb "the stop conditions are extended, not restated" \
-    "This plugin adds the conditions below. For corrective batches only:" \
+    "This plugin adds the stop conditions \`supercharlouze:following-the-rules\` writes in full" \
     "extends the stop conditions of superpowers:subagent-driven-development"
 
 # The condition on a constraint is introduced with both of its triggers: a batch
 # that declares constraints, or an ADR on `main`.
-if has "For a story only if its batch declares constraints or \`main\` carries an ADR when its branch starts:" "$SKILL_FLAT"; then
-    pass "using-batches introduces the stop condition on a constraint or an ADR"
+if has "For a story only if its batch declares constraints or \`main\` carries an ADR when its branch starts:" "$FOUNDATION_FLAT"; then
+    pass "following-the-rules introduces the stop condition on a constraint or an ADR"
 else
-    fail "using-batches introduces the stop condition on a constraint or an ADR"
+    fail "following-the-rules introduces the stop condition on a constraint or an ADR"
 fi
 check_verb "SDD is imposed as the execution mode" \
     "This plugin imposes SDD as the execution mode" \
@@ -82,6 +83,44 @@ check_verb "SDD is imposed as the execution mode" \
 check_verb "finishing is constrained to the pull request option" \
     "this plugin constrains the choice to" \
     "constrains superpowers:finishing-a-development-branch to the pull request option"
+
+# using-batches writes in full the override on steps 6 to 9 alone. For each of
+# the others it declares the override and names the skill that writes it in
+# full: delivering-a-story.
+STORY_FLAT="$(tr '\n' ' ' < "$REPO_ROOT/skills/delivering-a-story/SKILL.md" | tr -s ' ')"
+POINTERS="$(grep -o "\`supercharlouze:delivering-a-story\` writes this override in full\." "$SKILL" | wc -l | tr -d ' ' || true)"
+if [ "$POINTERS" = "3" ]; then
+    pass "using-batches says where each of the three other overrides is written in full"
+else
+    fail "using-batches says where each of the three other overrides is written in full ($POINTERS found)"
+fi
+for needle in \
+    "this plugin requires \`superpowers:subagent-driven-development\`" \
+    "repatriating the rulings depends on SDD's ledger" \
+    "those arbitrations are the only record of where the spec was ambiguous" \
+    "the choice is constrained to **\"Push and create a Pull Request\"**" \
+    "**\"Merge back locally\" is actively destructive.**" \
+    "**\"Keep the branch as-is\" is not destructive**" \
+    "**Deliberately not an override:** SDD's terminal state." \
+    "know nothing of the stories beside it"; do
+    if has "$needle" "$STORY_FLAT"; then
+        pass "delivering-a-story writes the override in full: $needle"
+    else
+        fail "delivering-a-story writes the override in full: $needle"
+    fi
+done
+for needle in \
+    "Justification, stated exactly" \
+    "actively destructive" \
+    "keeps none" \
+    "know nothing of the stories beside it" \
+    "SDD's terminal state"; do
+    if has "$needle" "$SKILL_FLAT"; then
+        fail "using-batches no longer writes in full: $needle"
+    else
+        pass "using-batches no longer writes in full: $needle"
+    fi
+done
 
 if has "before any design work" "$BLOCK_FLAT" && has "before executing any plan" "$BLOCK_FLAT"; then
     pass "block requires invocation before design and before execution"
@@ -110,13 +149,22 @@ else
     fail "using-batches forbids an undeclared fifth override"
 fi
 
-# The git model lives here and nowhere else (spec 5.1).
-for needle in "same pull request" "may ship to production" "feature flag" "drift"; do
-    if has "$needle" "$SKILL_FLAT"; then
-        pass "using-batches states: $needle"
+# The git model lives in following-the-rules and nowhere else (spec 5.1).
+for needle in "may ship to production" "feature flag" "drift"; do
+    if has "$needle" "$FOUNDATION_FLAT"; then
+        pass "following-the-rules states: $needle"
     else
-        fail "using-batches states: $needle"
+        fail "following-the-rules states: $needle"
     fi
 done
+
+# The bounded change's rule on updating the spec in the same pull request lives
+# in making-a-bounded-change.
+BOUNDED_FLAT="$(tr '\n' ' ' < "$REPO_ROOT/skills/making-a-bounded-change/SKILL.md")"
+if has "same pull request" "$BOUNDED_FLAT"; then
+    pass "making-a-bounded-change states: same pull request"
+else
+    fail "making-a-bounded-change states: same pull request"
+fi
 
 exit $((FAILURES > 0))
