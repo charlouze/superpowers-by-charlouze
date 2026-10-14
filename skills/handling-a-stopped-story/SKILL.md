@@ -120,12 +120,12 @@ is rounded, and that change is wanted."
 
 | Ruling | Next steps, in their order |
 |---|---|
-| The spec is corrected, and the batch stays corrective on a reduced scope | `supercharlouze:amending-a-batch` reduces the `Scope`, from the batch document. Then `supercharlouze:making-a-bounded-change` carries the correction your human partner decides, from the spec. |
+| The spec is corrected, and the batch stays corrective on a reduced scope | `supercharlouze:amending-a-batch` reduces the `Scope`, from the batch document. Then `supercharlouze:making-a-bounded-change` carries the correction your human partner decides, from the spec. Then `supercharlouze:delivering-a-story` resumes the batch on its reduced scope, from the amended batch document. |
 | The corrective batch is rewritten as an ordinary batch | `supercharlouze:amending-a-batch` rewrites it, from the batch document. |
 | The remaining work is a different batch | `supercharlouze:closing-a-batch` closes this batch, from the batch document. Then `supercharlouze:opening-a-batch` opens the fresh one, from the gaps register whose entries this batch released. |
 | The observable change of a technical story is wanted | `supercharlouze:amending-a-batch` adds its block, from the batch document. Once that pull request merges, `supercharlouze:delivering-a-story` rewrites the work as an ordinary story of the amended batch, from the amended batch document. |
 | A constraint is untenable | `supercharlouze:amending-a-batch` changes or removes it, from the batch document. |
-| An ADR is untenable | A bounded change, under `supercharlouze:making-a-bounded-change`, rewrites or deletes it, from the ADR. |
+| An ADR is untenable | A bounded change, under `supercharlouze:making-a-bounded-change`, rewrites or deletes it, from the ADR. Once that pull request merges, `supercharlouze:delivering-a-story` rewrites the work as a story of the batch, from the batch document. |
 
 ## Red Flags
 

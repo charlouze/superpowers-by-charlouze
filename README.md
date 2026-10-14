@@ -96,6 +96,7 @@ own; it puts its checkpoints where your flow already has them.
 | Story delivery | a story's code, its spec change if it has one, and the ADRs the review asks for, in one diff |
 | Batch amendment | a change of scope, of spec delta, of technical design, of constraints or of flag on an open batch, and the ADRs written, rewritten or deleted with it |
 | Batch closing | the consolidation, `status: closed` |
+| Bounded change | what a change outside any batch does to the code, a spec, a gaps register and the ADRs |
 
 The opening gate is the one that pays. You read the wording of a spec at the
 moment changing it still costs nothing — and no story may be written until it

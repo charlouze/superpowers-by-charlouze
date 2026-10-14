@@ -396,6 +396,13 @@ case "$README_FLAT" in
     *)  fail "the README's amendment gate carries the ADRs changed with the amendment" ;;
 esac
 
+# A bounded change is a gate, in the README's gate table too.
+case "$README_FLAT" in
+    *"| Bounded change | what a change outside any batch does to the code, a spec, a gaps register and the ADRs |"*)
+        pass "the README's gate table counts the bounded change" ;;
+    *)  fail "the README's gate table counts the bounded change" ;;
+esac
+
 # The README extends the stop condition on a constraint to an ADR.
 case "$README_FLAT" in
     *"If a story finds that a constraint of its batch or an ADR cannot be held, it stops and puts it to the human. An agent may neither correct a spec, nor keep a qualification it has lost, nor bend a constraint or an ADR."*)

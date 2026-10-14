@@ -234,7 +234,7 @@ require handling-a-stopped-story "the prompt states the ruling, then each step w
 require handling-a-stopped-story "the ruling is stated with the story and what it revealed" \
     "State the ruling as your human partner gave it, and name the story and what it revealed. Not: \"Carry on with the requalification.\" Good: \"Technical story \`07-us-4-renommer-les-echeances\` was abandoned: it changes how a prorated amount is rounded, and that change is wanted.\""
 require handling-a-stopped-story "a corrected spec comes with a reduced scope" \
-    "| The spec is corrected, and the batch stays corrective on a reduced scope | \`supercharlouze:amending-a-batch\` reduces the \`Scope\`, from the batch document. Then \`supercharlouze:making-a-bounded-change\` carries the correction your human partner decides, from the spec. |"
+    "| The spec is corrected, and the batch stays corrective on a reduced scope | \`supercharlouze:amending-a-batch\` reduces the \`Scope\`, from the batch document. Then \`supercharlouze:making-a-bounded-change\` carries the correction your human partner decides, from the spec. Then \`supercharlouze:delivering-a-story\` resumes the batch on its reduced scope, from the amended batch document. |"
 require handling-a-stopped-story "a rewritten batch goes to an amendment" \
     "| The corrective batch is rewritten as an ordinary batch | \`supercharlouze:amending-a-batch\` rewrites it, from the batch document. |"
 require handling-a-stopped-story "a different batch closes this one first" \
@@ -244,7 +244,7 @@ require handling-a-stopped-story "a wanted change goes to an amendment, then to 
 require handling-a-stopped-story "an untenable constraint goes to an amendment" \
     "| A constraint is untenable | \`supercharlouze:amending-a-batch\` changes or removes it, from the batch document. |"
 require handling-a-stopped-story "an untenable ADR goes to a bounded change" \
-    "| An ADR is untenable | A bounded change, under \`supercharlouze:making-a-bounded-change\`, rewrites or deletes it, from the ADR. |"
+    "| An ADR is untenable | A bounded change, under \`supercharlouze:making-a-bounded-change\`, rewrites or deletes it, from the ADR. Once that pull request merges, \`supercharlouze:delivering-a-story\` rewrites the work as a story of the batch, from the batch document. |"
 require handling-a-stopped-story "red flag: the next step does not run in this conversation" \
     "| \"The ruling is fresh in this conversation, I'll run the amendment here\" | This conversation carries a stopped execution, which can contradict the document the next step starts from. Ask your human partner to clear the context, and give the prompt. |"
 require handling-a-stopped-story "red flag: only the human corrects a spec" \
@@ -591,7 +591,7 @@ require opening-a-batch "the merged document carries the design too" \
 require amending-a-batch "an amendment ends its review with no condition and hands back to the batch" \
     "**To end the review of an amendment, invoke \`supercharlouze:finishing-a-pr\` and give it no condition, and this next step: whatever the batch was doing when it stopped, with the skill that conducts it, starting from the amended batch document.**"
 require amending-a-batch "an amendment a ruling started hands on the step that follows it" \
-    "When the prompt that started the amendment states a ruling and names a step after the amendment, give that step instead, with its skill and its document, and have its prompt state the ruling."
+    "When the prompt that started the amendment states a ruling and names a step after the amendment, give that step instead, with its skill and its document, and have its prompt state the ruling and the steps it names after that one."
 require opening-a-batch "allocation reads main on the remote" "git ls-tree --name-only origin/main docs/batches/"
 
 # --- delivering-a-story (spec 3, 4.4, 5.1, 5.3) ---
@@ -1435,6 +1435,12 @@ require making-a-bounded-change "the ceremony of bounded work is kept, with the 
         "Its ceremony is the one \`superpowers:brainstorming\` gives bounded work, to which \`supercharlouze:using-batches\` adds the reading of \`docs/adr/\` by the design."
 require making-a-bounded-change "the rules are what the pull request holds besides" \
         "\`The Rules\` are what its pull request holds besides."
+require making-a-bounded-change "a bounded change ends its review with no condition and no next step" \
+        "**To end the review, invoke \`supercharlouze:finishing-a-pr\` and give it no condition and no next step.**"
+require making-a-bounded-change "a bounded change a ruling started hands on the step that follows it" \
+        "Exception: when the prompt that started the bounded change states a ruling and names a step after it, give that step, with its skill and its document, and have its prompt state the ruling."
+require making-a-bounded-change "red flag: nothing follows a bounded change" \
+        "| \"The bounded change is merged, nothing follows it\" | When the prompt that started it names a step after it, give that step's prompt: the batch waiting on it resumes from nothing else. |"
 require making-a-bounded-change "a bounded change carries no flag" \
         "**(c) It carries no feature flag.**"
 require making-a-bounded-change "red flag: a small fix that leaves the spec silent" \
@@ -1510,6 +1516,8 @@ require following-the-rules "the delivery gate carries the ADRs the review asks 
         "| Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |"
 require following-the-rules "the opening gate carries the ADRs changed with the batch document" \
         "| Batch opening | the pull request carrying the batch document, and the ADRs written, rewritten or deleted with it |"
+require following-the-rules "a bounded change is a gate" \
+        "| Bounded change | the pull request carrying what it changes of the code, a spec, a gaps register and the ADRs |"
 require following-the-rules "the amendment gate carries the ADRs changed with the decision" \
         "| Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag, and the ADRs written, rewritten or deleted with it |"
 require using-batches "the opening writes the ADRs the design decided" \
@@ -1545,7 +1553,7 @@ require making-a-bounded-change "the design read may be stale" \
 require following-the-rules "defines the pull request" \
         "**Pull request** — a change proposed for \`main\`, which the human reviews before it reaches \`main\`."
 require following-the-rules "defines the gate" \
-        "**Gate** — the human's review of a pull request, whose merge moves a module, a batch or a story forward."
+        "**Gate** — the human's review of a pull request, whose merge moves a module, a batch or a story forward, or delivers a bounded change."
 require following-the-rules "defines the reread" \
         "**Reread** — an agent's check of a piece of work. A reread is not a gate."
 

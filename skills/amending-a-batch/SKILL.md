@@ -131,7 +131,7 @@ document.**
 
 When the prompt that started the amendment states a ruling and names a step
 after the amendment, give that step instead, with its skill and its document,
-and have its prompt state the ruling.
+and have its prompt state the ruling and the steps it names after that one.
 
 ## Red Flags
 

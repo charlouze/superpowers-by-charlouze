@@ -335,7 +335,7 @@ absent "no other skill restates the form of a batch document" \
 # The end of a review is conducted in one place, `finishing-a-pr`. A skill whose
 # pull request is reviewed invokes it, and passes its conditions and its next
 # step.
-for s in adopting-a-module opening-a-batch amending-a-batch delivering-a-story closing-a-batch; do
+for s in adopting-a-module opening-a-batch amending-a-batch delivering-a-story closing-a-batch making-a-bounded-change; do
     require "$s" "ends its review by invoking finishing-a-pr" \
         "nvoke \`supercharlouze:finishing-a-pr\` and give it"
 done

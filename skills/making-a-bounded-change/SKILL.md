@@ -35,6 +35,10 @@ Its ceremony is the one `superpowers:brainstorming` gives bounded work, to which
 
 Its branch is `bounded/<slug>`: invoke `supercharlouze:starting-a-branch` and give it the name `bounded/<slug>`.
 
+**To end the review, invoke `supercharlouze:finishing-a-pr` and give it no condition and no next step.**
+
+Exception: when the prompt that started the bounded change states a ruling and names a step after it, give that step, with its skill and its document, and have its prompt state the ruling.
+
 ## Red Flags
 
 | Thought | Reality |
@@ -42,3 +46,4 @@ Its branch is `bounded/<slug>`: invoke `supercharlouze:starting-a-branch` and gi
 | "This is a small fix, the spec can stay silent about it" | Only if nothing observable at the module's boundary changes. The moment behaviour moves, the spec is updated in the same pull request, and either way the change declares the spec it targets and the sections it touches. |
 | "The code is right and the spec is plainly wrong, I'll correct the spec" | Only your human partner judges a spec wrong, and they decide the correction. Put it to them, and write nothing in the spec until they have decided. |
 | "While I correct the spec, I'll tidy the code it describes" | A spec correction touches no code: the code is what your human partner judged right. A code change is another bounded change. |
+| "The bounded change is merged, nothing follows it" | When the prompt that started it names a step after it, give that step's prompt: the batch waiting on it resumes from nothing else. |

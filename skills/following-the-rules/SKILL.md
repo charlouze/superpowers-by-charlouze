@@ -52,7 +52,7 @@ No ADR binds the code already on `main`.
 
 **Pull request** — a change proposed for `main`, which the human reviews before it reaches `main`.
 
-**Gate** — the human's review of a pull request, whose merge moves a module, a batch or a story forward.
+**Gate** — the human's review of a pull request, whose merge moves a module, a batch or a story forward, or delivers a bounded change.
 
 **Reread** — an agent's check of a piece of work. A reread is not a gate.
 
@@ -109,6 +109,7 @@ The second is why feature flags exist, and it rules out the two natural alternat
 | Story delivery | the pull request carrying a story's code, its spec change if it has one, and the ADRs the review asks for |
 | Batch closing | the pull request carrying the consolidation and `status: closed` |
 | Batch amendment | the pull request carrying the decision to change its scope, its spec delta, its technical design, its constraints or its flag, and the ADRs written, rewritten or deleted with it |
+| Bounded change | the pull request carrying what it changes of the code, a spec, a gaps register and the ADRs |
 
 **Preconditions for every pull request of this system**, checked before creating a branch: fetch, then start the branch from **`main` as the remote carries it**, never from another branch. That is what keeps a session chaining two pieces of work from stacking the second on the first one's branch, and what makes numbering and concurrency detection reason on the remote state. **Where you are standing does not matter**, and it must not: a session the harness launched inside a worktree cannot run git against the shared checkout at all, so a precondition on the directory would be unreachable exactly there. The starting point is reachable from anywhere — inside a reused workspace, `git fetch origin && git switch -c <branch> origin/main` satisfies it without leaving. `gh` is assumed available and authenticated; without it both degrade to a partial safety net and stop preventing anything.
 
