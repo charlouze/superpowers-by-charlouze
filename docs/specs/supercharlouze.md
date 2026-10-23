@@ -224,6 +224,21 @@ la nomme et donne le prompt qui la lance dans un contexte vide, et ce prompt
 Chacun de ces prompts nomme la skill à invoquer et le document d'où repartir, et
 ne renvoie jamais à la conversation.
 
+## Rereads
+
+Une relecture fait au plus deux tours : le premier lit le texte entier, le second
+ce que la révision du premier y a changé.
+
+Un constat de relecture dit ce qu'il ferait faire de travers ; une formulation
+seulement préférée n'en est pas un.
+
+Une relecture ne pose aucune question à l'humain : l'agent tranche chaque constat,
+et le corps de la pull request qui porte le texte dit ce qu'il a tranché.
+
+Exception : un constat qui demande d'écrire, de réécrire ou de supprimer un ADR,
+ou de changer le découpage en modules, est soumis à l'humain pendant la
+relecture, avec la décision que l'agent recommande.
+
 ## Module
 
 Un module a une spec et un gaps register, qui naissent ensemble à son adoption.
