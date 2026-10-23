@@ -1040,6 +1040,8 @@ require running-reread-rounds "what only the human decides is put to them now" \
     "Put each finding only your human partner decides to them once every reader has returned, before you revise anything: describe the problem so they can rule on it without the text in front of them, give the option you recommend, and apply their ruling."
 require running-reread-rounds "that question goes through the question tool" \
     "Ask it with your harness's question tool when it has one, such as \`AskUserQuestion\`."
+require running-reread-rounds "a finding is verified before it is acted on" \
+    "Check each finding against the text before you act on it, and drop one you cannot verify."
 require running-reread-rounds "the pull request body lists the decisions" \
     "Write for the pull request body, in this order: - each decision that goes back on something your human partner decided; - each ruling they gave, with the finding it settled; - what else you changed, the changes that weigh most first."
 require running-reread-rounds "a decision can end the rounds" \
@@ -1080,6 +1082,8 @@ require running-reread-rounds "red flag: a reader is done" \
     "| \"This reader is done, I'll settle its findings now\" | The next reader may displace them. Wait for every reader. |"
 require running-reread-rounds "red flag: asking the human" \
     "| \"I'll ask my human partner how to settle this finding\" | Unless the invoking skill says only they decide it, settle it, and write the decision for the pull request body: they rule on it in the review. |"
+require running-reread-rounds "red flag: an unverified finding" \
+    "| \"The reader sounds sure, I'll fix it\" | Check it against the text first. A finding you cannot verify is dropped. |"
 require running-reread-rounds "red flag: a smoother wording" \
     "| \"This reader has a point, the wording could be smoother\" | A wording a reader merely prefers is not a finding. Drop it. |"
 require running-reread-rounds "red flag: one more round" \

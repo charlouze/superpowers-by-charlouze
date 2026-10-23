@@ -34,6 +34,9 @@ invoking skill says what becomes of it.
 Drop a finding that names nothing it would make someone do wrong: a wording a
 reader merely prefers is not a finding.
 
+Check each finding against the text before you act on it, and drop one you
+cannot verify.
+
 **Ask your human partner nothing while the reread runs, except what the
 invoking skill says only they decide.** Settle every other finding yourself:
 they review what you decided on the pull request that carries the text, and a
@@ -96,6 +99,7 @@ what the reread returns.
 |---|---|
 | "This reader is done, I'll settle its findings now" | The next reader may displace them. Wait for every reader. |
 | "I'll ask my human partner how to settle this finding" | Unless the invoking skill says only they decide it, settle it, and write the decision for the pull request body: they rule on it in the review. |
+| "The reader sounds sure, I'll fix it" | Check it against the text first. A finding you cannot verify is dropped. |
 | "This reader has a point, the wording could be smoother" | A wording a reader merely prefers is not a finding. Drop it. |
 | "One more round, the text can still improve" | The second round is the last. The review of the pull request reads what follows it. |
 | "This section reads better rewritten whole" | A rewritten section is unread, and sends every reading out again. Retouch the sentences a finding names. |

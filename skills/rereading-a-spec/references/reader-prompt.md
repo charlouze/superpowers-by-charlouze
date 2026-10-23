@@ -54,6 +54,9 @@ differently.** For each finding, say what someone acting on the passage would do
 wrong, or which rule they would miss. A wording you would merely prefer is not a
 finding.
 
+Make each finding verifiable: quote, next to the passage, what it fails against,
+such as the passage it contradicts, the rule it breaks or the case it walks past.
+
 **Return, for each finding:** the passage it bears on, quoted with the section it
 sits in; what is wrong with that passage under your reading; and how sure you
 are. Return "nothing found" when you found nothing: an empty report and a reader
