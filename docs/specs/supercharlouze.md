@@ -232,6 +232,9 @@ ce que la révision du premier y a changé.
 Un constat de relecture dit ce qu'il ferait faire de travers ; une formulation
 seulement préférée n'en est pas un.
 
+Un constat de relecture cite, à côté du passage qu'il vise, ce qui le met en
+défaut ; l'agent écarte un constat qu'il n'a pas pu vérifier.
+
 Une relecture ne pose aucune question à l'humain : l'agent tranche chaque constat,
 et le corps de la pull request qui porte le texte dit ce qu'il a tranché.
 
