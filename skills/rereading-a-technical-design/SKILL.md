@@ -40,9 +40,9 @@ When no reading is dispatched (`The Readings`), return "nothing to reread".
 When the rounds are over, return:
 
 - the technical design and the constraints, revised: every finding worked
-  through, and every ruling of your human partner applied;
-- the behaviours and the blocks your human partner took back to the spec delta,
-  which ended the reread;
+  through;
+- the behaviours and the blocks you took back to the spec delta, which ended the
+  reread;
 - the findings on an ADR, each with what your human partner ruled on it;
 - what the reread found, or that it found nothing, written for a pull request
   body.
@@ -146,23 +146,21 @@ Once the first round is dispatched, invoke
   round only: no revision touches what it reads;
 - what becomes of each finding, stated below.
 
-A behaviour the design would make observable that no specification describes is
-always put to your human partner. It leaves the design, or your human partner
-takes the batch back to its spec delta and the reread ends: this reread writes
-no block.
+A behaviour the design would make observable that no specification describes
+leaves the design, or you take it back to the spec delta and the reread ends:
+this reread writes no block.
 
-A finding on a block is not fixed: put it to your human partner, who leaves the
-block as it is, takes the batch back to its spec delta, which ends the reread,
-or has the ADR changed. This reread revises no block.
+A finding on a block is not fixed: leave the block as it is, or take the batch
+back to its spec delta, which ends the reread. This reread revises no block.
 
-A finding on an ADR is not fixed either: put it to your human partner, and
-return it with what they ruled. Return the same way a finding on a block or on
-the design that they settle by having an ADR changed. This reread revises no
-ADR.
+A finding on an ADR is not fixed either: only your human partner decides an
+ADR. Put it to them with the decision you recommend, and return it with what
+they ruled. Return the same way a finding on a block or on the design that only
+writing, rewriting or deleting an ADR would settle. This reread revises no ADR.
 
-Any other finding is fixed on the technical design or the constraints without
-changing what they decide, or put to your human partner when fixing it would:
-they approved what the design decides.
+Any other finding is fixed on the technical design or the constraints. A fix
+that changes what they decide goes into what the reread found, as a decision
+your human partner's review rules on: they approved what the design decides.
 
 ## Red Flags
 
@@ -171,9 +169,9 @@ they approved what the design decides.
 | "I wrote this design, I can reread it myself" | The context that wrote it rereads its intentions, not its text. Dispatch readers outside it. |
 | "One reader can take every reading, it is cheaper" | A reader holding several readings does the cheapest and returns. One reader per reading. |
 | "The reading is long, I'll summarise it in the prompt" | The reader has nothing else. Paste it word for word. |
-| "This finding is right, I'll rework the design around it" | Your human partner approved what the design decides. Fix the wording, or put the change to them. |
-| "This behaviour is small, the design can carry it without a block" | What a user or a neighbouring module would observe needs a block. Put it to your human partner. |
-| "The design needs this rule, I'll write the block" | This reread writes no block. Put the behaviour to your human partner. |
+| "This finding is right, I'll rework the design around it" | Retouch what the finding names, and write for the pull request body what the fix changes of what the design decides. |
+| "This behaviour is small, the design can carry it without a block" | What a user or a neighbouring module would observe needs a block. Take it out of the design, or take it back to the spec delta. |
+| "The design needs this rule, I'll write the block" | This reread writes no block. Take the batch back to its spec delta. |
 | "The reader is right about this ADR, I'll fix its wording" | This reread revises no ADR. Put the finding to your human partner, and return it with what they ruled. |
-| "This block contradicts an ADR, I'll adjust the block" | This reread revises no block. Put the finding to your human partner. |
+| "This block contradicts an ADR, I'll adjust the block" | This reread revises no block. Take the batch back to its spec delta, or put the finding to your human partner for an ADR change. |
 | "The batch has no design, so there is nothing to reread" | A reading is dispatched when its object exists. An ADR the pull request writes is reread whatever the batch carries. |

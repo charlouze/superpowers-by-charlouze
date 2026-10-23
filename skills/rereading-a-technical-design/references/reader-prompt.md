@@ -63,6 +63,14 @@ prompt. Going to read the skill that dispatched you would put the other readers'
 readings in front of you, and a reader holding several does the cheapest of them
 and returns.
 
+**Report what would make someone act wrongly, not what you would word
+differently.** For each finding, say what someone acting on the passage would do
+wrong, or which rule they would miss. A wording you would merely prefer is not a
+finding.
+
+Make each finding verifiable: quote, next to the passage, what it fails against,
+such as the passage it contradicts, the code it misses or the case it walks past.
+
 **Return, for each finding:** the passage it bears on, quoted with the file and
 the section it sits in; what is wrong with that passage under your reading; and
 how sure you are. Return "nothing found" when you found nothing: an empty report

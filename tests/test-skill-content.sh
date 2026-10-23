@@ -375,14 +375,16 @@ require rereading-a-spec "the reread runs outside the writing context" "outside 
 require rereading-a-spec "it is invoked by a skill"                    "It is invoked by another skill, never on a request of your human partner"
 require rereading-a-spec "input: the spec and its path"                "the spec to read, and the path it has or will have under \`docs/specs/\`"
 require rereading-a-spec "the state is read from main"                 "The spec is new when \`main\` carries no file at that path, and changed otherwise"
-require rereading-a-spec "output: the spec revised"                    "the spec, revised: every finding worked through, and every ruling of your human partner applied"
+require rereading-a-spec "output: the spec revised"                    "the spec, revised: every finding worked through;"
 require rereading-a-spec "output: mechanisms come back as gaps"        "the sentences taken out because they describe a mechanism, each with the section it came from"
 require rereading-a-spec "output: boundary rules come back unrevised"  "the rules left as they are because they would constrain behaviour observable at the boundary of more than one module"
 require rereading-a-spec "output: what the reread found"               "what the reread found, or that it found nothing"
 # How a finding is worked through lives here, not in whoever invoked the reread.
 require rereading-a-spec "a mechanism leaves the spec"                 "A sentence that describes a mechanism leaves the spec"
 require rereading-a-spec "a boundary rule is not revised"              "the module breakdown is your human partner's decision, not a wording"
-require rereading-a-spec "any other finding is fixed or put up"        "Any other finding is fixed without changing what its sentence rules, or put to your human partner when fixing it would"
+require rereading-a-spec "any other finding is fixed"                 "Any other finding is fixed. A fix that changes what its sentence rules goes into what the reread found, as a decision your human partner's review rules on."
+require rereading-a-spec "a boundary rule goes to the human" "is put to your human partner with the breakdown you recommend, and stays as it is: the module breakdown is your human partner's decision, not a wording."
+require rereading-a-spec "output: boundary rules come back with the ruling" "at the boundary of more than one module, each with what your human partner ruled on it;"
 
 # The reader roles. The second assertion is what keeps the count from being
 # trimmed: alone, the first reads as a description of a typical reader rather
@@ -476,11 +478,11 @@ require rereading-a-technical-design "it is invoked by a skill"          "It is 
 require rereading-a-technical-design "the reread also bears on the blocks and the ADRs" "The reread also reads the batch's blocks and its design against the ADRs, and rereads each ADR that the pull request opening or amending the batch writes or rewrites."
 require rereading-a-technical-design "input: the batch, its applied specs, the other specs and the ADRs" "The input is: - the batch document; - each spec the batch touches, with the batch's blocks applied; - \`docs/specs/\`, for the specs the batch does not touch; - \`docs/adr/\`, as the pull request that opens or amends the batch leaves it; - the path of each ADR that pull request writes or rewrites."
 require rereading-a-technical-design "the readers read main's code"     "The readers read the code as \`main\` carries it"
-require rereading-a-technical-design "output: the design revised"        "the technical design and the constraints, revised: every finding worked through, and every ruling of your human partner applied"
-require rereading-a-technical-design "output: the behaviours and the blocks taken back to the delta" "the behaviours and the blocks your human partner took back to the spec delta, which ended the reread"
+require rereading-a-technical-design "output: the design revised"        "the technical design and the constraints, revised: every finding worked through;"
+require rereading-a-technical-design "output: the behaviours and the blocks taken back to the delta" "the behaviours and the blocks you took back to the spec delta, which ended the reread"
 require rereading-a-technical-design "output: the findings on an ADR" "the findings on an ADR, each with what your human partner ruled on it;"
 require rereading-a-technical-design "output: nothing to reread" "When no reading is dispatched (\`The Readings\`), return \"nothing to reread\"."
-require rereading-a-technical-design "the reread writes no block" "It leaves the design, or your human partner takes the batch back to its spec delta and the reread ends: this reread writes no block."
+require rereading-a-technical-design "the reread writes no block" "leaves the design, or you take it back to the spec delta and the reread ends: this reread writes no block."
 require rereading-a-technical-design "red flag: writing the block" "| \"The design needs this rule, I'll write the block\" | This reread writes no block."
 require rereading-a-technical-design "output: what the reread found"     "what the reread found, or that it found nothing, written for a pull request body"
 # One reader per reading, dispatched from a template.
@@ -523,17 +525,16 @@ case "$(body_flat "$REPO_ROOT/skills/rereading-a-technical-design/SKILL.md" 2>/d
     *)  pass "rereading-a-technical-design: no sentence counts the readings" ;;
 esac
 # The rounds live in `running-reread-rounds`, guarded in its block below. Here:
-# what this reread passes to it. What changes a decision goes to the human, who
-# approved the design.
+# what this reread passes to it. What changes a decision goes to the pull
+# request body, where the human who approved the design rules on it.
 require rereading-a-technical-design "the rounds revise the design and the constraints" "- the technical design and the constraints, as the text the rounds revise;"
 require rereading-a-technical-design "the reading of the ADRs goes out once" "- the reading of the ADRs to reread, as a reading that goes out in the first round only: no revision touches what it reads;"
 require rereading-a-technical-design "it says what becomes of each finding" "- what becomes of each finding, stated below."
-require rereading-a-technical-design "an undescribed behaviour always goes up" "A behaviour the design would make observable that no specification describes is always put to your human partner"
-require rereading-a-technical-design "a finding on a block goes to the human" "A finding on a block is not fixed: put it to your human partner, who leaves the block as it is, takes the batch back to its spec delta, which ends the reread, or has the ADR changed. This reread revises no block."
-require rereading-a-technical-design "a finding on an ADR goes to the human" "A finding on an ADR is not fixed either: put it to your human partner, and return it with what they ruled. Return the same way a finding on a block or on the design that they settle by having an ADR changed. This reread revises no ADR."
-require rereading-a-technical-design "a fix keeps what the design decides" "Any other finding is fixed on the technical design or the constraints without changing what they decide, or put to your human partner when fixing it would: they approved what the design decides."
+require rereading-a-technical-design "a finding on a block is settled here" "A finding on a block is not fixed: leave the block as it is, or take the batch back to its spec delta, which ends the reread. This reread revises no block."
+require rereading-a-technical-design "a finding on an ADR goes to the human" "A finding on an ADR is not fixed either: only your human partner decides an ADR. Put it to them with the decision you recommend, and return it with what they ruled. Return the same way a finding on a block or on the design that only writing, rewriting or deleting an ADR would settle. This reread revises no ADR."
+require rereading-a-technical-design "a fix that changes a decision goes to the pull request" "Any other finding is fixed on the technical design or the constraints. A fix that changes what they decide goes into what the reread found, as a decision your human partner's review rules on: they approved what the design decides."
 require rereading-a-technical-design "red flag: fixing an ADR" "| \"The reader is right about this ADR, I'll fix its wording\" | This reread revises no ADR. Put the finding to your human partner, and return it with what they ruled. |"
-require rereading-a-technical-design "red flag: adjusting a block" "| \"This block contradicts an ADR, I'll adjust the block\" | This reread revises no block. Put the finding to your human partner. |"
+require rereading-a-technical-design "red flag: adjusting a block" "| \"This block contradicts an ADR, I'll adjust the block\" | This reread revises no block. Take the batch back to its spec delta, or put the finding to your human partner for an ADR change. |"
 require rereading-a-technical-design "red flag: no design, nothing to reread" "| \"The batch has no design, so there is nothing to reread\" | A reading is dispatched when its object exists. An ADR the pull request writes is reread whatever the batch carries. |"
 
 # --- recording-a-decision ---
@@ -1026,25 +1027,25 @@ absent "applying-a-spec-delta names no skill that invokes it" "${entry_names%|}|
 require running-reread-rounds "says what the invoking skill passes" \
     "The skill that invokes it gives: - the text the rounds revise; - what becomes of each finding; - the readings that go out in the first round only, when it has any."
 require running-reread-rounds "waits for every reader" \
-    "Every reader returns before anything goes up. Wait for all of them and gather their findings, never a running report"
+    "Every reader returns before you settle anything. Wait for all of them and gather their findings, never a running report"
 require running-reread-rounds "findings are instructed, not forwarded" \
     "You instruct the findings; you do not forward them."
 require running-reread-rounds "the invoking skill says what becomes of a finding" \
     "Work each one through: the invoking skill says what becomes of it."
-require running-reread-rounds "the rulings are applied on the text the rounds revise" \
-    "Then put to your human partner what you changed and what you could not settle, and apply their rulings on the text the rounds revise."
-require running-reread-rounds "the human is spared a draft" \
-    "Forwarding raw findings makes your human partner arbitrate a draft, which is the work the review exists to spare them."
-require running-reread-rounds "what was settled alone comes first" \
-    "Open with one paragraph on what you settled alone, the changes that weigh most first."
-require running-reread-rounds "each open point is described in full" \
-    "Then take each point left to settle on its own. Describe the problem precisely and completely: your human partner rules on your description, without the text in front of them."
-require running-reread-rounds "each open point comes with solutions and a recommendation" \
-    "Propose at least two solutions when the problem admits more than one, and say which you recommend and why."
-require running-reread-rounds "each open point is asked with the question tool" \
-    "Ask each of these questions with your harness's question tool when it has one, such as \`AskUserQuestion\`: your solutions as its options, and room for an answer of their own."
-require running-reread-rounds "a ruling can end the rounds" \
-    "A ruling the invoking skill says ends the reread ends the rounds."
+require running-reread-rounds "a preferred wording is no finding" \
+    "Drop a finding that names nothing it would make someone do wrong: a wording a reader merely prefers is not a finding."
+require running-reread-rounds "the reread asks the human nothing" \
+    "**Ask your human partner nothing while the reread runs, except what the invoking skill says only they decide.** Settle every other finding yourself: they review what you decided on the pull request that carries the text, and a question asked now makes them rule twice."
+require running-reread-rounds "what only the human decides is put to them now" \
+    "Put each finding only your human partner decides to them once every reader has returned, before you revise anything: describe the problem so they can rule on it without the text in front of them, give the option you recommend, and apply their ruling."
+require running-reread-rounds "that question goes through the question tool" \
+    "Ask it with your harness's question tool when it has one, such as \`AskUserQuestion\`."
+require running-reread-rounds "a finding is verified before it is acted on" \
+    "Check each finding against the text before you act on it, and drop one you cannot verify."
+require running-reread-rounds "the pull request body lists the decisions" \
+    "Write for the pull request body, in this order: - each decision that goes back on something your human partner decided; - each ruling they gave, with the finding it settled; - what else you changed, the changes that weigh most first."
+require running-reread-rounds "a decision can end the rounds" \
+    "A decision the invoking skill says ends the reread ends the rounds."
 require running-reread-rounds "a round runs on the revised text" \
     "A round runs on the revised text."
 require running-reread-rounds "keeps the state a round read" \
@@ -1063,12 +1064,10 @@ require running-reread-rounds "a first-round reading is not dispatched again" \
     "A reading given as going out in the first round only is not dispatched again."
 require running-reread-rounds "a later dispatch is composed as the first" \
     "Compose each dispatch as the invoking skill composed the first round's."
-require running-reread-rounds "keeps a ledger of problems" \
-    "Keep a ledger from round to round: each finding's problem, the round that returned it, and what you did with it. Recognise a finding by its problem, not by its words"
-require running-reread-rounds "a returning problem goes to the human" \
-    "When a second round returns the same problem, put it to your human partner with the option you recommend, and do not reword it a third time."
-require running-reread-rounds "three rounds at most" \
-    "**The third round is the last you open.** After it, stop and put to your human partner what is still open, with your recommendation. A further round runs only on their decision."
+require running-reread-rounds "a returning problem is not reworded again" \
+    "**A problem that comes back is not reworded again.** Recognise a finding by its problem, not by its words: a reworded clause still carries the problem a reader found in it. When the second round returns a problem the first returned, change what the passage rules or leave it as it is, and write which for the pull request body."
+require running-reread-rounds "two rounds at most" \
+    "**The second round is the last.** Settle what it finds as you settled the first round's, and open no third: the review of the pull request reads what that last revision changed. Name in the pull request body the passages it changed, which no reader has read."
 require running-reread-rounds "the reread does not replace the review" \
     "**The reread prepares the review of the pull request that carries the text, it does not replace it.**"
 require running-reread-rounds "returns the text" \
@@ -1077,20 +1076,22 @@ require running-reread-rounds "says when to go back to the skill that invoked it
     "Once the rounds are over, go on with the skill that invoked this one: it says what the reread returns."
 # The ledger is the conductor's working note: it is kept, never returned.
 absent "running-reread-rounds returns no ledger" "[Rr]eturns? [^.]*ledger" running-reread-rounds
+# A reread stops after two rounds: no trace of a third survives.
+absent "no reread opens a third round" "[Tt]hird round is the last|[Aa] further round runs" running-reread-rounds
 require running-reread-rounds "red flag: a reader is done" \
-    "| \"This reader is done, I'll put its findings up now\" | The next reader may displace them. Wait for every reader. |"
-require running-reread-rounds "red flag: handing over the findings" \
-    "| \"I'll hand my human partner the findings to rule on\" | Instruct them first. Your human partner rules on what you changed and what you could not settle. |"
-require running-reread-rounds "red flag: a single solution" \
-    "| \"One solution is enough, I'll just recommend it\" | Your human partner rules between solutions. Propose at least two when the problem admits more than one. |"
-require running-reread-rounds "red flag: open points written out in a message" \
-    "| \"The open points read fine in my message\" | Ask each with your harness's question tool when it has one: your human partner answers it without having to say which point they mean. |"
+    "| \"This reader is done, I'll settle its findings now\" | The next reader may displace them. Wait for every reader. |"
+require running-reread-rounds "red flag: asking the human" \
+    "| \"I'll ask my human partner how to settle this finding\" | Unless the invoking skill says only they decide it, settle it, and write the decision for the pull request body: they rule on it in the review. |"
+require running-reread-rounds "red flag: an unverified finding" \
+    "| \"The reader sounds sure, I'll fix it\" | Check it against the text first. A finding you cannot verify is dropped. |"
+require running-reread-rounds "red flag: a smoother wording" \
+    "| \"This reader has a point, the wording could be smoother\" | A wording a reader merely prefers is not a finding. Drop it. |"
 require running-reread-rounds "red flag: one more round" \
-    "| \"One more round, the text can still improve\" | The third round is the last you open. After it, your human partner decides whether another runs. |"
+    "| \"One more round, the text can still improve\" | The second round is the last. The review of the pull request reads what follows it. |"
 require running-reread-rounds "red flag: a section rewritten whole" \
     "| \"This section reads better rewritten whole\" | A rewritten section is unread, and sends every reading out again. Retouch the sentences a finding names. |"
 require running-reread-rounds "red flag: a reworded clause" \
-    "| \"I reworded the clause, so this finding is a new one\" | A finding is its problem, not its words. Returned by a second round, it goes to your human partner. |"
+    "| \"I reworded the clause, so this finding is a new one\" | A finding is its problem, not its words. Returned by the second round, it is not reworded again. |"
 # An internal skill names the skills it invokes, never those that invoke it, nor
 # a numbered step of one of them. This one invokes none, and the skills that
 # invoke it are internal too: the guard walks every declared skill.
@@ -1242,7 +1243,7 @@ require rereading-a-batch "no block, nothing to apply" \
 require rereading-a-batch "the blocks are applied again once a reread touched one" \
     "**Invoke it again each time a reread has changed or added a block**, and give it the blocks as they now read."
 require rereading-a-batch "a block that does not apply holds the rereads" \
-    "**A block it returns as not applied is a delta gone stale.** Start no reread while one is left: put the block to your human partner."
+    "**A block it returns as not applied is a delta gone stale.** Start no reread while one is left: fit the block to its spec on \`main\`, have the blocks applied again, and write that change for the pull request body."
 # The coherence reread.
 require rereading-a-batch "the coherence reread reads the applied state" \
     "The coherence reread reads each touched spec whole, on the state its blocks produce."
@@ -1256,8 +1257,8 @@ require rereading-a-batch "revisions go back into the blocks" \
     "Carry every revision it returns back into the blocks: into the block whose text it changes, or into a new block when it changes a passage no block targets."
 require rereading-a-batch "revised blocks are applied again" \
     "Then have the blocks applied again (\`The Applied Copies\`)."
-require rereading-a-batch "a boundary rule stops the rereads" \
-    "A rule it returns as reaching past its module's boundary stops the rereads: put the breakdown to your human partner."
+require rereading-a-batch "a changed breakdown stops the rereads" \
+    "A rule it returns as reaching past its module's boundary stops the rereads when your human partner has ruled that the breakdown changes."
 # The technical reread.
 require rereading-a-batch "the technical reread waits for the coherence reread" \
     "**Start it only once the coherence reread has closed its rounds.** Run side by side, each reread revises what the other is reading"
@@ -1272,11 +1273,11 @@ require rereading-a-batch "a corrected ADR is handed to the reread" \
 require rereading-a-batch "revisions go back into the design" \
     "Carry every revision it returns back into \`Technical design\` and \`Constraints\`"
 require rereading-a-batch "the technical reread changes no spec delta" \
-    "The technical reread itself never changes \`Spec delta\`: only your human partner takes a behaviour or a block back to it."
+    "The technical reread itself never changes \`Spec delta\`: you write there what it takes back."
 require rereading-a-batch "what is taken back sends the batch back to the coherence reread" \
     "**A behaviour or a block it returns as taken back to the spec delta sends the batch back to the coherence reread.**"
-require rereading-a-batch "the block taken back is the one the human rules" \
-    "Write the block your human partner rules, or correct the block as they correct it, and have the blocks applied again (\`The Applied Copies\`)."
+require rereading-a-batch "the block taken back is written here" \
+    "Write the block the behaviour needs, or correct the block the finding names, and have the blocks applied again (\`The Applied Copies\`)."
 require rereading-a-batch "what is taken back makes the other rereads due" \
     "The coherence reread and the batch-document reread are due from then on, whatever you were given: run the coherence reread, then the technical reread again."
 require rereading-a-batch "the technical reread changes no ADR" "The technical reread changes no ADR either."
@@ -1291,7 +1292,7 @@ require rereading-a-batch "the dispatch is composed from the reader prompt" \
     "Compose the dispatch from \`skills/rereading-a-batch/references/document-reader-prompt.md\`"
 require rereading-a-batch "the document is revised on the report" "Revise the document on what it reports."
 require rereading-a-batch "says what it returns" \
-    "Return: - the batch document, revised; - what each reread you ran found, or that it found nothing, written for a pull request body, and for a technical reread that returned that it had nothing to reread, that instead; - each behaviour and each block your human partner took back to the spec delta."
+    "Return: - the batch document, revised; - what each reread you ran found, or that it found nothing, written for a pull request body, and for a technical reread that returned that it had nothing to reread, that instead; - each behaviour and each block taken back to the spec delta."
 require rereading-a-batch "red flag: rereading one's own blocks" \
     "| \"I wrote these blocks, I can reread them myself\" |"
 require rereading-a-batch "red flag: both rereads together" \

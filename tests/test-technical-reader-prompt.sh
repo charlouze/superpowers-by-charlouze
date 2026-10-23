@@ -75,6 +75,13 @@ has "a later round leaves the unchanged alone" "Report nothing that stands uncha
 has "a reader loads no unnamed skill"       "Load no skill your reading does not name"
 has "everything needed is in the prompt"    "Everything you need is in this prompt"
 has "a finding quotes its passage"          "the passage it bears on, quoted with the file and the section it"
+# A reader reports what would make someone act wrongly, never a wording it
+# would merely prefer: without that bar every reader returns its preferences,
+# and the reread turns into a trade of wordings.
+has "a finding says what it makes someone do wrong" "**Report what would make someone act wrongly, not what you would word differently.** For each finding, say what someone acting on the passage would do wrong, or which rule they would miss."
+has "a preferred wording is no finding" "A wording you would merely prefer is not a finding."
+# A finding the conductor cannot check is one it either trusts blindly or drops.
+has "a finding can be verified" "Make each finding verifiable: quote, next to the passage, what it fails against"
 has "an empty result is reported"           "Return \"nothing found\" when you found nothing"
 has "a reader revises nothing"              "Do not revise what you read, and do not modify the code"
 has "a reader dispatches nothing"           "Do not dispatch subagents"

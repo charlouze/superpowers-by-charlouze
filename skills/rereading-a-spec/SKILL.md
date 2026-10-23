@@ -27,12 +27,12 @@ Fetch, then read the spec as `main` carries it with
 
 When the rounds are over, return:
 
-- the spec, revised: every finding worked through, and every ruling of your
-  human partner applied;
+- the spec, revised: every finding worked through;
 - the sentences taken out because they describe a mechanism, each with the
   section it came from;
 - the rules left as they are because they would constrain behaviour observable
-  at the boundary of more than one module;
+  at the boundary of more than one module, each with what your human partner
+  ruled on it;
 - what the reread found, or that it found nothing, written for a pull request
   body.
 
@@ -128,13 +128,15 @@ rounds revise, and what becomes of each finding:
 
 - A sentence that describes a mechanism leaves the spec, and goes to the output.
 - A rule that would constrain behaviour observable at the boundary of more than
-  one module stays as it is, and goes to the output: the module breakdown is
-  your human partner's decision, not a wording.
+  one module is put to your human partner with the breakdown you recommend, and
+  stays as it is: the module breakdown is your human partner's decision, not a
+  wording. It goes to the output.
 - A defect the spec already carries on `main` is not fixed: the change did not
   write that passage, and fixing it widens what your human partner reviews. It
   goes once into what the reread found, and opens no round.
-- Any other finding is fixed without changing what its sentence rules, or put to
-  your human partner when fixing it would.
+- Any other finding is fixed. A fix that changes what its sentence rules goes
+  into what the reread found, as a decision your human partner's review rules
+  on.
 
 ## Red Flags
 
@@ -143,5 +145,5 @@ rounds revise, and what becomes of each finding:
 | "I wrote this spec, I can reread it myself" | The context that wrote it rereads its intentions, not its text. Dispatch readers outside it. |
 | "One reader can take every reading, it is cheaper" | A reader holding several readings does the cheapest and returns. One reader per reading. |
 | "The reading is long, I'll summarise it in the prompt" | The reader has nothing else. Paste it word for word. |
-| "This rule spills into the next module, I'll reword it to fit" | The breakdown is your human partner's decision. Leave the rule as it is, and return it. |
+| "This rule spills into the next module, I'll reword it to fit" | The breakdown is your human partner's decision. Leave the rule as it is, and put it to them. |
 | "The reader is right about this old passage, I'll fix it too" | The change did not write it. Return it once, and fix nothing. |

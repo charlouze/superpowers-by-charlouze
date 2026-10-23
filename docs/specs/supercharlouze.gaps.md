@@ -116,10 +116,3 @@ sont ni conformes ni non conformes, ils sont inobservables ici.
   doit tenir et sur sa concision. `rereading-a-spec` lui pose aussi la question
   « Where does this sit in the model? », que l'étape 7 ne cite pas. Constatée par
   la story `11-us-4-le-module`, consolidée par la clôture du lot 11.
-
-- **The coherence reread / The technical reread** — la spec fait lire chaque spec
-  touchée blocs appliqués, et ne dit pas ce que devient un bloc qui ne s'applique
-  plus à `main` au moment de l'ouverture ou de l'amendement. `rereading-a-batch`
-  arrête alors les relectures et soumet le bloc à l'humain, ce qu'aucune règle ne
-  décrit. Constatée par la story `13-us-12-relire-un-lot`, consolidée par la
-  clôture du lot 13.
