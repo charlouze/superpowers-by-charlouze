@@ -9,8 +9,8 @@ user-invocable: false
 ## Overview
 
 This skill conducts a reread from the moment its first round of readers is
-dispatched: it gathers their findings, works them through, and opens the later
-rounds.
+dispatched: it gathers their findings, works them through, and opens the second
+round.
 
 It is invoked by another skill, never on a request of your human partner.
 
@@ -24,31 +24,34 @@ The skill that invokes it gives:
 
 ## The Findings
 
-Every reader returns before anything goes up. Wait for all of them and gather
-their findings, never a running report: a partial report gets findings ruled on
-that the next reader displaces, and asks for the same ruling twice.
+Every reader returns before you settle anything. Wait for all of them and
+gather their findings, never a running report: a partial report gets findings
+settled that the next reader displaces.
 
 You instruct the findings; you do not forward them. Work each one through: the
 invoking skill says what becomes of it.
 
-Then put to your human partner what you changed and what you could not settle,
-and apply their rulings on the text the rounds revise. Forwarding raw findings
-makes your human partner arbitrate a draft, which is the work the review exists
-to spare them.
+Drop a finding that names nothing it would make someone do wrong: a wording a
+reader merely prefers is not a finding.
 
-Open with one paragraph on what you settled alone, the changes that weigh most
-first.
+**Ask your human partner nothing while the reread runs, except what the
+invoking skill says only they decide.** Settle every other finding yourself:
+they review what you decided on the pull request that carries the text, and a
+question asked now makes them rule twice.
 
-Then take each point left to settle on its own. Describe the problem precisely
-and completely: your human partner rules on your description, without the text
-in front of them. Propose at least two solutions when the problem admits more
-than one, and say which you recommend and why.
+Put each finding only your human partner decides to them once every reader has
+returned, before you revise anything: describe the problem so they can rule on
+it without the text in front of them, give the option you recommend, and apply
+their ruling. Ask it with your harness's question tool when it has one, such as
+`AskUserQuestion`.
 
-Ask each of these questions with your harness's question tool when it has one,
-such as `AskUserQuestion`: your solutions as its options, and room for an
-answer of their own.
+Write for the pull request body, in this order:
 
-A ruling the invoking skill says ends the reread ends the rounds.
+- each decision that goes back on something your human partner decided;
+- each ruling they gave, with the finding it settled;
+- what else you changed, the changes that weigh most first.
+
+A decision the invoking skill says ends the reread ends the rounds.
 
 ## The Rounds
 
@@ -68,15 +71,15 @@ chain indefinitely:
   round before read, next to the revised one. A reading given as going out in
   the first round only is not dispatched again. Compose each dispatch as the
   invoking skill composed the first round's.
-- **A problem that comes back goes to your human partner.** Keep a ledger from
-  round to round: each finding's problem, the round that returned it, and what
-  you did with it. Recognise a finding by its problem, not by its words: a
-  reworded clause still carries the problem a reader found in it. When a second
-  round returns the same problem, put it to your human partner with the option
-  you recommend, and do not reword it a third time.
-- **The third round is the last you open.** After it, stop and put to your human
-  partner what is still open, with your recommendation. A further round runs
-  only on their decision.
+- **A problem that comes back is not reworded again.** Recognise a finding by
+  its problem, not by its words: a reworded clause still carries the problem a
+  reader found in it. When the second round returns a problem the first
+  returned, change what the passage rules or leave it as it is, and write which
+  for the pull request body.
+- **The second round is the last.** Settle what it finds as you settled the
+  first round's, and open no third: the review of the pull request reads what
+  that last revision changed. Name in the pull request body the passages it
+  changed, which no reader has read.
 - **The reread prepares the review of the pull request that carries the text, it
   does not replace it.**
 
@@ -91,10 +94,9 @@ what the reread returns.
 
 | Thought | Reality |
 |---|---|
-| "This reader is done, I'll put its findings up now" | The next reader may displace them. Wait for every reader. |
-| "I'll hand my human partner the findings to rule on" | Instruct them first. Your human partner rules on what you changed and what you could not settle. |
-| "One solution is enough, I'll just recommend it" | Your human partner rules between solutions. Propose at least two when the problem admits more than one. |
-| "The open points read fine in my message" | Ask each with your harness's question tool when it has one: your human partner answers it without having to say which point they mean. |
-| "One more round, the text can still improve" | The third round is the last you open. After it, your human partner decides whether another runs. |
+| "This reader is done, I'll settle its findings now" | The next reader may displace them. Wait for every reader. |
+| "I'll ask my human partner how to settle this finding" | Unless the invoking skill says only they decide it, settle it, and write the decision for the pull request body: they rule on it in the review. |
+| "This reader has a point, the wording could be smoother" | A wording a reader merely prefers is not a finding. Drop it. |
+| "One more round, the text can still improve" | The second round is the last. The review of the pull request reads what follows it. |
 | "This section reads better rewritten whole" | A rewritten section is unread, and sends every reading out again. Retouch the sentences a finding names. |
-| "I reworded the clause, so this finding is a new one" | A finding is its problem, not its words. Returned by a second round, it goes to your human partner. |
+| "I reworded the clause, so this finding is a new one" | A finding is its problem, not its words. Returned by the second round, it is not reworded again. |

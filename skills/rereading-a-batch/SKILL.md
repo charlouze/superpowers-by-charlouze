@@ -52,7 +52,8 @@ the blocks as they now read. The next reread reads the state those blocks
 produce, and a block nothing applied was never checked.
 
 **A block it returns as not applied is a delta gone stale.** Start no reread
-while one is left: put the block to your human partner.
+while one is left: fit the block to its spec on `main`, have the blocks
+applied again, and write that change for the pull request body.
 
 ## The Coherence Reread
 
@@ -70,8 +71,8 @@ Carry every revision it returns back into the blocks: into the block whose text
 it changes, or into a new block when it changes a passage no block targets.
 Then have the blocks applied again (`The Applied Copies`).
 
-A rule it returns as reaching past its module's boundary stops the rereads: put
-the breakdown to your human partner.
+A rule it returns as reaching past its module's boundary stops the rereads when
+your human partner has ruled that the breakdown changes.
 
 ## The Technical Reread
 
@@ -87,12 +88,12 @@ counts among those it rewrites.
 
 Carry every revision it returns back into `Technical design` and `Constraints`.
 
-The technical reread itself never changes `Spec delta`: only your human partner
-takes a behaviour or a block back to it.
+The technical reread itself never changes `Spec delta`: you write there what it
+takes back.
 
 **A behaviour or a block it returns as taken back to the spec delta sends the
-batch back to the coherence reread.** Write the block your human partner rules,
-or correct the block as they correct it, and have the blocks applied again
+batch back to the coherence reread.** Write the block the behaviour needs, or
+correct the block the finding names, and have the blocks applied again
 (`The Applied Copies`). The coherence reread and the batch-document reread are
 due from then on, whatever you were given: run the coherence reread, then the
 technical reread again.
@@ -126,7 +127,7 @@ Return:
 - what each reread you ran found, or that it found nothing, written for a pull
   request body, and for a technical reread that returned that it had nothing
   to reread, that instead;
-- each behaviour and each block your human partner took back to the spec delta.
+- each behaviour and each block taken back to the spec delta.
 
 ## Red Flags
 
