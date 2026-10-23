@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.9.0...v0.10.0) (2026-10-23)
+
+
+### Features
+
+* un constat de relecture cite ce qui le met en défaut ([0894577](https://github.com/charlouze/superpowers-by-charlouze/commit/08945774474056d672a7a91159d3f6ab1385d79c))
+* une relecture tranche ses constats en deux tours au plus ([b3cf373](https://github.com/charlouze/superpowers-by-charlouze/commit/b3cf373e44f46a6fe9521e51db854044ce7c6c3c))
+
 ## [0.9.0](https://github.com/charlouze/superpowers-by-charlouze/compare/v0.8.0...v0.9.0) (2026-10-14)
 
 
